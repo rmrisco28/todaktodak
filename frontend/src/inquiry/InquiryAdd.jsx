@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
 import {
   Button,
   Col,
@@ -9,18 +7,15 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 
-export function ContactAdd() {
+export function InquiryAdd() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-
   const [modalShow, setModalShow] = useState(false);
 
   let navigate = useNavigate();
-
-  function handleSaveButtonClick() {
-    // todo axios 로 내용 저장 필요
-  }
 
   return (
     // 가운데 정렬
@@ -51,14 +46,7 @@ export function ContactAdd() {
             />
           </FormGroup>
         </div>
-        <div className="mb-3">
-          <FormGroup>
-            <FormLabel>작성자</FormLabel>
-            <FormControl value={"임시 작성자"} readOnly />
-          </FormGroup>
-        </div>
 
-        {/*버튼*/}
         <Button
           variant="danger"
           className="me-2"
@@ -68,7 +56,7 @@ export function ContactAdd() {
         >
           취소
         </Button>
-        <Button onClick={handleSaveButtonClick}>저장</Button>
+        <Button>저장</Button>
       </Col>
 
       {/* 취소 모달*/}
@@ -84,7 +72,7 @@ export function ContactAdd() {
           <Button
             variant="danger"
             onClick={() => {
-              navigate("/contact/list");
+              navigate("/inquiry");
             }}
           >
             목록으로

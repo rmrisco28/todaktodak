@@ -1,18 +1,14 @@
-import { useNavigate } from "react-router";
 import { Button, Col, Row } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
-export function ContactList() {
+export function InquiryList() {
   let navigate = useNavigate();
-
-  function handleTableRowClick() {
-    // todo axios로 게시판 데이터 가져오기
-  }
 
   return (
     <>
-      <Row className="justify-content-center">
-        <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4">문의게시판</h2>
+      <Row>
+        <Col>
+          <h2 className="mb-4">문의사항</h2>
 
           <table className="table table-hover">
             <thead>
@@ -25,11 +21,7 @@ export function ContactList() {
               </tr>
             </thead>
             <tbody>
-              <tr
-                style={{ cursor: "pointer" }}
-                // onClick={handleTableRowClick}
-                onClick={() => navigate("/contact/detail")}
-              >
+              <tr>
                 <td>1</td>
                 <td>어떻게 빌리나요</td>
                 <td>첫방문자</td>
@@ -38,7 +30,7 @@ export function ContactList() {
               </tr>
             </tbody>
           </table>
-          <Button onClick={() => navigate("/contact/add")}>글쓰기</Button>
+          <Button onClick={() => navigate("/inquiry/add")}>문의</Button>
         </Col>
       </Row>
     </>
