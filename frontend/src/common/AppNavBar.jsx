@@ -15,8 +15,21 @@ export function AppNavBar() {
               <Nav.Link as={NavLink} to="/">
                 HOME
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/board/add">
-                글작성
+              <Nav.Link as={NavLink} to="/product/list">
+                {/* 상품조회 목록 */}
+                상품조회
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/return">
+                {/* 반납신청 상세 */}
+                반납신청
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/order/list">
+                {/* 주문배송조회 목록 */}
+                주문배송조회
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/contact/list">
+                {/* 문의게시판 목록 */}
+                문의게시판
               </Nav.Link>
             </Nav>
 
