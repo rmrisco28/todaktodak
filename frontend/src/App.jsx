@@ -9,8 +9,8 @@ import { MemberDetail } from "./feacture/member/MemberDetail.jsx";
 import { MemberModify } from "./feacture/member/MemberModify.jsx";
 import { ProductList } from "./feacture/product/ProductList.jsx";
 import { ProductDetail } from "./feacture/product/ProductDetail.jsx";
-import { BuyDetail } from "./feacture/buy/BuyDetail.jsx";
-import { BuyAdd } from "./feacture/buy/BuyAdd.jsx";
+import { BuyForm } from "./feacture/order/BuyForm.jsx";
+import { BuyAdd } from "./feacture/order/BuyAdd.jsx";
 import { ContactAdd } from "./feacture/contact/ContactAdd.jsx";
 import { ContactList } from "./feacture/contact/ContactList.jsx";
 import { ContactDetail } from "./feacture/contact/ContactDetail.jsx";
@@ -21,7 +21,7 @@ import { ReceiveDetail } from "./feacture/order/ReceiveDetail.jsx";
 import { ReceiveExec } from "./feacture/order/ReceiveExec.jsx";
 import { CancelDetail } from "./feacture/order/CancelDetail.jsx";
 import { CancelExec } from "./feacture/order/CancelExec.jsx";
-import { Return } from "./feacture/order/Return.jsx";
+import { ReturnForm } from "./feacture/order/ReturnForm.jsx";
 import { ReturnAdd } from "./feacture/order/ReturnAdd.jsx";
 
 function App() {
@@ -50,11 +50,11 @@ function App() {
             {/* 상품조회 상세 */}
             <Route path="product/detail" element={<ProductDetail />} />
             {/* 상품구매 상세 */}
-            <Route path="buy/detail" element={<BuyDetail />} />
+            <Route path="buy" element={<BuyForm />} />
             {/* 상품구매 등록 */}
             <Route path="buy/add" element={<BuyAdd />} />
             {/* 반납신청 상세 */}
-            <Route path="return" element={<Return />} />
+            <Route path="return" element={<ReturnForm />} />
             {/* 반납신청 등록 */}
             <Route path="return/add" element={<ReturnAdd />} />
             {/* 문의게시판 등록 */}
