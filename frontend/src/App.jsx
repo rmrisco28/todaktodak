@@ -17,9 +17,9 @@ import { ContactDetail } from "./feacture/contact/ContactDetail.jsx";
 import { ContactModify } from "./feacture/contact/ContactModify.jsx";
 import { OrderList } from "./feacture/order/OrderList.jsx";
 import { OrderDetail } from "./feacture/order/OrderDetail.jsx";
-import { ReceiveDetail } from "./feacture/order/ReceiveDetail.jsx";
+import { ReceiveForm } from "./feacture/order/ReceiveForm.jsx";
 import { ReceiveExec } from "./feacture/order/ReceiveExec.jsx";
-import { CancelDetail } from "./feacture/order/CancelDetail.jsx";
+import { CancelForm } from "./feacture/order/CancelForm.jsx";
 import { CancelExec } from "./feacture/order/CancelExec.jsx";
 import { ReturnForm } from "./feacture/order/ReturnForm.jsx";
 import { ReturnAdd } from "./feacture/order/ReturnAdd.jsx";
@@ -70,11 +70,11 @@ function App() {
             {/* 주문배송조회 상세 */}
             <Route path="order/detail" element={<OrderDetail />} />
             {/* 상품수령 상세 */}
-            <Route path="receive/detail" element={<ReceiveDetail />} />
+            <Route path="receive" element={<ReceiveForm />} />
             {/* 상품수령 업데이트 */}
             <Route path="receive/exec" element={<ReceiveExec />} />
             {/* 상품취소 상세 */}
-            <Route path="cancel/detail" element={<CancelDetail />} />
+            <Route path="cancel" element={<CancelForm />} />
             {/* 상품취소 업데이트 */}
             <Route path="cancel/exec" element={<CancelExec />} />
           </Route>
