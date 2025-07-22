@@ -1,0 +1,42 @@
+import { Link, NavLink } from "react-router";
+import { Container, Nav, Navbar } from "react-bootstrap";
+
+export function AppNavBar() {
+  return (
+    <div>
+      <Navbar expand="lg" className="bg-body-tertiary">
+        <Container>
+          <Navbar.Brand to="/" as={Link}>
+            토닥토닥
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav>
+              <Nav.Link as={NavLink} to="/">
+                HOME
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/board/add">
+                글작성
+              </Nav.Link>
+            </Nav>
+
+            <Nav className="order-lg-3">
+              <Nav.Link as={NavLink} to="/signup">
+                가입
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/member/list">
+                회원목록
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/login">
+                로그인
+              </Nav.Link>
+              <Nav.Link as={NavLink} to="/logout">
+                로그아웃
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </div>
+  );
+}
