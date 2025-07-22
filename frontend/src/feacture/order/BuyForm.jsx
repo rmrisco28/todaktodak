@@ -1,3 +1,7 @@
 export function BuyForm() {
-  return null;
+  return (
+    <div>
+      <h2>상품구매</h2>
+    </div>
+  );
 }

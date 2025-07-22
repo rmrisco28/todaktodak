@@ -1,4 +1,4 @@
-package com.example.backend.main;
+package com.example.backend.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/order")
 @RequiredArgsConstructor
-public class MainController {
+public class OrderController {
 
-    @GetMapping("/")
-    public ResponseEntity<?> main() {
-
+    @GetMapping("list")
+    public ResponseEntity<?> list() {
         return null;
     }
 
