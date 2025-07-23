@@ -9,6 +9,8 @@ import {
 } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 export function ProductAdd() {
   const [category, setCategory] = useState("");
@@ -20,6 +22,8 @@ export function ProductAdd() {
   const [note, setNote] = useState("");
   const [images, setImages] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const navigate = useNavigate();
 
   let validate = true;
   if (name.trim() === "") {
@@ -43,7 +47,11 @@ export function ProductAdd() {
         images: images,
       })
       .then((res) => {
-        console.log("success");
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate("/product/list");
       })
       .catch((err) => {
         console.log(err);
