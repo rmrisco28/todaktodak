@@ -17,7 +17,7 @@ public class SaleImageThumb {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
-    private Integer id;
+    private Integer seq;
 
     @ManyToOne
     @JoinColumn(name = "sale_no", referencedColumnName = "sale_no")

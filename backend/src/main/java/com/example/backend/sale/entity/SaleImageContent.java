@@ -17,7 +17,7 @@ public class SaleImageContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
-    private Integer id;
+    private Integer seq;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "sale_no", nullable = false, referencedColumnName = "sale_no")
