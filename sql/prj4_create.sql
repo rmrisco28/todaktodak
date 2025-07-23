@@ -28,8 +28,8 @@ CREATE TABLE member
 # 상품관리 (내부 상품 재고 및 상태 관리)
 CREATE TABLE product
 (
-    seq         INT         NOT NULL,
-    product_no  VARCHAR(20) NOT NULL UNIQUE,
+    seq         INT AUTO_INCREMENT NOT NULL,
+    product_no  VARCHAR(20)        NOT NULL UNIQUE,
     category    VARCHAR(50),
     brand       VARCHAR(100),
     name        VARCHAR(50),
@@ -37,11 +37,11 @@ CREATE TABLE product
     stock       INT,
     price       INT,
     note        VARCHAR(255),
-    insert_dttm DATETIME    NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME    NOT NULL DEFAULT NOW(),
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
     state       VARCHAR(10),
-    use_yn      BOOLEAN     NOT NULL DEFAULT TRUE,
-    del_yn      BOOLEAN     NOT NULL DEFAULT FALSE,
+    use_yn      BOOLEAN            NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN            NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_product PRIMARY KEY (seq)
 );
 # DESC product;
@@ -53,11 +53,11 @@ CREATE TABLE product
 # 상품 관리 이미지
 CREATE TABLE product_image
 (
-    seq         INT      NOT NULL,
+    seq         INT AUTO_INCREMENT NOT NULL,
     product_no  VARCHAR(20),
     name        VARCHAR(300),
-    insert_dttm DATETIME NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME NOT NULL DEFAULT NOW(),
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_product_image PRIMARY KEY (seq),
     FOREIGN KEY (product_no) REFERENCES product (product_no)
 );
@@ -65,8 +65,8 @@ CREATE TABLE product_image
 # 판매상품 (상품 노출 관리)
 CREATE TABLE sale
 (
-    seq          INT         NOT NULL,
-    sale_no      VARCHAR(20) NOT NULL UNIQUE,
+    seq          INT AUTO_INCREMENT NOT NULL,
+    sale_no      VARCHAR(20)        NOT NULL UNIQUE,
     product_no   VARCHAR(20),
     category     VARCHAR(20),
     title        VARCHAR(255),
@@ -75,10 +75,10 @@ CREATE TABLE sale
     delivery_fee INT,
     content      VARCHAR(10000),
     view         INT,
-    insert_dttm  DATETIME    NOT NULL DEFAULT NOW(),
-    update_dttm  DATETIME    NOT NULL DEFAULT NOW(),
-    use_yn       BOOLEAN     NOT NULL DEFAULT TRUE,
-    del_yn       BOOLEAN     NOT NULL DEFAULT FALSE,
+    insert_dttm  DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm  DATETIME           NOT NULL DEFAULT NOW(),
+    use_yn       BOOLEAN            NOT NULL DEFAULT TRUE,
+    del_yn       BOOLEAN            NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_sale PRIMARY KEY (seq),
     FOREIGN KEY (product_no) REFERENCES product (product_no)
 );
@@ -91,22 +91,22 @@ CREATE TABLE sale
 # 판매 상품 관리 썸네일 이미지
 CREATE TABLE sale_image_thumb
 (
-    seq         INT      NOT NULL,
+    seq         INT AUTO_INCREMENT NOT NULL,
     sale_no     VARCHAR(20),
     name        VARCHAR(300),
-    insert_dttm DATETIME NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME NOT NULL DEFAULT NOW(),
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_sale_image_thumb PRIMARY KEY (seq),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
 # 판매 상품 관리 본문 이미지
 CREATE TABLE sale_image_content
 (
-    seq         INT          NOT NULL,
-    sale_no     VARCHAR(20)  NOT NULL,
-    name        VARCHAR(300) NOT NULL,
-    insert_dttm DATETIME     NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME     NOT NULL DEFAULT NOW(),
+    seq         INT AUTO_INCREMENT NOT NULL,
+    sale_no     VARCHAR(20)        NOT NULL,
+    name        VARCHAR(300)       NOT NULL,
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_sale_image_content PRIMARY KEY (seq),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
