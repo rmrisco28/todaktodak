@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Button,
@@ -9,17 +9,36 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
+import axios from "axios";
 
 export function ContactAdd() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [name, setName] = useState("");
 
   const [modalShow, setModalShow] = useState(false);
 
   let navigate = useNavigate();
 
   function handleSaveButtonClick() {
-    // todo axios 로 내용 저장 필요
+    axios
+      .post("/api/contact/add", {
+        title: title,
+        content: content,
+        name: name,
+      })
+      .then((res) => {
+        console.log("ok");
+        navigate("/contact/list");
+        alert(res.data.message);
+      })
+      .catch((err) => {
+        console.log("no");
+        console.log("저장실패");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
   }
 
   return (
@@ -54,7 +73,12 @@ export function ContactAdd() {
         <div className="mb-3">
           <FormGroup>
             <FormLabel>작성자</FormLabel>
-            <FormControl value={"임시 작성자"} readOnly />
+            <FormControl
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
           </FormGroup>
         </div>
 
@@ -68,6 +92,7 @@ export function ContactAdd() {
         >
           취소
         </Button>
+
         <Button onClick={handleSaveButtonClick}>저장</Button>
       </Col>
 

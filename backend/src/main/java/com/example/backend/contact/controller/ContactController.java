@@ -1,18 +1,51 @@
 package com.example.backend.contact.controller;
 
+import com.example.backend.contact.dto.ContactAddForm;
+import com.example.backend.contact.dto.ContactModifyForm;
+import com.example.backend.contact.entity.Contact;
+import com.example.backend.contact.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/contact")
 @RequiredArgsConstructor
 public class ContactController {
 
+    private final ContactService contactService;
+
+    @PutMapping("modify/{seq}")
+    public ResponseEntity<?> modify(@PathVariable Integer seq, @RequestBody ContactModifyForm cmf) {
+        cmf.setSeq(seq);
+        contactService.modify(cmf);
+        return ResponseEntity.ok(Map.of("message", "수정되었습니다."));
+    }
+
+    @GetMapping("detail/{seq}")
+    public ResponseEntity<?> detail(@PathVariable Integer seq) {
+        ContactAddForm detail = contactService.detail(seq);
+        return ResponseEntity.ok(detail);
+    }
+
+    @PostMapping("add")
+    public ResponseEntity<Map<String, Object>> add(@RequestBody ContactAddForm caf) {
+        contactService.add(caf);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", "success");
+        result.put("message", "문의사항이 저장되었습니다.");
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("list")
     public ResponseEntity<?> list() {
-        return null;
+        List<Contact> list = contactService.list();
+        return ResponseEntity.ok(list);
     }
+
 }

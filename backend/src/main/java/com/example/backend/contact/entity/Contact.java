@@ -1,6 +1,5 @@
 package com.example.backend.contact.entity;
 
-import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,16 +15,9 @@ import java.time.LocalDateTime;
 @Table(name = "contact", schema = "prj4")
 public class Contact {
     @Id
-    @Column(name = "seq", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seq", nullable = false)
     private Integer seq;
-
-    @Column(name = "contact_no", nullable = false, length = 20)
-    private String contactNo;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "member_no", nullable = false, referencedColumnName = "member_no")
-    private Member memberNo;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -36,23 +28,12 @@ public class Contact {
     @Column(name = "content", nullable = false, length = 10000)
     private String content;
 
-    @Column(name = "view", nullable = false)
+    @ColumnDefault("0")
+    @Column(name = "view")
     private Integer view;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "insert_dttm", nullable = false, updatable = false, insertable = false)
+    @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime insertDttm;
-
-    @ColumnDefault("current_timestamp()")
-    @Column(name = "update_dttm", nullable = false, insertable = false)
-    private LocalDateTime updateDttm;
-
-    @ColumnDefault("1")
-    @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = true;
-
-    @ColumnDefault("0")
-    @Column(name = "del_yn", nullable = false)
-    private Boolean delYn = false;
 
 }

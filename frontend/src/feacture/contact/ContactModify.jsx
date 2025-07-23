@@ -7,17 +7,58 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import axios from "axios";
 
 export function ContactModify() {
-  const [title, setTitle] = useState();
-  const [content, setContent] = useState();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [name, setName] = useState("");
+  const { seq } = useParams();
+
   const [modalShow, setModalShow] = useState(false);
 
   let navigate = useNavigate();
 
-  function handleSaveButtonClick() {}
+  useEffect(() => {
+    axios
+      .get(`/api/contact/detail/${seq}`, {})
+      .then((res) => {
+        console.log("ok");
+        const data = res.data;
+        setTitle(data.title);
+        setContent(data.content);
+        setName(data.name);
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }, [seq]);
+
+  function handleSaveButtonClick() {
+    axios
+      .put(`/api/contact/modify/${seq}`, {
+        seq,
+        title,
+        content,
+        name,
+      })
+      .then((res) => {
+        console.log("ok");
+        navigate("/contact/list");
+        alert(res.data.message);
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }
 
   return (
     <>
@@ -48,6 +89,17 @@ export function ContactModify() {
               />
             </FormGroup>
           </div>
+
+          <div className="mb-3">
+            <FormGroup>
+              <FormLabel>작성자</FormLabel>
+              <FormControl
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </FormGroup>
+          </div>
+
           {/*버튼*/}
           <Button
             variant="danger"

@@ -4,14 +4,35 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
 } from "react-bootstrap";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function ContactDetail() {
+  const [contact, setContact] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const { seq } = useParams();
   let navigate = useNavigate();
 
-  function handleSaveButtonClick() {}
+  useEffect(() => {
+    axios
+      .get(`/api/contact/detail/${seq}`)
+      .then((res) => {
+        console.log("ok");
+        setContact(res.data);
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }, [seq]);
+
+  if (!contact) return <div>로딩 중...</div>;
 
   return (
     <>
@@ -21,7 +42,7 @@ export function ContactDetail() {
           <div>
             <FormGroup className="mb-3" controlId="title1">
               <FormLabel>제목</FormLabel>
-              <FormControl value={"임시 제목"} readOnly />
+              <FormControl value={contact.title} readOnly />
             </FormGroup>
           </div>
           <div>
@@ -31,16 +52,14 @@ export function ContactDetail() {
                 readOnly
                 as="textarea"
                 rows={6}
-                value={
-                  "임시 내용 readonly @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-                }
+                value={contact.content}
               />
             </FormGroup>
           </div>
           <div className="mb-3">
             <FormGroup>
               <FormLabel>작성자</FormLabel>
-              <FormControl value={"임시 작성자"} readOnly />
+              <FormControl value={contact.name} readOnly />
             </FormGroup>
           </div>
           <Button
@@ -51,9 +70,17 @@ export function ContactDetail() {
             목록
           </Button>
           <Button
+            variant="danger"
+            className="me-2"
+            onClick={() => setModalShow(true)}
+          >
+            삭제
+          </Button>
+
+          <Button
             variant="warning"
             className="me-2"
-            onClick={() => navigate("/contact/modify")}
+            onClick={() => navigate(`/contact/modify/${seq}`)}
           >
             수정
           </Button>
@@ -79,11 +106,32 @@ export function ContactDetail() {
           </div>
           <Button
             title="관리자에게만 보이게 할 예정"
-            onClick={handleSaveButtonClick}
+            // onClick={handleSaveButtonClick}
           >
             답변저장
           </Button>
         </Col>
+
+        {/* 삭제 모달*/}
+        <Modal show={modalShow} onHide={() => setModalShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>삭제 여부 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>정말 삭제하시겠습니까?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+              뒤로
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                navigate("/contact/list");
+              }}
+            >
+              삭제
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Row>
     </>
   );

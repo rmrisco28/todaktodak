@@ -1,0 +1,63 @@
+package com.example.backend.contact.service;
+
+import com.example.backend.contact.dto.ContactAddForm;
+import com.example.backend.contact.dto.ContactModifyForm;
+import com.example.backend.contact.entity.Contact;
+import com.example.backend.contact.repository.ContactRepository;
+import com.example.backend.member.entity.Member;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+import java.util.Map;
+
+@Controller
+@RequiredArgsConstructor
+@Transactional
+public class ContactService {
+
+    private final ContactRepository contactRepository;
+
+
+    public void add(@RequestBody ContactAddForm caf) {
+        Contact contact = new Contact();
+
+        contact.setTitle(caf.getTitle());
+        contact.setContent(caf.getContent());
+        contact.setName(caf.getName());
+
+        contactRepository.save(contact);
+    }
+
+    public List<Contact> list() {
+        return contactRepository.findAllByOrderBySeqDesc();
+    }
+
+    public ContactAddForm detail(Integer seq) {
+        Contact contact = contactRepository.findById(seq).orElseThrow();
+
+        ContactAddForm caf = new ContactAddForm();
+        caf.setTitle(contact.getTitle());
+        caf.setContent(contact.getContent());
+        caf.setName(contact.getName());
+
+        return caf;
+
+
+    }
+
+    public void modify(ContactModifyForm cmf) {
+        Contact contact = contactRepository.findById(cmf.getSeq())
+                .orElseThrow(() -> new EntityNotFoundException("해당게시물이 존재하지 않습니다."));
+
+        contact.setTitle(cmf.getTitle());
+        contact.setContent(cmf.getContent());
+        contact.setName(cmf.getName());
+
+        contactRepository.save(contact);
+    }
+}
