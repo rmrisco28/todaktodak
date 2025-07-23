@@ -6,14 +6,16 @@ import com.example.backend.product.entity.ProductImage;
 import com.example.backend.product.repository.ProductImageRepository;
 import com.example.backend.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +27,12 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
+    private final S3Client s3Client;
 
+    @Value("${image.prefix}")
+    private String imagePrefix;
+    @Value("${aws.s3.bucket.name}")
+    private String bucketName;
 
     public void add(ProductAddForm dto) {
         // TODO 권한 체크 (관리자)
@@ -70,6 +77,10 @@ public class ProductService {
                     productImageRepository.save(entity);
 
                     // TODO AWS S3 업로드
+                    // AWS s3 파일 업로드
+//                    String objectKey = "prj3/board/" + product.getSeq() + "/" + image.getOriginalFilename();
+//                    uploadFile(image, objectKey);
+
                     // 실제 파일 server(local) disk 저장
                     // 1) ../Temp/prj3/boardFile 에서 '게시물 번호'이름의 폴더 생성
                     File folder = new File("D:/01.private_work/Choongang/workspaces/Temp/prj4/productImage/" + product.getSeq());
@@ -95,6 +106,18 @@ public class ProductService {
                     }
                 }
             }
+        }
+    }
+
+    private void uploadFile(MultipartFile file, String objectKey) {
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest
+                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("파일 전송이 실패하였습니다.");
         }
     }
 
