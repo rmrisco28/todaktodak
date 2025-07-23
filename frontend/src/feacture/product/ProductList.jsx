@@ -1,3 +1,154 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router";
+import { Col, Pagination, Row, Spinner, Table } from "react-bootstrap";
+import { FaThumbsUp } from "react-icons/fa6";
+import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
+import { GrNext, GrPrevious } from "react-icons/gr";
+
 export function ProductList() {
-  return null;
+  const [productList, setProductList] = useState(null);
+  const [pageInfo, setPageInfo] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // 마운트될 때 (initial render 시) 실행되는 코드
+    axios
+      .get(`/api/product/list?${searchParams}`)
+      .then((res) => {
+        console.log("동작 성공");
+        setProductList(res.data.productList);
+        setPageInfo(res.data.pageInfo);
+      })
+      .catch((err) => {
+        console.log("오류 발생");
+      })
+      .finally(() => {
+        console.log("항상 실행");
+      });
+  }, [searchParams]);
+
+  if (!productList) {
+    return <Spinner />;
+  }
+
+  function handleTableRowClick(seq) {
+    // 게시물 상세 보기 이동
+    navigate(`/product/${seq}`);
+  }
+
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
+  }
+
+  function handlePageNumberClick(pageNumber) {
+    // console.log(pageNumber + "페이지로 이동");
+    // navigate(`/?p=${pageNumber}`);
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.set("p", pageNumber);
+    setSearchParams(nextSearchParams);
+  }
+
+  return (
+    <>
+      <Row>
+        <Col>
+          <h2 className="mb-4">글 목록</h2>
+          {productList.length > 0 ? (
+            <Table striped={true} hover={true}>
+              <thead>
+                <tr>
+                  <th style={{ width: "70px" }}>번호</th>
+                  <th
+                    className="d-none d-md-table-cell"
+                    style={{ width: "200px" }}
+                  >
+                    상품번호
+                  </th>
+                  <th>상품명</th>
+                  <th
+                    className="d-none d-lg-table-cell"
+                    style={{ width: "200px" }}
+                  >
+                    등록일시
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {productList.map((product) => (
+                  <tr
+                    key={product.seq}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleTableRowClick(product.seq)}
+                  >
+                    <td>{product.seq}</td>
+                    <td className="d-none d-md-table-cell">
+                      {product.productNo}
+                    </td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <span>{product.name}</span>
+                      </div>
+                    </td>
+                    <td className="d-none d-lg-table-cell">
+                      {product.timesAgo}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <p>등록된 상품이 존재하지 않습니다.</p>
+          )}
+        </Col>
+      </Row>
+
+      {/* PageNation */}
+      <Row className={"my-3"}>
+        <Col>
+          <Pagination className="justify-content-center">
+            <Pagination.First
+              disabled={pageInfo.currentPageNumber === 1}
+              onClick={() => handlePageNumberClick(1)}
+            >
+              <TbPlayerTrackPrev />
+            </Pagination.First>
+            <Pagination.Prev
+              disabled={pageInfo.leftPageNumber <= 1}
+              onClick={() =>
+                handlePageNumberClick(pageInfo.leftPageNumber - 10)
+              }
+            >
+              <GrPrevious />
+            </Pagination.Prev>
+            {pageNumbers.map((pageNumber) => (
+              <Pagination.Item
+                key={pageNumber}
+                onClick={() => handlePageNumberClick(pageNumber)}
+                active={pageInfo.currentPageNumber === pageNumber}
+              >
+                {pageNumber}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              diabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+              onClick={() =>
+                handlePageNumberClick(pageInfo.rightPageNumber + 1)
+              }
+            >
+              <GrNext />
+            </Pagination.Next>
+            <Pagination.Last
+              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+              onClick={() => handlePageNumberClick(pageInfo.totalPages)}
+            >
+              <TbPlayerTrackNext />
+            </Pagination.Last>
+          </Pagination>
+        </Col>
+      </Row>
+    </>
+  );
 }
