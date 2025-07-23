@@ -1,12 +1,15 @@
 package com.example.backend.product.service;
 
 import com.example.backend.product.dto.ProductAddForm;
+import com.example.backend.product.dto.ProductListDto;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
 import com.example.backend.product.repository.ProductImageRepository;
 import com.example.backend.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +22,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +31,8 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
-    private final S3Client s3Client;
+    // TODO
+    //    private final S3Client s3Client;
 
     @Value("${image.prefix}")
     private String imagePrefix;
@@ -109,17 +114,17 @@ public class ProductService {
         }
     }
 
-    private void uploadFile(MultipartFile file, String objectKey) {
-        try {
-            PutObjectRequest putObjectRequest = PutObjectRequest
-                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
-                    .build();
-            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("파일 전송이 실패하였습니다.");
-        }
-    }
+//    private void uploadFile(MultipartFile file, String objectKey) {
+//        try {
+//            PutObjectRequest putObjectRequest = PutObjectRequest
+//                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
+//                    .build();
+//            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException("파일 전송이 실패하였습니다.");
+//        }
+//    }
 
     public boolean validateForAdd(ProductAddForm dto) {
         System.out.println("ProductService.validateForAdd");
@@ -146,5 +151,20 @@ public class ProductService {
         }
 
         return true;
+    }
+
+    public Map<String, Object> list(String keyword, Integer pageNumber) {
+        Page<ProductListDto> productListDtoPage = productRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+        int totalPages = productListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo, "productList", productListDtoPage.getContent());
     }
 }
