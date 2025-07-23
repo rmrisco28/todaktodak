@@ -18,7 +18,7 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
-    private Integer id;
+    private Integer seq;
 
     @Column(name = "sale_no", nullable = false, length = 20)
     private String saleNo;

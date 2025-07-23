@@ -11,9 +11,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export function ProductAdd() {
-  const [categoryTop, setCategoryTop] = useState("");
-  const [categoryMid, setCategoryMid] = useState("");
-  const [categorySub, setCategorySub] = useState("");
+  const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
   const [name, setName] = useState("");
   const [standard, setStandard] = useState("");
@@ -35,7 +33,12 @@ export function ProductAdd() {
     setIsProcessing(true);
     axios
       .postForm("/api/product/add", {
+        category: category,
+        brand: brand,
         name: name,
+        standard: standard,
+        stock: stock,
+        price: price,
         note: note,
         images: images,
       })
@@ -56,31 +59,11 @@ export function ProductAdd() {
         <h2 className="mb-4">관리 상품 등록</h2>
         <div>
           {/* TODO Selectbox + 카테고리 관리DB 추가 */}
-          <FormGroup className="mb-3" controlId="formCategoryTop">
-            <FormLabel>대분류</FormLabel>
+          <FormGroup className="mb-3" controlId="formCategory">
+            <FormLabel>분류</FormLabel>
             <FormControl
-              value={categoryTop}
-              onChange={(e) => setCategoryTop(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-        </div>
-        <div>
-          {/* TODO Selectbox + 카테고리 관리DB 추가 */}
-          <FormGroup className="mb-3" controlId="formCategoryMid">
-            <FormLabel>중분류</FormLabel>
-            <FormControl
-              value={categoryMid}
-              onChange={(e) => setCategoryMid(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-        </div>
-        <div>
-          {/* TODO Selectbox + 카테고리 관리DB 추가 */}
-          <FormGroup className="mb-3" controlId="formCategorySub">
-            <FormLabel>소분류</FormLabel>
-            <FormControl
-              value={categorySub}
-              onChange={(e) => setCategorySub(e.target.value)}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             ></FormControl>
           </FormGroup>
         </div>
@@ -143,7 +126,6 @@ export function ProductAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* TODO DB 추가*/}
           <FormGroup className="mb-3" controlId="formImages">
             <FormLabel>상품 이미지</FormLabel>
             <FormControl
