@@ -1,5 +1,6 @@
-package com.example.backend.product.entity;
+package com.example.backend.sale.entity;
 
+import com.example.backend.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,40 +18,34 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
-    private Integer seq;
+    private Integer id;
 
     @Column(name = "sale_no", nullable = false, length = 20)
     private String saleNo;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "product_no", nullable = false, referencedColumnName = "product_no")
+    @ManyToOne
+    @JoinColumn(name = "product_no", referencedColumnName = "product_no")
     private Product productNo;
 
-    @Column(name = "category_top", nullable = false, length = 20)
-    private String categoryTop;
+    @Column(name = "category", length = 20)
+    private String category;
 
-    @Column(name = "category_mid", nullable = false, length = 20)
-    private String categoryMid;
-
-    @Column(name = "category_sub", nullable = false, length = 20)
-    private String categorySub;
-
-    @Column(name = "title", nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private Integer price;
 
-    @Column(name = "delivery_fee", nullable = false)
+    @Column(name = "delivery_fee")
     private Integer deliveryFee;
 
     @Column(name = "content", length = 10000)
     private String content;
 
-    @Column(name = "view", nullable = false)
+    @Column(name = "view")
     private Integer view;
 
     @ColumnDefault("current_timestamp()")
@@ -63,7 +58,7 @@ public class Sale {
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = true;
+    private Boolean useYn = false;
 
     @ColumnDefault("0")
     @Column(name = "del_yn", nullable = false)
