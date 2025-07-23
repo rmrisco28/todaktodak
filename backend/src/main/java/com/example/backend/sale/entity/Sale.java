@@ -1,5 +1,6 @@
-package com.example.backend.contact.entity;
+package com.example.backend.sale.entity;
 
+import com.example.backend.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,28 +13,40 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-@Table(name = "reply", schema = "prj4")
-public class Reply {
+@Table(name = "sale", schema = "prj4")
+public class Sale {
     @Id
-    @Column(name = "seq", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer seq;
+    @Column(name = "seq", nullable = false)
+    private Integer id;
 
-    @Column(name = "reply_no", nullable = false, length = 20)
-    private String replyNo;
+    @Column(name = "sale_no", nullable = false, length = 20)
+    private String saleNo;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "contact_no", nullable = false, referencedColumnName = "contact_no")
-    private Contact contactNo;
+    @ManyToOne
+    @JoinColumn(name = "product_no", referencedColumnName = "product_no")
+    private Product productNo;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "category", length = 20)
+    private String category;
+
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
+    @Column(name = "quantity")
+    private Integer quantity;
 
-    @Column(name = "content", nullable = false, length = 10000)
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "delivery_fee")
+    private Integer deliveryFee;
+
+    @Column(name = "content", length = 10000)
     private String content;
+
+    @Column(name = "view")
+    private Integer view;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, updatable = false, insertable = false)

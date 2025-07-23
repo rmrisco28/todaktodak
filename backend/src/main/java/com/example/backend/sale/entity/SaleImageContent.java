@@ -1,4 +1,4 @@
-package com.example.backend.order.entity;
+package com.example.backend.sale.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,21 +12,19 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-@Table(name = "delivery", schema = "prj4")
-public class Delivery {
+@Table(name = "sale_image_content", schema = "prj4")
+public class SaleImageContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
-    private Integer seq;
+    private Integer id;
 
-    @Column(name = "delivery_no", nullable = false, length = 20)
-    private String deliveryNo;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sale_no", nullable = false, referencedColumnName = "sale_no")
+    private Sale saleNo;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 300)
     private String name;
-
-    @Column(name = "tel", nullable = false, length = 15)
-    private String tel;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, updatable = false, insertable = false)
@@ -35,16 +33,5 @@ public class Delivery {
     @ColumnDefault("current_timestamp()")
     @Column(name = "update_dttm", nullable = false, insertable = false)
     private LocalDateTime updateDttm;
-
-    @Column(name = "state", nullable = false, length = 10)
-    private String state;
-
-    @ColumnDefault("1")
-    @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = true;
-
-    @ColumnDefault("0")
-    @Column(name = "del_yn", nullable = false)
-    private Boolean delYn = false;
 
 }
