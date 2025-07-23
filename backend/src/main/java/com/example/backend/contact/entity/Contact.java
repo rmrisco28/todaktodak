@@ -1,4 +1,4 @@
-package com.example.backend.order.entity;
+package com.example.backend.contact.entity;
 
 import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;

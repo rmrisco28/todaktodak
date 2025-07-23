@@ -1,6 +1,5 @@
 package com.example.backend.contact.entity;
 
-import com.example.backend.order.entity.Contact;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
