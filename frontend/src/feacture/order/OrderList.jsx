@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const OrderList = () => {
+export function OrderList() {
   const [orders, setOrders] = useState([]);
   const [form, setForm] = useState({
     orderNo: "",
@@ -37,7 +37,6 @@ const OrderList = () => {
       console.error("주문 저장 실패:", error);
     }
   };
-
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">주문 관리</h1>
@@ -105,6 +104,4 @@ const OrderList = () => {
       </table>
     </div>
   );
-};
-
-export default OrderList;
+}
