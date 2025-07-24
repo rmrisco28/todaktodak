@@ -1,107 +1,68 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  ListGroup,
+  Modal,
+  Row,
+  Table,
+} from "react-bootstrap";
+import { useState } from "react";
 
 export function OrderList() {
-  const [orders, setOrders] = useState([]);
-  const [form, setForm] = useState({
-    orderNo: "",
-    orderOption: "",
-    orderDate: "",
-  });
-
-  const fetchOrders = async () => {
-    try {
-      const response = await axios.get("/api/order/list");
-      setOrders(response.data);
-    } catch (error) {
-      console.error("주문 목록 조회 실패:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("/api/order/save", form);
-      alert("주문이 저장되었습니다.");
-      setForm({ orderNo: "", orderOption: "", orderDate: "" });
-      fetchOrders();
-    } catch (error) {
-      console.error("주문 저장 실패:", error);
-    }
-  };
+  const [orderList, setOrderList] = useState();
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">주문 관리</h1>
-
-      <form onSubmit={handleSubmit} className="mb-6">
-        <div className="mb-2">
-          <label className="block">주문번호:</label>
-          <input
-            type="text"
-            name="orderNo"
-            value={form.orderNo}
-            onChange={handleChange}
-            className="border p-2 w-full"
-            required
-          />
+    <Row className="justify-content-center">
+      <Col xs={12} md={8} lg={6}>
+        <div className="d-flex justify-content-between">
+          <h2 className="mb-4">seq</h2>
         </div>
-        <div className="mb-2">
-          <label className="block">옵션:</label>
-          <input
-            type="text"
-            name="orderOption"
-            value={form.orderOption}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
+        <div>
+          <FormGroup className="mb-3" controlId="title1">
+            <FormLabel>주문번호</FormLabel>
+          </FormGroup>
         </div>
-        <div className="mb-2">
-          <label className="block">주문일자:</label>
-          <input
-            type="datetime-local"
-            name="orderDate"
-            value={form.orderDate}
-            onChange={handleChange}
-            className="border p-2 w-full"
-          />
+        <div>
+          <FormGroup className="mb-3" controlId="title1">
+            <FormLabel>주문자명</FormLabel>
+          </FormGroup>
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          주문 저장
-        </button>
-      </form>
-
-      <h2 className="text-xl font-semibold mb-2">주문 목록</h2>
-      <table className="table-auto border-collapse w-full">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border px-4 py-2">SEQ</th>
-            <th className="border px-4 py-2">주문번호</th>
-            <th className="border px-4 py-2">옵션</th>
-            <th className="border px-4 py-2">주문일자</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.seq}>
-              <td className="border px-4 py-2">{order.seq}</td>
-              <td className="border px-4 py-2">{order.orderNo}</td>
-              <td className="border px-4 py-2">{order.orderOption}</td>
-              <td className="border px-4 py-2">{order.orderDate}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        <div>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>주문상태</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="insertedAt1">
+            <FormLabel>상품옵션</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="insertedAt1">
+            <FormLabel>갯수</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="insertedAt1">
+            <FormLabel>상품 총 가격</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="insertedAt1">
+            <FormLabel>배송 비용</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="insertedAt1">
+            <FormLabel>총 가격</FormLabel>
+          </FormGroup>
+        </div>
+        <div className="my-5">
+          <hr />
+        </div>
+      </Col>
+    </Row>
   );
 }
