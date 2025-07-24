@@ -20,7 +20,7 @@ export function ProductAdd() {
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
   const [note, setNote] = useState("");
-  const [images, setImages] = useState("");
+  const [images, setImages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const navigate = useNavigate();
