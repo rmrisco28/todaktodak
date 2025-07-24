@@ -6,24 +6,19 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "member", schema = "prj4")
-public class Member {
+@Table(name = "member2")
+public class Member2 {
     @Id
-    @Column(name = "seq", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer seq;
-
-    @Column(name = "member_no", nullable = false, length = 20)
-    private String memberNo;
-
-    @Column(name = "auth", length = 20)
-    private String auth;
+    @Column(name = "seq", nullable = false)
+    private Integer id;
 
     @Column(name = "member_id", nullable = false, length = 120)
     private String memberId;
@@ -38,7 +33,7 @@ public class Member {
     private String email;
 
     @Column(name = "birth_dt", nullable = false)
-    private LocalDateTime birthDt;
+    private LocalDate birthDt;
 
     @Column(name = "phone", nullable = false, length = 15)
     private String phone;
@@ -49,26 +44,11 @@ public class Member {
     @Column(name = "addr_detail", nullable = false)
     private String addrDetail;
 
-    @Column(name = "postal", nullable = false, length = 10)
-    private String postal;
+    @Column(name = "post_code", nullable = false, length = 10)
+    private String postCode;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "insert_dttm", nullable = false, updatable = false, insertable = false)
+    @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime insertDttm;
-
-    @ColumnDefault("current_timestamp()")
-    @Column(name = "update_dttm", nullable = false, insertable = false)
-    private LocalDateTime updateDttm;
-
-    @Column(name = "state", nullable = false, length = 10)
-    private String state;
-
-    @ColumnDefault("1")
-    @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = true;
-
-    @ColumnDefault("0")
-    @Column(name = "del_yn", nullable = false)
-    private Boolean delYn = false;
 
 }

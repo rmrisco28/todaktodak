@@ -1,12 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { Col, Row, Table } from "react-bootstrap";
 
 export function MemberList() {
+  const [memberList, setMemberList] = useState([]);
+
   useEffect(() => {
     axios
       .get("/api/member/list")
-      .then((res) => {})
+      .then((res) => {
+        setMemberList(res.data);
+      })
       .catch((err) => {})
       .finally(() => {});
   }, []);
@@ -22,31 +26,17 @@ export function MemberList() {
               <th>ID</th>
               <th>고객명</th>
               <th>등록일시</th>
-              <th>상태</th>
             </tr>
           </thead>
           <tbody>
-            <tr style={{ cursor: "pointer" }}>
-              <td>123</td>
-              <td>123</td>
-              <td>1123</td>
-              <td>1123</td>
-              <td>1123</td>
-            </tr>
-            <tr>
-              <td>123</td>
-              <td>123</td>
-              <td>1123</td>
-              <td>1123</td>
-              <td>1123</td>
-            </tr>
-            <tr>
-              <td>123</td>
-              <td>123</td>
-              <td>1123</td>
-              <td>1123</td>
-              <td>1123</td>
-            </tr>
+            {memberList.map((member) => (
+              <tr key={member.id} style={{ cursor: "pointer" }}>
+                <td>{member.id}</td>
+                <td>{member.memberId}</td>
+                <td>{member.name}</td>
+                <td>{member.insertDttm}</td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </Col>
