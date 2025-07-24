@@ -1,6 +1,5 @@
 package com.example.backend.order.controller;
 
-import com.example.backend.order.dto.DeliveryListDto;
 import com.example.backend.order.dto.OrderDetailDto;
 import com.example.backend.order.dto.OrderListDto;
 import com.example.backend.order.service.OrderService;
@@ -29,18 +28,11 @@ public class OrderController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("detail")
-    public ResponseEntity<?> detail(OrderDetailDto orderDetailDto) {
-
-        return null;
-    }
-
-    @GetMapping("delivery/list")
-    public ResponseEntity<?> deliveryList(DeliveryListDto deliveryListDto) {
-
-        orderService.deliveryList(deliveryListDto);
-
-        return null;
-    }
-
+//    @GetMapping("detail")
+//    public ResponseEntity<?> detail(OrderDetailDto orderDetailDto) {
+//
+//        orderService.detail(orderDetailDto);
+//
+//        return ResponseEntity.ok(orderDetailDto);
+//    }
 }
