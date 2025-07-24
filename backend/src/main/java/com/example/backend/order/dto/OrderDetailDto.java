@@ -13,6 +13,7 @@ public class OrderDetailDto {
     private String orderOption;
     private Integer count;
     private Integer totalProdPrice;
+    private Integer deliveryFee;
     private Integer totalPrice;
     private String trackNo;
     private LocalDateTime insertDttm;
