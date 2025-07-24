@@ -20,16 +20,21 @@ export function ProductAdd() {
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
   const [note, setNote] = useState("");
-  const [images, setImages] = useState("");
+  const [images, setImages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const navigate = useNavigate();
 
   let validate = true;
-  if (name.trim() === "") {
-    validate = false;
-  }
-  if (note.trim() === "") {
+  if (
+    category.trim() === "" ||
+    brand.trim() === "" ||
+    name.trim() === "" ||
+    standard.trim() === "" ||
+    stock < 0 ||
+    price < 0 ||
+    note.trim() === ""
+  ) {
     validate = false;
   }
 
@@ -103,20 +108,22 @@ export function ProductAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* TODO Selectbox 숫자 */}
           <FormGroup className="mb-3" controlId="formStock">
             <FormLabel>재고수량</FormLabel>
             <FormControl
+              type="number"
+              step={1}
               value={stock}
               onChange={(e) => setStock(e.target.value)}
             ></FormControl>
           </FormGroup>
         </div>
         <div>
-          {/* TODO 숫자만 입력 */}
           <FormGroup className="mb-3" controlId="formPrice">
             <FormLabel>개당 가격</FormLabel>
             <FormControl
+              type="number"
+              step={10}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             ></FormControl>

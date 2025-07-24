@@ -22,6 +22,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +75,6 @@ public class ProductService {
     }
 
     private void saveImages(Product product, List<MultipartFile> images) {
-        System.out.println("ProductService.saveImages");
         if (images != null && images.size() > 0) {
             for (MultipartFile image : images) {
                 if (image != null && image.getSize() > 0) {
@@ -130,7 +130,7 @@ public class ProductService {
 //    }
 
     public boolean validateForAdd(ProductAddForm dto) {
-        System.out.println("ProductService.validateForAdd");
+
         if (dto.getCategory() == null || dto.getCategory().trim().isBlank()) {
             return false;
         }
@@ -189,5 +189,16 @@ public class ProductService {
         dto.setImages(images);
 
         return dto;
+    }
+
+    public void updateDelYn(Integer seq) {
+        Product dbData = productRepository.findById(seq).get();
+        // del_yn = true
+        dbData.setDelYn(true);
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        productRepository.save(dbData);
     }
 }

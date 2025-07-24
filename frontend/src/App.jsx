@@ -27,6 +27,7 @@ import { SaleList } from "./feacture/sale/SaleList.jsx";
 import { SaleDetail } from "./feacture/sale/SaleDetail.jsx";
 import { ProductAdd } from "./feacture/product/ProductAdd.jsx";
 import { SaleAdd } from "./feacture/sale/SaleAdd.jsx";
+import { ProductModify } from "./feacture/product/ProductModify.jsx";
 
 function App() {
   return (
@@ -55,6 +56,8 @@ function App() {
             <Route path="product/list" element={<ProductList />} />
             {/* 상품조회 상세 */}
             <Route path="product/detail/:seq" element={<ProductDetail />} />
+            {/* 상품 수정 */}
+            <Route path="product/modify" element={<ProductModify />} />
             {/* 판매상품 등록 */}
             <Route path="sale/add" element={<SaleAdd />} />
             {/* 판매상품조회 목록 */}
@@ -64,7 +67,6 @@ function App() {
             {/* 상품구매 상세 */}
             <Route path="buy" element={<BuyForm />} />
             {/* 상품구매 등록 */}
-
             <Route path="buy/add" element={<BuyAdd />} />
             {/* 반납신청 상세 */}
             <Route path="return" element={<ReturnForm />} />
