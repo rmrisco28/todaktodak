@@ -1,23 +1,40 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { Col, Pagination, Row, Spinner, Table } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Form,
+  FormControl,
+  InputGroup,
+  Pagination,
+  Row,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import { FaThumbsUp } from "react-icons/fa6";
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
+import { BiSearchAlt2 } from "react-icons/bi";
 
 export function ProductList() {
+  const [keyword, setKeyword] = useState("");
   const [productList, setProductList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 마운트될 때 (initial render 시) 실행되는 코드
+    const q = searchParams.get("q");
+    if (q) {
+      setKeyword(q);
+    } else {
+      setKeyword("");
+    }
+
     axios
       .get(`/api/product/list?${searchParams}`)
       .then((res) => {
-        console.log("동작 성공");
         setProductList(res.data.productList);
         setPageInfo(res.data.pageInfo);
       })
@@ -28,6 +45,11 @@ export function ProductList() {
         console.log("항상 실행");
       });
   }, [searchParams]);
+
+  function handleSearchFormSubmit(e) {
+    e.preventDefault();
+    navigate("/product/list?q=" + keyword);
+  }
 
   if (!productList) {
     return <Spinner />;
@@ -55,7 +77,23 @@ export function ProductList() {
     <>
       <Row>
         <Col>
-          <h2 className="mb-4">글 목록</h2>
+          <h2 className="mb-4">관리 상품 목록</h2>
+          <Form
+            inline="true"
+            onSubmit={handleSearchFormSubmit}
+            className="order-lg-2 mx-lg-auto"
+          >
+            <InputGroup>
+              <FormControl
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+              <Button type="submit">
+                <BiSearchAlt2 />
+              </Button>
+            </InputGroup>
+          </Form>
+
           {productList.length > 0 ? (
             <Table striped={true} hover={true}>
               <thead>
