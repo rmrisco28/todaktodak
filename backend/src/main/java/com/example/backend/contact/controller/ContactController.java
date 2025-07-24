@@ -19,6 +19,12 @@ public class ContactController {
 
     private final ContactService contactService;
 
+    @DeleteMapping("/{seq}")
+    public ResponseEntity<?> delete(@PathVariable Integer seq) {
+        contactService.delete(seq);
+        return ResponseEntity.ok(Map.of("message", "삭제되었습니다."));
+    }
+
     // 게시물 조회수
     @GetMapping("/{seq}")
     public ResponseEntity<?> viewCount(@PathVariable Integer seq) {

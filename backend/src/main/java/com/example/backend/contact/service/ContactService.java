@@ -38,7 +38,9 @@ public class ContactService {
     }
 
     public ContactAddForm detail(Integer seq) {
-        Contact contact = contactRepository.findById(seq).orElseThrow();
+        Contact contact = contactRepository.findById(seq)
+                .filter(c -> !c.getDelYn())
+                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
 
         ContactAddForm caf = new ContactAddForm();
         caf.setTitle(contact.getTitle());
@@ -66,5 +68,11 @@ public class ContactService {
 
         contact.setView(contact.getView() + 1);
         return contact;
+    }
+
+    public void delete(Integer seq) {
+        Contact contact = contactRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        contact.setDelYn(true); //
     }
 }

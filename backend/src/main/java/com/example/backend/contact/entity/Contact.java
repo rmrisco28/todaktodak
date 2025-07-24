@@ -28,12 +28,20 @@ public class Contact {
     @Column(name = "content", nullable = false, length = 10000)
     private String content;
 
-    @ColumnDefault("1")
+    @ColumnDefault("0")
     @Column(name = "view")
     private Integer view = 0;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime insertDttm;
+
+    @ColumnDefault("1")
+    @Column(name = "use_yn", nullable = true)
+    private Boolean useYn = true;
+
+    @ColumnDefault("0")
+    @Column(name = "del_yn", nullable = false)
+    private Boolean delYn = false;
 
 }
