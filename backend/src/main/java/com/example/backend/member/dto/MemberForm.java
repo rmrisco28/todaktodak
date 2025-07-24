@@ -13,5 +13,7 @@ public class MemberForm {
     private String phone;
     private String birthDate;
     private String email;
-    private AddressDto address;
+    private String addr;
+    private String addrDetail;
+    private String postcode;
 }

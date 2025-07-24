@@ -1,11 +1,13 @@
 package com.example.backend.member.controller;
 
 import com.example.backend.member.dto.MemberForm;
+import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -16,12 +18,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("list")
-    public ResponseEntity<?> list() {
+    public List<MemberListInfo> list() {
         return memberService.list();
     }
 
     @PostMapping("signup")
-    public ResponseEntity<?> signup(@RequestBody MemberForm memberForm) {
+    public ResponseEntity<?> add(@RequestBody MemberForm memberForm) {
         try {
             // 서비스로 일 시키기(회원가입용 dto 사용)
             memberService.signup(memberForm);

@@ -61,11 +61,9 @@ export function MemberSignup() {
         phone: phone,
         birthDate: birthDate,
         email: email,
-        address: {
-          fullAddress: address,
-          detail: addressDetail,
-          postcode: postcode,
-        },
+        addr: address,
+        addrDetail: addressDetail,
+        postcode: postcode,
       })
       .then((res) => {
         console.log(res.data);
@@ -74,9 +72,7 @@ export function MemberSignup() {
       .catch((err) => {
         console.log("err");
       })
-      .finally(() => {
-        console.log("always");
-      });
+      .finally(() => {});
   }
 
   function updateBirthDate(y, m, d) {
@@ -238,7 +234,7 @@ export function MemberSignup() {
             </div>
           </FormGroup>
           {/* 주소 검색 */}
-          <FormGroup controlId="address">
+          <FormGroup controlId="addrees">
             <FormLabel></FormLabel>
             <div className="d-flex mb-3" style={{ gap: "10px" }}>
               <FormControl

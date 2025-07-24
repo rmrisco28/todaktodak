@@ -1,6 +1,5 @@
 package com.example.backend.order.entity;
 
-import com.example.backend.member.entity.Member;
 import com.example.backend.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -32,9 +31,6 @@ public class Rental {
     @JoinColumn(name = "product_no", nullable = false, referencedColumnName = "product_no")
     private Product productNo;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "member_no", nullable = false, referencedColumnName = "member_no")
-    private Member memberNo;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, updatable = false, insertable = false)

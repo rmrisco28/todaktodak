@@ -21,10 +21,7 @@ public class Reply {
 
     @Column(name = "reply_no", nullable = false, length = 20)
     private String replyNo;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "contact_no", nullable = false, referencedColumnName = "contact_no")
-    private Contact contactNo;
+    
 
     @Column(name = "title", nullable = false)
     private String title;
