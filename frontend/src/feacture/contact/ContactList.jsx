@@ -1,12 +1,26 @@
 import { useNavigate } from "react-router";
 import { Button, Col, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function ContactList() {
+  const [contactList, setContactList] = useState([]);
   let navigate = useNavigate();
 
-  function handleTableRowClick() {
-    // todo axios로 게시판 데이터 가져오기
-  }
+  useEffect(() => {
+    axios
+      .get("/api/contact/list")
+      .then((res) => {
+        console.log("ok");
+        setContactList(res.data);
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }, []);
 
   return (
     <>
@@ -25,17 +39,18 @@ export function ContactList() {
               </tr>
             </thead>
             <tbody>
-              <tr
-                style={{ cursor: "pointer" }}
-                // onClick={handleTableRowClick}
-                onClick={() => navigate("/contact/detail")}
-              >
-                <td>1</td>
-                <td>어떻게 빌리나요</td>
-                <td>첫방문자</td>
-                <td>2025.07.22</td>
-                <td>365</td>
-              </tr>
+              {contactList.map((contact) => (
+                <tr
+                  key={contact.seq}
+                  onClick={() => navigate(`/contact/detail/${contact.seq}`)}
+                >
+                  <td>{contact.seq}</td>
+                  <td>{contact.title}</td>
+                  <td>{contact.name}</td>
+                  <td>{contact.insertDttm}</td>
+                  <td>{contact.view}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
           <Button onClick={() => navigate("/contact/add")}>글쓰기</Button>
