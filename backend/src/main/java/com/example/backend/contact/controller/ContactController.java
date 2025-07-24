@@ -21,7 +21,6 @@ public class ContactController {
 
     @DeleteMapping("/{seq}")
     public ResponseEntity<?> delete(@PathVariable Integer seq) {
-        System.out.println("ContactController.delete");
         contactService.delete(seq);
         return ResponseEntity.ok(Map.of("message", "삭제되었습니다."));
     }
