@@ -177,7 +177,7 @@ export function ProductDetail() {
           </Button>
           <Button
             variant="outline-info"
-            onClick={() => navigate(`/product/update?seq=${product.seq}`)}
+            onClick={() => navigate(`/product/modify?seq=${product.seq}`)}
           >
             수정
           </Button>
