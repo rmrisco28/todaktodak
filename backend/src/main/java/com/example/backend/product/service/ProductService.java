@@ -22,6 +22,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -191,9 +192,13 @@ public class ProductService {
     }
 
     public void updateDelYn(Integer seq) {
-
         Product dbData = productRepository.findById(seq).get();
+        // del_yn = true
         dbData.setDelYn(true);
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
         productRepository.save(dbData);
     }
 }
