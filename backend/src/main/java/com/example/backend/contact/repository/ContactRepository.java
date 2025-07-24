@@ -11,6 +11,9 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
     List<Contact> findAllByOrderBySeqDesc();
 
     List<Contact> findByDelYnFalse(); // 삭제가 false인 게시물만
-
+    
     Contact findBySeq(Integer seq);
+
+
+    List<Contact> findByDelYnFalseOrderBySeqDesc();
 }

@@ -126,7 +126,7 @@ export function ContactModify() {
             <Button
               variant="danger"
               onClick={() => {
-                navigate("/contact/detail");
+                navigate(`/contact/detail/${seq}`);
               }}
             >
               게시판으로

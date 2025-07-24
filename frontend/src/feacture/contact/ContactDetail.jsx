@@ -125,7 +125,19 @@ export function ContactDetail() {
             <Button
               variant="danger"
               onClick={() => {
-                navigate("/contact/list");
+                axios
+                  .delete(`/api/contact/${seq}`)
+                  .then((res) => {
+                    console.log("ok");
+                    alert(res.data.message);
+                    navigate("/contact/list", { replace: true });
+                  })
+                  .catch((err) => {
+                    console.log("no");
+                  })
+                  .finally(() => {
+                    console.log("finally");
+                  });
               }}
             >
               삭제

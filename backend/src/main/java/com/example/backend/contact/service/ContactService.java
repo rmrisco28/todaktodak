@@ -23,6 +23,7 @@ public class ContactService {
     private final ContactRepository contactRepository;
 
 
+    // 게시물 생성
     public void add(@RequestBody ContactAddForm caf) {
         Contact contact = new Contact();
 
@@ -33,10 +34,13 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
+    // 삭제 안된 게시물만 가져오기
     public List<Contact> list() {
-        return contactRepository.findAllByOrderBySeqDesc();
+//        return contactRepository. findAllByOrderBySeqDesc();
+        return contactRepository.findByDelYnFalseOrderBySeqDesc();
     }
 
+    // 게시물 상세화면 불러오기
     public ContactAddForm detail(Integer seq) {
         Contact contact = contactRepository.findById(seq)
                 .filter(c -> !c.getDelYn())
@@ -48,10 +52,9 @@ public class ContactService {
         caf.setName(contact.getName());
 
         return caf;
-
-
     }
 
+    // 게시물 수정
     public void modify(ContactModifyForm cmf) {
         Contact contact = contactRepository.findById(cmf.getSeq())
                 .orElseThrow(() -> new EntityNotFoundException("해당게시물이 존재하지 않습니다."));
@@ -63,6 +66,7 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
+    // 조회수 증가
     public Contact viewCount(Integer seq) {
         Contact contact = contactRepository.findById(seq).orElseThrow(() -> new RuntimeException("해당글이 존재하지 않습니다."));
 
@@ -70,6 +74,7 @@ public class ContactService {
         return contact;
     }
 
+    // 게시물 삭제
     public void delete(Integer seq) {
         Contact contact = contactRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
