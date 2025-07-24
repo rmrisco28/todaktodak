@@ -19,6 +19,21 @@ public class ContactController {
 
     private final ContactService contactService;
 
+    @DeleteMapping("/{seq}")
+    public ResponseEntity<?> delete(@PathVariable Integer seq) {
+        System.out.println("ContactController.delete");
+        contactService.delete(seq);
+        return ResponseEntity.ok(Map.of("message", "삭제되었습니다."));
+    }
+
+    // 게시물 조회수
+    @GetMapping("/{seq}")
+    public ResponseEntity<?> viewCount(@PathVariable Integer seq) {
+        Contact contact = contactService.viewCount(seq);
+        return ResponseEntity.ok(contact);
+    }
+
+    // 게시글 수정
     @PutMapping("modify/{seq}")
     public ResponseEntity<?> modify(@PathVariable Integer seq, @RequestBody ContactModifyForm cmf) {
         cmf.setSeq(seq);
@@ -26,12 +41,14 @@ public class ContactController {
         return ResponseEntity.ok(Map.of("message", "수정되었습니다."));
     }
 
+    // 게시물 상세 화면
     @GetMapping("detail/{seq}")
     public ResponseEntity<?> detail(@PathVariable Integer seq) {
         ContactAddForm detail = contactService.detail(seq);
         return ResponseEntity.ok(detail);
     }
 
+    // 게시물 추가
     @PostMapping("add")
     public ResponseEntity<Map<String, Object>> add(@RequestBody ContactAddForm caf) {
         contactService.add(caf);
@@ -42,6 +59,7 @@ public class ContactController {
         return ResponseEntity.ok(result);
     }
 
+    // 게시물 목록 불러오기
     @GetMapping("list")
     public ResponseEntity<?> list() {
         List<Contact> list = contactService.list();

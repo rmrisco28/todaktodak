@@ -64,6 +64,7 @@ function App() {
             {/* 상품구매 상세 */}
             <Route path="buy" element={<BuyForm />} />
             {/* 상품구매 등록 */}
+
             <Route path="buy/add" element={<BuyAdd />} />
             {/* 반납신청 상세 */}
             <Route path="return" element={<ReturnForm />} />

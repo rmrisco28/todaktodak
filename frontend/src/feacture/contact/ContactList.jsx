@@ -42,7 +42,16 @@ export function ContactList() {
               {contactList.map((contact) => (
                 <tr
                   key={contact.seq}
-                  onClick={() => navigate(`/contact/detail/${contact.seq}`)}
+                  onClick={() => {
+                    axios
+                      .get(`/api/contact/${contact.seq}`) // 조회수 증가
+                      .then(() => {
+                        navigate(`/contact/detail/${contact.seq}`);
+                      })
+                      .catch((err) => {
+                        console.log("조회수 증가 실패 err");
+                      });
+                  }}
                 >
                   <td>{contact.seq}</td>
                   <td>{contact.title}</td>

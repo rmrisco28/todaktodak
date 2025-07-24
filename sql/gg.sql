@@ -74,6 +74,8 @@ CREATE TABLE contact
     content     VARCHAR(10000) NOT NULL,
     view        INT                     DEFAULT 0,
     insert_dttm DATETIME       NOT NULL DEFAULT NOW(),
+    use_yn      BOOLEAN        NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN        NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_contact PRIMARY KEY (seq)
 );
 
