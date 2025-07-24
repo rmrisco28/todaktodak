@@ -78,6 +78,11 @@ export function ProductList() {
       <Row>
         <Col>
           <h2 className="mb-4">관리 상품 목록</h2>
+          {/* 상품 등록 */}
+          <Button variant="primary" onClick={() => navigate(`/product/add`)}>
+            상품 등록
+          </Button>
+
           <Form
             inline="true"
             onSubmit={handleSearchFormSubmit}
