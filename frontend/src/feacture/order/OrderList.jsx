@@ -35,28 +35,58 @@ export function OrderList() {
           </FormGroup>
         </div>
         <div>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>상품명</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
           <FormGroup className="mb-3" controlId="insertedAt1">
             <FormLabel>상품옵션</FormLabel>
           </FormGroup>
         </div>
         <div>
-          <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>갯수</FormLabel>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>상품번호</FormLabel>
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>상품 총 가격</FormLabel>
+            <FormLabel>상품갯수</FormLabel>
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>배송 비용</FormLabel>
+            <FormLabel>상품총가격</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>배송번호</FormLabel>
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>총 가격</FormLabel>
+            <FormLabel>배송비용</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>운송장번호</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="insertedAt1">
+            <FormLabel>총가격</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>첫주문일시</FormLabel>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="author1">
+            <FormLabel>마지막수정일시</FormLabel>
           </FormGroup>
         </div>
         <div className="my-5">
