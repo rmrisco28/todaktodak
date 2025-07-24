@@ -15,8 +15,8 @@ import { ContactAdd } from "./feacture/contact/ContactAdd.jsx";
 import { ContactList } from "./feacture/contact/ContactList.jsx";
 import { ContactDetail } from "./feacture/contact/ContactDetail.jsx";
 import { ContactModify } from "./feacture/contact/ContactModify.jsx";
-import { OrderList } from "./feacture/order/OrderList.jsx";
-import { OrderDetail } from "./feacture/order/OrderDetail.jsx";
+import { OrderDeliveryList } from "./feacture/order/OrderDeliveryList.jsx";
+import { OrderDeliveryDetail } from "./feacture/order/OrderDeliveryDetail.jsx";
 import { ReceiveForm } from "./feacture/order/ReceiveForm.jsx";
 import { ReceiveExec } from "./feacture/order/ReceiveExec.jsx";
 import { CancelForm } from "./feacture/order/CancelForm.jsx";
@@ -27,6 +27,8 @@ import { SaleList } from "./feacture/sale/SaleList.jsx";
 import { SaleDetail } from "./feacture/sale/SaleDetail.jsx";
 import { ProductAdd } from "./feacture/product/ProductAdd.jsx";
 import { SaleAdd } from "./feacture/sale/SaleAdd.jsx";
+import { OrderList } from "./feacture/order/OrderList.jsx";
+import { OrderDetail } from "./OrderDetail.jsx";
 
 function App() {
   return (
@@ -77,10 +79,17 @@ function App() {
             <Route path="contact/detail" element={<ContactDetail />} />
             {/* 문의게시판 수정 */}
             <Route path="contact/modify" element={<ContactModify />} />
-            {/* 주문배송조회 목록 */}
+            {/* 주문목록 */}
             <Route path="order/list" element={<OrderList />} />
-            {/* 주문배송조회 상세 */}
+            {/* 주문상세 */}
             <Route path="order/detail" element={<OrderDetail />} />
+            {/* 주문배송조회 목록 */}
+            <Route path="order/delivery/list" element={<OrderDeliveryList />} />
+            {/* 주문배송조회 상세 */}
+            <Route
+              path="order/delivery/detail"
+              element={<OrderDeliveryDetail />}
+            />
             {/* 상품수령 상세 */}
             <Route path="receive" element={<ReceiveForm />} />
             {/* 상품수령 업데이트 */}
