@@ -126,7 +126,10 @@ export function ProductDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formState">
             <FormLabel>상품등록상태</FormLabel>
-            <FormControl value={product.state} readOnly={true} />
+            <FormControl
+              value={product.state || "상태값 없음"}
+              readOnly={true}
+            />
           </FormGroup>
         </div>
         <div>
