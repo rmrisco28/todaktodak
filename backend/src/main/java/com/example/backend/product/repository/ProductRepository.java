@@ -21,8 +21,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             p.insertDttm
                         )
             FROM Product p
-            WHERE p.name LIKE %:keyword%
-                OR p.productNo LIKE %:keyword%
+            WHERE (p.useYn = true 
+                AND p.delYn = false)
+                AND (p.name LIKE %:keyword%
+                OR p.productNo LIKE %:keyword%)
             ORDER BY p.seq DESC
             """)
     Page<ProductListDto> findAllBy(String keyword, PageRequest of);

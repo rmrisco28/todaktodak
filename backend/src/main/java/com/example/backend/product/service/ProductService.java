@@ -74,7 +74,6 @@ public class ProductService {
     }
 
     private void saveImages(Product product, List<MultipartFile> images) {
-        System.out.println("ProductService.saveImages");
         if (images != null && images.size() > 0) {
             for (MultipartFile image : images) {
                 if (image != null && image.getSize() > 0) {
@@ -130,7 +129,7 @@ public class ProductService {
 //    }
 
     public boolean validateForAdd(ProductAddForm dto) {
-        System.out.println("ProductService.validateForAdd");
+
         if (dto.getCategory() == null || dto.getCategory().trim().isBlank()) {
             return false;
         }
@@ -189,5 +188,12 @@ public class ProductService {
         dto.setImages(images);
 
         return dto;
+    }
+
+    public void updateDelYn(Integer seq) {
+
+        Product dbData = productRepository.findById(seq).get();
+        dbData.setDelYn(true);
+        productRepository.save(dbData);
     }
 }

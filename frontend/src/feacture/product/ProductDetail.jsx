@@ -45,18 +45,18 @@ export function ProductDetail() {
 
   function handleDeleteButtonClick() {
     axios
-      .delete(`/api/product/detail/${seq}`)
+      .put(`/api/product/${seq}`)
       .then((res) => {
         console.log("동작 성공");
         const message = res.data.message;
         if (message) {
           toast(message.text, { type: message.type });
         }
-        navigate("/");
+        navigate("/product/list");
       })
       .catch((err) => {
         console.log("동작 오류");
-        toast("게시물이 삭제되지 않았습니다.", { type: "warning" });
+        toast("상품이 삭제되지 않았습니다.", { type: "warning" });
       })
       .finally(() => {
         console.log("항상 실행");
@@ -114,13 +114,21 @@ export function ProductDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formInsertDttm">
             <FormLabel>등록일시</FormLabel>
-            <FormControl value={product.insertDttm} readOnly={true} />
+            <FormControl
+              value={product.insertDttm}
+              type="datetime-local"
+              readOnly={true}
+            />
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formUpdateDttm">
             <FormLabel>수정일시</FormLabel>
-            <FormControl value={product.updateDttm} readOnly={true} />
+            <FormControl
+              value={product.updateDttm}
+              type="datetime-local"
+              readOnly={true}
+            />
           </FormGroup>
         </div>
         <div>
@@ -150,17 +158,11 @@ export function ProductDetail() {
           </ListGroup>
         </div>
         <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>작성자</FormLabel>
-            <FormControl value={product.authorNickName} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="insertedAt1">
+          <FormGroup className="mb-3" controlId="FormInsertDttm">
             <FormLabel>등록일시</FormLabel>
             <FormControl
               type="datetime-local"
-              value={product.insertedAt}
+              value={product.insertDttm}
               readOnly={true}
             />
           </FormGroup>
@@ -176,7 +178,7 @@ export function ProductDetail() {
           </Button>
           <Button
             variant="outline-info"
-            onClick={() => navigate(`/product/modify?seq=${product.seq}`)}
+            onClick={() => navigate(`/product/update?seq=${product.seq}`)}
           >
             수정
           </Button>
