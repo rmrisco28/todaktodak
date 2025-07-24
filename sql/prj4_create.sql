@@ -28,49 +28,88 @@ CREATE TABLE member
 # 상품관리 (내부 상품 재고 및 상태 관리)
 CREATE TABLE product
 (
-    seq          INT          NOT NULL,
-    product_no   VARCHAR(20)  NOT NULL UNIQUE,
-    category_top VARCHAR(50)  NOT NULL,
-    category_mid VARCHAR(50)  NOT NULL,
-    category_sub VARCHAR(50)  NOT NULL,
-    brand        VARCHAR(100) NOT NULL,
-    name         VARCHAR(50)  NOT NULL,
-    standard     VARCHAR(255) NOT NULL,
-    stock        INT          NOT NULL,
-    price        INT          NOT NULL,
-    note         VARCHAR(255),
-    insert_dttm  DATETIME     NOT NULL DEFAULT NOW(),
-    update_dttm  DATETIME     NOT NULL DEFAULT NOW(),
-    state        VARCHAR(10)  NOT NULL,
-    use_yn       BOOLEAN      NOT NULL DEFAULT TRUE,
-    del_yn       BOOLEAN      NOT NULL DEFAULT FALSE,
+    seq         INT AUTO_INCREMENT NOT NULL,
+    product_no  VARCHAR(20)        NOT NULL UNIQUE,
+    category    VARCHAR(50),
+    brand       VARCHAR(100),
+    name        VARCHAR(50),
+    standard    VARCHAR(255),
+    stock       INT,
+    price       INT,
+    note        VARCHAR(255),
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    state       VARCHAR(10),
+    use_yn      BOOLEAN            NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN            NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_product PRIMARY KEY (seq)
 );
 # DESC product;
+# ALTER TABLE product
+#     ADD COLUMN category VARCHAR(50) AFTER `product_no`;
+# ALTER TABLE product
+#     DROP COLUMN images;
+# DROP TABLE product;
+# 상품 관리 이미지
+CREATE TABLE product_image
+(
+    seq         INT AUTO_INCREMENT NOT NULL,
+    product_no  VARCHAR(20),
+    name        VARCHAR(300),
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_product_image PRIMARY KEY (seq),
+    FOREIGN KEY (product_no) REFERENCES product (product_no)
+);
 
 # 판매상품 (상품 노출 관리)
 CREATE TABLE sale
 (
-    seq          INT          NOT NULL,
-    sale_no      VARCHAR(20)  NOT NULL UNIQUE,
-    product_no   VARCHAR(20)  NOT NULL,
-    category_top VARCHAR(20)  NOT NULL,
-    category_mid VARCHAR(20)  NOT NULL,
-    category_sub VARCHAR(20)  NOT NULL,
-    title        VARCHAR(255) NOT NULL,
-    quantity     INT          NOT NULL,
-    price        INT          NOT NULL,
-    delivery_fee INT          NOT NULL,
+    seq          INT AUTO_INCREMENT NOT NULL,
+    sale_no      VARCHAR(20)        NOT NULL UNIQUE,
+    product_no   VARCHAR(20),
+    category     VARCHAR(20),
+    title        VARCHAR(255),
+    quantity     INT,
+    price        INT,
+    delivery_fee INT,
     content      VARCHAR(10000),
-    view         INT          NOT NULL,
-    insert_dttm  DATETIME     NOT NULL DEFAULT NOW(),
-    update_dttm  DATETIME     NOT NULL DEFAULT NOW(),
-    use_yn       BOOLEAN      NOT NULL DEFAULT TRUE,
-    del_yn       BOOLEAN      NOT NULL DEFAULT FALSE,
+    view         INT,
+    insert_dttm  DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm  DATETIME           NOT NULL DEFAULT NOW(),
+    use_yn       BOOLEAN            NOT NULL DEFAULT TRUE,
+    del_yn       BOOLEAN            NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_sale PRIMARY KEY (seq),
     FOREIGN KEY (product_no) REFERENCES product (product_no)
 );
 # DESC sale;
+# ALTER TABLE sale
+#     ADD COLUMN category VARCHAR(50) AFTER `product_no`;
+# ALTER TABLE sale
+#     DROP COLUMN category_top;
+
+# 판매 상품 관리 썸네일 이미지
+CREATE TABLE sale_image_thumb
+(
+    seq         INT AUTO_INCREMENT NOT NULL,
+    sale_no     VARCHAR(20),
+    name        VARCHAR(300),
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_sale_image_thumb PRIMARY KEY (seq),
+    FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
+);
+# 판매 상품 관리 본문 이미지
+CREATE TABLE sale_image_content
+(
+    seq         INT AUTO_INCREMENT NOT NULL,
+    sale_no     VARCHAR(20)        NOT NULL,
+    name        VARCHAR(300)       NOT NULL,
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_sale_image_content PRIMARY KEY (seq),
+    FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
+);
 
 # 배송업체 관리
 CREATE TABLE delivery

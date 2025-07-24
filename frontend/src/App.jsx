@@ -23,6 +23,10 @@ import { CancelForm } from "./feacture/order/CancelForm.jsx";
 import { CancelExec } from "./feacture/order/CancelExec.jsx";
 import { ReturnForm } from "./feacture/order/ReturnForm.jsx";
 import { ReturnAdd } from "./feacture/order/ReturnAdd.jsx";
+import { SaleList } from "./feacture/sale/SaleList.jsx";
+import { SaleDetail } from "./feacture/sale/SaleDetail.jsx";
+import { ProductAdd } from "./feacture/product/ProductAdd.jsx";
+import { SaleAdd } from "./feacture/sale/SaleAdd.jsx";
 
 function App() {
   return (
@@ -45,10 +49,18 @@ function App() {
             <Route path="member" element={<MemberDetail />} />
             {/* 회원수정 */}
             <Route path="member/modify" element={<MemberModify />} />
+            {/* 상품 등록 */}
+            <Route path="product/add" element={<ProductAdd />} />
             {/* 상품조회 목록 */}
             <Route path="product/list" element={<ProductList />} />
             {/* 상품조회 상세 */}
             <Route path="product/detail" element={<ProductDetail />} />
+            {/* 판매상품 등록 */}
+            <Route path="sale/add" element={<SaleAdd />} />
+            {/* 판매상품조회 목록 */}
+            <Route path="sale/list" element={<SaleList />} />
+            {/* 판매상품조회 상세 */}
+            <Route path="sale/detail" element={<SaleDetail />} />
             {/* 상품구매 상세 */}
             <Route path="buy" element={<BuyForm />} />
             {/* 상품구매 등록 */}

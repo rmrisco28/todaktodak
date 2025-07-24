@@ -22,28 +22,22 @@ public class Product {
     @Column(name = "product_no", nullable = false, length = 20)
     private String productNo;
 
-    @Column(name = "category_top", nullable = false, length = 50)
-    private String categoryTop;
+    @Column(name = "category", length = 50)
+    private String category;
 
-    @Column(name = "category_mid", nullable = false, length = 50)
-    private String categoryMid;
-
-    @Column(name = "category_sub", nullable = false, length = 50)
-    private String categorySub;
-
-    @Column(name = "brand", nullable = false, length = 100)
+    @Column(name = "brand", length = 100)
     private String brand;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", length = 50)
     private String name;
 
-    @Column(name = "standard", nullable = false)
+    @Column(name = "standard")
     private String standard;
 
-    @Column(name = "stock", nullable = false)
+    @Column(name = "stock")
     private Integer stock;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private Integer price;
 
     @Column(name = "note")
@@ -57,12 +51,12 @@ public class Product {
     @Column(name = "update_dttm", nullable = false, insertable = false)
     private LocalDateTime updateDttm;
 
-    @Column(name = "state", nullable = false, length = 10)
+    @Column(name = "state", length = 10)
     private String state;
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = true;
+    private Boolean useYn = false;
 
     @ColumnDefault("0")
     @Column(name = "del_yn", nullable = false)
