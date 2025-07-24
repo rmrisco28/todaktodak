@@ -1,5 +1,6 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.dto.MemberDto;
 import com.example.backend.member.dto.MemberForm;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.service.MemberService;
@@ -18,6 +19,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("list")
+    // 회원 목록 보기
     public List<MemberListInfo> list() {
         return memberService.list();
     }
@@ -41,6 +43,12 @@ public class MemberController {
         return ResponseEntity.ok().body(
                 Map.of("message",
                         Map.of("type", "success", "text", "회원가입 되었습니다.")));
+    }
+
+
+    @GetMapping(params = "memberId")
+    public MemberDto getMemberDetail(@RequestParam String memberId) {
+        return memberService.getMemberByMemberId(memberId);
     }
 
 }

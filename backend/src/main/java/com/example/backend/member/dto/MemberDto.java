@@ -6,14 +6,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class MemberForm {
+public class MemberDto {
     private String memberId;
-    private String password;
     private String name;
-    private String phone;
-    private String birthDate;
     private String email;
+    private LocalDate birthDt;
+    private String phone;
+    private String postCode;
     private String addr;
     private String addrDetail;
-    private String postCode;
+    private LocalDateTime insertDttm;
+
 }
