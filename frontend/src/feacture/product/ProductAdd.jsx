@@ -107,6 +107,8 @@ export function ProductAdd() {
           <FormGroup className="mb-3" controlId="formStock">
             <FormLabel>재고수량</FormLabel>
             <FormControl
+              type="number"
+              step={1}
               value={stock}
               onChange={(e) => setStock(e.target.value)}
             ></FormControl>
@@ -117,6 +119,8 @@ export function ProductAdd() {
           <FormGroup className="mb-3" controlId="formPrice">
             <FormLabel>개당 가격</FormLabel>
             <FormControl
+              type="number"
+              step={10}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             ></FormControl>
