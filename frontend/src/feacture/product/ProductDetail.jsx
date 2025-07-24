@@ -23,7 +23,6 @@ export function ProductDetail() {
   const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
-    // axios로 해당 게시물 가져오기
     axios
       .get(`/api/product/detail/${seq}`)
       .then((res) => {
