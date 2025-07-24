@@ -1,6 +1,7 @@
 package com.example.backend.product.controller;
 
 import com.example.backend.product.dto.ProductAddForm;
+import com.example.backend.product.dto.ProductDto;
 import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,17 @@ public class ProductController {
     ) {
         return productService.list(keyword, pageNumber);
     }
+
+    /**
+     * 상품관리 상세 조회 (관리자)
+     *
+     * @param seq
+     * @return
+     */
+    @GetMapping("detail/{seq}")
+    public ProductDto getProductBySeq(@PathVariable Integer seq) {
+        return productService.getProductBySeq(seq);
+    }
+
 
 }

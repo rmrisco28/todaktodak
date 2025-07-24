@@ -1,6 +1,8 @@
 package com.example.backend.product.service;
 
 import com.example.backend.product.dto.ProductAddForm;
+import com.example.backend.product.dto.ProductDto;
+import com.example.backend.product.dto.ProductImageDto;
 import com.example.backend.product.dto.ProductListDto;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
@@ -20,6 +22,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -166,5 +169,25 @@ public class ProductService {
                 "currentPageNumber", pageNumber);
 
         return Map.of("pageInfo", pageInfo, "productList", productListDtoPage.getContent());
+    }
+
+    public ProductDto getProductBySeq(Integer seq) {
+        ProductDto dto = productRepository.findProductBySeq(seq);
+        Product product = new Product();
+        product.setProductNo(dto.getProductNo());
+
+        List<ProductImage> imageList = productImageRepository.findByProductNo(product);
+        List<ProductImageDto> images = new ArrayList<>();
+        for (ProductImage image : imageList) {
+            ProductImageDto imageDto = new ProductImageDto();
+            imageDto.setName(image.getName());
+            imageDto.setPath("http://localhost:8081/productImage/" + seq + "/" + image.getName());
+            // TODO call aws s3
+//            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
+            images.add(imageDto);
+        }
+        dto.setImages(images);
+
+        return dto;
     }
 }
