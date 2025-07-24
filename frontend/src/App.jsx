@@ -74,9 +74,9 @@ function App() {
             {/* 문의게시판 목록 */}
             <Route path="contact/list" element={<ContactList />} />
             {/* 문의게시판 상세 */}
-            <Route path="contact/detail" element={<ContactDetail />} />
+            <Route path="contact/detail/:seq" element={<ContactDetail />} />
             {/* 문의게시판 수정 */}
-            <Route path="contact/modify" element={<ContactModify />} />
+            <Route path="contact/modify/:seq" element={<ContactModify />} />
             {/* 주문배송조회 목록 */}
             <Route path="order/list" element={<OrderList />} />
             {/* 주문배송조회 상세 */}
