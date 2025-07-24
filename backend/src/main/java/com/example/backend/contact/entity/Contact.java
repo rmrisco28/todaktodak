@@ -28,9 +28,9 @@ public class Contact {
     @Column(name = "content", nullable = false, length = 10000)
     private String content;
 
-    @ColumnDefault("0")
+    @ColumnDefault("1")
     @Column(name = "view")
-    private Integer view;
+    private Integer view = 0;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)

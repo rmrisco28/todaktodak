@@ -60,4 +60,11 @@ public class ContactService {
 
         contactRepository.save(contact);
     }
+
+    public Contact viewCount(Integer seq) {
+        Contact contact = contactRepository.findById(seq).orElseThrow(() -> new RuntimeException("해당글이 존재하지 않습니다."));
+
+        contact.setView(contact.getView() + 1);
+        return contact;
+    }
 }
