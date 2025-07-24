@@ -1,3 +1,9 @@
+import { Col, Row } from "react-bootstrap";
+
 export function MemberDetail() {
-  return null;
+  return (
+    <Row>
+      <Col></Col>
+    </Row>
+  );
 }
