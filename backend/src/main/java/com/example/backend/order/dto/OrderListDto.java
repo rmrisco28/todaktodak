@@ -8,8 +8,11 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class OrderListDto {
-    private Integer seq;
-    private String orderNo;
+    private String odrName;
+    private String orderState;
     private String orderOption;
-    private LocalDateTime orderDate;
+    private Integer count;
+    private Integer totalPrice;
+    private LocalDateTime insertDttm;
+    private LocalDateTime updateDttm;
 }
