@@ -26,10 +26,15 @@ export function ProductAdd() {
   const navigate = useNavigate();
 
   let validate = true;
-  if (name.trim() === "") {
-    validate = false;
-  }
-  if (note.trim() === "") {
+  if (
+    category.trim() === "" ||
+    brand.trim() === "" ||
+    name.trim() === "" ||
+    standard.trim() === "" ||
+    stock < 0 ||
+    price < 0 ||
+    note.trim() === ""
+  ) {
     validate = false;
   }
 
