@@ -59,7 +59,7 @@ export function ReturnAdd() {
     <div>
       <div>
         <FormGroup>
-          <FormLabel>최초 주문자 성명</FormLabel>
+          <FormLabel>주문자 성명</FormLabel>
           <input
             type="text"
             value={name}

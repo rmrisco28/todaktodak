@@ -18,13 +18,13 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("list")
-    public Map<String, Object> getAllBoards(
-            @RequestParam(value = "q", defaultValue = "") String keyword,
-            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
-
-        return OrderService.list(keyword, pageNumber);
-    }
+//    @GetMapping("list")
+//    public Map<String, Object> getAllBoards(
+//            @RequestParam(value = "q", defaultValue = "") String keyword,
+//            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
+//
+//        return OrderService.list(keyword, pageNumber);
+//    }
 //    @PutMapping("{id}")
 //    @PreAuthorize("isAuthenticated()")
 //    public ResponseEntity<?> updateBoard(@PathVariable Integer id,
