@@ -56,7 +56,7 @@ public class Product {
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = false;
+    private Boolean useYn = true;
 
     @ColumnDefault("0")
     @Column(name = "del_yn", nullable = false)
