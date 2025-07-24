@@ -1,5 +1,6 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, Route } from "react-router";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { CancelExec } from "../feacture/order/CancelExec.jsx";
 
 export function AppNavBar() {
   return (
@@ -45,6 +46,10 @@ export function AppNavBar() {
               </Nav.Link>
               <Nav.Link as={NavLink} to="/logout">
                 로그아웃
+              </Nav.Link>
+              {/*  결제화면 추후 삭제 필수!!!! 이동하기 편하게 적어놓은 것*/}
+              <Nav.Link as={NavLink} to="/buy">
+                결제화면/ 작업 편의를 위해 임시 생성/ 추후 삭제
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

@@ -4,7 +4,7 @@ import com.example.backend.contact.dto.ContactAddForm;
 import com.example.backend.contact.dto.ContactModifyForm;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.repository.ContactRepository;
-import com.example.backend.member.entity.Member;
+//import com.example.backend.member.entity.Member;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +34,8 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
-    // 삭제 안된 게시물만 가져오기
+    // 삭제 안된 게시물 조회
     public List<Contact> list() {
-//        return contactRepository. findAllByOrderBySeqDesc();
         return contactRepository.findByDelYnFalseOrderBySeqDesc();
     }
 
@@ -65,6 +64,7 @@ public class ContactService {
 
         contactRepository.save(contact);
     }
+
 
     // 조회수 증가
     public Contact viewCount(Integer seq) {
