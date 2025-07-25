@@ -1,11 +1,9 @@
 package com.example.backend.product.service;
 
-import com.example.backend.product.dto.ProductAddForm;
-import com.example.backend.product.dto.ProductDto;
-import com.example.backend.product.dto.ProductImageDto;
-import com.example.backend.product.dto.ProductListDto;
+import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
+import com.example.backend.product.entity.ProductImageId;
 import com.example.backend.product.repository.ProductImageRepository;
 import com.example.backend.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -79,8 +77,11 @@ public class ProductService {
             for (MultipartFile image : images) {
                 if (image != null && image.getSize() > 0) {
                     ProductImage entity = new ProductImage();
+                    ProductImageId id = new ProductImageId();
+                    id.setProductNo(product.getProductNo());
+                    id.setName(image.getOriginalFilename());
                     entity.setProductNo(product);
-                    entity.setName(image.getOriginalFilename());
+                    entity.setId(id);
 
                     productImageRepository.save(entity);
 
@@ -180,8 +181,8 @@ public class ProductService {
         List<ProductImageDto> images = new ArrayList<>();
         for (ProductImage image : imageList) {
             ProductImageDto imageDto = new ProductImageDto();
-            imageDto.setName(image.getName());
-            imageDto.setPath("http://localhost:8081/productImage/" + seq + "/" + image.getName());
+            imageDto.setName(image.getId().getName());
+            imageDto.setPath("http://localhost:8081/productImage/" + seq + "/" + image.getId().getName());
             // TODO call aws s3
 //            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
             images.add(imageDto);
@@ -200,5 +201,129 @@ public class ProductService {
         dbData.setUpdateDttm(now);
 
         productRepository.save(dbData);
+    }
+
+    public boolean validateForUpdate(ProductUpdateForm dto) {
+
+        if (dto.getCategory() == null || dto.getCategory().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getBrand() == null || dto.getBrand().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getName() == null || dto.getName().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getStandard() == null || dto.getStandard().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getStock() == null || dto.getStock() < 0) {
+            return false;
+        }
+        if (dto.getPrice() == null || dto.getPrice() < 0) {
+            return false;
+        }
+        if (dto.getNote() == null || dto.getNote().trim().isBlank()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void update(ProductUpdateForm dto) {
+        Product dbData = productRepository.findById(dto.getSeq()).get();
+
+        dbData.setCategory(dto.getCategory());
+        dbData.setBrand(dto.getBrand());
+        dbData.setName(dto.getName());
+        dbData.setStandard(dto.getStandard());
+        dbData.setStock(dto.getStock());
+        dbData.setPrice(dto.getPrice());
+        dbData.setNote(dto.getNote());
+
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        // TODO 이미지 수정 오류 처리
+        deleteFiles(dbData, dto.getDeleteImages());
+        saveFiles(dbData, dto.getImages());
+
+        productRepository.save(dbData);
+    }
+
+    private void saveFiles(Product dbData, List<MultipartFile> images) {
+        if (images != null && images.size() > 0) {
+            for (MultipartFile image : images) {
+                if (image != null && image.getSize() > 0) {
+                    // board_file 테이블 새 레코드 입력
+                    ProductImage productImage = new ProductImage();
+                    // entity set
+                    ProductImageId id = new ProductImageId();
+                    id.setProductNo(dbData.getProductNo());
+                    id.setName(image.getOriginalFilename());
+                    productImage.setProductNo(dbData);
+                    productImage.setId(id);
+
+                    // repository
+                    productImageRepository.save(productImage);
+
+                    // AWS s3 파일 업로드
+//                    String objectKey = "prj4/productImage/" + dbData.getId() + "/" + image.getOriginalFilename();
+//                    uploadFile(image, objectKey);
+
+
+                    // 실제 파일 server(local) disk 저장
+                    // 1) ../Temp/prj3/boardFile 에서 '게시물 번호'이름의 폴더 생성
+                    File folder = new File("D:/01.private_work/Choongang/workspaces/Temp/prj4/productImage/" + dbData.getSeq());
+                    if (!folder.exists()) {
+                        folder.mkdirs();
+                    }
+
+                    // 2) 폴더에 파일 저장
+                    try {
+                        BufferedInputStream bi = new BufferedInputStream(image.getInputStream());
+                        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(new File(folder, image.getOriginalFilename())));
+                        try (bi; bo) {
+                            byte[] b = new byte[1024];
+                            int len;
+                            while ((len = bi.read(b)) != -1) {
+                                bo.write(b, 0, len);
+                            }
+                            bo.flush();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+
+
+                }
+            }
+
+        }
+
+    }
+
+    private void deleteFiles(Product dbData, String[] deleteImages) {
+        if (deleteImages != null && deleteImages.length > 0) {
+            for (String image : deleteImages) {
+                // board_file table 의 record 지우고
+                ProductImageId id = new ProductImageId();
+                id.setProductNo(dbData.getProductNo());
+                id.setName(image);
+                productImageRepository.deleteById(id);
+
+                File targetFile
+                        = new File("D:/01.private_work/Choongang/workspaces/Temp/prj4/productImages/" + dbData.getSeq() + "/" + image);
+                if (targetFile.exists()) {
+                    targetFile.delete();
+                }
+
+                // s3의 파일 지우기
+//                String objectKey = "prj4/product/" + dbData.getId() + "/" + file;
+//                deleteFile(objectKey);
+            }
+        }
     }
 }

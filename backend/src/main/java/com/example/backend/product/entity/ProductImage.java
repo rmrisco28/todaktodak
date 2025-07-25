@@ -14,20 +14,16 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "product_image", schema = "prj4")
 public class ProductImage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seq", nullable = false)
-    private Integer seq;
+    @EmbeddedId
+    private ProductImageId id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_no", referencedColumnName = "product_no")
+    @MapsId("productNo")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_no", nullable = false, referencedColumnName = "product_no")
     private Product productNo;
 
-    @Column(name = "name", length = 300)
-    private String name;
-
     @ColumnDefault("current_timestamp()")
-    @Column(name = "insert_dttm", nullable = false, updatable = false, insertable = false)
+    @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime insertDttm;
 
     @ColumnDefault("current_timestamp()")

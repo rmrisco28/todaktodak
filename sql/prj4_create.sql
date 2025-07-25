@@ -53,14 +53,18 @@ CREATE TABLE product
 # 상품 관리 이미지
 CREATE TABLE product_image
 (
-    seq         INT AUTO_INCREMENT NOT NULL,
     product_no  VARCHAR(20),
     name        VARCHAR(300),
-    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_product_image PRIMARY KEY (seq),
+    insert_dttm DATETIME NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_product_image PRIMARY KEY (product_no, name),
     FOREIGN KEY (product_no) REFERENCES product (product_no)
 );
+
+# ALTER TABLE product_image
+#     DROP PRIMARY KEY,
+#     ADD PRIMARY KEY (product_no, name);
+
 
 # 판매상품 (상품 노출 관리)
 CREATE TABLE sale

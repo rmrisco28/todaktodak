@@ -2,6 +2,7 @@ package com.example.backend.product.controller;
 
 import com.example.backend.product.dto.ProductAddForm;
 import com.example.backend.product.dto.ProductDto;
+import com.example.backend.product.dto.ProductUpdateForm;
 import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -84,5 +85,36 @@ public class ProductController {
         }
 
     }
+
+    /**
+     * 상품 수정
+     *
+     * @param seq
+     * @param dto
+     * @return
+     */
+    @PutMapping("modify/{seq}")
+    public ResponseEntity<?> updateProduct(@PathVariable Integer seq, ProductUpdateForm dto) {
+
+        boolean result = productService.validateForUpdate(dto);
+
+        try {
+            if (result) {
+                productService.update(dto);
+
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", seq + " 번 상품이 수정되었습니다.")));
+            } else {
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", "입력한 내용이 유효하지 않습니다.")));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
+    }
+
 
 }
