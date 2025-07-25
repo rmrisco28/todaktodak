@@ -50,4 +50,5 @@ public class Rental {
     @Column(name = "del_yn", nullable = false)
     private Boolean delYn = false;
 
+    private String rentalName;
 }

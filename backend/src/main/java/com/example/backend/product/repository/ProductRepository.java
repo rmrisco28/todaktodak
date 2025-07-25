@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT MAX(p.seq) FROM Product p")
@@ -52,5 +54,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             """)
     ProductDto findProductBySeq(Integer seq);
 
-    Product findByProductNo(String productNo);
+    List<Object> findByName(String productName);
 }
