@@ -4,31 +4,23 @@ import com.example.backend.order.dto.ReturnAddDto;
 import com.example.backend.order.service.ReturnService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/return")
 @RequiredArgsConstructor
 public class ReturnController {
 
-    private ReturnService returnService;
+    private final ReturnService returnService;
 
     @PostMapping("add")
     public ResponseEntity<?> addReturn(@RequestBody ReturnAddDto returnAddDto) {
 
+        System.out.println("returnAddDto = " + returnAddDto);
+        
         returnService.add(returnAddDto);
-//        for (ReturnAddDto dto : list) {
-//            System.out.println(dto);
-//        }
-//        if (!exists) {
-//            return ResponseEntity.ok("신청 완료");
-//        } else {
-//            return ResponseEntity.badRequest().build();
-//        }
-        return null;
+
+        return ResponseEntity.ok("반납 신청이 완료되었습니다.");
     }
 
     @GetMapping("")

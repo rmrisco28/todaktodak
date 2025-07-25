@@ -55,4 +55,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     ProductDto findProductBySeq(Integer seq);
 
     List<Object> findByName(String productName);
+
+    Product findByProductNo(String productNo);
 }

@@ -6,22 +6,25 @@ import {
   FormGroup,
   FormLabel,
 } from "react-bootstrap";
-import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 
 export function ReturnAdd() {
-  const [returnDate, setReturnDate] = useState("");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [note, setNote] = useState("");
+  const [returnAdd, setReturnAdd] = useState({
+    productNo: "",
+    memberNo: "",
+    odrName: "",
+    rentalDate: "",
+    count: 0,
+    state: "",
+    insertDttn: "",
+  });
 
   function handleRtnSaveButtonClick() {
     // 반납 신청 확인
     axios
-      .get(`api/return/add`)
+      .post(`/api/return/add`, returnAdd)
       .then((res) => {
         console.log("잘됨");
       })
@@ -59,69 +62,38 @@ export function ReturnAdd() {
     <div>
       <div>
         <FormGroup>
-          <FormLabel>주문자 성명</FormLabel>
-          <input
-            type="text"
-            value={name}
-            placeholder="이름을 입력하세요."
-            onChange={(e) => setName(e.target.value)}
-          />
+          <FormLabel>{returnAdd.productNo}</FormLabel>
         </FormGroup>
       </div>
       <div>
         <FormGroup>
-          <FormLabel>연락처</FormLabel>
-          <input
-            type="text"
-            value={phone}
-            placeholder="연락처를 입력하세요."
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </FormGroup>
-      </div>
-      <div>
-        <FormGroup>
-          <FormLabel>이메일</FormLabel>
-          <input
-            type="email"
-            value={email}
-            placeholder="이메일을 입력하세요."
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </FormGroup>
-      </div>
-      <div>
-        <FormGroup>
-          <FormLabel>주소</FormLabel>
-          <input
-            type="text"
-            value={address}
-            placeholder="주소를 입력하세요."
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </FormGroup>
-      </div>
-      <div></div>
-      <div>
-        <FormLabel>기타 알림 사항</FormLabel>
-        <FormGroup>
-          <FormControl
-            as="textarea"
-            rows={6}
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
+          <FormLabel>{returnAdd.memberNo}</FormLabel>
         </FormGroup>
       </div>
       <FormGroup>
-        <FormLabel>반납 신청일</FormLabel>
-        <FormControl
-          type="datetime-local"
-          readOnly={true}
-          value={returnDate}
-          disabled
-        />
+        <FormLabel>{returnAdd.odrName}</FormLabel>
       </FormGroup>
+      <div>
+        <FormGroup>
+          <FormLabel>{returnAdd.rentalDate}</FormLabel>
+        </FormGroup>
+      </div>
+      <div>
+        <FormGroup>
+          <FormLabel>{returnAdd.count}</FormLabel>
+        </FormGroup>
+      </div>
+      <div>
+        <FormGroup>
+          <FormLabel>{returnAdd.state}</FormLabel>
+        </FormGroup>
+      </div>
+      <div>
+        <FormGroup>
+          <FormLabel>{returnAdd.insertDttn}</FormLabel>
+        </FormGroup>
+      </div>
+
       <button onClick={handleRtnSaveButtonClick}>반납 신청하기</button>
 
       <Container className="mt-4">
