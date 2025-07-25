@@ -26,11 +26,9 @@ export function ProductDetail() {
     axios
       .get(`/api/product/detail/${seq}`)
       .then((res) => {
-        console.log("동작 성공");
         setProduct(res.data);
       })
       .catch((err) => {
-        console.log("동작 오류");
         toast("해당 상품이 존재하지 않습니다.", { type: "warning" });
       })
       .finally(() => {
@@ -46,7 +44,6 @@ export function ProductDetail() {
     axios
       .put(`/api/product/${seq}`)
       .then((res) => {
-        console.log("동작 성공");
         const message = res.data.message;
         if (message) {
           toast(message.text, { type: message.type });
@@ -177,14 +174,10 @@ export function ProductDetail() {
           </Button>
           <Button
             variant="outline-info"
-            onClick={() => navigate(`/product/modify?seq=${product.seq}`)}
+            onClick={() => navigate(`/product/modify/${product.seq}`)}
           >
             수정
           </Button>
-        </div>
-
-        <div className="my-5">
-          <hr />
         </div>
       </Col>
 
