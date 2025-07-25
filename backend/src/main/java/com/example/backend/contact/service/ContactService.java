@@ -2,18 +2,17 @@ package com.example.backend.contact.service;
 
 import com.example.backend.contact.dto.ContactAddForm;
 import com.example.backend.contact.dto.ContactModifyForm;
+import com.example.backend.contact.dto.ReplyDto;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.repository.ContactRepository;
 //import com.example.backend.member.entity.Member;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,6 +48,7 @@ public class ContactService {
         caf.setTitle(contact.getTitle());
         caf.setContent(contact.getContent());
         caf.setName(contact.getName());
+        caf.setReply(contact.getReply());
 
         return caf;
     }
@@ -79,5 +79,14 @@ public class ContactService {
         Contact contact = contactRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
         contact.setDelYn(true); //
+    }
+
+    public void reply(ReplyDto rd) {
+        Contact contact = contactRepository.findBySeq(rd.getSeq());
+
+        contact.setReply(rd.getReply());
+        contact.setReplyDttm(rd.getReplyDttm());
+
+        contactRepository.save(contact);
     }
 }

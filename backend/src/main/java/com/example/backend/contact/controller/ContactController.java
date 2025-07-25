@@ -2,6 +2,7 @@ package com.example.backend.contact.controller;
 
 import com.example.backend.contact.dto.ContactAddForm;
 import com.example.backend.contact.dto.ContactModifyForm;
+import com.example.backend.contact.dto.ReplyDto;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.service.ContactService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,13 @@ import java.util.Map;
 public class ContactController {
 
     private final ContactService contactService;
+
+    @PutMapping("reply/{seq}")
+    public ResponseEntity<?> reply(@PathVariable Integer seq, @RequestBody ReplyDto rd) {
+        rd.setSeq(seq);
+        contactService.reply(rd);
+        return ResponseEntity.ok(Map.of("message", "저장되었습니다."));
+    }
 
     @DeleteMapping("/{seq}")
     public ResponseEntity<?> delete(@PathVariable Integer seq) {

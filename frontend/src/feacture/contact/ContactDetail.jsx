@@ -14,15 +14,19 @@ import axios from "axios";
 export function ContactDetail() {
   const [contact, setContact] = useState(null);
   const [modalShow, setModalShow] = useState(false);
+  const [reply, setReply] = useState("");
   const { seq } = useParams();
+
   let navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get(`/api/contact/detail/${seq}`)
+      .get(`/api/contact/detail/${seq}`, {})
       .then((res) => {
         console.log("ok");
-        setContact(res.data);
+        const data = res.data;
+        setReply(data.reply);
+        setContact(data);
       })
       .catch((err) => {
         console.log("no");
@@ -33,6 +37,22 @@ export function ContactDetail() {
   }, [seq]);
 
   if (!contact) return <div>로딩 중...</div>;
+
+  function handleSaveButtonClick() {
+    axios
+      .put(`/api/contact/reply/${seq}`, { reply })
+      .then((res) => {
+        console.log("ok");
+        alert(res.data.message);
+        navigate(`/contact/detail/${seq}`, { replace: true });
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }
 
   return (
     <>
@@ -92,26 +112,26 @@ export function ContactDetail() {
             <FormGroup className="mb-3" controlId="content1">
               <FormLabel className="mb-3">문의 답변 </FormLabel>
               <FormControl
-                readOnly
                 as="textarea"
                 rows={6}
-                value={`아직 답변이 없습니다. (readonly)
-
-관리자만 수정 할 수 있게 할 예정
-
-아래 버튼도 관리자만 볼 수 있게 할 예정
-                `}
+                value={reply}
+                onChange={(e) => {
+                  setReply(e.target.value);
+                }}
               />
             </FormGroup>
           </div>
           <Button
             title="관리자에게만 보이게 할 예정"
-            // onClick={handleSaveButtonClick}
+            onClick={handleSaveButtonClick}
           >
             답변저장
           </Button>
         </Col>
 
+        {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
+        {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
+        {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
         {/* 삭제 모달*/}
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
