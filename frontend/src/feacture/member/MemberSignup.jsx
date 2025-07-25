@@ -20,7 +20,7 @@ export function MemberSignup() {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-  const [postcode, setPostcode] = useState("");
+  const [postCode, setPostCode] = useState("");
 
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
@@ -47,7 +47,7 @@ export function MemberSignup() {
         }
 
         setAddress(fullAddress); // 주소저장
-        setPostcode(data.zonecode); // 우편번호 저장
+        setPostCode(data.zonecode); // 우편번호 저장
       },
     }).open();
   };
@@ -63,7 +63,7 @@ export function MemberSignup() {
         email: email,
         addr: address,
         addrDetail: addressDetail,
-        postcode: postcode,
+        postCode: postCode,
       })
       .then((res) => {
         console.log(res.data);
@@ -222,8 +222,8 @@ export function MemberSignup() {
             <div className="d-flex" style={{ gap: "10px" }}>
               <FormControl
                 placeholder="우편번호"
-                value={postcode}
-                onChange={(e) => setPostcode(e.target.value)}
+                value={postCode}
+                onChange={(e) => setPostCode(e.target.value)}
                 style={{ width: "150px" }}
                 readOnly
               />
