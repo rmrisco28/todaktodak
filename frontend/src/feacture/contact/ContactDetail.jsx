@@ -58,7 +58,21 @@ export function ContactDetail() {
     <>
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-3">문의내역</h2>
+          <h2
+            className="mb-4"
+            style={{
+              // textAlign: "center",
+              cursor: "pointer",
+              width: "fit-content",
+              transition: "coloer 0.2s",
+              color: "#000",
+            }}
+            onMouseEnter={(e) => (e.target.style.color = "#007bff")}
+            onMouseLeave={(e) => (e.target.style.color = "#000")}
+            onClick={() => navigate("/contact/list")}
+          >
+            문의게시판
+          </h2>
           <div>
             <FormGroup className="mb-3" controlId="title1">
               <FormLabel>제목</FormLabel>
