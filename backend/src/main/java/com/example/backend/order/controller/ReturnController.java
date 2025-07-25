@@ -16,14 +16,18 @@ public class ReturnController {
     private ReturnService returnService;
 
     @PostMapping("add")
-    public ResponseEntity<ReturnAddDto> addReturn(@RequestBody ReturnAddDto returnAddDto) {
+    public ResponseEntity<?> addReturn(@RequestBody ReturnAddDto returnAddDto) {
 
-        List<ReturnAddDto> list = returnService.getList();
+        returnService.add(returnAddDto);
 
-        for (ReturnAddDto dto : list) {
-            System.out.println(dto);
-        }
-
+//        for (ReturnAddDto dto : list) {
+//            System.out.println(dto);
+//        }
+//        if (!exists) {
+//            return ResponseEntity.ok("신청 완료");
+//        } else {
+//            return ResponseEntity.badRequest().build();
+//        }
         return null;
     }
 

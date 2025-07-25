@@ -47,4 +47,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             WHERE p.seq = :seq
             """)
     ProductDto findProductBySeq(Integer seq);
+
+    Product findByProductNo(String productNo);
 }

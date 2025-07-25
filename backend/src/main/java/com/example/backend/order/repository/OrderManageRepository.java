@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderManageRepository extends JpaRepository<OrderManage, Integer> {
+    OrderManage findByName(String orderName);
 //    static Page<OrderListDto> findAllBy(String keyword, PageRequest of) {
 //    }
 }
