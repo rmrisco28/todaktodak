@@ -14,17 +14,17 @@ public class ReturnController {
     private final ReturnService returnService;
 
     @PostMapping("add")
-    public ResponseEntity<?> addReturn(@RequestBody ReturnAddDto returnAddDto) {
+    public ResponseEntity<?> add(@RequestBody ReturnAddDto returnAddDto) {
 
-        System.out.println("returnAddDto = " + returnAddDto);
-        
         returnService.add(returnAddDto);
 
         return ResponseEntity.ok("반납 신청이 완료되었습니다.");
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> returnForm(ReturnAddDto returnAddDto) {
+    @GetMapping("{id}")
+    public ResponseEntity<?> returnForm() {
+
+//        returnService.list(returnAddDto);
 
         return null;
     }

@@ -20,7 +20,7 @@ export function AppNavBar() {
                 {/* 상품조회 목록 */}
                 상품조회
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/return">
+              <Nav.Link as={NavLink} to="/return/add">
                 {/* 반납신청 상세 */}
                 반납신청
               </Nav.Link>

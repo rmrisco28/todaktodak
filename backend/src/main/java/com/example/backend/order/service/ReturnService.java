@@ -1,11 +1,9 @@
 package com.example.backend.order.service;
 
-import com.example.backend.member.repository.MemberRepository;
+//import com.example.backend.member.repository.MemberRepository;
+
 import com.example.backend.order.dto.ReturnAddDto;
-import com.example.backend.order.entity.Member;
-import com.example.backend.order.entity.OrderManage;
 import com.example.backend.order.entity.ProductOrder;
-import com.example.backend.order.repository.OrderManageRepository;
 import com.example.backend.order.repository.ProductOrderRepository;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
@@ -21,7 +19,6 @@ public class ReturnService {
     private final ProductRepository productRepository;
 //    private final MemberRepository memberRepository;
 
-//    private final
 
     public void add(ReturnAddDto returnAddDto) {
         ProductOrder productOrder = new ProductOrder();
