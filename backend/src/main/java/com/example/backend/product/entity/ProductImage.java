@@ -17,10 +17,10 @@ public class ProductImage {
     @EmbeddedId
     private ProductImageId id;
 
-    @MapsId("productNo")
+    //    @MapsId("productNo")
     @ManyToOne(optional = false)
-    @JoinColumn(name = "product_no", nullable = false, referencedColumnName = "product_no")
-    private Product productNo;
+    @JoinColumn(name = "product_no", nullable = false, referencedColumnName = "product_no", insertable = false, updatable = false)
+    private Product product;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)

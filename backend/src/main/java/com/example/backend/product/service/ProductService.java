@@ -13,10 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -64,7 +60,7 @@ public class ProductService {
         product.setStock(dto.getStock());
         product.setPrice(dto.getPrice());
         product.setNote(dto.getNote());
-        product.setState(null);
+        product.setState("상태값");
 
         productRepository.save(product);
 
@@ -80,7 +76,7 @@ public class ProductService {
                     ProductImageId id = new ProductImageId();
                     id.setProductNo(product.getProductNo());
                     id.setName(image.getOriginalFilename());
-                    entity.setProductNo(product);
+                    entity.setProduct(product);
                     entity.setId(id);
 
                     productImageRepository.save(entity);
@@ -177,7 +173,7 @@ public class ProductService {
         Product product = new Product();
         product.setProductNo(dto.getProductNo());
 
-        List<ProductImage> imageList = productImageRepository.findByProductNo(product);
+        List<ProductImage> imageList = productImageRepository.findByProduct(product);
         List<ProductImageDto> images = new ArrayList<>();
         for (ProductImage image : imageList) {
             ProductImageDto imageDto = new ProductImageDto();
@@ -262,7 +258,7 @@ public class ProductService {
                     ProductImageId id = new ProductImageId();
                     id.setProductNo(dbData.getProductNo());
                     id.setName(image.getOriginalFilename());
-                    productImage.setProductNo(dbData);
+                    productImage.setProduct(dbData);
                     productImage.setId(id);
 
                     // repository
