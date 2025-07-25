@@ -1,11 +1,15 @@
 package com.example.backend.contact.controller;
 
 import com.example.backend.contact.dto.ContactAddForm;
+import com.example.backend.contact.dto.ContactDto;
 import com.example.backend.contact.dto.ContactModifyForm;
 import com.example.backend.contact.dto.ReplyDto;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.service.ContactService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,11 +70,20 @@ public class ContactController {
         return ResponseEntity.ok(result);
     }
 
-    // 게시물 목록 불러오기
+    // 게시물 목록 불러오기 컨트롤러
     @GetMapping("list")
-    public ResponseEntity<?> list() {
-        List<Contact> list = contactService.list();
-        return ResponseEntity.ok(list);
+    public Map<String, Object> list(
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
+        return contactService.list(keyword, pageNumber);
     }
+
+//    // 게시물 목록 불러오기 컨트롤러
+//    @GetMapping("list")
+//    public ResponseEntity<?> list() {
+//        List<Contact> list = contactService.list();
+//        return ResponseEntity.ok(list);
+//    }
+
 
 }

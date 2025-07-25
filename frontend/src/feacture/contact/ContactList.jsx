@@ -1,18 +1,25 @@
-import { useNavigate } from "react-router";
-import { Button, Col, Row } from "react-bootstrap";
+import { useNavigate, useSearchParams } from "react-router";
+import { Button, Col, Pagination, Row, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
+import { GrNext, GrPrevious } from "react-icons/gr";
 
 export function ContactList() {
-  const [contactList, setContactList] = useState([]);
+  const [contactList, setContactList] = useState(null);
+  const [pageInfo, setPageInfo] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   let navigate = useNavigate();
 
   useEffect(() => {
+    console.log("aaa");
     axios
-      .get("/api/contact/list")
+      .get(`/api/contact/list?${searchParams}`)
       .then((res) => {
         console.log("ok");
-        setContactList(res.data);
+        setContactList(res.data.contactList);
+        setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
         console.log("no");
@@ -20,7 +27,22 @@ export function ContactList() {
       .finally(() => {
         console.log("finally");
       });
-  }, []);
+  }, [setSearchParams]);
+
+  if (!contactList) {
+    return <Spinner />;
+  }
+
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
+  }
+
+  function handlePageNumberClick(pageNumber) {
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.set("p", pageNumber);
+    setSearchParams(nextSearchParams);
+  }
 
   return (
     <>
@@ -63,6 +85,43 @@ export function ContactList() {
             </tbody>
           </table>
           <Button onClick={() => navigate("/contact/add")}>글쓰기</Button>
+        </Col>
+      </Row>
+
+      {/* PageNation */}
+      <Row>
+        <Col>
+          <Pagination className="justify-content-center">
+            <Pagination.First
+              disabled={pageInfo.currentPageNumber === 1}
+              onClick={() => handlePageNumberClick(1)}
+            ></Pagination.First>
+            <Pagination.Prev
+              disabled={pageInfo.leftPageNumber <= 1}
+              onClick={() =>
+                handlePageNumberClick(pageInfo.leftPageNumber - 10)
+              }
+            ></Pagination.Prev>
+            {pageNumbers.map((pageNumber) => (
+              <Pagination.Item
+                key={pageNumber}
+                onClick={() => handlePageNumberClick(pageNumber)}
+                active={pageInfo.currentPageNumber === pageNumber}
+              >
+                {pageNumber}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+              onClick={() =>
+                handlePageNumberClick(pageInfo.rightPageNumber + 1)
+              }
+            ></Pagination.Next>
+            <Pagination.Last
+              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+              onClick={() => handlePageNumberClick(pageInfo.totalPages)}
+            ></Pagination.Last>
+          </Pagination>
         </Col>
       </Row>
     </>

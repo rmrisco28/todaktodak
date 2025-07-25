@@ -1,18 +1,22 @@
 package com.example.backend.contact.service;
 
 import com.example.backend.contact.dto.ContactAddForm;
+import com.example.backend.contact.dto.ContactDto;
 import com.example.backend.contact.dto.ContactModifyForm;
 import com.example.backend.contact.dto.ReplyDto;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.repository.ContactRepository;
-//import com.example.backend.member.entity.Member;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,12 +37,33 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
-    // 삭제 안된 게시물 조회
-    public List<Contact> list() {
-        return contactRepository.findByDelYnFalseOrderBySeqDesc();
+//    // 삭제 안된 게시물 조회
+//    public List<Contact> list() {
+//        return contactRepository.findByDelYnFalseOrderBySeqDesc();
+//    }
+
+
+    // 삭제 안된 게시판 목록 조회
+    public Map<String, Object> list(String keyword, Integer pageNumber) {
+        Page<ContactDto> contactListDtoPage = contactRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+
+        int totalPages = contactListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of(
+                "totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo, "contactList", contactListDtoPage.getContent());
     }
 
-    // 게시물 상세화면 불러오기
+
+    // 게시물 상세화면 불러오기 서비스
     public ContactAddForm detail(Integer seq) {
         Contact contact = contactRepository.findById(seq)
                 .filter(c -> !c.getDelYn())
@@ -89,4 +114,6 @@ public class ContactService {
 
         contactRepository.save(contact);
     }
+
+
 }

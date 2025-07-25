@@ -44,6 +44,7 @@ END $$
 
 DELIMITER;
 
+
 # 게시판 드랍
 DROP TABLE contact;
 
