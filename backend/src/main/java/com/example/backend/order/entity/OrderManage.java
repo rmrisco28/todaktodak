@@ -74,4 +74,5 @@ public class OrderManage {
     @Column(name = "update_dttm", nullable = false, insertable = false)
     private LocalDateTime updateDttm;   // 주문 레코드가 마지막 수정된 날짜/시간
 
+    private String address;
 }

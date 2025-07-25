@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class OrderDetailDto {
+public class OrderManageDto {
     private Integer seq;
     private String orderNo;
     private String odrName;

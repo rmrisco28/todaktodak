@@ -1,23 +1,38 @@
 package com.example.backend.order.controller;
 
-import com.example.backend.order.service.ReturnFormService;
+import com.example.backend.order.dto.ReturnAddDto;
+import com.example.backend.order.service.ReturnService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/return")
 @RequiredArgsConstructor
 public class ReturnController {
 
-    private ReturnFormService returnFormService;
+    private ReturnService returnService;
 
-    @GetMapping("add")
-    public ResponseEntity<?> returnForm() {
+    @PostMapping("add")
+    public ResponseEntity<?> addReturn(@RequestBody ReturnAddDto returnAddDto) {
 
-        returnFormService.add();
+        returnService.add(returnAddDto);
+
+//        for (ReturnAddDto dto : list) {
+//            System.out.println(dto);
+//        }
+//        if (!exists) {
+//            return ResponseEntity.ok("신청 완료");
+//        } else {
+//            return ResponseEntity.badRequest().build();
+//        }
+        return null;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> returnForm(ReturnAddDto returnAddDto) {
 
         return null;
     }

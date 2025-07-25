@@ -51,4 +51,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
               AND p.delYn = false
             """)
     ProductDto findProductBySeq(Integer seq);
+
+    Product findByProductNo(String productNo);
 }
