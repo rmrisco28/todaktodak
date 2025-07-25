@@ -13,12 +13,18 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-@Table(name = "member2")
-public class Member2 {
+@Table(name = "member")
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
-    private Integer id;
+    private Integer seq;
+
+    @Column(name = "member_no", nullable = false, length = 20)
+    private String memberNo;
+
+    @Column(name = "auth", length = 20)
+    private String auth;
 
     @Column(name = "member_id", nullable = false, length = 120)
     private String memberId;
@@ -32,8 +38,8 @@ public class Member2 {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "birth_dt", nullable = false)
-    private LocalDate birthDt;
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
 
     @Column(name = "phone", nullable = false, length = 15)
     private String phone;
@@ -50,5 +56,21 @@ public class Member2 {
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime insertDttm;
+
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "update_dttm", nullable = false, insertable = false)
+    private LocalDateTime updateDttm;
+
+
+    @Column(name = "state", length = 10)
+    private String state = "use";
+
+    @ColumnDefault("1")
+    @Column(name = "use_yn", nullable = false)
+    private Boolean useYn = true;
+
+    @ColumnDefault("0")
+    @Column(name = "del_yn", nullable = false)
+    private Boolean delYn = false;
 
 }

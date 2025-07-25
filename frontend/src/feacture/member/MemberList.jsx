@@ -33,11 +33,11 @@ export function MemberList() {
           <tbody>
             {memberList.map((member) => (
               <tr
-                key={member.memberId}
+                key={member.seq}
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/member?memberId=${member.memberId}`)}
+                onClick={() => navigate(`/member?seq=${member.seq}`)}
               >
-                <td>{member.id}</td>
+                <td>{member.seq}</td>
                 <td>{member.memberId}</td>
                 <td>{member.name}</td>
                 <td>{member.insertDttm}</td>
