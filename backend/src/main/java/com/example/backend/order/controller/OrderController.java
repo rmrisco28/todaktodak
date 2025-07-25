@@ -17,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;
+//    private final OrderService orderService;
 
 //    @GetMapping("list")
 //    public List<OrderListDto> getAllOrders() {
