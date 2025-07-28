@@ -17,6 +17,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -191,5 +192,14 @@ public class SaleService {
         dto.setContentImages(contentImgs);
 
         return dto;
+    }
+
+    public void updateDelYn(Integer seq) {
+        Sale dbData = saleRepository.findById(seq).get();
+        dbData.setDelYn(true);
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        saleRepository.save(dbData);
     }
 }
