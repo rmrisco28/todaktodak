@@ -5,8 +5,10 @@ import com.example.backend.product.dto.ProductListDto;
 import com.example.backend.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                 OR p.productNo LIKE %:keyword%)
             ORDER BY p.seq DESC
             """)
-    Page<ProductListDto> findAllBy(String keyword, PageRequest of);
+    Page<ProductListDto> searchProductList(@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = """
             SELECT new com.example.backend.product.dto.ProductDto(
