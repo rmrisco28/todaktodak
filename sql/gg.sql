@@ -44,6 +44,7 @@ END $$
 
 DELIMITER;
 
+
 # 게시판 드랍
 DROP TABLE contact;
 
@@ -70,19 +71,21 @@ CREATE TABLE contact
 # 임시임시 게시판
 CREATE TABLE contact
 (
-    seq         INT            NOT NULL AUTO_INCREMENT,
-    title       VARCHAR(255)   NOT NULL,
-    name        VARCHAR(50)    NOT NULL,
-    content     VARCHAR(10000) NOT NULL,
-    view        INT                     DEFAULT 0,
-    insert_dttm DATETIME       NOT NULL DEFAULT NOW(),
-    use_yn      BOOLEAN        NOT NULL DEFAULT TRUE,
-    del_yn      BOOLEAN        NOT NULL DEFAULT FALSE,
+    seq         INT             NOT NULL AUTO_INCREMENT,
+    title       VARCHAR(255)    NOT NULL,
+    name        VARCHAR(50)     NOT NULL,
+    content     VARCHAR(10000)  NOT NULL,
+    view        INT                      DEFAULT 0,
+    insert_dttm DATETIME        NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME        NOT NULL DEFAULT NOW(),
+    reply       VARBINARY(1000) NOT NULL,
+    reply_dttm  DATETIME        NOT NULL DEFAULT NOW(),
+    use_yn      BOOLEAN         NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN         NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_contact PRIMARY KEY (seq)
 );
 
 DROP TABLE contact;
-
 
 
 -- 주문 배송 정보
