@@ -63,9 +63,9 @@ public class SaleService {
 
     private void saveImages(Sale sale, List<MultipartFile> images, String target) {
         if (images != null && images.size() > 0) {
+            String base_path = "D:/01.private_work/Choongang/workspaces/Temp/prj4/";
             for (MultipartFile image : images) {
                 if (image != null && image.getSize() > 0) {
-                    String base_path = "D:/01.private_work/Choongang/workspaces/Temp/prj4/";
                     if (target.equals("thumb")) {
                         SaleImageThumb entity = new SaleImageThumb();
                         SaleImageThumbId id = new SaleImageThumbId();
@@ -201,5 +201,86 @@ public class SaleService {
         dbData.setUpdateDttm(now);
 
         saleRepository.save(dbData);
+    }
+
+    public boolean validateForUpdate(SaleUpdateForm dto) {
+
+        if (dto.getCategory() == null || dto.getCategory().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getTitle() == null || dto.getTitle().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getQuantity() == null || dto.getQuantity() < 0) {
+            return false;
+        }
+        if (dto.getPrice() == null || dto.getPrice() < 0) {
+            return false;
+        }
+        if (dto.getDeliveryFee() == null || dto.getDeliveryFee() < 0) {
+            return false;
+        }
+        if (dto.getContent() == null || dto.getContent().trim().isBlank()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void update(SaleUpdateForm dto) {
+        Sale dbData = saleRepository.findById(dto.getSeq()).get();
+
+        dbData.setCategory(dto.getCategory());
+        dbData.setTitle(dto.getTitle());
+        dbData.setQuantity(dto.getQuantity());
+        dbData.setPrice(dto.getPrice());
+        dbData.setDeliveryFee(dto.getDeliveryFee());
+        dbData.setContent(dto.getContent());
+
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        deleteImages(dbData, dto.getDeleteThumbnails(), "thumb");
+        saveImages(dbData, dto.getThumbnails(), "thumb");
+        deleteImages(dbData, dto.getDeleteImages(), "content");
+        saveImages(dbData, dto.getContentImages(), "content");
+
+        saleRepository.save(dbData);
+    }
+
+    private void deleteImages(Sale dbData, String[] deleteImages, String target) {
+        if (deleteImages != null && deleteImages.length > 0) {
+            String base_path = "D:/01.private_work/Choongang/workspaces/Temp/prj4/";
+            for (String image : deleteImages) {
+                if (target.equals("thumb")) {
+                    // table 의 record 지우고
+                    SaleImageThumbId id = new SaleImageThumbId();
+                    id.setSaleNo(dbData.getSaleNo());
+                    id.setName(image);
+                    saleImageThumbRepository.deleteById(id);
+
+                    base_path += "saleImageThumb/";
+                } else if (target.equals("content")) {
+                    // table 의 record 지우고
+                    SaleImageContentId id = new SaleImageContentId();
+                    id.setSaleNo(dbData.getSaleNo());
+                    id.setName(image);
+                    saleImageContentRepository.deleteById(id);
+
+                    base_path += "saleImageContent/";
+                }
+
+                File targetFile
+                        = new File(base_path + dbData.getSeq() + "/" + image);
+                if (targetFile.exists()) {
+                    targetFile.delete();
+                }
+
+                // s3의 파일 지우기
+//                String objectKey = "prj4/product/" + dbData.getId() + "/" + file;
+//                deleteFile(objectKey);
+            }
+        }
     }
 }

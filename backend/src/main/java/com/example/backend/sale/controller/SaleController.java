@@ -2,6 +2,7 @@ package com.example.backend.sale.controller;
 
 import com.example.backend.sale.dto.SaleAddForm;
 import com.example.backend.sale.dto.SaleDto;
+import com.example.backend.sale.dto.SaleUpdateForm;
 import com.example.backend.sale.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -81,6 +82,36 @@ public class SaleController {
             return ResponseEntity.ok().body(Map.of("message",
                     Map.of("type", "error", "text", e.getMessage())));
         }
+    }
+
+    /**
+     * 판매상품 수정
+     *
+     * @param seq
+     * @param dto
+     * @return
+     */
+    @PutMapping("modify/{seq}")
+    public ResponseEntity<?> updateSale(@PathVariable Integer seq, SaleUpdateForm dto) {
+
+        boolean result = saleService.validateForUpdate(dto);
+
+        try {
+            if (result) {
+                saleService.update(dto);
+
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", seq + " 번 판매상품이 수정되었습니다.")));
+            } else {
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", "입력한 내용이 유효하지 않습니다.")));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
     }
 
 
