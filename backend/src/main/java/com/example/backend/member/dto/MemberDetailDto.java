@@ -18,5 +18,7 @@ public class MemberDetailDto {
     private String addr;
     private String addrDetail;
     private LocalDateTime insertDttm;
+    private LocalDateTime updateDttm;
+    private String state;
 
 }
