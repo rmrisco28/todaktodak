@@ -173,7 +173,7 @@ export function SaleAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* 판매건당가격 price 용어 변경(판매가격 중복방지) */}
+          {/* TODO 판매건당가격 price 용어 변경(판매가격 중복방지) */}
           <FormGroup className="mb-3" controlId="formPrice">
             <FormLabel>판매건당가격</FormLabel>
             <FormControl
@@ -185,7 +185,7 @@ export function SaleAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* 배달업체 데이터 조회  */}
+          {/* TODO 배달업체 데이터 조회  */}
           <FormGroup className="mb-3" controlId="formDeliveryFee">
             <FormLabel>배송비</FormLabel>
             <FormControl
