@@ -2,7 +2,7 @@ import { Col, Row, Spinner, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export function BoardList() {
+export function OrderList() {
   const [orderList, setOrderList] = useState({
     ordererName: "",
     orderState: "",
