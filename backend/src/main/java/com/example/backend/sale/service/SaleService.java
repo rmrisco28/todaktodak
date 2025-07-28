@@ -1,0 +1,145 @@
+package com.example.backend.sale.service;
+
+import com.example.backend.sale.dto.SaleAddForm;
+import com.example.backend.sale.entity.*;
+import com.example.backend.sale.repository.SaleImageContentRepository;
+import com.example.backend.sale.repository.SaleImageThumbRepository;
+import com.example.backend.sale.repository.SaleRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class SaleService {
+
+    private final SaleRepository saleRepository;
+    private final SaleImageThumbRepository saleImageThumbRepository;
+    private final SaleImageContentRepository saleImageContentRepository;
+
+    public void add(SaleAddForm dto) {
+        // TODO 권한 체크 (관리자)
+
+        // 조합번호 생성 (코드 + 현재일자 + 시퀀스)
+        String code = "SA";
+
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+        String date = formatter.format(now);
+
+        Integer maxSeq = saleRepository.findMaxSeq();
+        int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
+        String seqStr = String.format("%07d", latestSeq);
+
+        Sale sale = new Sale();
+        sale.setSaleNo(code + date + seqStr);
+        sale.setCategory(dto.getCategory());
+        sale.setTitle(dto.getTitle());
+        sale.setQuantity(dto.getQuantity());
+        sale.setPrice(dto.getPrice());
+        sale.setDeliveryFee(dto.getDeliveryFee());
+        sale.setContent(dto.getContent());
+
+        saleRepository.save(sale);
+
+        saveImages(sale, dto.getThumbnails(), "thumb");
+        saveImages(sale, dto.getContentImages(), "content");
+    }
+
+    private void saveImages(Sale sale, List<MultipartFile> images, String target) {
+        if (images != null && images.size() > 0) {
+            for (MultipartFile image : images) {
+                if (image != null && image.getSize() > 0) {
+                    String base_path = "D:/01.private_work/Choongang/workspaces/Temp/prj4/";
+                    if (target.equals("thumb")) {
+                        SaleImageThumb entity = new SaleImageThumb();
+                        SaleImageThumbId id = new SaleImageThumbId();
+                        id.setSaleNo(sale.getSaleNo());
+                        id.setName(image.getOriginalFilename());
+                        entity.setSale(sale);
+                        entity.setId(id);
+
+                        saleImageThumbRepository.save(entity);
+
+                        base_path += "saleImageThumb/";
+                    } else if (target.equals("content")) {
+                        SaleImageContent entity = new SaleImageContent();
+                        SaleImageContentId id = new SaleImageContentId();
+                        id.setSaleNo(sale.getSaleNo());
+                        id.setName(image.getOriginalFilename());
+                        entity.setSale(sale);
+                        entity.setId(id);
+
+                        saleImageContentRepository.save(entity);
+
+                        base_path += "saleImageContent/";
+                    }
+
+                    // TODO AWS S3 업로드
+                    // AWS s3 파일 업로드
+                    //                    String objectKey = "prj4/board/" + product.getSeq() + "/" + image.getOriginalFilename();
+                    //                    uploadFile(image, objectKey);
+
+                    // 실제 파일 server(local) disk 저장
+                    // 1) ../Temp/prj3/boardFile 에서 '게시물 번호'이름의 폴더 생성
+                    File folder = new File(base_path + sale.getSeq());
+                    if (!folder.exists()) {
+                        folder.mkdirs();
+                    }
+
+                    // 2) 폴더에 파일 저장
+                    try {
+                        BufferedInputStream bi = new BufferedInputStream(image.getInputStream());
+                        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(new File(folder, image.getOriginalFilename())));
+                        try (bi; bo) {
+                            byte[] b = new byte[1024];
+                            int len;
+                            while ((len = bi.read(b)) != -1) {
+                                bo.write(b, 0, len);
+                            }
+                            bo.flush();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean validateForAdd(SaleAddForm dto) {
+
+        if (dto.getCategory() == null || dto.getCategory().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getTitle() == null || dto.getTitle().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getQuantity() == null || dto.getQuantity() < 0) {
+            return false;
+        }
+        if (dto.getPrice() == null || dto.getPrice() < 0) {
+            return false;
+        }
+        if (dto.getDeliveryFee() == null || dto.getDeliveryFee() < 0) {
+            return false;
+        }
+        if (dto.getContent() == null || dto.getContent().trim().isBlank()) {
+            return false;
+        }
+
+        return true;
+    }
+
+}
