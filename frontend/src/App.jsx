@@ -57,7 +57,7 @@ function App() {
             {/* 상품조회 상세 */}
             <Route path="product/detail/:seq" element={<ProductDetail />} />
             {/* 상품 수정 */}
-            <Route path="product/modify" element={<ProductModify />} />
+            <Route path="product/modify/:seq" element={<ProductModify />} />
             {/* 판매상품 등록 */}
             <Route path="sale/add" element={<SaleAdd />} />
             {/* 판매상품조회 목록 */}
