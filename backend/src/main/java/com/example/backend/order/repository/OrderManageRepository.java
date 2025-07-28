@@ -1,12 +1,10 @@
 package com.example.backend.order.repository;
 
-import com.example.backend.order.dto.OrderListDto;
 import com.example.backend.order.entity.OrderManage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
 public interface OrderManageRepository extends JpaRepository<OrderManage, Integer> {
-
-//    List<OrderListDto> findAllByOrderBySeqDesc();
+    List<OrderManage> findByMember_Seq(Integer memberId);
 }
