@@ -250,7 +250,6 @@ CREATE TABLE rental
     FOREIGN KEY (product_no) REFERENCES product (product_no),
     FOREIGN KEY (member_no) REFERENCES member (member_no)
 );
-# DESC rental;
 
 #회원관리 테스트 테이블
 CREATE TABLE member2
@@ -302,3 +301,5 @@ VALUES (1,
         false,
         '2025-07-29 14:30:00',
         NOW())
+        
+# DESC rental;

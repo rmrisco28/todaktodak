@@ -2,11 +2,8 @@ package com.example.backend.member.dto;
 
 import lombok.Data;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Data
-public class MemberForm {
+public class MemberSignupForm {
     private String memberId;
     private String password;
     private String name;
