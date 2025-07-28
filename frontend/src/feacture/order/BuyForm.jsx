@@ -16,7 +16,7 @@ export function BuyForm() {
   const [postalCode, setPostalCode] = useState("");
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState(); // 참고항목
-  const [request, setRequest] = useState("");
+  const [request, setRequest] = useState("집 앞에 놔주세요.");
   const [isCustom, setIsCustom] = useState(false);
 
   let navigate = useNavigate();
@@ -229,7 +229,7 @@ export function BuyForm() {
             <FormGroup>
               <FormControl
                 value={request}
-                placeholder="집 앞에 놔주세요."
+                placeholder={request}
                 onChange={(e) => {
                   setRequest(e.target.value);
                 }}

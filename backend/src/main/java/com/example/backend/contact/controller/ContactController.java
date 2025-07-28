@@ -78,12 +78,20 @@ public class ContactController {
         return contactService.list(keyword, pageNumber);
     }
 
-//    // 게시물 목록 불러오기 컨트롤러
-//    @GetMapping("list")
-//    public ResponseEntity<?> list() {
-//        List<Contact> list = contactService.list();
-//        return ResponseEntity.ok(list);
-//    }
+    // 삭제된 게시판 목록 불러오기
+    @GetMapping("deleted/list")
+    public Map<String, Object> deletedList(
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
+        return contactService.deletedList(keyword, pageNumber);
+    }
 
+    // 삭제된 게시판 상세 페이지
+    @GetMapping("deleted/detail/{seq}")
+    public ResponseEntity<?> deletedDetail(@PathVariable Integer seq) {
+        ContactAddForm caf = contactService.deletedDetail(seq);
+
+        return ResponseEntity.ok(caf);
+    }
 
 }

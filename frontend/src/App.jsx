@@ -28,6 +28,8 @@ import { SaleDetail } from "./feacture/sale/SaleDetail.jsx";
 import { ProductAdd } from "./feacture/product/ProductAdd.jsx";
 import { SaleAdd } from "./feacture/sale/SaleAdd.jsx";
 import { ProductModify } from "./feacture/product/ProductModify.jsx";
+import { ContactDeleted } from "./feacture/contact/ContactDeleted.jsx";
+import { ContactDeletedDetail } from "./feacture/contact/ContactDeletedDetail.jsx";
 
 function App() {
   return (
@@ -80,6 +82,14 @@ function App() {
             <Route path="contact/detail/:seq" element={<ContactDetail />} />
             {/* 문의게시판 수정 */}
             <Route path="contact/modify/:seq" element={<ContactModify />} />
+            {/* 문의게시판 삭제목록 */}
+            <Route path="contact/deleted/list" element={<ContactDeleted />} />
+            {/* 문의게시판 삭제 상세 */}
+            <Route
+              path="contact/deleted/detail/:seq"
+              element={<ContactDeletedDetail />}
+            />
+
             {/* 주문배송조회 목록 */}
             <Route path="order/list" element={<OrderList />} />
             {/* 주문배송조회 상세 */}

@@ -1,22 +1,18 @@
 package com.example.backend.contact.service;
 
-import com.example.backend.contact.dto.ContactAddForm;
-import com.example.backend.contact.dto.ContactDto;
-import com.example.backend.contact.dto.ContactModifyForm;
-import com.example.backend.contact.dto.ReplyDto;
+import com.example.backend.contact.dto.*;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.repository.ContactRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +24,19 @@ public class ContactService {
 
     // 게시물 생성
     public void add(@RequestBody ContactAddForm caf) {
+//        String code = "CO";
+//
+//        Date now = new Date();
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+//        String date = formatter.format(now);
+//
+//        Integer maxSeq = contactRepository.findMaxSeq();
+//        int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
+//        String seqStr = String.format("%07d", latestSeq);
+
+
         Contact contact = new Contact();
+//        contact.setContactNo(code + date + seqStr);
 
         contact.setTitle(caf.getTitle());
         contact.setContent(caf.getContent());
@@ -69,6 +77,7 @@ public class ContactService {
                 .filter(c -> !c.getDelYn())
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
 
+
         ContactAddForm caf = new ContactAddForm();
         caf.setTitle(contact.getTitle());
         caf.setContent(contact.getContent());
@@ -106,6 +115,7 @@ public class ContactService {
         contact.setDelYn(true); //
     }
 
+    // 답글 저장
     public void reply(ReplyDto rd) {
         Contact contact = contactRepository.findBySeq(rd.getSeq());
 
@@ -115,5 +125,39 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
+    // 삭제된 게시판 목록 관리자
+    public Map<String, Object> deletedList(String keyword, Integer pageNumber) {
 
+        Page<ContactDeletedDto> contactDeletedListDtoPage = contactRepository.findAllByDeleted(keyword, PageRequest.of(pageNumber - 1, 10));
+
+        int totalPages = contactDeletedListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of(
+                "totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo, "contactDeletedList", contactDeletedListDtoPage.getContent());
+    }
+
+    // 삭제된 게시판 상세화면 관리자
+    public ContactAddForm deletedDetail(Integer seq) {
+        Contact contact = contactRepository.findById(seq)
+                .filter(c -> c.getDelYn())
+                .orElseThrow(() -> new RuntimeException("삭제된 게시글이 존재하지 않습니다."));
+
+        ContactAddForm caf = new ContactAddForm();
+
+        caf.setTitle(contact.getTitle());
+        caf.setContent(contact.getContent());
+        caf.setName(contact.getName());
+        caf.setReply(contact.getReply());
+
+        return caf;
+    }
 }

@@ -16,6 +16,7 @@ export function ContactList() {
   const [contactList, setContactList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [keyword, setKeyword] = useState("");
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   let navigate = useNavigate();
