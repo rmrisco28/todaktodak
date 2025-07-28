@@ -1,7 +1,6 @@
 package com.example.backend.sale.service;
 
-import com.example.backend.sale.dto.SaleAddForm;
-import com.example.backend.sale.dto.SaleListDto;
+import com.example.backend.sale.dto.*;
 import com.example.backend.sale.entity.*;
 import com.example.backend.sale.repository.SaleImageContentRepository;
 import com.example.backend.sale.repository.SaleImageThumbRepository;
@@ -18,6 +17,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -159,5 +159,37 @@ public class SaleService {
                 "currentPageNumber", pageNumber);
 
         return Map.of("pageInfo", pageInfo, "saleList", saleListDtoPage.getContent());
+    }
+
+    public SaleDto getSaleBySeq(Integer seq) {
+        SaleDto dto = saleRepository.findSaleBySeq(seq);
+        Sale sale = new Sale();
+        sale.setSaleNo(dto.getSaleNo());
+
+        List<SaleImageThumb> thumbList = saleImageThumbRepository.findBySale(sale);
+        List<SaleImageThumbDto> thumbs = new ArrayList<>();
+        for (SaleImageThumb thumb : thumbList) {
+            SaleImageThumbDto thumbDto = new SaleImageThumbDto();
+            thumbDto.setName(thumb.getId().getName());
+            thumbDto.setPath("http://localhost:8081/saleImageThumb/" + seq + "/" + thumb.getId().getName());
+            // TODO call aws s3
+//            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
+            thumbs.add(thumbDto);
+        }
+        dto.setThumbnails(thumbs);
+
+        List<SaleImageContent> contentImgList = saleImageContentRepository.findBySale(sale);
+        List<SaleImageContentDto> contentImgs = new ArrayList<>();
+        for (SaleImageContent contentImg : contentImgList) {
+            SaleImageContentDto contentDto = new SaleImageContentDto();
+            contentDto.setName(contentImg.getId().getName());
+            contentDto.setPath("http://localhost:8081/saleImageContent/" + seq + "/" + contentImg.getId().getName());
+            // TODO call aws s3
+//            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
+            contentImgs.add(contentDto);
+        }
+        dto.setContentImages(contentImgs);
+
+        return dto;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.backend.sale.controller;
 
 import com.example.backend.sale.dto.SaleAddForm;
+import com.example.backend.sale.dto.SaleDto;
 import com.example.backend.sale.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,17 @@ public class SaleController {
     ) {
         return saleService.list(keyword, pageNumber);
     }
+
+    /**
+     * 판매상품 상세 조회 (사용자)
+     *
+     * @param seq
+     * @return
+     */
+    @GetMapping("detail/{seq}")
+    public SaleDto getSaleBySeq(@PathVariable Integer seq) {
+        return saleService.getSaleBySeq(seq);
+    }
+
 
 }

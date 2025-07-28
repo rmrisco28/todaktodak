@@ -1,9 +1,9 @@
 package com.example.backend.sale.repository;
 
+import com.example.backend.sale.dto.SaleDto;
 import com.example.backend.sale.dto.SaleListDto;
 import com.example.backend.sale.entity.Sale;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +29,25 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
             ORDER BY s.seq DESC
             """)
     Page<SaleListDto> searchSaleList(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query(value = """
+            SELECT new com.example.backend.sale.dto.SaleDto(
+            s.seq,
+            s.saleNo,
+            s.category,
+            s.title,
+            s.quantity,
+            s.price,
+            s.deliveryFee,
+            s.content,
+            s.insertDttm,
+            s.updateDttm,
+            s.useYn
+            )
+            FROM Sale s
+            WHERE s.seq = :seq
+              AND s.useYn = true
+              AND s.delYn = false
+            """)
+    SaleDto findSaleBySeq(Integer seq);
 }
