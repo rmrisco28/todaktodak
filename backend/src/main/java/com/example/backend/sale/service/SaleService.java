@@ -1,11 +1,14 @@
 package com.example.backend.sale.service;
 
 import com.example.backend.sale.dto.SaleAddForm;
+import com.example.backend.sale.dto.SaleListDto;
 import com.example.backend.sale.entity.*;
 import com.example.backend.sale.repository.SaleImageContentRepository;
 import com.example.backend.sale.repository.SaleImageThumbRepository;
 import com.example.backend.sale.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +20,7 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -142,4 +146,18 @@ public class SaleService {
         return true;
     }
 
+    public Map<String, Object> list(String keyword, Integer pageNumber) {
+        Page<SaleListDto> saleListDtoPage = saleRepository.searchSaleList(keyword, PageRequest.of(pageNumber - 1, 10));
+        int totalPages = saleListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo, "saleList", saleListDtoPage.getContent());
+    }
 }

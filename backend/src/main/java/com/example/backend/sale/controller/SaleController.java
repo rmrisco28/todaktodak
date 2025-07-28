@@ -4,9 +4,7 @@ import com.example.backend.sale.dto.SaleAddForm;
 import com.example.backend.sale.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -38,6 +36,21 @@ public class SaleController {
             return ResponseEntity.badRequest().body(Map.of("message",
                     Map.of("type", "error", "text", "입력한 내용이 유효하지 않습니다.")));
         }
+    }
+
+    /**
+     * 판매상품 목록 조회 (사용자)
+     *
+     * @param keyword
+     * @param pageNumber
+     * @return
+     */
+    @GetMapping("list")
+    public Map<String, Object> getAllSales(
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
+    ) {
+        return saleService.list(keyword, pageNumber);
     }
 
 }

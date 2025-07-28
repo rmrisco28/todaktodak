@@ -63,8 +63,7 @@ export function SaleAdd() {
         if (message) {
           toast(message.text, { type: message.type });
         }
-        // 경로 수정: /sale/list
-        navigate("/product/list");
+        navigate("/sale/list");
       })
       .catch((err) => {
         console.log(err);
