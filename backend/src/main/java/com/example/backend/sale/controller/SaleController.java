@@ -1,0 +1,43 @@
+package com.example.backend.sale.controller;
+
+import com.example.backend.sale.dto.SaleAddForm;
+import com.example.backend.sale.service.SaleService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/sale")
+public class SaleController {
+
+    private final SaleService saleService;
+
+    /**
+     * 기능명: 판매 상품 등록 기능
+     * 권한: 관리자
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("add")
+    public ResponseEntity<?> add(SaleAddForm dto) {
+        // validate
+        boolean result = saleService.validateForAdd(dto);
+
+        if (result) {
+            saleService.add(dto);
+
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "success", "text", "새 상품이 등록되었습니다.")));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error", "text", "입력한 내용이 유효하지 않습니다.")));
+        }
+    }
+
+}

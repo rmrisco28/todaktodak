@@ -95,23 +95,21 @@ CREATE TABLE sale
 # 판매 상품 관리 썸네일 이미지
 CREATE TABLE sale_image_thumb
 (
-    seq         INT AUTO_INCREMENT NOT NULL,
     sale_no     VARCHAR(20),
     name        VARCHAR(300),
-    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_sale_image_thumb PRIMARY KEY (seq),
+    insert_dttm DATETIME NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_sale_image_thumb PRIMARY KEY (sale_no, name),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
 # 판매 상품 관리 본문 이미지
 CREATE TABLE sale_image_content
 (
-    seq         INT AUTO_INCREMENT NOT NULL,
-    sale_no     VARCHAR(20)        NOT NULL,
-    name        VARCHAR(300)       NOT NULL,
-    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_sale_image_content PRIMARY KEY (seq),
+    sale_no     VARCHAR(20)  NOT NULL,
+    name        VARCHAR(300) NOT NULL,
+    insert_dttm DATETIME     NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME     NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_sale_image_content PRIMARY KEY (sale_no, name),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
 
@@ -305,5 +303,5 @@ VALUES (1,
         false,
         '2025-07-29 14:30:00',
         NOW())
-        
+
 # DESC rental;
