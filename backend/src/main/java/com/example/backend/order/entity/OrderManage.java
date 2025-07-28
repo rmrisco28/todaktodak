@@ -4,16 +4,19 @@ import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "OrderManage")
 @Getter
 @Setter
+@ToString
+@Table(name = "order_manage")
 public class OrderManage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer seq;
@@ -25,9 +28,8 @@ public class OrderManage {
     private LocalDateTime orderDate;
 
     @Column(name = "total_price")
-    private int totalPrice;
+    private Integer totalPrice;
 
-    @Column(name = "status")
     private String status;
 
     @Column(name = "tracking_number")
@@ -37,6 +39,7 @@ public class OrderManage {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "orderManage", cascade = CascadeType.ALL)
+    // ✅ 추가된 부분
+    @OneToMany(mappedBy = "orderManage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 }

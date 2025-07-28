@@ -12,14 +12,13 @@ export function OrderList() {
     endDate: "",
   });
 
-  useEffect(() => {
-    // 빈 값 제거하여 쿼리 스트링 최소화
-    const sanitizedParams = {};
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== "") {
-        sanitizedParams[key] = value;
-      }
-    });
+    useEffect(() => {
+        const sanitizedParams = {};
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value !== "") {
+                sanitizedParams[key] = value;
+            }
+        });
 
     axios
       .get("/api/order/list", { params: sanitizedParams })

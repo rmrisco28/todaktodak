@@ -1,6 +1,6 @@
 package com.example.backend.order.controller;
 
-import com.example.backend.order.dto.OrderSummaryDto;
+import com.example.backend.order.dto.OrderManageDto;
 import com.example.backend.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +20,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/list")
-    public List<OrderSummaryDto> getOrders(
+    public List<OrderManageDto> getOrders(
             @RequestParam Integer memberSeq,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String keyword,

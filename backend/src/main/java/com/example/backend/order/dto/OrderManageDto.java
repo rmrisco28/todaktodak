@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class OrderSummaryDto {
+public class OrderManageDto {
     private Integer orderId;
+    private String orderNo;
     private LocalDateTime orderDate;
     private String productNames;
     private int totalPrice;
