@@ -154,7 +154,7 @@ public class ProductService {
     }
 
     public Map<String, Object> list(String keyword, Integer pageNumber) {
-        Page<ProductListDto> productListDtoPage = productRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+        Page<ProductListDto> productListDtoPage = productRepository.searchProductList(keyword, PageRequest.of(pageNumber - 1, 10));
         int totalPages = productListDtoPage.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
         int leftPageNumber = rightPageNumber - 9;
