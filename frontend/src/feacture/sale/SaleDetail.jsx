@@ -1,3 +1,245 @@
+import { useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Image,
+  ListGroup,
+  ListGroupItem,
+  Modal,
+  Row,
+  Spinner,
+} from "react-bootstrap";
+
 export function SaleDetail() {
-  return null;
+  const [sale, setSale] = useState(null);
+  const { seq } = useParams();
+  const navigate = useNavigate();
+  const [modalShow, setModalShow] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get(`/api/sale/detail/${seq}`)
+      .then((res) => {
+        setSale(res.data);
+      })
+      .catch((err) => {
+        toast("해당 상품이 존재하지 않습니다.", { type: "warning" });
+      })
+      .finally(() => {
+        console.log("항상 실행");
+      });
+  }, []);
+
+  if (!sale) {
+    return <Spinner />;
+  }
+
+  function handleDeleteButtonClick() {
+    axios
+      .put(`/api/sale/${seq}`)
+      .then((res) => {
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate("/sale/list");
+      })
+      .catch((err) => {
+        console.log("동작 오류");
+        toast("상품이 삭제되지 않았습니다.", { type: "warning" });
+      })
+      .finally(() => {
+        console.log("항상 실행");
+      });
+  }
+
+  return (
+    <Row className="justify-content-center">
+      <Col xs={12} md={8} lg={6}>
+        <div className="d-flex justify-content-between">
+          <h2 className="mb-4">{sale.seq} 번 상품</h2>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formCategory">
+            <FormLabel>분류</FormLabel>
+            <FormControl value={sale.category} readOnly={true} />
+          </FormGroup>
+        </div>
+        {/* TODO 상품 테이블 조회 */}
+        {/*
+        <div>
+          <FormGroup className="mb-3" controlId="formProductName">
+            <FormLabel>상품명</FormLabel>
+            <FormControl
+              value={sale.productName}
+              readOnly={true}
+              onChange={(e) => setProductName(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+        </div>
+        */}
+        <div>
+          <FormGroup className="mb-3" controlId="formTitle">
+            <FormLabel>제목</FormLabel>
+            <FormControl value={sale.title} readOnly={true} />
+          </FormGroup>
+        </div>
+
+        <div className="mb-3">
+          상품 썸네일
+          <ListGroup>
+            {sale.thumbnails.map((image) => (
+              <ListGroupItem key={image.name}>
+                <Image fluid src={image.path} />
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
+        {/*
+        <div>
+          <FormGroup className="mb-3" controlId="formBrand">
+            <FormLabel>브랜드명</FormLabel>
+            <FormControl value={sale.brand} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formStandard">
+            <FormLabel>규격</FormLabel>
+            <FormControl value={sale.standard} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formStock">
+            <FormLabel>재고량</FormLabel>
+            <FormControl value={sale.stock} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formPrice">
+            <FormLabel>단위가격</FormLabel>
+            <FormControl value={sale.price} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formNote">
+            <FormLabel>비고</FormLabel>
+            <FormControl value={sale.note} readOnly={true} />
+          </FormGroup>
+        </div>
+        */}
+        <div>
+          <FormGroup className="mb-3" controlId="formQuantity">
+            <FormLabel>판매건당수량</FormLabel>
+            <FormControl value={sale.quantity} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          {/* TODO 판매건당가격 price 용어 변경(판매가격 중복방지) */}
+          <FormGroup className="mb-3" controlId="formPrice">
+            <FormLabel>판매건당가격</FormLabel>
+            <FormControl value={sale.price} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          {/* TODO 배송업체 데이터 조회 */}
+          <FormGroup className="mb-3" controlId="formDeliveryFee">
+            <FormLabel>배송비</FormLabel>
+            <FormControl value={sale.deliveryFee} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formContent">
+            <FormLabel>본문내용</FormLabel>
+            <FormControl value={sale.content} readOnly={true} />
+          </FormGroup>
+        </div>
+
+        <div className="mb-3">
+          본문 이미지
+          <ListGroup>
+            {sale.contentImages.map((image) => (
+              <ListGroupItem key={image.name}>
+                <Image fluid src={image.path} />
+              </ListGroupItem>
+            ))}
+          </ListGroup>
+        </div>
+
+        <div>
+          <FormGroup className="mb-3" controlId="formInsertDttm">
+            <FormLabel>등록일시</FormLabel>
+            <FormControl
+              value={sale.insertDttm}
+              type="datetime-local"
+              readOnly={true}
+            />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formUpdateDttm">
+            <FormLabel>수정일시</FormLabel>
+            <FormControl
+              value={sale.updateDttm}
+              type="datetime-local"
+              readOnly={true}
+            />
+          </FormGroup>
+        </div>
+
+        <div>
+          <FormGroup className="mb-3" controlId="formUseYn">
+            <FormLabel>판매등록여부</FormLabel>
+            <FormControl value={sale.useYn} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="FormInsertDttm">
+            <FormLabel>등록일시</FormLabel>
+            <FormControl
+              type="datetime-local"
+              value={sale.insertDttm}
+              readOnly={true}
+            />
+          </FormGroup>
+        </div>
+
+        <div>
+          <Button
+            className="me-2"
+            variant="outline-danger"
+            onClick={() => setModalShow(true)}
+          >
+            삭제
+          </Button>
+          <Button
+            variant="outline-info"
+            onClick={() => navigate(`/sale/modify/${sale.seq}`)}
+          >
+            수정
+          </Button>
+        </div>
+      </Col>
+
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>상품 삭제 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{sale.seq} 번 상품을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="danger" onClick={handleDeleteButtonClick}>
+            삭제
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Row>
+  );
 }
