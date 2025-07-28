@@ -65,5 +65,23 @@ public class SaleController {
         return saleService.getSaleBySeq(seq);
     }
 
+    /**
+     * 판매상품 삭제
+     *
+     * @param seq
+     * @return
+     */
+    @PutMapping("{seq}")
+    public ResponseEntity<?> deleteSale(@PathVariable Integer seq) {
+        try {
+            saleService.updateDelYn(seq);
+            return ResponseEntity.ok().body(Map.of("Message",
+                    Map.of("type", "success", "text", seq + "번 판매상품이 삭제되었습니다.")));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+    }
+
 
 }
