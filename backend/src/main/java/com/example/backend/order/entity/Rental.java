@@ -25,7 +25,7 @@ public class Rental {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "order_no", nullable = false, referencedColumnName = "order_no")
-    private OrderManage orderNo;
+    private OrderManage orderManageNo;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_no", nullable = false, referencedColumnName = "product_no")
