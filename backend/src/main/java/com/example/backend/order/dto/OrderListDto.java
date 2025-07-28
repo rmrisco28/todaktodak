@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class OrderListDto {
-    private String odrName;
+    private String ordererName;
     private String orderState;
     private String orderOption;
     private Integer count;

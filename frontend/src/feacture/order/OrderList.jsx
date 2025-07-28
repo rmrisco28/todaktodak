@@ -1,97 +1,68 @@
-import {
-  Button,
-  Col,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  ListGroup,
-  Modal,
-  Row,
-  Table,
-} from "react-bootstrap";
-import { useState } from "react";
+import { Col, Row, Spinner, Table } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export function OrderList() {
-  const [orderList, setOrderList] = useState();
+export function BoardList() {
+  const [orderList, setOrderList] = useState({
+    ordererName: "",
+    orderState: "",
+    orderOption: "",
+    count: 0,
+    totalPrice: 0,
+    insertDttn: "",
+  });
+
+  useEffect(() => {
+    // 마운트될때(initial render 시) 실행되는 코드
+    axios
+      .get("/api/order/list", orderList)
+      .then((res) => {
+        console.log("잘 될 때 코드");
+        setOrderList(res.data);
+      })
+      .catch((err) => {
+        console.log("잘 안될 때 코드");
+      })
+      .finally(() => {
+        console.log("항상 실행 코드");
+      });
+  }, []);
+
+  if (!orderList) {
+    return <Spinner />;
+  }
+
   return (
-    <Row className="justify-content-center">
-      <Col xs={12} md={8} lg={6}>
-        <div className="d-flex justify-content-between">
-          <h2 className="mb-4">seq</h2>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="title1">
-            <FormLabel>주문번호</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="title1">
-            <FormLabel>주문자명</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>주문상태</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>상품명</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>상품옵션</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>상품번호</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>상품갯수</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>상품총가격</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>배송번호</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>배송비용</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>운송장번호</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="insertedAt1">
-            <FormLabel>총가격</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>첫주문일시</FormLabel>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="author1">
-            <FormLabel>마지막수정일시</FormLabel>
-          </FormGroup>
-        </div>
-        <div className="my-5">
-          <hr />
-        </div>
+    <Row>
+      <Col>
+        <h2 className="mb-4">주문 목록</h2>
+        {orderList.length > 0 ? (
+          <Table striped={true} hover={true}>
+            <thead>
+              <tr>
+                <th>주문자명</th>
+                <th>주문상태</th>
+                <th>옵션</th>
+                <th>갯수</th>
+                <th>총 가격</th>
+                <th>등록일시</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orderList.map((order) => (
+                <tr key={order.ordererName}>
+                  <td>{order.orderState}</td>
+                  <td>{order.orderOption}</td>
+                  <td>{order.count}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>{order.insertDttn}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        ) : (
+          <p>조회된 주문이 없습니다.</p>
+        )}
       </Col>
     </Row>
   );
