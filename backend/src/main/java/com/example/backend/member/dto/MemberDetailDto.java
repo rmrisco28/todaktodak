@@ -6,11 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class MemberDto {
+public class MemberDetailDto {
+    private Integer seq;
+    private String memberNo;
     private String memberId;
     private String name;
     private String email;
-    private LocalDate birthDt;
+    private LocalDate birthDate;
     private String phone;
     private String postCode;
     private String addr;
