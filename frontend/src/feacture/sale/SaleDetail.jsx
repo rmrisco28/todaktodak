@@ -198,16 +198,6 @@ export function SaleDetail() {
             <FormControl value={sale.useYn} readOnly={true} />
           </FormGroup>
         </div>
-        <div>
-          <FormGroup className="mb-3" controlId="FormInsertDttm">
-            <FormLabel>등록일시</FormLabel>
-            <FormControl
-              type="datetime-local"
-              value={sale.insertDttm}
-              readOnly={true}
-            />
-          </FormGroup>
-        </div>
 
         <div>
           <Button
