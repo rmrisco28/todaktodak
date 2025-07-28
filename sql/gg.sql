@@ -88,7 +88,7 @@ CREATE TABLE contact
 DROP TABLE contact;
 
 
--- 주문 배송 정보
+# 주문 배송 정보
 CREATE TABLE order_info
 (
     seq         INT          NOT NUll AUTO_INCREMENT,
