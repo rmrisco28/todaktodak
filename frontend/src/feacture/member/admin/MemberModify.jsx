@@ -9,11 +9,13 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 
 export function MemberModify() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
+  const navigate = useNavigate();
 
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
@@ -52,6 +54,10 @@ export function MemberModify() {
 
   if (!member) {
     return <Spinner />;
+  }
+
+  function handleModifyButtonClick() {
+    navigate(`/member?seq=${params.get("seq")}`);
   }
 
   return (
@@ -259,6 +265,18 @@ export function MemberModify() {
               />
             </Col>
           </FormGroup>
+        </div>
+        <div>
+          <Button
+            className="me-2"
+            variant="outline-dark"
+            onClick={(e) => navigate(-1)}
+          >
+            취소
+          </Button>
+          <Button variant="outline-primary" onClick={handleModifyButtonClick}>
+            수정
+          </Button>
         </div>
       </Col>
     </Row>

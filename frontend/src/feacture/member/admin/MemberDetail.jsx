@@ -190,10 +190,18 @@ export function MemberDetail() {
             삭제
           </Button>
           <Button
+            className="me-5"
             variant="outline-primary"
             onClick={() => navigate(`/member/modify?seq=${params.get("seq")}`)}
           >
             수정
+          </Button>
+          <Button
+            className="ms-5"
+            variant="outline-dark"
+            onClick={() => navigate(`/member/list`)}
+          >
+            목록
           </Button>
         </div>
       </Col>
