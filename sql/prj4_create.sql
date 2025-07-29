@@ -271,3 +271,21 @@ CREATE TABLE member2
 );
 
 DROP TABLE member2;
+
+# 카테고리 관리 테이블
+CREATE TABLE category
+(
+    seq         INT AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(255)       NOT NULL,
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    use_yn      BOOLEAN            NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN            NOT NULL DEFAULT FALSE,
+    CONSTRAINT pk_category PRIMARY KEY (seq)
+);
+
+# 배송업체 관리 테이블
+
+
+
+
