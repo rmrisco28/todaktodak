@@ -39,11 +39,11 @@ public class ContactController {
         return ResponseEntity.ok(Map.of("message", "삭제되었습니다."));
     }
 
-    // 게시물 삭제
+    // 삭제된 게시물 복구
     @DeleteMapping("restore/{seq}")
     public ResponseEntity<?> restore(@PathVariable Integer seq) {
         contactService.restore(seq);
-        return ResponseEntity.ok(Map.of("message", "복구되었습니다.."));
+        return ResponseEntity.ok(Map.of("message", "복구되었습니다."));
     }
 
     // 게시물 조회수

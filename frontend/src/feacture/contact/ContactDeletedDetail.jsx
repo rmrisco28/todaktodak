@@ -138,7 +138,7 @@ export function ContactDeletedDetail() {
                   .then((res) => {
                     console.log("ok");
                     alert(res.data.message);
-                    navigate("/contact/list", { replace: true });
+                    navigate("/contact/list?isAdmin=true", { replace: true });
                   })
                   .catch((err) => {
                     console.log("no");

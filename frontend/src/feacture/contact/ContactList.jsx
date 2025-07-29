@@ -80,7 +80,7 @@ export function ContactList() {
               // textAlign: "center",
               cursor: "pointer",
               width: "fit-content",
-              transition: "coloer 0.2s",
+              transition: "color 0.2s",
               color: "#000",
             }}
             onMouseEnter={(e) => (e.target.style.color = "#007bff")}
