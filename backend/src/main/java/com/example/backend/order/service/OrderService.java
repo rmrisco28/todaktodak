@@ -1,6 +1,6 @@
 package com.example.backend.order.service;
 
-import com.example.backend.order.dto.OrderSummaryDto;
+import com.example.backend.order.dto.OrderManageDto;
 import com.example.backend.order.entity.OrderManage;
 import com.example.backend.order.repository.OrderManageRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,13 @@ public class OrderService {
 
     private final OrderManageRepository orderManageRepository;
 
-    public List<OrderSummaryDto> findOrders(
+    public List<OrderManageDto> findOrders(
             Integer memberSeq,
             String status,
             String keyword,
             LocalDate startDate,
             LocalDate endDate
     ) {
-        // 주문 목록 가져오기
         List<OrderManage> orderManages = orderManageRepository.findByMember_Seq(memberSeq);
 
         return orderManages.stream()
@@ -39,8 +38,9 @@ public class OrderService {
                                     item.getProduct().getName() != null &&
                                     item.getProduct().getName().contains(keyword));
                 })
-                .map(order -> new OrderSummaryDto(
+                .map(order -> new OrderManageDto(
                         order.getSeq(),
+                        order.getOrderNo(), // ✨ 주문번호 표시
                         order.getOrderDate(),
                         order.getItems().stream()
                                 .map(item -> item.getProduct().getName())
