@@ -1,4 +1,11 @@
-import { Col, FormControl, FormGroup, FormLabel, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Row,
+} from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -44,12 +51,12 @@ export function ContactDeletedDetail() {
               cursor: "pointer",
               width: "fit-content",
               transition: "color 0.2s",
-              color: "#000"
+              color: "#000",
             }}
             onMouseEnter={(e) => (e.target.style.color = "#007bff")}
             onMouseLeave={(e) => (e.target.style.color = "#000")}
             onClick={() => {
-              navigate("/contact/delete/list");
+              navigate("/contact/deleted/list");
             }}
           >
             삭제된 {seq}번 게시물
@@ -64,7 +71,12 @@ export function ContactDeletedDetail() {
           <div className="mb-3">
             <FormGroup>
               <FormLabel>내용</FormLabel>
-              <FormControl value={contact.content} as="textarea" rows={6} readOnly />
+              <FormControl
+                value={contact.content}
+                as="textarea"
+                rows={6}
+                readOnly
+              />
             </FormGroup>
           </div>
 
@@ -80,6 +92,22 @@ export function ContactDeletedDetail() {
               <FormLabel>문의 답변</FormLabel>
               <FormControl value={reply} as="textarea" rows={6} readOnly />
             </FormGroup>
+          </div>
+
+          <div>
+            <Button
+              className="me-2"
+              onClick={() => navigate("/contact/list?isAdmin=true")}
+            >
+              전체 목록
+            </Button>
+
+            <Button
+              variant="danger"
+              onClick={() => navigate("/contact/deleted/list")}
+            >
+              삭제 목록
+            </Button>
           </div>
         </Col>
       </Row>
