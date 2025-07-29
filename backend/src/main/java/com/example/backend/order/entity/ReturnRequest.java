@@ -21,4 +21,16 @@ public class ReturnRequest {
     private String phoneNumber;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @ManyToOne
+    @JoinColumn(name = "order_no", referencedColumnName = "order_no")
+    private OrderManage orderNo;
+
+    @Column(name = "product_no", length = 100)
+    private String productNo;
+
+    @ManyToOne
+    @JoinColumn(name = "order_item_seq")
+    private OrderItem orderItemSeq;
+
 }

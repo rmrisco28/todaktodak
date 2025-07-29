@@ -96,7 +96,7 @@ function App() {
             {/* 주문배송조회 목록 */}
             <Route path="order/list" element={<OrderList />} />
             {/* 주문배송조회 상세 */}
-            <Route path="order/detail" element={<OrderDetail />} />
+            <Route path="order/:orderId" element={<OrderDetail />} />
             {/* 상품수령 상세 */}
             <Route path="receive" element={<ReceiveForm />} />
             {/* 상품수령 업데이트 */}

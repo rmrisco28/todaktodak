@@ -1,13 +1,19 @@
 package com.example.backend.order.service;
 
+import com.example.backend.order.dto.OrderDetailDto;
 import com.example.backend.order.dto.OrderManageDto;
+import com.example.backend.order.entity.OrderInfo;
+import com.example.backend.order.entity.OrderItem;
 import com.example.backend.order.entity.OrderManage;
+import com.example.backend.order.repository.OrderInfoRepository;
+import com.example.backend.order.repository.OrderItemRepository;
 import com.example.backend.order.repository.OrderManageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +23,8 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderManageRepository orderManageRepository;
+    private final OrderInfoRepository orderInfoRepository;
+    private final OrderItemRepository orderItemRepository;
 
     public List<OrderManageDto> findOrders(
             Integer memberSeq,
@@ -26,29 +34,95 @@ public class OrderService {
             LocalDate endDate
     ) {
         List<OrderManage> orderManages = orderManageRepository.findByMember_Seq(memberSeq);
+        List<OrderManageDto> result = new ArrayList<>();
 
-        return orderManages.stream()
-                .filter(order -> status == null || status.isBlank() || order.getStatus().equals(status))
-                .filter(order -> startDate == null || !order.getOrderDate().toLocalDate().isBefore(startDate))
-                .filter(order -> endDate == null || !order.getOrderDate().toLocalDate().isAfter(endDate))
-                .filter(order -> {
-                    if (keyword == null || keyword.isBlank()) return true;
-                    return order.getItems().stream()
-                            .anyMatch(item -> item.getProduct() != null &&
-                                    item.getProduct().getName() != null &&
-                                    item.getProduct().getName().contains(keyword));
-                })
-                .map(order -> new OrderManageDto(
+        for (OrderManage order : orderManages) {
+            boolean matches = true;
+
+            if (status != null && !status.isBlank()) {
+                if (!status.equals(order.getStatus())) {
+                    matches = false;
+                }
+            }
+
+            if (startDate != null) {
+                if (order.getOrderDate().toLocalDate().isBefore(startDate)) {
+                    matches = false;
+                }
+            }
+
+            if (endDate != null) {
+                if (order.getOrderDate().toLocalDate().isAfter(endDate)) {
+                    matches = false;
+                }
+            }
+
+            if (keyword != null && !keyword.isBlank()) {
+                boolean found = false;
+                for (OrderItem item : order.getItems()) {
+                    if (item.getProduct() != null && item.getProduct().getName() != null) {
+                        if (item.getProduct().getName().contains(keyword)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                String productNames = "";
+                List<String> names = new ArrayList<>();
+                for (OrderItem item : order.getItems()) {
+                    if (item.getProduct() != null && item.getProduct().getName() != null) {
+                        names.add(item.getProduct().getName());
+                    }
+                }
+                productNames = String.join(", ", names);
+
+                OrderManageDto dto = new OrderManageDto(
                         order.getSeq(),
-                        order.getOrderNo(), // ✨ 주문번호 표시
+                        order.getOrderNo(),
                         order.getOrderDate(),
-                        order.getItems().stream()
-                                .map(item -> item.getProduct().getName())
-                                .collect(Collectors.joining(", ")),
+                        productNames,
                         order.getTotalPrice(),
                         order.getStatus(),
-                        order.getTrackingNumber()
-                ))
-                .collect(Collectors.toList());
+                        order.getTrackNo()
+                );
+
+                result.add(dto);
+            }
+        }
+
+        return result;
+    }
+
+    public OrderDetailDto getOrderDetail(Integer orderSeq) {
+        OrderManage order = orderManageRepository.findById(orderSeq).orElse(null);
+
+        List<OrderItem> items = orderItemRepository.findByOrderManage(order);
+
+        List<String> productNames = new ArrayList<>();
+        List<Integer> quantities = new ArrayList<>();
+        List<Integer> prices = new ArrayList<>();
+
+        for (OrderItem item : items) {
+            productNames.add(item.getProduct().getName());
+            quantities.add(item.getQuantity());
+            prices.add(item.getProduct().getPrice());
+        }
+
+        return new OrderDetailDto(
+                order.getOrderNo(),
+                order.getOrderDate(),
+                productNames,
+                quantities,
+                prices,
+                order.getTotalPrice(),
+                order.getStatus(),
+                order.getTrackNo()
+        );
     }
 }
