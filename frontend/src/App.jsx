@@ -31,6 +31,13 @@ import { ProductModify } from "./feacture/product/ProductModify.jsx";
 import { ContactDeleted } from "./feacture/contact/ContactDeleted.jsx";
 import { ContactDeletedDetail } from "./feacture/contact/ContactDeletedDetail.jsx";
 import { SaleModify } from "./feacture/sale/SaleModify.jsx";
+import { CategoryAdd } from "./feacture/category/CategoryAdd.jsx";
+import { CategoryModify } from "./feacture/category/CategoryModify.jsx";
+import { CategoryList } from "./feacture/category/CategoryList.jsx";
+import { DeliveryAdd } from "./feacture/delivery/DeliveryAdd.jsx";
+import { DeliveryDetail } from "./feacture/delivery/DeliveryDetail.jsx";
+import { DeliveryList } from "./feacture/delivery/DeliveryList.jsx";
+import { DeliveryModify } from "./feacture/delivery/DeliveryModify.jsx";
 
 function App() {
   return (
@@ -105,6 +112,20 @@ function App() {
             <Route path="cancel" element={<CancelForm />} />
             {/* 상품취소 업데이트 */}
             <Route path="cancel/exec" element={<CancelExec />} />
+            {/* 카테고리 등록 */}
+            <Route path="category/add" element={<CategoryAdd />} />
+            {/* 카테고리 목록 */}
+            <Route path="category/list" element={<CategoryList />} />
+            {/* 카테고리 수정 */}
+            <Route path="category/modify" element={<CategoryModify />} />
+            {/* 카테고리 등록 */}
+            <Route path="delivery/add" element={<DeliveryAdd />} />
+            {/* 카테고리 목록 */}
+            <Route path="delivery/list" element={<DeliveryList />} />
+            {/* 카테고리 상세 */}
+            <Route path="delivery/detail/:seq" element={<DeliveryDetail />} />
+            {/* 카테고리 수정 */}
+            <Route path="delivery/modify" element={<DeliveryModify />} />
           </Route>
         </Routes>
       </BrowserRouter>
