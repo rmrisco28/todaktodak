@@ -200,6 +200,7 @@ export function SaleDetail() {
           </FormGroup>
         </div>
 
+        {/* TODO 판매등록여부 = 관리자 권한 */}
         <div>
           <FormGroup className="mb-3" controlId="formUseYn">
             <FormLabel>판매등록여부</FormLabel>
@@ -242,6 +243,7 @@ export function SaleDetail() {
           </Button>
         </div>
 
+        {/* TODO 수정+삭제 버튼 = 관리자 권한 */}
         <div>
           <Button
             className="me-2"
