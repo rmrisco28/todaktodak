@@ -81,6 +81,8 @@ public class MemberService {
         dto.setInsertDttm(db.getInsertDttm());
         dto.setUpdateDttm(db.getUpdateDttm());
         dto.setState(db.getState());
+        dto.setUseYn(db.getUseYn());
+        dto.setDelYn(db.getDelYn());
 
         return dto;
     }

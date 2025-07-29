@@ -152,9 +152,33 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         <div>
-          <FormGroup controlId="state" className="mb-3">
-            <FormLabel>회원 상태</FormLabel>
-            <FormControl value={member.state} readOnly={true} />
+          <FormGroup as={Row} controlId="state" className="mb-4">
+            <FormLabel column sm={3}>
+              회원상태
+            </FormLabel>
+            <Col sm={7}>
+              <FormControl value={member.state} readOnly={true} />
+            </Col>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup as={Row} controlId="useYn" className="mb-4">
+            <FormLabel column sm={3}>
+              사용여부
+            </FormLabel>
+            <Col sm={7}>
+              <FormControl value={member.useYn} readOnly={true} />
+            </Col>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup as={Row} controlId="delYn" className="mb-4">
+            <FormLabel column sm={3}>
+              삭제여부
+            </FormLabel>
+            <Col sm={7}>
+              <FormControl value={member.delYn} readOnly={true} />
+            </Col>
           </FormGroup>
         </div>
         <div>

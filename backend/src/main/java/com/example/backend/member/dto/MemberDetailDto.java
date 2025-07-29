@@ -20,5 +20,7 @@ public class MemberDetailDto {
     private LocalDateTime insertDttm;
     private LocalDateTime updateDttm;
     private String state;
+    private boolean useYn;
+    private boolean delYn;
 
 }
