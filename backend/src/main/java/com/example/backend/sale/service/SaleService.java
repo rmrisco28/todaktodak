@@ -159,6 +159,10 @@ public class SaleService {
                 "leftPageNumber", leftPageNumber,
                 "currentPageNumber", pageNumber);
 
+        saleListDtoPage.getContent()
+                .stream()
+                .forEach(e -> e.setThumbnailPath("http://localhost:8081/saleImageThumb/" + e.getSeq() + "/" + e.getThumbnail()));
+
         return Map.of("pageInfo", pageInfo, "saleList", saleListDtoPage.getContent());
     }
 

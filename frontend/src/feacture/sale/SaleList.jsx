@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   Button,
+  Card,
   Col,
   Form,
   FormControl,
@@ -100,44 +101,39 @@ export function SaleList() {
           </Form>
 
           {saleList.length > 0 ? (
-            <Table striped={true} hover={true}>
-              <thead>
-                <tr>
-                  <th style={{ width: "70px" }}>번호</th>
-                  <th
-                    className="d-none d-md-table-cell"
-                    style={{ width: "200px" }}
-                  >
-                    판매상품번호
-                  </th>
-                  <th>제목</th>
-                  <th
-                    className="d-none d-lg-table-cell"
-                    style={{ width: "200px" }}
-                  >
-                    등록일시
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {saleList.map((sale) => (
-                  <tr
-                    key={sale.seq}
-                    style={{ cursor: "pointer" }}
+            <Row xs={2} sm={3} md={4} lg={5} className="g-4">
+              {saleList.map((sale) => (
+                <Col key={sale.seq}>
+                  <Card
+                    style={{ cursor: "pointer", height: "100%" }}
                     onClick={() => handleTableRowClick(sale.seq)}
                   >
-                    <td>{sale.seq}</td>
-                    <td className="d-none d-md-table-cell">{sale.saleNo}</td>
-                    <td>
-                      <div className="d-flex gap-2">
-                        <span>{sale.title}</span>
-                      </div>
-                    </td>
-                    <td className="d-none d-lg-table-cell">{sale.timesAgo}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+                    <Card.Img
+                      variant="top"
+                      src={sale.thumbnailPath || "/placeholder.png"}
+                      style={{
+                        height: "180px",
+                        objectFit: "cover",
+                        borderBottom: "1px solid #eee",
+                      }}
+                    />
+                    <Card.Body className="d-flex flex-column">
+                      <Card.Title
+                        style={{ fontSize: "1rem" }}
+                        className="text-truncate"
+                      >
+                        {sale.title}
+                      </Card.Title>
+                      <Card.Text className="text-muted mb-0">
+                        {sale.price
+                          ? sale.price.toLocaleString() + "원"
+                          : "가격 미정"}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
           ) : (
             <p>등록된 판매상품이 존재하지 않습니다.</p>
           )}
