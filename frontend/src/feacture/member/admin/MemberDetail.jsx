@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router";
+import { toast } from "react-toastify";
 
 export function MemberDetail() {
   const [member, setMember] = useState(null);
@@ -32,9 +33,21 @@ export function MemberDetail() {
   function handleDeleteButtonClick() {
     axios
       .put(`/api/member/${params.get("seq")}/delete`)
-      .then((res) => {})
-      .catch((err) => console.log(err))
-      .finally(() => console.log("always"));
+      .then((res) => {
+        console.log("실행완료");
+        const message = res.data.message;
+        toast(message.text, { type: message.type });
+        navigate("list");
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response.data.message;
+        toast(message.text, { type: message.type });
+      })
+      .finally(() => {
+        console.log("always");
+        setModalShow(false);
+      });
   }
 
   if (!member) {
