@@ -1,14 +1,18 @@
 package com.example.backend.order.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@ToString
+@Builder
 @Table(name="receive")
 public class Receive {
 
