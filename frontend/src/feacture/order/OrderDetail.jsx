@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export function OrderDetail() {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -42,6 +43,30 @@ export function OrderDetail() {
         <strong>송장번호:</strong>
         {order.trackingNumber}
       </p>
+
+      <div className="mt-4 d-flex flex-wrap gap-2">
+        <button
+          className="btn btn-success"
+          onClick={() => navigate(`/receive/${orderId}`)}
+        >
+          상품 수령
+        </button>
+        <button
+          className="btn btn-warning"
+          onClick={() => navigate(`/cancel/${orderId}`)}
+        >
+          주문 취소
+        </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate(`/extend/${orderId}`)}
+        >
+          대여 연장 신청
+        </button>
+        <button className="btn btn-danger" onClick={() => navigate(`/return`)}>
+          반납 신청
+        </button>
+      </div>
     </div>
   );
 }

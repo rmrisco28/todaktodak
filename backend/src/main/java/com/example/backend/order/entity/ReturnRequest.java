@@ -2,10 +2,16 @@ package com.example.backend.order.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
 @Table(name = "return_request")
 public class ReturnRequest {
 
