@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import {
   Button,
   Col,
+  Container,
   FormControl,
   FormGroup,
   FormLabel,
@@ -21,6 +22,9 @@ export function SaleDetail() {
   const { seq } = useParams();
   const navigate = useNavigate();
   const [modalShow, setModalShow] = useState(false);
+
+  const [mainThumbnail, setMainThumbnail] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     axios
@@ -59,6 +63,12 @@ export function SaleDetail() {
       });
   }
 
+  const handleThumbnailClick = (path) => setMainThumbnail(path);
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    setQuantity(isNaN(value) || value < 1 ? 1 : value);
+  };
+
   function handleCartAddButton() {
     //   TODO 장바구니 추가 기능 (+회원 체크, input 체크)
   }
@@ -68,115 +78,139 @@ export function SaleDetail() {
   }
 
   return (
-    <Row className="justify-content-center">
-      <Col xs={12} md={8} lg={6}>
-        <div className="d-flex justify-content-between">
-          <h2 className="mb-4">{sale.seq} 번 상품</h2>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formCategory">
-            <FormLabel>분류</FormLabel>
-            <FormControl value={sale.category} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formTitle">
-            <FormLabel>제목</FormLabel>
-            <FormControl value={sale.title} readOnly={true} />
-          </FormGroup>
-        </div>
-
-        <div className="mb-3">
-          상품 썸네일
-          <ListGroup>
+    <Container className="my-5">
+      <Row className="gx-5">
+        {/* 왼쪽 - 대표 썸네일 */}
+        <Col md={6}>
+          <Image
+            src={sale.thumbnails[0]?.path}
+            fluid
+            rounded
+            className="border"
+          />
+          <div className="d-flex gap-2 flex-wrap">
             {sale.thumbnails.map((image) => (
-              <ListGroupItem key={image.name}>
-                <Image fluid src={image.path} />
-              </ListGroupItem>
+              <Image
+                key={image.name}
+                src={image.path}
+                thumbnail
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
+                  cursor: "pointer",
+                  border:
+                    mainThumbnail === image.path
+                      ? "2px solid #007bff"
+                      : "1px solid #dee2e6",
+                }}
+                onClick={() => handleThumbnailClick(image.path)}
+              />
             ))}
-          </ListGroup>
-        </div>
-        <div>
-          {/* TODO 판매건당가격 price 용어 변경(상품가격 중복방지) */}
-          <FormGroup className="mb-3" controlId="formPrice">
-            <FormLabel>가격</FormLabel>
-            <FormControl value={sale.price} readOnly={true} />
+          </div>
+        </Col>
+
+        {/* 오른쪽 - 상품 정보 */}
+        <Col md={6}>
+          <h3 className="mb-3">{sale.title}</h3>
+          <p className="text-muted">상품번호: {sale.seq}</p>
+          <hr />
+          <div className="mb-3">
+            <strong>분류:</strong>
+            {sale.category}
+          </div>
+          <div className="mb-3">
+            {/* TODO 판매건당가격 price 용어 변경(상품가격 중복방지) */}
+            <strong>가격:</strong>{" "}
+            <span className="text-danger fw-bold">
+              {sale.price.toLocaleString()}원
+            </span>
+          </div>
+          <div className="mb-3">
+            {/* TODO 배송업체 데이터 조회 */}
+            <strong>배송비:</strong>{" "}
+            {sale.deliveryFee > 0
+              ? `${sale.deliveryFee.toLocaleString()}원`
+              : "무료배송"}
+          </div>
+
+          <FormGroup className="mb-3" controlId="formQuantity">
+            <FormLabel>수량</FormLabel>
+            <FormControl
+              type="number"
+              min={1}
+              value={quantity}
+              onChange={handleQuantityChange}
+              style={{ maxWidth: "120px" }}
+            />
           </FormGroup>
-        </div>
-        <div>
-          {/* TODO 배송업체 데이터 조회 */}
-          <FormGroup className="mb-3" controlId="formDeliveryFee">
-            <FormLabel>배송비</FormLabel>
-            <FormControl value={sale.deliveryFee} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formContent">
-            <FormLabel>본문내용</FormLabel>
-            <FormControl value={sale.content} readOnly={true} />
-          </FormGroup>
-        </div>
 
-        <div className="mb-3">
-          본문 이미지
-          <ListGroup>
-            {sale.contentImages.map((image) => (
-              <ListGroupItem key={image.name}>
-                <Image fluid src={image.path} />
-              </ListGroupItem>
-            ))}
-          </ListGroup>
-        </div>
+          {/* 액션 버튼 */}
+          <div className="d-flex flex-wrap gap-2 mb-4">
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => navigate(`/buy/${sale.seq}`)}
+            >
+              대여하기
+            </Button>
+            <Button variant="outline-primary" onClick={handleCartAddButton}>
+              장바구니 담기
+            </Button>
+            <Button variant="outline-danger" onClick={handlePickAddButton}>
+              찜하기
+            </Button>
+            <Button
+              variant="warning"
+              onClick={() => navigate(`/rental/${sale.seq}`)}
+            >
+              대여 연장 신청
+            </Button>
+          </div>
 
-        <div>
-          <Button
-            className="me-2"
-            variant="primary"
-            onClick={() => navigate(`/buy/${sale.seq}`)}
-          >
-            대여하기
-          </Button>
-          <Button
-            className="me-2"
-            variant="outline-primary"
-            onClick={handleCartAddButton}
-          >
-            장바구니 담기
-          </Button>
-          <Button
-            className="me-2"
-            variant="outline-danger"
-            onClick={handlePickAddButton}
-          >
-            찜하기
-          </Button>
-          <Button
-            className="me-2"
-            variant="warning"
-            onClick={() => navigate(`/rental/${sale.seq}`)}
-          >
-            대여 연장 신청
-          </Button>
-        </div>
+          {/* 관리자 버튼 (TODO) */}
+          <div className="d-flex gap-2">
+            <Button variant="outline-danger" onClick={() => setModalShow(true)}>
+              삭제
+            </Button>
+            <Button
+              variant="outline-info"
+              onClick={() => navigate(`/sale/modify/${sale.seq}`)}
+            >
+              수정
+            </Button>
+          </div>
+        </Col>
+      </Row>
 
-        {/* TODO 수정+삭제 버튼 = 관리자 권한 */}
-        <div>
-          <Button
-            className="me-2"
-            variant="outline-danger"
-            onClick={() => setModalShow(true)}
-          >
-            삭제
-          </Button>
-          <Button
-            variant="outline-info"
-            onClick={() => navigate(`/sale/modify/${sale.seq}`)}
-          >
-            수정
-          </Button>
-        </div>
-      </Col>
+      {/* 본문 내용 */}
+      <Row className="mt-5">
+        <Col>
+          <h5>상품 설명</h5>
+          <p style={{ whiteSpace: "pre-wrap" }}>{sale.content}</p>
+        </Col>
+      </Row>
 
+      {/* 본문 이미지 */}
+      {sale.contentImages.length > 0 && (
+        <Row className="mt-4">
+          <Col>
+            <h5>상세 이미지</h5>
+            <div className="d-flex flex-column gap-3">
+              {sale.contentImages.map((image) => (
+                <Image
+                  key={image.name}
+                  src={image.path}
+                  fluid
+                  className="border"
+                />
+              ))}
+            </div>
+          </Col>
+        </Row>
+      )}
+
+      {/* 삭제 모달 */}
       <Modal show={modalShow} onHide={() => setModalShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>상품 삭제 확인</Modal.Title>
@@ -191,6 +225,6 @@ export function SaleDetail() {
           </Button>
         </Modal.Footer>
       </Modal>
-    </Row>
+    </Container>
   );
 }
