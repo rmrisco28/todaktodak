@@ -76,6 +76,7 @@ public class MemberService {
 
         MemberDetailForm dto = new MemberDetailForm();
         dto.setMemberNo(db.getMemberNo());
+        dto.setAuth(db.getAuth());
         dto.setMemberId(db.getMemberId());
         dto.setName(db.getName());
         dto.setEmail(db.getEmail());
@@ -111,6 +112,7 @@ public class MemberService {
     public void update(Integer seq, MemberModifyDto dto) {
         Member dbData = memberRepository.findById(seq).get();
         dbData.setMemberNo(dto.getMemberNo());
+        dbData.setAuth(dto.getAuth());
         dbData.setMemberId(dto.getMemberId());
         dbData.setName(dto.getName());
         dbData.setEmail(dto.getEmail());

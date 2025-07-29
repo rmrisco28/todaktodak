@@ -10,6 +10,7 @@ public class MemberDetailForm {
     // 회원상세보기폼
     private Integer seq;
     private String memberNo;
+    private String auth;
     private String memberId;
     private String name;
     private String email;

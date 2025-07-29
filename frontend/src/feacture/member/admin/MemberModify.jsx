@@ -131,6 +131,17 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 권한 */}
+        <div>
+          <FormGroup as={Row} controlId="auth" className="mb-4">
+            <FormLabel column lg={3}>
+              권한
+            </FormLabel>
+            <Col lg={7}>
+              <FormControl value={member.auth} readOnly={true} />
+            </Col>
+          </FormGroup>
+        </div>
         {/* 아이디 */}
         <div>
           <FormGroup as={Row} controlId="memberId" className="mb-4">

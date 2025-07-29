@@ -10,6 +10,7 @@ public class MemberModifyDto {
     // 회원수정폼
     private String memberNo;
     private String memberId;
+    private String auth;
     private String name;
     private String email;
     private String birthDate;
