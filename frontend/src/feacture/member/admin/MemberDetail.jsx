@@ -1,18 +1,23 @@
 import {
+  Button,
   Col,
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 export function MemberDetail() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
+  const [modalShow, setModalShow] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -24,6 +29,14 @@ export function MemberDetail() {
       .finally(() => console.log("always"));
   }, []);
 
+  function handleDeleteButtonClick() {
+    axios
+      .put(`/api/member/${params.get("seq")}/delete`)
+      .then((res) => {})
+      .catch((err) => console.log(err))
+      .finally(() => console.log("always"));
+  }
+
   if (!member) {
     return <Spinner />;
   }
@@ -33,7 +46,7 @@ export function MemberDetail() {
       <Col lg={4}>
         <h3 className="mb-4">회원 정보 관리</h3>
         <div>
-          <FormGroup as={Row} controlId="memberId" className="mb-4">
+          <FormGroup as={Row} controlId="memberNo" className="mb-4">
             <FormLabel column lg={3}>
               고객 번호
             </FormLabel>
@@ -115,11 +128,53 @@ export function MemberDetail() {
         </div>
         <div>
           <FormGroup controlId="insertDttm" className="mb-3">
-            <FormLabel>가입일시</FormLabel>
+            <FormLabel>등록일시</FormLabel>
             <FormControl value={member.insertDttm} readOnly={true} />
           </FormGroup>
         </div>
+        <div>
+          <FormGroup controlId="updatetDttm" className="mb-3">
+            <FormLabel>수정일시</FormLabel>
+            <FormControl value={member.updateDttm} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup controlId="state" className="mb-3">
+            <FormLabel>회원 상태</FormLabel>
+            <FormControl value={member.state} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <Button
+            className="me-2"
+            variant="outline-danger"
+            onClick={() => setModalShow(true)}
+          >
+            삭제
+          </Button>
+          <Button
+            variant="outline-primary"
+            onClick={() => navigate(`/member/modify?seq=${params.get("seq")}`)}
+          >
+            수정
+          </Button>
+        </div>
       </Col>
+
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 삭제 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{member.memberId} 회원을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
+            삭제
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

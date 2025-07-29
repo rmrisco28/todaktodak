@@ -63,7 +63,7 @@ public class Member {
 
 
     @Column(name = "state", length = 10)
-    private String state = "use";
+    private String state = "USE";
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)

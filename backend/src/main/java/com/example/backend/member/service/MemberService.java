@@ -5,12 +5,14 @@ import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.dto.MemberSignupForm;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
+import com.example.backend.product.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -77,10 +79,22 @@ public class MemberService {
         dto.setAddr(db.getAddr());
         dto.setAddrDetail(db.getAddrDetail());
         dto.setInsertDttm(db.getInsertDttm());
-
-        System.out.println("DB에서 가져온 memberNo: " + db.getMemberNo());
-
+        dto.setUpdateDttm(db.getUpdateDttm());
+        dto.setState(db.getState());
 
         return dto;
+    }
+
+    public void updateDelYn(Integer seq) {
+        Member dbData = memberRepository.findById(seq).get();
+        // del_yn = true
+        dbData.setDelYn(true);
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        dbData.setState("DELETE");
+
+        memberRepository.save(dbData);
     }
 }

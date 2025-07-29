@@ -1,6 +1,5 @@
 package com.example.backend.member.controller;
 
-import com.example.backend.member.dto.MemberDetailDto;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.dto.MemberSignupForm;
 import com.example.backend.member.service.MemberService;
@@ -18,11 +17,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    // 회원 목록 보기
-    @GetMapping("list")
-    public List<MemberListInfo> list() {
-        return memberService.list();
-    }
 
     // 회원 가입
     @PostMapping("signup")
@@ -46,11 +40,34 @@ public class MemberController {
                         Map.of("type", "success", "text", "회원가입 되었습니다.")));
     }
 
+    // 회원 목록 보기
+    @GetMapping("list")
+    public List<MemberListInfo> list() {
+        return memberService.list();
+    }
 
     // 회원 정보 상세 보기
     @GetMapping(params = "seq")
     public ResponseEntity<?> getMember(@RequestParam Integer seq) {
         return ResponseEntity.ok().body(memberService.getMember(seq));
     }
+
+    // 회원 삭제(관리자)
+    @PutMapping("{seq}/delete")
+    public ResponseEntity<?> delete(@PathVariable Integer seq) {
+        try {
+            memberService.updateDelYn(seq);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", seq + "회원 정보가 삭제되었습니다.")));
+    }
+
 
 }
