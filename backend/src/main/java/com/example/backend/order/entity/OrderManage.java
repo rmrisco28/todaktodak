@@ -41,4 +41,7 @@ public class OrderManage {
 
     @OneToMany(mappedBy = "orderManage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
+
+    @Column(name = "del_yn")
+    private String delYn;
 }

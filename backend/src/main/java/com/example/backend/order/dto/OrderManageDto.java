@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class OrderManageDto {
-    private Integer orderId;
+    private Integer seq;
     private String orderNo;
     private LocalDateTime orderDate;
     private String productNames;
-    private int totalPrice;
+    private Integer totalPrice;
     private String status;
-    private String trackingNumber;
+    private String trackNo;
+    private String delYn;
 }
