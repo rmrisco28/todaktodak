@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "return_request")
-@Data
 public class ReturnRequest {
 
     @Id

@@ -2,7 +2,6 @@ package com.example.backend.order.service;
 
 import com.example.backend.order.dto.OrderDetailDto;
 import com.example.backend.order.dto.OrderManageDto;
-import com.example.backend.order.entity.OrderInfo;
 import com.example.backend.order.entity.OrderItem;
 import com.example.backend.order.entity.OrderManage;
 import com.example.backend.order.repository.OrderInfoRepository;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +21,6 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final OrderManageRepository orderManageRepository;
-    private final OrderInfoRepository orderInfoRepository;
     private final OrderItemRepository orderItemRepository;
 
     public List<OrderManageDto> findOrders(
