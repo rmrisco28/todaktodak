@@ -21,7 +21,7 @@ public class MemberController {
 
     // 회원 가입
     @PostMapping("signup")
-    public ResponseEntity<?> add(@RequestBody MemberSignupForm memberSignupForm) {
+    public ResponseEntity<?> signup(@RequestBody MemberSignupForm memberSignupForm) {
         try {
             // 서비스로 일 시키기(회원가입용 dto 사용)
             memberService.signup(memberSignupForm);
