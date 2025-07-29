@@ -13,9 +13,21 @@ import java.time.ZoneId;
 @NoArgsConstructor
 public class SaleListDto {
     private Integer seq;
+    private String thumbnail;
+    private String thumbnailPath;
     private String title;
+    private Integer price;
     private String saleNo;
     private LocalDateTime insertDttm;
+
+    public SaleListDto(Integer seq, String name, String title, Integer price, String saleNo, LocalDateTime insertDttm) {
+        this.seq = seq;
+        this.thumbnail = name;
+        this.title = title;
+        this.price = price;
+        this.saleNo = saleNo;
+        this.insertDttm = insertDttm;
+    }
 
     public String getTimesAgo() {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));

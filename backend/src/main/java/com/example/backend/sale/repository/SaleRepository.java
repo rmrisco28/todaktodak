@@ -17,11 +17,15 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
     @Query(value = """
             SELECT new com.example.backend.sale.dto.SaleListDto (
                         s.seq,
+                        t.id.name,
                         s.title,
+                        s.price,
                         s.saleNo,
                         s.insertDttm
                         )
             FROM Sale s
+            LEFT JOIN SaleImageThumb t 
+                ON t.sale.saleNo = s.saleNo
             WHERE (s.useYn = true 
                 AND s.delYn = false)
                 AND (s.title LIKE %:keyword%
