@@ -16,6 +16,7 @@ export function MemberModify() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
   const navigate = useNavigate();
+  const [newPassword, setNewPassword] = useState("");
 
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
@@ -44,21 +45,66 @@ export function MemberModify() {
       });
   }, [params]);
 
-  // 년월일이 바뀔 때마다 member.birthDate 업데이트
-  useEffect(() => {
-    if (birthDay && birthMonth && birthDay) {
-      const newBirthDate = `&{birthYear}-${birthMonth}-${birthDay}}`;
-      setMember((member) => ({ ...member, birthdate: newBirthDate }));
-    }
-  }, [birthYear, birthMonth, birthDay]);
-
   if (!member) {
     return <Spinner />;
   }
 
   function handleModifyButtonClick() {
-    navigate(`/member?seq=${params.get("seq")}`);
+    const modifiedMember = { ...member };
+
+    if (newPassword.trim() !== "") {
+      modifiedMember.password = newPassword;
+    }
+
+    if (birthYear && birthMonth && birthDay) {
+      modifiedMember.birthDate = `${birthYear}-${birthMonth}-${birthDay}`;
+    }
+
+    axios
+      .put(`/api/member/${params.get("seq")}/modify`, modifiedMember)
+      .then((res) => {
+        console.log("success");
+        setMember(res.data);
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate(`/member?seq=${params.get("seq")}`);
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .finally(() => {
+        console.log("always");
+      });
   }
+
+  const handleSearchButtonClick = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        let fullAddress = data.address;
+        let extraAddress = "";
+
+        if (data.addressType === "R") {
+          if (data.bname !== "") extraAddress += data.bname;
+          if (data.buildingName !== "")
+            extraAddress +=
+              (extraAddress !== "" ? ", " : "") + data.buildingName;
+          fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+        }
+
+        setMember((prev) => ({
+          ...prev,
+          postCode: data.zonecode,
+          addr: fullAddress,
+        }));
+      },
+    }).open();
+  };
 
   return (
     <Row className="justify-content-center">
@@ -95,7 +141,11 @@ export function MemberModify() {
               비밀번호
             </FormLabel>
             <Col lg={7} className="text-center">
-              <FormControl />
+              <FormControl
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
             </Col>
           </FormGroup>
         </div>
@@ -199,7 +249,20 @@ export function MemberModify() {
               우편번호
             </FormLabel>
             <Col sm={7}>
-              <FormControl />
+              <div className="d-flex" style={{ gap: "10px" }}>
+                <FormControl
+                  value={member.postCode}
+                  readOnly={true}
+                  placeholder="우편번호"
+                />
+                <Button
+                  variant="outline-dark"
+                  style={{ whiteSpace: "nowrap" }}
+                  onClick={handleSearchButtonClick}
+                >
+                  검색
+                </Button>
+              </div>
             </Col>
           </FormGroup>
         </div>
@@ -209,7 +272,7 @@ export function MemberModify() {
               주소
             </FormLabel>
             <Col md={9}>
-              <FormControl />
+              <FormControl value={member.addr} readOnly={true} />
             </Col>
           </FormGroup>
         </div>
@@ -217,7 +280,12 @@ export function MemberModify() {
           <FormGroup as={Row} controlId="addressDetail" className="mb-4">
             <FormLabel column sm={3}></FormLabel>
             <Col sm={9}>
-              <FormControl />
+              <FormControl
+                value={member.addrDetail || ""}
+                onChange={(e) =>
+                  setMember({ ...member, addrDetail: e.target.value })
+                }
+              />
             </Col>
           </FormGroup>
         </div>

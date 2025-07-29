@@ -1,6 +1,7 @@
 package com.example.backend.member.controller;
 
 import com.example.backend.member.dto.MemberListInfo;
+import com.example.backend.member.dto.MemberModifyDto;
 import com.example.backend.member.dto.MemberSignupForm;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,24 @@ public class MemberController {
         return ResponseEntity.ok().body(Map.of("message",
                 Map.of("type", "success",
                         "text", seq + "회원 정보가 삭제되었습니다.")));
+    }
+
+    // 회원 정보 수정(관리자)
+    @PutMapping("{seq}/modify")
+    public ResponseEntity<?> update(@PathVariable Integer seq,
+                                    @RequestBody MemberModifyDto dto) {
+        try {
+            memberService.update(seq, dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", "회원 정보가 수정되었습니다.")));
     }
 
 

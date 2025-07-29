@@ -1,11 +1,11 @@
 package com.example.backend.member.service;
 
-import com.example.backend.member.dto.MemberDetailDto;
+import com.example.backend.member.dto.MemberDetailForm;
 import com.example.backend.member.dto.MemberListInfo;
+import com.example.backend.member.dto.MemberModifyDto;
 import com.example.backend.member.dto.MemberSignupForm;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
-import com.example.backend.product.entity.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,10 +65,10 @@ public class MemberService {
         return memberRepository.findAllBy();
     }
 
-    public MemberDetailDto getMember(Integer seq) {
+    public MemberDetailForm getMember(Integer seq) {
         Member db = memberRepository.findById(seq).get();
 
-        MemberDetailDto dto = new MemberDetailDto();
+        MemberDetailForm dto = new MemberDetailForm();
         dto.setMemberNo(db.getMemberNo());
         dto.setMemberId(db.getMemberId());
         dto.setName(db.getName());
@@ -97,6 +97,34 @@ public class MemberService {
 
         dbData.setState("DELETE");
 
+        memberRepository.save(dbData);
+    }
+
+    public void update(Integer seq, MemberModifyDto dto) {
+        Member dbData = memberRepository.findById(seq).get();
+        dbData.setMemberNo(dto.getMemberNo());
+        dbData.setMemberId(dto.getMemberId());
+        dbData.setName(dto.getName());
+        dbData.setEmail(dto.getEmail());
+        dbData.setPhone(dto.getPhone());
+        dbData.setPostCode(dto.getPostCode());
+        dbData.setAddr(dto.getAddr());
+        dbData.setAddrDetail(dto.getAddrDetail());
+        dbData.setUpdateDttm(LocalDateTime.now());
+        dbData.setState(dto.getState());
+        dbData.setUseYn(dto.isUseYn());
+        dbData.setDelYn(dto.isDelYn());
+
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            dbData.setPassword(dto.getPassword());
+        }
+
+        if (dto.getBirthDate() != null && !dto.getBirthDate().isBlank()) {
+            dbData.setBirthDate(LocalDate.parse(dto.getBirthDate()));
+        }
         memberRepository.save(dbData);
     }
 }
