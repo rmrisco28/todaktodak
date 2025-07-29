@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
@@ -15,7 +16,21 @@ export function MemberLogin() {
   const navigate = useNavigate();
 
   function handleLogInButtonClick() {
-    navigate("/");
+    axios
+      .post(`/member/login`, {
+        memberId: memberId,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        console.log("always");
+      });
   }
 
   return (

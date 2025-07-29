@@ -1,9 +1,6 @@
 package com.example.backend.member.controller;
 
-import com.example.backend.member.dto.MemberAddForm;
-import com.example.backend.member.dto.MemberListInfo;
-import com.example.backend.member.dto.MemberModifyDto;
-import com.example.backend.member.dto.MemberSignupForm;
+import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -109,6 +106,11 @@ public class MemberController {
         return ResponseEntity.ok().body(
                 Map.of("message",
                         Map.of("type", "success", "text", "회원등록이 완료되었습니다.")));
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<?> login(@RequestBody MemberLoginForm memberLoginForm) {
+        return null;
     }
 
 
