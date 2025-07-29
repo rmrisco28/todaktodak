@@ -79,19 +79,6 @@ export function SaleDetail() {
             <FormControl value={sale.category} readOnly={true} />
           </FormGroup>
         </div>
-        {/* TODO 상품 테이블 조회 */}
-        {/*
-        <div>
-          <FormGroup className="mb-3" controlId="formProductName">
-            <FormLabel>상품명</FormLabel>
-            <FormControl
-              value={sale.productName}
-              readOnly={true}
-              onChange={(e) => setProductName(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-        </div>
-        */}
         <div>
           <FormGroup className="mb-3" controlId="formTitle">
             <FormLabel>제목</FormLabel>
@@ -109,48 +96,10 @@ export function SaleDetail() {
             ))}
           </ListGroup>
         </div>
-        {/*
         <div>
-          <FormGroup className="mb-3" controlId="formBrand">
-            <FormLabel>브랜드명</FormLabel>
-            <FormControl value={sale.brand} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formStandard">
-            <FormLabel>규격</FormLabel>
-            <FormControl value={sale.standard} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formStock">
-            <FormLabel>재고량</FormLabel>
-            <FormControl value={sale.stock} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
+          {/* TODO 판매건당가격 price 용어 변경(상품가격 중복방지) */}
           <FormGroup className="mb-3" controlId="formPrice">
-            <FormLabel>단위가격</FormLabel>
-            <FormControl value={sale.price} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formNote">
-            <FormLabel>비고</FormLabel>
-            <FormControl value={sale.note} readOnly={true} />
-          </FormGroup>
-        </div>
-        */}
-        <div>
-          <FormGroup className="mb-3" controlId="formQuantity">
-            <FormLabel>판매건당수량</FormLabel>
-            <FormControl value={sale.quantity} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          {/* TODO 판매건당가격 price 용어 변경(판매가격 중복방지) */}
-          <FormGroup className="mb-3" controlId="formPrice">
-            <FormLabel>판매건당가격</FormLabel>
+            <FormLabel>가격</FormLabel>
             <FormControl value={sale.price} readOnly={true} />
           </FormGroup>
         </div>
@@ -180,41 +129,11 @@ export function SaleDetail() {
         </div>
 
         <div>
-          <FormGroup className="mb-3" controlId="formInsertDttm">
-            <FormLabel>등록일시</FormLabel>
-            <FormControl
-              value={sale.insertDttm}
-              type="datetime-local"
-              readOnly={true}
-            />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formUpdateDttm">
-            <FormLabel>수정일시</FormLabel>
-            <FormControl
-              value={sale.updateDttm}
-              type="datetime-local"
-              readOnly={true}
-            />
-          </FormGroup>
-        </div>
-
-        {/* TODO 판매등록여부 = 관리자 권한 */}
-        <div>
-          <FormGroup className="mb-3" controlId="formUseYn">
-            <FormLabel>판매등록여부</FormLabel>
-            <FormControl value={sale.useYn} readOnly={true} />
-          </FormGroup>
-        </div>
-
-        <div>
           <Button
             className="me-2"
             variant="primary"
-            onClick={() => navigate(`/buy`)}
+            onClick={() => navigate(`/buy/${sale.seq}`)}
           >
-            {/* TODO 판매상품구매 화면 이동 */}
             대여하기
           </Button>
           <Button
@@ -222,7 +141,6 @@ export function SaleDetail() {
             variant="outline-primary"
             onClick={handleCartAddButton}
           >
-            {/* TODO method 구현 (user, input check + 장바구니 add) */}
             장바구니 담기
           </Button>
           <Button
@@ -230,15 +148,13 @@ export function SaleDetail() {
             variant="outline-danger"
             onClick={handlePickAddButton}
           >
-            {/* TODO method 구현 (user, 찜하기 add) */}
             찜하기
           </Button>
           <Button
             className="me-2"
             variant="warning"
-            onClick={() => navigate(`/sale/modify/${sale.seq}`)}
+            onClick={() => navigate(`/rental/${sale.seq}`)}
           >
-            {/* TODO 대여 연장 신청 화면 이동 */}
             대여 연장 신청
           </Button>
         </div>
