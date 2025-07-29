@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
 } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
@@ -13,6 +14,7 @@ import axios from "axios";
 export function ContactDeletedDetail() {
   const [contact, setContact] = useState(null);
   const [reply, setReply] = useState("");
+  const [modalShow, setModalShow] = useState();
 
   const navigate = useNavigate();
   const { seq } = useParams();
@@ -23,11 +25,8 @@ export function ContactDeletedDetail() {
       .then((res) => {
         console.log("ok");
         const data = res.data;
-        console.log(res.data);
         setContact(data);
         setReply(data.reply);
-        console.log(contact);
-        console.log(reply);
       })
       .catch((err) => {
         console.log("no");
@@ -101,15 +100,58 @@ export function ContactDeletedDetail() {
             >
               전체 목록
             </Button>
-
             <Button
-              variant="danger"
+              className="me-2"
+              variant="warning"
               onClick={() => navigate("/contact/deleted/list")}
             >
               삭제 목록
             </Button>
+            <Button
+              variant="danger"
+              className="me-2"
+              onClick={() => setModalShow(true)}
+            >
+              복구
+            </Button>
           </div>
         </Col>
+
+        {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
+        {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
+        {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
+        {/* 삭제 모달*/}
+        <Modal show={modalShow} onHide={() => setModalShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>복구 여부 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>정말 게시물을 복구하시겠습니까?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+              뒤로
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                axios
+                  .delete(`/api/contact/restore/${seq}`)
+                  .then((res) => {
+                    console.log("ok");
+                    alert(res.data.message);
+                    navigate("/contact/list", { replace: true });
+                  })
+                  .catch((err) => {
+                    console.log("no");
+                  })
+                  .finally(() => {
+                    console.log("finally");
+                  });
+              }}
+            >
+              복구
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Row>
     </>
   );

@@ -166,4 +166,10 @@ public class ContactService {
 
         return caf;
     }
+
+    public void restore(Integer seq) {
+        Contact contact = contactRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        contact.setDelYn(false); //
+    }
 }
