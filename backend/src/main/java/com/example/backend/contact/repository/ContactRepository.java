@@ -31,7 +31,8 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
                         c.title,
                         c.name,
                         c.view,
-                        c.insertDttm)
+                        c.insertDttm,
+                        c.delYn)
             FROM Contact c
             WHERE (c.useYn = true
                    And c.delYn = false)
@@ -52,6 +53,21 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
             ORDER By c.updateDttm DESC 
             """)
     Page<ContactDeletedDto> findAllByDeleted(String keyword, PageRequest of);
+
+
+    @Query(value = """
+            SELECT new com.example.backend.contact.dto.ContactDto(
+                        c.seq,
+                        c.title,
+                        c.name ,
+                        c.view,
+                        c.updateDttm,
+                        c.delYn)
+                        FROM Contact c
+                        WHERE (:keyword = '' OR c.name Like %:keyword% OR c.title LIKE %:keyword%)
+            ORDER By c.updateDttm DESC 
+            """)
+    Page<ContactDto> findAllByAdmin(String keyword, PageRequest pageRequest);
 
 //    @Query("SELECT MAX(c.seq)FROM Contact c")
 //    Integer findMaxSeq();

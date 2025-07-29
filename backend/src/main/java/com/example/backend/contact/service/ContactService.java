@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,9 +50,15 @@ public class ContactService {
 //    }
 
 
-    // 삭제 안된 게시판 목록 조회
-    public Map<String, Object> list(String keyword, Integer pageNumber) {
-        Page<ContactDto> contactListDtoPage = contactRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+    // 관리자/이용자 통합 게시판 목록
+    public Map<String, Object> list(String keyword, Integer pageNumber, Boolean isAdmin) {
+        Page<ContactDto> contactListDtoPage;
+
+        if (isAdmin) {
+            contactListDtoPage = contactRepository.findAllByAdmin(keyword, PageRequest.of(pageNumber - 1, 10));
+        } else {
+            contactListDtoPage = contactRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+        }
 
         int totalPages = contactListDtoPage.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
@@ -67,7 +72,8 @@ public class ContactService {
                 "leftPageNumber", leftPageNumber,
                 "currentPageNumber", pageNumber);
 
-        return Map.of("pageInfo", pageInfo, "contactList", contactListDtoPage.getContent());
+        return Map.of("pageInfo", pageInfo,
+                "contactList", contactListDtoPage.getContent());
     }
 
 

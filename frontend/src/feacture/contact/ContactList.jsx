@@ -16,10 +16,15 @@ export function ContactList() {
   const [contactList, setContactList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   let navigate = useNavigate();
+
+  const handleLogin = (user) => {
+    setIsAdmin(user.role === "admin");
+  };
 
   useEffect(() => {
     const q = searchParams.get("q");
@@ -100,7 +105,11 @@ export function ContactList() {
                     axios
                       .get(`/api/contact/${contact.seq}`) // 조회수 증가
                       .then(() => {
-                        navigate(`/contact/detail/${contact.seq}`);
+                        if (contact.delYn === true) {
+                          navigate(`/contact/deleted/detail/${contact.seq}`);
+                        } else {
+                          navigate(`/contact/detail/${contact.seq}`);
+                        }
                       })
                       .catch((err) => {
                         console.log("조회수 증가 실패 err");

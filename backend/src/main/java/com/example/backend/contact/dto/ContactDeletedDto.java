@@ -15,4 +15,5 @@ public class ContactDeletedDto implements Serializable {
     String name;
     Integer view;
     LocalDateTime updateDttm;
+
 }
