@@ -30,6 +30,7 @@ export function MemberDetail() {
       .finally(() => console.log("always"));
   }, []);
 
+  // 삭제 버튼 클릭
   function handleDeleteButtonClick() {
     axios
       .put(`/api/member/${params.get("seq")}/delete`)
@@ -37,7 +38,7 @@ export function MemberDetail() {
         console.log("실행완료");
         const message = res.data.message;
         toast(message.text, { type: message.type });
-        navigate("list");
+        navigate("list"); // 목록 페이지로 이동
       })
       .catch((err) => {
         console.log(err);
@@ -58,6 +59,7 @@ export function MemberDetail() {
     <Row className="justify-content-center">
       <Col lg={4}>
         <h3 className="mb-4">회원 정보 관리</h3>
+        {/* 고객 번호 */}
         <div>
           <FormGroup as={Row} controlId="memberNo" className="mb-4">
             <FormLabel column lg={3}>
@@ -68,6 +70,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 아이디 */}
         <div>
           <FormGroup as={Row} controlId="memberId" className="mb-4">
             <FormLabel column lg={3}>
@@ -78,6 +81,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 이름 */}
         <div>
           <FormGroup as={Row} controlId="name" className="mb-4">
             <FormLabel column sm={3}>
@@ -88,6 +92,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 이메일 */}
         <div>
           <FormGroup as={Row} controlId="email" className="mb-4">
             <FormLabel column sm={3}>
@@ -98,6 +103,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
             <FormLabel column sm={3}>
@@ -108,6 +114,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 연락처 */}
         <div>
           <FormGroup as={Row} controlId="phone" className="mb-4">
             <FormLabel column sm={3}>
@@ -118,6 +125,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 우편번호 */}
         <div>
           <FormGroup as={Row} controlId="postCode" className="mb-4">
             <FormLabel column sm={3}>
@@ -128,29 +136,34 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 주소 */}
         <div>
           <FormGroup controlId="address" className="mb-2">
             <FormLabel>주소</FormLabel>
             <FormControl value={member.addr} readOnly={true} />
           </FormGroup>
         </div>
+        {/* 상세주소 */}
         <div>
           <FormGroup controlId="addressDetail" className="mb-3">
             <FormControl value={member.addrDetail} readOnly={true} />
           </FormGroup>
         </div>
+        {/* 등록일시 */}
         <div>
           <FormGroup controlId="insertDttm" className="mb-3">
             <FormLabel>등록일시</FormLabel>
             <FormControl value={member.insertDttm} readOnly={true} />
           </FormGroup>
         </div>
+        {/* 수정일시 */}
         <div>
           <FormGroup controlId="updatetDttm" className="mb-3">
             <FormLabel>수정일시</FormLabel>
             <FormControl value={member.updateDttm} readOnly={true} />
           </FormGroup>
         </div>
+        {/* 회원상태 */}
         <div>
           <FormGroup as={Row} controlId="state" className="mb-4">
             <FormLabel column sm={3}>
@@ -161,6 +174,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 사용여부 */}
         <div>
           <FormGroup as={Row} controlId="useYn" className="mb-4">
             <FormLabel column sm={3}>
@@ -171,6 +185,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 삭제여부 */}
         <div>
           <FormGroup as={Row} controlId="delYn" className="mb-4">
             <FormLabel column sm={3}>
@@ -181,6 +196,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
+        {/* 삭제, 수정, 목록 버튼*/}
         <div>
           <Button
             className="me-2"
@@ -206,6 +222,7 @@ export function MemberDetail() {
         </div>
       </Col>
 
+      {/* 회원 삭제 확인 모달 */}
       <Modal show={modalShow} onHide={() => setModalShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>회원 삭제 확인</Modal.Title>

@@ -16,8 +16,11 @@ export function MemberModify() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
   const navigate = useNavigate();
+
+  // 새 비밀번호 입력값 상태
   const [newPassword, setNewPassword] = useState("");
 
+  // 생년월일 관련 상태(드랍다운 분리)
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
@@ -49,13 +52,17 @@ export function MemberModify() {
     return <Spinner />;
   }
 
+  // 수정 버튼 클릭
   function handleModifyButtonClick() {
+    // 기존 회원 정보 복사
     const modifiedMember = { ...member };
 
+    // 비밀번호가 입력된 경우에만 수정
     if (newPassword.trim() !== "") {
       modifiedMember.password = newPassword;
     }
 
+    // 생년월일이 모두 입력된 경우에만 수정
     if (birthYear && birthMonth && birthDay) {
       modifiedMember.birthDate = `${birthYear}-${birthMonth}-${birthDay}`;
     }
@@ -69,7 +76,7 @@ export function MemberModify() {
         if (message) {
           toast(message.text, { type: message.type });
         }
-        navigate(`/member?seq=${params.get("seq")}`);
+        navigate(`/member?seq=${params.get("seq")}`); // 상세 페이지 이동
       })
       .catch((err) => {
         console.log(err);
@@ -83,9 +90,11 @@ export function MemberModify() {
       });
   }
 
+  // 다음 주소 검색 API 연동
   const handleSearchButtonClick = () => {
     new window.daum.Postcode({
       oncomplete: function (data) {
+        // 주소 조합 처리
         let fullAddress = data.address;
         let extraAddress = "";
 
@@ -110,6 +119,7 @@ export function MemberModify() {
     <Row className="justify-content-center">
       <Col lg={4}>
         <h3 className="mb-4">회원 정보 수정</h3>
+        {/* 고객 번호 */}
         <div>
           <FormGroup as={Row} controlId="memberNo" className="mb-4">
             <FormLabel column lg={3}>
@@ -120,6 +130,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 아이디 */}
         <div>
           <FormGroup as={Row} controlId="memberId" className="mb-4">
             <FormLabel column lg={3}>
@@ -135,6 +146,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 새 비밀번호 입력*/}
         <div>
           <FormGroup as={Row} controlId="password" className="mb-4">
             <FormLabel column lg={3}>
@@ -149,6 +161,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 이름 */}
         <div>
           <FormGroup as={Row} controlId="name" className="mb-4">
             <FormLabel column sm={3}>
@@ -162,6 +175,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 이메일 */}
         <div>
           <FormGroup as={Row} controlId="email" className="mb-4">
             <FormLabel column sm={3}>
@@ -177,12 +191,14 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
             <FormLabel column sm={3}>
               생년월일
             </FormLabel>
             <Col sm={9} className="d-flex" style={{ gap: "10px" }}>
+              {/* 년도 */}
               <FormControl
                 as="select"
                 value={birthYear}
@@ -199,6 +215,7 @@ export function MemberModify() {
                   );
                 })}
               </FormControl>
+              {/* 월 */}
               <FormControl
                 as="select"
                 value={birthMonth}
@@ -212,6 +229,7 @@ export function MemberModify() {
                   </option>
                 ))}
               </FormControl>
+              {/* 일*/}
               <FormControl
                 as="select"
                 value={birthDay}
@@ -228,6 +246,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 연락처 */}
         <div>
           <FormGroup as={Row} controlId="phone" className="mb-4">
             <FormLabel column sm={3}>
@@ -243,6 +262,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 우편번호 */}
         <div>
           <FormGroup as={Row} controlId="postCode" className="mb-4">
             <FormLabel column sm={3}>
@@ -255,6 +275,7 @@ export function MemberModify() {
                   readOnly={true}
                   placeholder="우편번호"
                 />
+                {/* 검색버튼 */}
                 <Button
                   variant="outline-dark"
                   style={{ whiteSpace: "nowrap" }}
@@ -266,6 +287,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 주소 */}
         <div>
           <FormGroup as={Row} controlId="address" className="mb-2">
             <FormLabel column sm={3}>
@@ -276,6 +298,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 상세 주소 */}
         <div>
           <FormGroup as={Row} controlId="addressDetail" className="mb-4">
             <FormLabel column sm={3}></FormLabel>
@@ -289,6 +312,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 회원상태 */}
         <div>
           <FormGroup as={Row} controlId="state" className="mb-3">
             <FormLabel column sm={3}>
@@ -304,6 +328,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 사용여부 */}
         <div>
           <FormGroup as={Row} controlId="useYn" className="mb-3">
             <FormLabel column sm={3}>
@@ -319,6 +344,7 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 삭제여부 */}
         <div>
           <FormGroup as={Row} controlId="delYn" className="mb-3">
             <FormLabel column sm={3}>
@@ -334,11 +360,12 @@ export function MemberModify() {
             </Col>
           </FormGroup>
         </div>
+        {/* 취소 수정 버튼*/}
         <div>
           <Button
             className="me-2"
             variant="outline-dark"
-            onClick={(e) => navigate(-1)}
+            onClick={() => navigate(-1)}
           >
             취소
           </Button>

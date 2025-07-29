@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class MemberModifyDto {
+    // 회원수정폼
     private String memberNo;
     private String memberId;
     private String name;

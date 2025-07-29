@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class MemberDetailForm {
+    // 회원상세보기폼
     private Integer seq;
     private String memberNo;
     private String memberId;

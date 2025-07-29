@@ -25,6 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
 
+    // 회원 가입
     public void signup(MemberSignupForm memberSignupForm) {
 
         if (this.validate(memberSignupForm)) {
@@ -39,6 +40,7 @@ public class MemberService {
             member.setAddrDetail(memberSignupForm.getAddrDetail());
             member.setPostCode(memberSignupForm.getPostCode());
 
+            // 고객번호 조합
             String code = "ME";
             Date now = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
@@ -48,10 +50,12 @@ public class MemberService {
             String seqStr = String.format("%07d", latestSeq);
             member.setMemberNo(code + date + seqStr);
 
+            // 저장
             memberRepository.save(member);
         }
     }
 
+    // 유효성(중복) 검사
     public boolean validate(MemberSignupForm memberSignupForm) {
         // memberId 중복 여부
         Optional<Member> dbData = memberRepository.findByMemberId(memberSignupForm.getMemberId());
@@ -61,10 +65,12 @@ public class MemberService {
         return true;
     }
 
+    // 회원 목록(관리자)
     public List<MemberListInfo> list() {
         return memberRepository.findAllBy();
     }
 
+    // 회원 상세보기(관리자)
     public MemberDetailForm getMember(Integer seq) {
         Member db = memberRepository.findById(seq).get();
 
@@ -87,6 +93,7 @@ public class MemberService {
         return dto;
     }
 
+    // 회원 삭제 시 delYn 변경(삭제 데이터 보관)
     public void updateDelYn(Integer seq) {
         Member dbData = memberRepository.findById(seq).get();
         // del_yn = true
@@ -100,6 +107,7 @@ public class MemberService {
         memberRepository.save(dbData);
     }
 
+    // 회원 정보 수정(관리자)
     public void update(Integer seq, MemberModifyDto dto) {
         Member dbData = memberRepository.findById(seq).get();
         dbData.setMemberNo(dto.getMemberNo());
@@ -118,6 +126,7 @@ public class MemberService {
         LocalDateTime now = LocalDateTime.now();
         dbData.setUpdateDttm(now);
 
+        // 새 비밀번호 입력시에만 적용
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             dbData.setPassword(dto.getPassword());
         }

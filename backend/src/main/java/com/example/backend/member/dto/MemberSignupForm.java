@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class MemberSignupForm {
+    // 회원가입폼
     private String memberId;
     private String password;
     private String name;
