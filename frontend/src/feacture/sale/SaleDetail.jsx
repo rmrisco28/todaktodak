@@ -59,6 +59,14 @@ export function SaleDetail() {
       });
   }
 
+  function handleCartAddButton() {
+    //   TODO 장바구니 추가 기능 (+회원 체크, input 체크)
+  }
+
+  function handlePickAddButton() {
+    // TODO 찜하기 추가 기능 (+회원 체크)
+  }
+
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
@@ -197,6 +205,41 @@ export function SaleDetail() {
             <FormLabel>판매등록여부</FormLabel>
             <FormControl value={sale.useYn} readOnly={true} />
           </FormGroup>
+        </div>
+
+        <div>
+          <Button
+            className="me-2"
+            variant="primary"
+            onClick={() => navigate(`/buy`)}
+          >
+            {/* TODO 판매상품구매 화면 이동 */}
+            대여하기
+          </Button>
+          <Button
+            className="me-2"
+            variant="outline-primary"
+            onClick={handleCartAddButton}
+          >
+            {/* TODO method 구현 (user, input check + 장바구니 add) */}
+            장바구니 담기
+          </Button>
+          <Button
+            className="me-2"
+            variant="outline-danger"
+            onClick={handlePickAddButton}
+          >
+            {/* TODO method 구현 (user, 찜하기 add) */}
+            찜하기
+          </Button>
+          <Button
+            className="me-2"
+            variant="warning"
+            onClick={() => navigate(`/sale/modify/${sale.seq}`)}
+          >
+            {/* TODO 대여 연장 신청 화면 이동 */}
+            대여 연장 신청
+          </Button>
         </div>
 
         <div>
