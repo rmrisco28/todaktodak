@@ -78,7 +78,7 @@ export function MemberDetail() {
               권한
             </FormLabel>
             <Col lg={7}>
-              <FormControl value={member.auth} readOnly={true} />
+              <FormControl value={member.auth || ""} readOnly={true} />
             </Col>
           </FormGroup>
         </div>

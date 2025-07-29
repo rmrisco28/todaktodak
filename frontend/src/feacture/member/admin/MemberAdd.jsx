@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export function MemberAdd() {
   const [auth, setAuth] = useState("");
@@ -56,6 +57,7 @@ export function MemberAdd() {
   function handleSaveButtonClick() {
     axios
       .post("/api/member/add", {
+        auth: auth,
         memberId: memberId,
         password: password,
         name: name,
@@ -68,7 +70,11 @@ export function MemberAdd() {
       })
       .then((res) => {
         console.log(res.data);
-        navigate("/login");
+        const message = res.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate("/member/list");
       })
       .catch((err) => {
         console.log(err);

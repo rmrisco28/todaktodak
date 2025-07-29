@@ -1,9 +1,6 @@
 package com.example.backend.member.service;
 
-import com.example.backend.member.dto.MemberDetailForm;
-import com.example.backend.member.dto.MemberListInfo;
-import com.example.backend.member.dto.MemberModifyDto;
-import com.example.backend.member.dto.MemberSignupForm;
+import com.example.backend.member.dto.*;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -137,5 +134,46 @@ public class MemberService {
             dbData.setBirthDate(LocalDate.parse(dto.getBirthDate()));
         }
         memberRepository.save(dbData);
+    }
+
+    // 회원 등록(관리자)
+    public void add(MemberAddForm memberAddForm) {
+
+        if (this.validate2(memberAddForm)) {
+            Member member2 = new Member();
+            member2.setAuth(memberAddForm.getAuth());
+            member2.setMemberId(memberAddForm.getMemberId());
+            member2.setPassword(memberAddForm.getPassword());
+            member2.setName(memberAddForm.getName());
+            member2.setPhone(memberAddForm.getPhone());
+            member2.setBirthDate(LocalDate.parse(memberAddForm.getBirthDate()));
+            member2.setEmail(memberAddForm.getEmail());
+            member2.setAddr(memberAddForm.getAddr());
+            member2.setAddrDetail(memberAddForm.getAddrDetail());
+            member2.setPostCode(memberAddForm.getPostCode());
+
+            // 고객번호 조합
+            String code = "ME";
+            Date now = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+            String date = formatter.format(now);
+            Integer maxSeq = memberRepository.findMaxSeq();
+            int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
+            String seqStr = String.format("%07d", latestSeq);
+            member2.setMemberNo(code + date + seqStr);
+
+            // 저장
+            memberRepository.save(member2);
+        }
+    }
+
+    // 유효성(중복) 검사
+    public boolean validate2(MemberAddForm memberAddForm) {
+        // memberId 중복 여부
+        Optional<Member> dbData = memberRepository.findByMemberId(memberAddForm.getMemberId());
+        if (dbData.isPresent()) {
+            throw new RuntimeException("이미 존재하는 아이디입니다.");
+        }
+        return true;
     }
 }

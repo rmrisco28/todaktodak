@@ -138,7 +138,10 @@ export function MemberModify() {
               권한
             </FormLabel>
             <Col lg={7}>
-              <FormControl value={member.auth} readOnly={true} />
+              <FormControl
+                value={member.auth || ""}
+                onChange={(e) => setMember({ ...member, auth: e.target.value })}
+              />
             </Col>
           </FormGroup>
         </div>

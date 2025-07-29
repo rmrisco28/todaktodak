@@ -1,5 +1,6 @@
 package com.example.backend.member.controller;
 
+import com.example.backend.member.dto.MemberAddForm;
 import com.example.backend.member.dto.MemberListInfo;
 import com.example.backend.member.dto.MemberModifyDto;
 import com.example.backend.member.dto.MemberSignupForm;
@@ -86,6 +87,28 @@ public class MemberController {
         return ResponseEntity.ok().body(Map.of("message",
                 Map.of("type", "success",
                         "text", "회원 정보가 수정되었습니다.")));
+    }
+
+    // 회원 등록(관리자)
+    @PostMapping("add")
+    public ResponseEntity<?> add(@RequestBody MemberAddForm memberAddForm) {
+        try {
+            // 서비스로 일 시키기(회원등록 dto 사용)
+            memberService.add(memberAddForm);
+        } catch (Exception e) {
+            // 콘솔에 예외 발생 정보 출력
+            e.printStackTrace();
+            // 예외 객체 e에서 오류 메시지 꺼냄
+            String message = e.getMessage();
+            // 예외 발생 시 상태 코드와 오류 메시지 출력
+            return ResponseEntity.badRequest().body(
+                    Map.of("message",
+                            Map.of("type", "error", "text", message)));
+        }
+        // 회원가입 완료 시 메시지 출력
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success", "text", "회원등록이 완료되었습니다.")));
     }
 
 
