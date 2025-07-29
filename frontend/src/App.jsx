@@ -7,6 +7,7 @@ import { MemberSignup } from "./feacture/member/MemberSignup.jsx";
 import { MemberList } from "./feacture/member/admin/MemberList.jsx";
 import { MemberDetail } from "./feacture/member/admin/MemberDetail.jsx";
 import { MemberModify } from "./feacture/member/admin/MemberModify.jsx";
+import { MemberAdd } from "./feacture/member/admin/MemberAdd.jsx";
 import { ProductList } from "./feacture/product/ProductList.jsx";
 import { ProductDetail } from "./feacture/product/ProductDetail.jsx";
 import { BuyForm } from "./feacture/order/BuyForm.jsx";
@@ -53,6 +54,8 @@ function App() {
             <Route path="member" element={<MemberDetail />} />
             {/* 회원수정 */}
             <Route path="member/modify" element={<MemberModify />} />
+            {/* 회원등록 */}
+            <Route path="member/add" element={<MemberAdd />} />
             {/* 상품 등록 */}
             <Route path="product/add" element={<ProductAdd />} />
             {/* 상품조회 목록 */}

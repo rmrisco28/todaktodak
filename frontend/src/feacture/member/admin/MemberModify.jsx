@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
@@ -335,10 +336,13 @@ export function MemberModify() {
               사용여부
             </FormLabel>
             <Col sm={7}>
-              <FormControl
-                value={member.useYn}
+              <FormCheck
+                type="switch"
+                id="useYn-switch"
+                label={member.useYn ? "사용중" : "미사용"}
+                checked={member.useYn}
                 onChange={(e) =>
-                  setMember({ ...member, useYn: e.target.value })
+                  setMember({ ...member, useYn: e.target.checked })
                 }
               />
             </Col>
@@ -351,10 +355,13 @@ export function MemberModify() {
               삭제여부
             </FormLabel>
             <Col sm={7}>
-              <FormControl
-                value={member.delYn}
+              <FormCheck
+                type="switch"
+                id="useYn-switch"
+                label={member.delYn ? "삭제" : "미삭제"}
+                checked={member.delYn}
                 onChange={(e) =>
-                  setMember({ ...member, delYn: e.target.value })
+                  setMember({ ...member, delYn: e.target.checked })
                 }
               />
             </Col>

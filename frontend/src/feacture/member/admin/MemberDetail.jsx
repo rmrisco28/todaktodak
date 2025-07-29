@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
@@ -180,8 +181,15 @@ export function MemberDetail() {
             <FormLabel column sm={3}>
               사용여부
             </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.useYn} readOnly={true} />
+            <Col sm={7} className="d-flex align-items-center">
+              <FormCheck
+                type="switch"
+                id="useYn-switch"
+                label={member.useYn ? "사용중" : "미사용"}
+                checked={member.useYn}
+                readOnly
+                disabled
+              />
             </Col>
           </FormGroup>
         </div>
@@ -192,7 +200,14 @@ export function MemberDetail() {
               삭제여부
             </FormLabel>
             <Col sm={7}>
-              <FormControl value={member.delYn} readOnly={true} />
+              <FormCheck
+                type="switch"
+                id="delYn-switch"
+                label={member.delYn ? "삭제" : "미삭제"}
+                checked={member.delYn}
+                readOnly
+                disabled
+              />
             </Col>
           </FormGroup>
         </div>
