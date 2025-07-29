@@ -95,23 +95,21 @@ CREATE TABLE sale
 # 판매 상품 관리 썸네일 이미지
 CREATE TABLE sale_image_thumb
 (
-    seq         INT AUTO_INCREMENT NOT NULL,
     sale_no     VARCHAR(20),
     name        VARCHAR(300),
-    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_sale_image_thumb PRIMARY KEY (seq),
+    insert_dttm DATETIME NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_sale_image_thumb PRIMARY KEY (sale_no, name),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
 # 판매 상품 관리 본문 이미지
 CREATE TABLE sale_image_content
 (
-    seq         INT AUTO_INCREMENT NOT NULL,
-    sale_no     VARCHAR(20)        NOT NULL,
-    name        VARCHAR(300)       NOT NULL,
-    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_sale_image_content PRIMARY KEY (seq),
+    sale_no     VARCHAR(20)  NOT NULL,
+    name        VARCHAR(300) NOT NULL,
+    insert_dttm DATETIME     NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME     NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_sale_image_content PRIMARY KEY (sale_no, name),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
 
@@ -273,37 +271,3 @@ CREATE TABLE member2
 );
 
 DROP TABLE member2;
-
-# 상품 주문 테이블
-CREATE TABLE product_order
-(
-    seq          INT          null AUTO_INCREMENT,
-    product_no   VARCHAR(255) NULL,
-    member_no    VARCHAR(255) NULL,
-    orderer_name VARCHAR(255) NULL,
-    rental_date  DATE         NULL,
-    count        INT          NULL,
-    state        VARCHAR(255) NULL,
-    use_yn       BOOLEAN      NULL,
-    del_yn       BOOLEAN      NULL,
-    insert_dttn  DATETIME     NULL,
-    update_dttn  DATETIME     NULL DEFAULT NOW(),
-    CONSTRAINT pk_product_order PRIMARY KEY (seq),
-    FOREIGN KEY (product_no) REFERENCES product (product_no),
-    FOREIGN KEY (member_no) REFERENCES member (member_no)
-);
-
-INSERT INTO product_order
-VALUES (1,
-        'PR2507230000002',
-        'ME2507250000001',
-        'kk',
-        '2025-07-29',
-        1,
-        'ok',
-        true,
-        false,
-        '2025-07-29 14:30:00',
-        NOW())
-        
-# DESC rental;

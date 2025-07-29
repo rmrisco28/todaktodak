@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { MainLayout } from "./common/MainLayout.jsx";
 import { MainView } from "./main/MainView.jsx";
-import { MemberLogin } from "./feacture/member/MemberLogin.jsx";
-import { MemberLogout } from "./feacture/member/MemberLogout.jsx";
-import { MemberSignup } from "./feacture/member/MemberSignup.jsx";
-import { MemberList } from "./feacture/member/MemberList.jsx";
-import { MemberDetail } from "./feacture/member/MemberDetail.jsx";
-import { MemberModify } from "./feacture/member/MemberModify.jsx";
+import { MemberLogin } from "./feacture/member/login,logout/MemberLogin.jsx";
+import { MemberLogout } from "./feacture/member/login,logout/MemberLogout.jsx";
+import { MemberSignup } from "./feacture/member/user/MemberSignup.jsx";
+import { MemberList } from "./feacture/member/admin/MemberList.jsx";
+import { MemberDetail } from "./feacture/member/admin/MemberDetail.jsx";
+import { MemberModify } from "./feacture/member/admin/MemberModify.jsx";
 import { ProductList } from "./feacture/product/ProductList.jsx";
 import { ProductDetail } from "./feacture/product/ProductDetail.jsx";
 import { BuyForm } from "./feacture/order/BuyForm.jsx";
@@ -30,6 +30,7 @@ import { SaleAdd } from "./feacture/sale/SaleAdd.jsx";
 import { ProductModify } from "./feacture/product/ProductModify.jsx";
 import { ContactDeleted } from "./feacture/contact/ContactDeleted.jsx";
 import { ContactDeletedDetail } from "./feacture/contact/ContactDeletedDetail.jsx";
+import { SaleModify } from "./feacture/sale/SaleModify.jsx";
 
 function App() {
   return (
@@ -65,7 +66,9 @@ function App() {
             {/* 판매상품조회 목록 */}
             <Route path="sale/list" element={<SaleList />} />
             {/* 판매상품조회 상세 */}
-            <Route path="sale/detail" element={<SaleDetail />} />
+            <Route path="sale/detail/:seq" element={<SaleDetail />} />
+            {/* 판매상품 수정 */}
+            <Route path="sale/modify/:seq" element={<SaleModify />} />
             {/* 상품구매 상세 */}
             <Route path="buy" element={<BuyForm />} />
             {/* 상품구매 등록 */}

@@ -16,11 +16,11 @@ export function AppNavBar() {
               <Nav.Link as={NavLink} to="/">
                 HOME
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/product/list">
-                {/* 상품조회 목록 */}
-                상품조회
+              <Nav.Link as={NavLink} to="/sale/list">
+                {/* 판매상품조회 목록 */}
+                판매상품조회
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/return/add">
+              <Nav.Link as={NavLink} to="/return">
                 {/* 반납신청 상세 */}
                 반납신청
               </Nav.Link>
@@ -49,7 +49,7 @@ export function AppNavBar() {
               </Nav.Link>
               {/*  결제화면 추후 삭제 필수!!!! 이동하기 편하게 적어놓은 것*/}
               <Nav.Link as={NavLink} to="/buy">
-                결제화면/ 작업 편의를 위해 임시 생성/ 추후 삭제
+                결제화면(임시)
               </Nav.Link>
               {/*  관리자 게시판 목록 추후 삭제 필수!!!! 이동하기 편하게 적어놓은 것*/}
               <Nav.Link as={NavLink} to="/contact/deleted/list">

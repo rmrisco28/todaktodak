@@ -1,21 +1,18 @@
 package com.example.backend.order.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 public class OrderManageDto {
-    private Integer seq;
+    private Integer orderId;
     private String orderNo;
-    private String odrName;
-    private String orderState;
-    private String orderOption;
-    private Integer count;
-    private Integer totalProdPrice;
-    private Integer deliveryFee;
-    private Integer totalPrice;
-    private String trackNo;
-    private LocalDateTime insertDttm;
-    private LocalDateTime updateDttm;
+    private LocalDateTime orderDate;
+    private String productNames;
+    private int totalPrice;
+    private String status;
+    private String trackingNumber;
 }

@@ -154,7 +154,7 @@ public class ProductService {
     }
 
     public Map<String, Object> list(String keyword, Integer pageNumber) {
-        Page<ProductListDto> productListDtoPage = productRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
+        Page<ProductListDto> productListDtoPage = productRepository.searchProductList(keyword, PageRequest.of(pageNumber - 1, 10));
         int totalPages = productListDtoPage.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
         int leftPageNumber = rightPageNumber - 9;
@@ -241,7 +241,6 @@ public class ProductService {
         LocalDateTime now = LocalDateTime.now();
         dbData.setUpdateDttm(now);
 
-        // TODO 이미지 수정 오류 처리
         deleteFiles(dbData, dto.getDeleteImages());
         saveFiles(dbData, dto.getImages());
 
@@ -252,7 +251,7 @@ public class ProductService {
         if (images != null && images.size() > 0) {
             for (MultipartFile image : images) {
                 if (image != null && image.getSize() > 0) {
-                    // board_file 테이블 새 레코드 입력
+                    // 테이블 새 레코드 입력
                     ProductImage productImage = new ProductImage();
                     // entity set
                     ProductImageId id = new ProductImageId();
@@ -304,7 +303,7 @@ public class ProductService {
     private void deleteFiles(Product dbData, String[] deleteImages) {
         if (deleteImages != null && deleteImages.length > 0) {
             for (String image : deleteImages) {
-                // board_file table 의 record 지우고
+                // table 의 record 지우고
                 ProductImageId id = new ProductImageId();
                 id.setProductNo(dbData.getProductNo());
                 id.setName(image);

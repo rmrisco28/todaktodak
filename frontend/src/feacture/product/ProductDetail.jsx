@@ -153,16 +153,6 @@ export function ProductDetail() {
             ))}
           </ListGroup>
         </div>
-        <div>
-          <FormGroup className="mb-3" controlId="FormInsertDttm">
-            <FormLabel>등록일시</FormLabel>
-            <FormControl
-              type="datetime-local"
-              value={product.insertDttm}
-              readOnly={true}
-            />
-          </FormGroup>
-        </div>
 
         <div>
           <Button

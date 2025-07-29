@@ -13,7 +13,9 @@ export function MemberList() {
       .then((res) => {
         setMemberList(res.data);
       })
-      .catch((err) => {})
+      .catch((err) => {
+        console.log(err);
+      })
       .finally(() => {});
   }, []);
 
