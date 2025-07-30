@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Controller
@@ -23,19 +25,19 @@ public class ContactService {
 
     // 게시물 생성
     public void add(@RequestBody ContactAddForm caf) {
-//        String code = "CO";
-//
-//        Date now = new Date();
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-//        String date = formatter.format(now);
-//
-//        Integer maxSeq = contactRepository.findMaxSeq();
-//        int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
-//        String seqStr = String.format("%07d", latestSeq);
+        String code = "CO";
+
+        Date now = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
+        String date = formatter.format(now);
+
+        Integer maxSeq = contactRepository.findMaxSeq();
+        int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
+        String seqStr = String.format("%07d", latestSeq);
 
 
         Contact contact = new Contact();
-//        contact.setContactNo(code + date + seqStr);
+        contact.setContactNo(code + date + seqStr);
 
         contact.setTitle(caf.getTitle());
         contact.setContent(caf.getContent());

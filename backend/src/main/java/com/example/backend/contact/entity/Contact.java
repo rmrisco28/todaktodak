@@ -56,12 +56,8 @@ public class Contact {
     @Column(name = "del_yn", nullable = false)
     private Boolean delYn = false;
 
+    @Column(name = "contact_no", nullable = false, length = 20)
+    private String contactNo;
 
-//    @Column(name = "contact_no", nullable = false, length = 20)
-//    private String contactNo;
-//
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "member_no", nullable = false, referencedColumnName = "member_no")
-//    private Member memberNo;
 
 }
