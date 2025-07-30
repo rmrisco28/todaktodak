@@ -40,9 +40,11 @@ import { DeliveryDetail } from "./feature/delivery/DeliveryDetail.jsx";
 import { DeliveryList } from "./feature/delivery/DeliveryList.jsx";
 import { DeliveryModify } from "./feature/delivery/DeliveryModify.jsx";
 
+import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
+
 function App() {
   return (
-    <>
+    <AuthenticationContextProvider>
       <BrowserRouter>
         <Routes>
           {/* 상단 공통 메뉴 */}
@@ -80,7 +82,7 @@ function App() {
             {/* 판매상품 수정 */}
             <Route path="sale/modify/:seq" element={<SaleModify />} />
             {/* 상품구매 상세 */}
-            <Route path="buy" element={<BuyForm />} />
+            <Route path="buy/:seq" element={<BuyForm />} />
             {/* 상품구매 등록 */}
             <Route path="buy/add" element={<BuyAdd />} />
             {/* 반납신청 상세 */}
@@ -132,7 +134,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthenticationContextProvider>
   );
 }
 

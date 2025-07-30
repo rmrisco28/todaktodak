@@ -5,12 +5,16 @@ import {
   FormGroup,
   FormLabel,
   Row,
+  Spinner,
 } from "react-bootstrap";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export function BuyForm() {
+  const { seq } = useParams();
+  const [sale, setSale] = useState(null);
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -20,6 +24,25 @@ export function BuyForm() {
   const [isCustom, setIsCustom] = useState(false);
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`/api/sale/detail/${seq}`)
+      .then((res) => {
+        console.log(res.data);
+        setSale(res.data);
+      })
+      .catch((err) => {
+        toast("해당 상품이 존재하지 않습니다.", { type: "warning" });
+      })
+      .finally(() => {
+        console.log("항상 실행");
+      });
+  }, []);
+
+  if (!sale) {
+    return <Spinner />;
+  }
 
   // 전화번호 입력을 위한 정규식 (010-XXXX-XXXX)
 
