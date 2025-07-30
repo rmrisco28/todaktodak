@@ -7,6 +7,7 @@ import {
   Form,
   FormControl,
   InputGroup,
+  Modal,
   Pagination,
   Row,
   Spinner,
@@ -15,8 +16,12 @@ import {
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
+import { FaRegPenToSquare, FaXmark } from "react-icons/fa6";
+import { toast } from "react-toastify";
 
 export function CategoryList() {
+  const [deleteTarget, setDeleteTarget] = useState("");
+  const [modalShow, setModalShow] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [categoryList, setCategoryList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
@@ -70,8 +75,33 @@ export function CategoryList() {
     setSearchParams(nextSearchParams);
   }
 
-  function handleDeleteCategoryButton(seq) {
-    return undefined;
+  function handleDeleteCategoryModalShow(e, seq) {
+    e.stopPropagation();
+    setDeleteTarget(seq);
+    return setModalShow(true);
+  }
+
+  function handleDeleteButtonClick() {
+    axios
+      .put(`/api/category/${deleteTarget}`)
+      .then((res) => {
+        const message = res.data.message;
+        console.log(message);
+        if (message) {
+          toast(message.text, { type: message.type, autoClose: 1500 });
+        }
+        setTimeout(() => {
+          navigate(0);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log("동작 오류");
+        toast("카테고리가 삭제되지 않았습니다.", { type: "warning" });
+      })
+      .finally(() => {
+        console.log("항상 실행");
+      });
+    return null;
   }
 
   return (
@@ -133,21 +163,25 @@ export function CategoryList() {
                     </td>
                     <td>
                       <Button
-                        variant="outline-info"
+                        variant="outline-secondary"
                         onClick={() =>
                           navigate(`/category/modify/${category.seq}`)
                         }
                       >
-                        수정
+                        {/*수정*/}
+                        <FaRegPenToSquare />
                       </Button>
                     </td>
                     <td>
                       <Button
                         className="me-2"
                         variant="outline-danger"
-                        onClick={handleDeleteCategoryButton(category.seq)}
+                        onClick={(e) =>
+                          handleDeleteCategoryModalShow(e, category.seq)
+                        }
                       >
-                        삭제
+                        {/*삭제*/}
+                        <FaXmark />
                       </Button>
                     </td>
                   </tr>
@@ -203,6 +237,23 @@ export function CategoryList() {
             </Pagination.Last>
           </Pagination>
         </Col>
+
+        <Modal show={modalShow} onHide={() => setModalShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>카테고리 삭제 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {deleteTarget} 번 카테고리를 삭제하시겠습니까?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+              취소
+            </Button>
+            <Button variant="danger" onClick={handleDeleteButtonClick}>
+              삭제
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Row>
     </>
   );

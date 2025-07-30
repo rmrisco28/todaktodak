@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -49,5 +50,16 @@ public class CategoryService {
                 "currentPageNumber", pageNumber);
 
         return Map.of("pageInfo", pageInfo, "categoryList", categoryListDtoPage.getContent());
+    }
+
+    public void updateDelYn(Integer seq) {
+        Category dbData = categoryRepository.findById(seq).get();
+        // del_yn = true
+        dbData.setDelYn(true);
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        categoryRepository.save(dbData);
     }
 }

@@ -53,4 +53,24 @@ public class CategoryController {
         return categoryService.list(keyword, pageNumber);
     }
 
+    /**
+     * 카테고리 삭제 (관리자)
+     *
+     * @param seq
+     * @return
+     */
+    @PutMapping("{seq}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer seq) {
+
+        try {
+            categoryService.updateDelYn(seq);
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "warning", "text", seq + "번 카테고리가 삭제되었습니다.")));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
+    }
+
 }
