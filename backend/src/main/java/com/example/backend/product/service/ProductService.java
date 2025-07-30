@@ -29,7 +29,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
-    // TODO
+    // TODO  [@minki]
     //    private final S3Client s3Client;
 
     @Value("${image.prefix}")
@@ -38,7 +38,7 @@ public class ProductService {
     private String bucketName;
 
     public void add(ProductAddForm dto) {
-        // TODO 권한 체크 (관리자)
+        // TODO [@minki] 권한 체크 (관리자)
 
         // 조합번호 생성 (코드 + 현재일자 + 시퀀스)
         String code = "PR";

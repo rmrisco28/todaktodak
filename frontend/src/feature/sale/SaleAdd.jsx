@@ -78,7 +78,7 @@ export function SaleAdd() {
       <Col xs={12} md={8} lg={6}>
         <h2 className="mb-4">판매 상품 등록</h2>
         <div>
-          {/* TODO Selectbox + 카테고리 관리DB 추가 */}
+          {/* TODO [@minki] Selectbox + 카테고리 관리DB 추가 */}
           <FormGroup className="mb-3" controlId="formCategory">
             <FormLabel>분류</FormLabel>
             <FormControl
@@ -87,7 +87,7 @@ export function SaleAdd() {
             ></FormControl>
           </FormGroup>
         </div>
-        {/* TODO 상품 테이블 조회 */}
+        {/* TODO [@minki] 상품 테이블 조회 */}
         {/*
         <div>
           <FormGroup className="mb-3" controlId="formName">
@@ -173,7 +173,7 @@ export function SaleAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* TODO 판매건당가격 price 용어 변경(판매가격 중복방지) */}
+          {/* TODO [@minki] 판매건당가격 price 용어 변경(판매가격 중복방지) */}
           <FormGroup className="mb-3" controlId="formPrice">
             <FormLabel>판매건당가격</FormLabel>
             <FormControl
@@ -185,7 +185,7 @@ export function SaleAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* TODO 배달업체 데이터 조회  */}
+          {/* TODO [@minki] 배달업체 데이터 조회  */}
           <FormGroup className="mb-3" controlId="formDeliveryFee">
             <FormLabel>배송비</FormLabel>
             <FormControl

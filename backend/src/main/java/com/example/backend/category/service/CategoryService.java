@@ -28,7 +28,7 @@ public class CategoryService {
     }
 
     public void add(CategoryAddForm dto) {
-        // TODO 권한 체크 (관리자)
+        // TODO [@minki] 권한 체크 (관리자)
 
         Category category = new Category();
         category.setName(dto.getName());

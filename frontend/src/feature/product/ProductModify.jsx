@@ -106,7 +106,7 @@ export function ProductModify() {
       <Col xs={12} md={8} lg={6}>
         <h2 className="mb-4">관리 상품 수정</h2>
         <div>
-          {/* TODO Selectbox + 카테고리 관리DB 추가 */}
+          {/* TODO [@minki] Selectbox + 카테고리 관리DB 추가 */}
           <FormGroup className="mb-3" controlId="formCategory">
             <FormLabel>분류</FormLabel>
             <FormControl
