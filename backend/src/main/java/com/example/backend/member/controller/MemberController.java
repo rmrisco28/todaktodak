@@ -110,7 +110,16 @@ public class MemberController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberLoginForm memberLoginForm) {
-        return null;
+        try {
+            String token = memberService.getToken(memberLoginForm);
+            return ResponseEntity.ok().body(Map.of("token", token, "message",
+                    Map.of("type", "success", "text", "로그인을 성공하였습니다.")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.status(401).body(Map.of("message",
+                    Map.of("type", "error", "text", message)));
+        }
     }
 
 
