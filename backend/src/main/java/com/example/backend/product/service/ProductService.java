@@ -81,7 +81,7 @@ public class ProductService {
 
                     productImageRepository.save(entity);
 
-                    // TODO AWS S3 업로드
+                    // TODO [@minki] AWS S3 업로드
                     // AWS s3 파일 업로드
 //                    String objectKey = "prj3/board/" + product.getSeq() + "/" + image.getOriginalFilename();
 //                    uploadFile(image, objectKey);
@@ -179,7 +179,7 @@ public class ProductService {
             ProductImageDto imageDto = new ProductImageDto();
             imageDto.setName(image.getId().getName());
             imageDto.setPath("http://localhost:8081/productImage/" + seq + "/" + image.getId().getName());
-            // TODO call aws s3
+            // TODO [@minki] call aws s3
 //            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
             images.add(imageDto);
         }

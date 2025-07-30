@@ -120,14 +120,14 @@ function App() {
             {/* 카테고리 목록 */}
             <Route path="category/list" element={<CategoryList />} />
             {/* 카테고리 수정 */}
-            <Route path="category/modify" element={<CategoryModify />} />
-            {/* 카테고리 등록 */}
+            <Route path="category/modify/:seq" element={<CategoryModify />} />
+            {/* 배송업체 등록 */}
             <Route path="delivery/add" element={<DeliveryAdd />} />
-            {/* 카테고리 목록 */}
+            {/* 배송업체 목록 */}
             <Route path="delivery/list" element={<DeliveryList />} />
-            {/* 카테고리 상세 */}
+            {/* 배송업체 상세 */}
             <Route path="delivery/detail/:seq" element={<DeliveryDetail />} />
-            {/* 카테고리 수정 */}
+            {/* 배송업체 수정 */}
             <Route path="delivery/modify" element={<DeliveryModify />} />
           </Route>
         </Routes>
