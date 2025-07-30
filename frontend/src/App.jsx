@@ -40,9 +40,11 @@ import { DeliveryDetail } from "./feature/delivery/DeliveryDetail.jsx";
 import { DeliveryList } from "./feature/delivery/DeliveryList.jsx";
 import { DeliveryModify } from "./feature/delivery/DeliveryModify.jsx";
 
+import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
+
 function App() {
   return (
-    <>
+    <AuthenticationContextProvider>
       <BrowserRouter>
         <Routes>
           {/* 상단 공통 메뉴 */}
@@ -132,7 +134,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthenticationContextProvider>
   );
 }
 
