@@ -16,7 +16,7 @@ export function ContactList() {
   const [contactList, setContactList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [keyword, setKeyword] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  // const [isAdmin, setIsAdmin] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -26,7 +26,8 @@ export function ContactList() {
     const handleLogin = (user) => {
       setIsAdmin(user.role === "admin");
     };*/
-
+  const isAdmin =
+    new URLSearchParams(location.search).get("isAdmin") === "true";
   useEffect(() => {
     const q = searchParams.get("q");
     if (q) {
@@ -67,7 +68,11 @@ export function ContactList() {
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
-    navigate(`/contact/list?q=${keyword}`);
+    if (isAdmin) {
+      navigate(`/contact/list?isAdmin=true&q=${keyword}`);
+    } else {
+      navigate(`/contact/list?q=${keyword}`);
+    }
   }
 
   return (
