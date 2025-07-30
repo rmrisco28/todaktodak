@@ -6,6 +6,7 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.AuthRepository;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -31,6 +32,7 @@ public class MemberService {
     private final AuthRepository authRepository;
     private final MemberRepository memberRepository;
     private final JwtEncoder jwtEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     // 회원 가입
@@ -39,7 +41,7 @@ public class MemberService {
         if (this.validate(memberSignupForm)) {
             Member member = new Member();
             member.setMemberId(memberSignupForm.getMemberId());
-            member.setPassword(memberSignupForm.getPassword());
+            member.setPassword(passwordEncoder.encode(memberSignupForm.getPassword()));
             member.setName(memberSignupForm.getName());
             member.setPhone(memberSignupForm.getPhone());
             member.setBirthDate(LocalDate.parse(memberSignupForm.getBirthDate()));
@@ -138,7 +140,7 @@ public class MemberService {
 
         // 새 비밀번호 입력시에만 적용
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            dbData.setPassword(dto.getPassword());
+            dbData.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
         if (dto.getBirthDate() != null && !dto.getBirthDate().isBlank()) {
@@ -154,7 +156,7 @@ public class MemberService {
             Member member2 = new Member();
             member2.setAuth(memberAddForm.getAuth());
             member2.setMemberId(memberAddForm.getMemberId());
-            member2.setPassword(memberAddForm.getPassword());
+            member2.setPassword(passwordEncoder.encode(memberAddForm.getPassword()));
             member2.setName(memberAddForm.getName());
             member2.setPhone(memberAddForm.getPhone());
             member2.setBirthDate(LocalDate.parse(memberAddForm.getBirthDate()));
