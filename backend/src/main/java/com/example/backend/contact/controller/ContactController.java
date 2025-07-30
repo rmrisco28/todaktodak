@@ -24,6 +24,7 @@ public class ContactController {
 
     private final ContactService contactService;
 
+    // 답변 기능
     @PutMapping("reply/{seq}")
     public ResponseEntity<?> reply(@PathVariable Integer seq, @RequestBody ReplyDto rd) {
         rd.setSeq(seq);
@@ -31,10 +32,18 @@ public class ContactController {
         return ResponseEntity.ok(Map.of("message", "저장되었습니다."));
     }
 
+    // 게시물 삭제
     @DeleteMapping("/{seq}")
     public ResponseEntity<?> delete(@PathVariable Integer seq) {
         contactService.delete(seq);
         return ResponseEntity.ok(Map.of("message", "삭제되었습니다."));
+    }
+
+    // 삭제된 게시물 복구
+    @DeleteMapping("restore/{seq}")
+    public ResponseEntity<?> restore(@PathVariable Integer seq) {
+        contactService.restore(seq);
+        return ResponseEntity.ok(Map.of("message", "복구되었습니다."));
     }
 
     // 게시물 조회수
@@ -55,8 +64,13 @@ public class ContactController {
     // 게시물 상세 화면
     @GetMapping("detail/{seq}")
     public ResponseEntity<?> detail(@PathVariable Integer seq) {
-        ContactAddForm detail = contactService.detail(seq);
-        return ResponseEntity.ok(detail);
+        try {
+
+            ContactAddForm detail = contactService.detail(seq);
+            return ResponseEntity.ok(detail);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     // 게시물 추가
@@ -70,12 +84,14 @@ public class ContactController {
         return ResponseEntity.ok(result);
     }
 
-    // 게시물 목록 불러오기 컨트롤러
+    // 게시물 목록 불러오기 이용자/관리자 통합
     @GetMapping("list")
     public Map<String, Object> list(
             @RequestParam(value = "q", defaultValue = "") String keyword,
-            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
-        return contactService.list(keyword, pageNumber);
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
+            @RequestParam(value = "isAdmin", defaultValue = "false") Boolean isAdmin) {
+
+        return contactService.list(keyword, pageNumber, isAdmin);
     }
 
     // 삭제된 게시판 목록 불러오기

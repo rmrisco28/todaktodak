@@ -1,5 +1,6 @@
 package com.example.backend.contact.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Value;
 
 import java.io.Serializable;
@@ -14,5 +15,7 @@ public class ContactDeletedDto implements Serializable {
     String title;
     String name;
     Integer view;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime updateDttm;
+
 }

@@ -16,10 +16,16 @@ export function ContactList() {
   const [contactList, setContactList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   let navigate = useNavigate();
+
+  /* todo gg 추후 세션 관리자 여부 판단하는 코드
+    const handleLogin = (user) => {
+      setIsAdmin(user.role === "admin");
+    };*/
 
   useEffect(() => {
     const q = searchParams.get("q");
@@ -34,6 +40,7 @@ export function ContactList() {
         console.log("ok");
         setContactList(res.data.contactList);
         setPageInfo(res.data.pageInfo);
+        console.log(isAdmin);
       })
       .catch((err) => {
         console.log("no");
@@ -73,7 +80,7 @@ export function ContactList() {
               // textAlign: "center",
               cursor: "pointer",
               width: "fit-content",
-              transition: "coloer 0.2s",
+              transition: "color 0.2s",
               color: "#000",
             }}
             onMouseEnter={(e) => (e.target.style.color = "#007bff")}
@@ -100,18 +107,32 @@ export function ContactList() {
                     axios
                       .get(`/api/contact/${contact.seq}`) // 조회수 증가
                       .then(() => {
-                        navigate(`/contact/detail/${contact.seq}`);
+                        if (contact.delYn === true) {
+                          navigate(`/contact/deleted/detail/${contact.seq}`);
+                        } else {
+                          navigate(`/contact/detail/${contact.seq}`);
+                        }
                       })
                       .catch((err) => {
                         console.log("조회수 증가 실패 err");
                       });
                   }}
                 >
-                  <td>{contact.seq}</td>
-                  <td>{contact.title}</td>
-                  <td>{contact.name}</td>
-                  <td>{contact.insertDttm}</td>
-                  <td>{contact.view}</td>
+                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                    {contact.seq}
+                  </td>
+                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                    {contact.title}
+                  </td>
+                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                    {contact.name}
+                  </td>
+                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                    {contact.insertDttm}
+                  </td>
+                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                    {contact.view}
+                  </td>
                 </tr>
               ))}
             </tbody>

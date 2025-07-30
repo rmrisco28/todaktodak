@@ -95,7 +95,7 @@ export function ContactDeleted() {
                     <td>{contact.seq}</td>
                     <td>{contact.title}</td>
                     <td>{contact.name}</td>
-                    <td>1</td>
+                    <td>{contact.updateDttm}</td>
                     <td>{contact.view}</td>
                   </tr>
                 ))}
