@@ -88,7 +88,8 @@ public class MemberService {
 
     // 회원 상세보기(관리자)
     public MemberDetailForm getMember(Integer seq) {
-        Member db = memberRepository.findById(seq).get();
+        Member db = memberRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException(seq + "번 회원을 찾을 수 없습니다."));
 
         MemberDetailForm dto = new MemberDetailForm();
         dto.setMemberNo(db.getMemberNo());
@@ -198,5 +199,22 @@ public class MemberService {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
         return true;
+    }
+
+    public MyInfoDto getMyInfo(String memberId) {
+        Member dbData = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다." + memberId));
+        MyInfoDto dto = new MyInfoDto();
+
+        dto.setMemberId(dbData.getMemberId());
+        dto.setName(dbData.getName());
+        dto.setEmail(dbData.getEmail());
+        dto.setBirthDate(dbData.getBirthDate());
+        dto.setPhone(dbData.getPhone());
+        dto.setPostCode(dbData.getPostCode());
+        dto.setAddr(dbData.getAddr());
+        dto.setAddrDetail(dbData.getAddrDetail());
+
+        return dto;
     }
 }

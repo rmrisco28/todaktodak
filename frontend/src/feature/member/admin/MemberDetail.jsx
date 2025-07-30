@@ -222,7 +222,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
-        {/* 삭제, 수정, 목록 버튼*/}
+        {/* 삭제, 수정 버튼*/}
         <div>
           <Button
             className="me-2"

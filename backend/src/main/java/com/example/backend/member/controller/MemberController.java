@@ -111,6 +111,12 @@ public class MemberController {
                         Map.of("type", "success", "text", "회원등록이 완료되었습니다.")));
     }
 
+    // 회원 상세 보기(회원)
+    @GetMapping("myinfo/{memberId}")
+    public ResponseEntity<?> getMyInfo(@PathVariable String memberId) {
+        return ResponseEntity.ok().body(memberService.getMyInfo(memberId));
+    }
+
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberLoginForm memberLoginForm) {
         return null;
