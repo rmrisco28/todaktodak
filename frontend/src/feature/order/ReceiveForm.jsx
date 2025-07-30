@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Container, Row, Col, Modal } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function ReceiveForm() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { orderManageSeq } = location.state || {};
+  const { orderId } = useParams(); // ✅ /receive/:orderId 에서 받기
+  const orderManageSeq = orderId; // 이름 맞추기
+  const memberNo = localStorage.getItem("memberNo"); // 로그인 정보
 
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -24,14 +25,17 @@ export function ReceiveForm() {
     try {
       await axios.patch("/api/order/receive", {
         orderManageSeq,
-        receivedBy: "user01",
+        receivedBy: memberNo,
         memo: "수령 확인",
       });
+
       alert("상품을 수령 처리했습니다.");
-      navigate("/order/list");
+      navigate("/order/list", { state: { updated: true } });
     } catch (error) {
       console.error(error);
       alert("상품 수령 처리에 실패했습니다.");
+    } finally {
+      handleCloseModal();
     }
   };
 
@@ -58,13 +62,7 @@ export function ReceiveForm() {
           <Button variant="secondary" onClick={handleCloseModal}>
             아니오
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => {
-              handleCloseModal();
-              handleReceiveConfirm();
-            }}
-          >
+          <Button variant="primary" onClick={handleReceiveConfirm}>
             예, 수령했습니다
           </Button>
         </Modal.Footer>

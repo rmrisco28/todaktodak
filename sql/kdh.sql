@@ -56,7 +56,7 @@ VALUES ('PROD901', '스킨케어', '토닥토닥', '테스트 상품', '500ml', 
 
 -- 정상 주문
 INSERT INTO order_manage (order_no, order_date, total_price, status, track_no, member_seq, del_yn)
-VALUES ('ORD001', NOW(), 30000, '배송중', 'T1234567890', 1, 'N');
+VALUES ('ORD008', '2025-01-01', 30000, '배송중', 'T1234527890', 1, 'N');
 
 -- 삭제된 주문
 INSERT INTO order_manage (order_no, order_date, total_price, status, track_no, member_seq, del_yn)
@@ -64,7 +64,7 @@ VALUES ('ORD002', NOW(), 15000, '배송완료', 'T0000000001', 1, 'Y');
 
 -- ORD001: 정상 주문
 INSERT INTO order_items (quantity, order_no, product_no)
-VALUES (2, 'ORD001', 'PROD001');
+VALUES (2, 'ORD007', 'PROD001');
 
 -- ORD002: 삭제된 주문
 INSERT INTO order_items (quantity, order_no, product_no)

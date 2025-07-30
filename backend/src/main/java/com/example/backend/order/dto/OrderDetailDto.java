@@ -9,6 +9,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class OrderDetailDto {
+    private Integer orderManageSeq;
     private String orderNo;
     private LocalDateTime orderDate;
 

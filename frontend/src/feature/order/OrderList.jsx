@@ -14,6 +14,7 @@ export function OrderList() {
   const [keyword, setKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [selectedRange, setSelectedRange] = useState(null); // 1, 3, 6개월 중 선택된 버튼 상태
 
   useEffect(() => {
     const params = {
@@ -39,6 +40,7 @@ export function OrderList() {
     start.setMonth(end.getMonth() - months);
     setStartDate(start.toISOString().slice(0, 10));
     setEndDate(end.toISOString().slice(0, 10));
+    setSelectedRange(months);
   };
 
   const handleStatusChange = (orderSeq, newStatus) => {
@@ -48,34 +50,34 @@ export function OrderList() {
         status: newStatus,
       })
       .then(() => {
-        // 변경 후 다시 불러오기
         const updatedOrders = orders.map((o) =>
           o.seq === orderSeq ? { ...o, status: newStatus } : o,
         );
         setOrders(updatedOrders);
       })
-      .catch((err) => alert("상태 변경 실패"));
+      .catch(() => alert("상태 변경 실패"));
   };
 
   return (
     <Container className="mt-4">
       <h2>{isAdmin ? "주문 관리" : "주문 내역"}</h2>
+
       <Row className="my-3">
         <Col>
           <Button
-            variant="outline-secondary"
+            variant={selectedRange === 1 ? "secondary" : "outline-secondary"}
             onClick={() => handleDateRange(1)}
           >
             1개월
           </Button>{" "}
           <Button
-            variant="outline-secondary"
+            variant={selectedRange === 3 ? "secondary" : "outline-secondary"}
             onClick={() => handleDateRange(3)}
           >
             3개월
           </Button>{" "}
           <Button
-            variant="outline-secondary"
+            variant={selectedRange === 6 ? "secondary" : "outline-secondary"}
             onClick={() => handleDateRange(6)}
           >
             6개월
@@ -87,11 +89,13 @@ export function OrderList() {
               setKeyword("");
               setStartDate("");
               setEndDate("");
+              setSelectedRange(null);
             }}
           >
             초기화
           </Button>
         </Col>
+
         <Col>
           <Form.Select
             value={status}
@@ -105,6 +109,7 @@ export function OrderList() {
             <option value="주문취소">주문취소</option>
           </Form.Select>
         </Col>
+
         <Col>
           <Form.Control
             type="text"
@@ -169,13 +174,15 @@ export function OrderList() {
                   <Button
                     size="sm"
                     variant="danger"
-                    onClick={() =>
-                      navigate("/receive", {
+                    onClick={() => {
+                      const memberNo = localStorage.getItem("memberNo");
+                      navigate(`/receive/${order.seq}`, {
                         state: {
                           orderManageSeq: order.seq,
+                          memberNo: memberNo,
                         },
-                      })
-                    }
+                      });
+                    }}
                   >
                     상품수령
                   </Button>

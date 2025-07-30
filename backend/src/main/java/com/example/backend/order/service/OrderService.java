@@ -125,6 +125,7 @@ public class OrderService {
 
         // 상세 DTO 반환
         return new OrderDetailDto(
+                order.getSeq(),
                 order.getOrderNo(),
                 order.getOrderDate(),
                 productNames,

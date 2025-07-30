@@ -11,7 +11,10 @@ export function OrderDetail() {
   useEffect(() => {
     axios
       .get(`/api/order/detail?orderSeq=${orderId}`)
-      .then((res) => setOrder(res.data))
+      .then((res) => {
+        console.log(res.data);
+        setOrder(res.data);
+      })
       .catch((err) => console.error("상세 조회 실패:", err));
   }, [orderId]);
 
@@ -67,17 +70,21 @@ export function OrderDetail() {
       <h5 className="mb-3">처리 메뉴</h5>
       <div className="d-flex flex-wrap gap-2 mb-5">
         <Button
-          variant="outline-dark"
+          variant="danger"
           onClick={() => navigate(`/receive/${orderId}`)}
         >
-          상품 수령
+          상품수령
         </Button>
-        <Button
-          variant="outline-secondary"
-          onClick={() => navigate(`/cancel/${orderId}`)}
+        <button
+          className="btn btn-outline-danger"
+          onClick={() =>
+            navigate("/cancel", {
+              state: { orderManageSeq: item.orderManageSeq },
+            })
+          }
         >
           주문 취소
-        </Button>
+        </button>
         <Button
           variant="outline-primary"
           onClick={() => navigate(`/extend/${orderId}`)}
