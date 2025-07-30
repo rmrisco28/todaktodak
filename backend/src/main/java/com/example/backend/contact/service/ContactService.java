@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -96,6 +97,7 @@ public class ContactService {
     }
 
     // 게시물 수정
+    @Transactional
     public void modify(ContactModifyForm cmf) {
         Contact contact = contactRepository.findById(cmf.getSeq())
                 .orElseThrow(() -> new EntityNotFoundException("해당게시물이 존재하지 않습니다."));
@@ -103,8 +105,12 @@ public class ContactService {
         contact.setTitle(cmf.getTitle());
         contact.setContent(cmf.getContent());
         contact.setName(cmf.getName());
+        contact.setUpdateDttm(LocalDateTime.now());
+        System.out.println(contact + "33333333333333333333333333");
+
 
         contactRepository.save(contact);
+        contactRepository.flush();
     }
 
 
