@@ -40,6 +40,7 @@ import { DeliveryDetail } from "./feature/delivery/DeliveryDetail.jsx";
 import { DeliveryList } from "./feature/delivery/DeliveryList.jsx";
 import { DeliveryModify } from "./feature/delivery/DeliveryModify.jsx";
 import { MemberMyInfo } from "./feature/member/MemberMyInfo.jsx";
+import { MemberMyInfoModify } from "./feature/member/MemberMyInfoModify.jsx";
 
 function App() {
   return (
@@ -66,6 +67,11 @@ function App() {
             <Route path="member/add" element={<MemberAdd />} />
             {/* 회원상세(회원) */}
             <Route path="member/myinfo/:memberId" element={<MemberMyInfo />} />
+            {/* 회원수정(회원) */}
+            <Route
+              path="member/myinfo/modify/:memberId"
+              element={<MemberMyInfoModify />}
+            />
             {/* 상품 등록 */}
             <Route path="product/add" element={<ProductAdd />} />
             {/* 상품조회 목록 */}

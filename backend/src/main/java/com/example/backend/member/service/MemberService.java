@@ -217,4 +217,22 @@ public class MemberService {
 
         return dto;
     }
+
+    public void MyInfoModify(String memberId, MyInfoModifyDto dto) {
+        Member dbData = memberRepository.findByMemberId(memberId).get();
+
+        dbData.setMemberId(dto.getMemberId());
+        dbData.setName(dto.getName());
+        dbData.setEmail(dto.getEmail());
+        dbData.setPhone(dto.getPhone());
+        dbData.setPostCode(dto.getPostCode());
+        dbData.setAddr(dto.getAddr());
+        dbData.setAddrDetail(dto.getAddrDetail());
+
+        if (dto.getBirthDate() != null && !dto.getBirthDate().isBlank()) {
+            dbData.setBirthDate(LocalDate.parse(dto.getBirthDate()));
+        }
+
+        memberRepository.save(dbData);
+    }
 }

@@ -125,7 +125,7 @@ export function MemberMyInfo() {
           <Button
             className="mb-4"
             variant="outline-primary"
-            onClick={() => navigate(`/member/myinfo/modify`)}
+            onClick={() => navigate(`/member/myinfo/modify/${memberId}`)}
           >
             수정
           </Button>
