@@ -70,11 +70,11 @@ export function SaleDetail() {
   };
 
   function handleCartAddButton() {
-    //   TODO 장바구니 추가 기능 (+회원 체크, input 체크)
+    // TODO [@minki] 장바구니 추가 기능 (+회원 체크, input 체크)
   }
 
   function handlePickAddButton() {
-    // TODO 찜하기 추가 기능 (+회원 체크)
+    // TODO [@minki] 찜하기 추가 기능 (+회원 체크)
   }
 
   return (
@@ -120,14 +120,14 @@ export function SaleDetail() {
             {sale.category}
           </div>
           <div className="mb-3">
-            {/* TODO 판매건당가격 price 용어 변경(상품가격 중복방지) */}
+            {/* TODO [@minki] 판매건당가격 price 용어 변경(상품가격 중복방지) */}
             <strong>가격:</strong>{" "}
             <span className="text-danger fw-bold">
               {sale.price.toLocaleString()}원
             </span>
           </div>
           <div className="mb-3">
-            {/* TODO 배송업체 데이터 조회 */}
+            {/* TODO [@minki] 배송업체 데이터 조회 */}
             <strong>배송비:</strong>{" "}
             {sale.deliveryFee > 0
               ? `${sale.deliveryFee.toLocaleString()}원`
@@ -168,7 +168,7 @@ export function SaleDetail() {
             </Button>
           </div>
 
-          {/* 관리자 버튼 (TODO) */}
+          {/* 관리자 버튼 (TODO [@minki]) */}
           <div className="d-flex gap-2">
             <Button variant="outline-danger" onClick={() => setModalShow(true)}>
               삭제

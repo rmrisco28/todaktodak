@@ -33,7 +33,7 @@ public class SaleService {
     private final SaleImageContentRepository saleImageContentRepository;
 
     public void add(SaleAddForm dto) {
-        // TODO 권한 체크 (관리자)
+        // TODO [@minki] 권한 체크 (관리자)
 
         // 조합번호 생성 (코드 + 현재일자 + 시퀀스)
         String code = "SA";
@@ -90,7 +90,7 @@ public class SaleService {
                         base_path += "saleImageContent/";
                     }
 
-                    // TODO AWS S3 업로드
+                    // TODO [@minki] AWS S3 업로드
                     // AWS s3 파일 업로드
                     //                    String objectKey = "prj4/board/" + product.getSeq() + "/" + image.getOriginalFilename();
                     //                    uploadFile(image, objectKey);
