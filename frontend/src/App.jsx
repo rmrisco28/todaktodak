@@ -80,7 +80,7 @@ function App() {
             {/* 판매상품 수정 */}
             <Route path="sale/modify/:seq" element={<SaleModify />} />
             {/* 상품구매 상세 */}
-            <Route path="buy" element={<BuyForm />} />
+            <Route path="buy/:seq" element={<BuyForm />} />
             {/* 상품구매 등록 */}
             <Route path="buy/add" element={<BuyAdd />} />
             {/* 반납신청 상세 */}
