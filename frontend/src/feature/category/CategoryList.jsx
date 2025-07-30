@@ -169,6 +169,7 @@ export function CategoryList() {
                       {category.updateTimesAgo}
                     </td>
                     <td>
+                      {/* TODO [@minki] 목록 페이지에서 바로 수정이 가능하도록 로직 변경 */}
                       <Button
                         variant="outline-secondary"
                         onClick={() =>
