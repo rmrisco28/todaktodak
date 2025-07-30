@@ -1,6 +1,8 @@
 package com.example.backend.category.controller;
 
 import com.example.backend.category.dto.CategoryAddForm;
+import com.example.backend.category.dto.CategoryDto;
+import com.example.backend.category.dto.CategoryUpdateForm;
 import com.example.backend.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,10 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     /**
-     * 기능명: 카테고리 등록 기능
-     * 권한: 관리자
-     *
      * @param dto
      * @return
+     * @brief Add Category (permission: Administrator)
+     * @author minki-jeon
      */
     @PostMapping("add")
     public ResponseEntity<?> add(CategoryAddForm dto) {
@@ -39,11 +40,11 @@ public class CategoryController {
     }
 
     /**
-     * 카테고리 목록 조회 (관리자)
-     *
      * @param keyword
      * @param pageNumber
      * @return
+     * @brief View Category List (permission: Administrator)
+     * @author minki-jeon
      */
     @GetMapping("list")
     public Map<String, Object> getAllCategory(
@@ -51,6 +52,68 @@ public class CategoryController {
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
     ) {
         return categoryService.list(keyword, pageNumber);
+    }
+
+    /**
+     * @param seq
+     * @return
+     * @brief Delete Category (permission: Administrator)
+     * @author minki-jeon
+     */
+    @PutMapping("{seq}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Integer seq) {
+
+        try {
+            categoryService.updateDelYn(seq);
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "warning", "text", seq + "번 카테고리가 삭제되었습니다.")));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
+    }
+
+    /**
+     * @param seq
+     * @return
+     * @brief View Category Details (permission: Administrator)
+     * @author minki-jeon
+     */
+    @GetMapping("detail/{seq}")
+    public CategoryDto getCategoryBySeq(@PathVariable Integer seq) {
+        return categoryService.getCategoryBySeq(seq);
+    }
+
+
+    /**
+     * @param seq
+     * @param dto
+     * @return
+     * @brief Edit Category (permission: Administrator)
+     * @author minki-jeon
+     */
+    @PutMapping("modify/{seq}")
+    public ResponseEntity<?> updateCategory(@PathVariable Integer seq, CategoryUpdateForm dto) {
+
+        boolean result = categoryService.validateForUpdate(dto);
+
+        try {
+            if (result) {
+                categoryService.update(dto);
+
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", seq + " 번 카테고리가 수정되었습니다.")));
+            } else {
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", "입력한 내용이 유효하지 않습니다.")));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
     }
 
 }

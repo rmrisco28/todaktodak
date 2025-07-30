@@ -1,5 +1,6 @@
 package com.example.backend.category.repository;
 
+import com.example.backend.category.dto.CategoryDto;
 import com.example.backend.category.dto.CategoryListDto;
 import com.example.backend.category.entity.Category;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
             c.seq,
             c.name,
             c.insertDttm,
+            c.updateDttm,
             c.useYn
                         )
             FROM Category c
@@ -23,4 +25,17 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
             ORDER BY c.seq DESC
             """)
     Page<CategoryListDto> searchCategoryList(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query(value = """
+                SELECT new com.example.backend.category.dto.CategoryDto(
+                c.seq,
+                c.name,
+                c.useYn
+                )
+                FROM Category c
+                WHERE c.seq = :seq
+                  AND c.useYn = true
+                  AND c.delYn = false
+            """)
+    CategoryDto findCategoryBySeq(Integer seq);
 }
