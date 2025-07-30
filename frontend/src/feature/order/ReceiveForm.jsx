@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Container, Row, Col, Modal } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -9,6 +9,13 @@ export function ReceiveForm() {
   const { orderManageSeq } = location.state || {};
 
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (!orderManageSeq) {
+      alert("잘못된 접근입니다. 주문 정보가 없습니다.");
+      navigate("/order/list");
+    }
+  }, [orderManageSeq, navigate]);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -21,7 +28,7 @@ export function ReceiveForm() {
         memo: "수령 확인",
       });
       alert("상품을 수령 처리했습니다.");
-      navigate(`/order/detail/${orderManageSeq}`);
+      navigate("/order/list");
     } catch (error) {
       console.error(error);
       alert("상품 수령 처리에 실패했습니다.");

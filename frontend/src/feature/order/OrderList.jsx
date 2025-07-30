@@ -170,12 +170,9 @@ export function OrderList() {
                     size="sm"
                     variant="danger"
                     onClick={() =>
-                      navigate("/receive/${order.Seq}", {
+                      navigate("/receive", {
                         state: {
-                          orderSeq: order.seq,
-                          orderNo: order.orderNo,
-                          productNames: order.productNames,
-                          totalPrice: order.totalPrice,
+                          orderManageSeq: order.seq,
                         },
                       })
                     }

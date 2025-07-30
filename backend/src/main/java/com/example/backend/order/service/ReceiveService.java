@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,15 +23,16 @@ public class ReceiveService {
     public void receive(ReceiveRequestDto dto) {
         OrderManage orderManage = orderManageRepository.findBySeq(dto.getOrderManageSeq());
 
+        
         Receive receive = Receive.builder()
                 .orderManage(orderManage)
                 .receivedAt(LocalDateTime.now())
                 .receivedBy(dto.getReceivedBy())
                 .memo(dto.getMemo())
                 .build();
-
         receiveRepository.save(receive);
 
+        orderManage.setStatus("배송완료");
         orderManageRepository.save(orderManage);
     }
 }

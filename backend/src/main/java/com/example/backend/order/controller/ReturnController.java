@@ -15,6 +15,7 @@ public class ReturnController {
     @PostMapping
     public String submitReturn(@RequestBody ReturnRequestDto rrDto) {
         returnService.processReturn(rrDto);
+
         return "반품 신청이 정상적으로 처리되었습니다.";
     }
 }
