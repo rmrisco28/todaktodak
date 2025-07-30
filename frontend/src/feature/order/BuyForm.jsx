@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormLabel,
   Row,
+  Spinner,
 } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -18,6 +19,7 @@ export function BuyForm() {
   const [addressDetail, setAddressDetail] = useState(); // 참고항목
   const [request, setRequest] = useState("집 앞에 놔주세요.");
   const [isCustom, setIsCustom] = useState(false);
+  const [isProcessing, setIsProcessing] = useState();
 
   let navigate = useNavigate();
 
@@ -42,6 +44,7 @@ export function BuyForm() {
     }
   };
 
+  // 주소 검색 버튼 다음 api
   function handleAddressButtonClick() {
     new daum.Postcode({
       oncomplete: function (data) {
@@ -97,7 +100,22 @@ export function BuyForm() {
     }).open();
   }
 
+  // 결제 버튼 클릭시 공란 여부 확인
+  let validate = true;
+  if (
+    name.trim() === "" ||
+    phoneNumber.trim() === "" ||
+    postalCode.trim() === "" ||
+    address.trim() === "" ||
+    request.trim() === ""
+  ) {
+    validate = false;
+  }
+
+  // 결제 버튼
   function handleSuccessButtonClick() {
+    window.open("https://payment-demo.kakaopay.com/online", "_blank");
+    setIsProcessing(true);
     axios
       .post("/api/buy", {
         name: name,
@@ -118,6 +136,7 @@ export function BuyForm() {
       })
       .finally(() => {
         console.log("finally");
+        setIsProcessing(false);
       });
   }
 
@@ -159,6 +178,7 @@ export function BuyForm() {
                 <FormControl
                   value={postalCode}
                   placeholder="우편번호"
+                  readOnly
                   style={{ width: "150px" }}
                   onChange={(e) => {
                     setPostalCode(e.target.value);
@@ -180,6 +200,7 @@ export function BuyForm() {
               <FormControl
                 value={address}
                 placeholder="주소 입력해주세요."
+                readOnly
                 onChange={(e) => {
                   setAddress(e.target.value);
                 }}
@@ -247,7 +268,10 @@ export function BuyForm() {
 
           {/*결제 버튼*/}
           <div className="d-grid gap-2 mx-auto">
-            <Button onClick={handleSuccessButtonClick}>결제하기</Button>
+            <Button onClick={handleSuccessButtonClick} disabled={!validate}>
+              {isProcessing && <Spinner size="sm" />}
+              {isProcessing || "결제하기"}
+            </Button>
           </div>
         </Col>
       </Row>
