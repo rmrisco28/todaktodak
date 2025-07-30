@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 export function MemberSignup() {
   const [memberId, setMemberId] = useState("");
@@ -67,6 +68,10 @@ export function MemberSignup() {
       })
       .then((res) => {
         console.log(res.data);
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
         navigate("/login");
       })
       .catch((err) => {

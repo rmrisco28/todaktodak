@@ -3,8 +3,9 @@ package com.example.backend.member.dto;
 import lombok.Data;
 
 @Data
-public class MemberSignupForm {
-    // 회원가입폼
+public class MemberAddForm {
+    // 회원등록폼
+    private String auth;
     private String memberId;
     private String password;
     private String name;
