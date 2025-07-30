@@ -42,7 +42,7 @@ export function AuthenticationContextProvider({ children }) {
         setUser({
           memberId: res.data.memberId,
           name: res.data.name,
-          scope: payload.scp.split(" "), // 토큰 scope (ex: ROLE_USER, ROLE_ADMIN)
+          scope: payload.scp.split(","), // 토큰 scope (ex: ROLE_USER, ROLE_ADMIN)
         });
       });
     }
@@ -59,7 +59,7 @@ export function AuthenticationContextProvider({ children }) {
       setUser({
         memberId: res.data.memberId,
         name: res.data.name,
-        scope: payload.scp.split(" "),
+        scope: payload.scp.split(","),
       });
     });
   }
@@ -77,7 +77,7 @@ export function AuthenticationContextProvider({ children }) {
 
   // 현재 사용자가 관리자 권한을 갖고 있는지 확인
   function isAdmin() {
-    return user && user.scope && user.scope.includes("admin");
+    return user && user.scope && user.scope.includes("ROLE_ADMIN");
   }
 
   // step3. provide context (token Context 값 전달)
