@@ -4,6 +4,8 @@ import com.example.backend.member.dto.*;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -63,8 +66,24 @@ public class MemberService {
     }
 
     // 회원 목록(관리자)
-    public List<MemberListInfo> list() {
-        return memberRepository.findAllBy();
+    public Map<String, Object> list(Integer pageNumber) {
+        Page<MemberListInfo> memberListInfoPage
+                = memberRepository.findAllBy(PageRequest.of(pageNumber - 1, 10));
+
+        int totalPages = memberListInfoPage.getTotalPages(); // 마지막 페이지
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo,
+                "memberList", memberListInfoPage.getContent());
+
     }
 
     // 회원 상세보기(관리자)

@@ -1,12 +1,14 @@
 package com.example.backend.member.controller;
 
-import com.example.backend.member.dto.*;
+import com.example.backend.member.dto.MemberAddForm;
+import com.example.backend.member.dto.MemberLoginForm;
+import com.example.backend.member.dto.MemberModifyDto;
+import com.example.backend.member.dto.MemberSignupForm;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -41,8 +43,9 @@ public class MemberController {
 
     // 회원 목록 보기
     @GetMapping("list")
-    public List<MemberListInfo> list() {
-        return memberService.list();
+    public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
+
+        return memberService.list(pageNumber);
     }
 
     // 회원 정보 상세 보기
