@@ -238,13 +238,6 @@ export function MemberDetail() {
           >
             수정
           </Button>
-          <Button
-            className="ms-5"
-            variant="outline-dark"
-            onClick={() => navigate(`/member/list`)}
-          >
-            목록
-          </Button>
         </div>
       </Col>
 

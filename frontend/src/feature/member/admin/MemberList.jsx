@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Col, Pagination, Row, Spinner, Table } from "react-bootstrap";
+import {
+  Col,
+  Form,
+  FormCheck,
+  Pagination,
+  Row,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
 
 export function MemberList() {
@@ -13,12 +21,11 @@ export function MemberList() {
     axios
       .get(`/api/member/list?${searchParams}`)
       .then((res) => {
-        console.log("응답 데이터:", res.data);
         setMemberList(res.data.memberList);
         setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
-        console.log("에러:", err);
+        console.log(err);
       })
       .finally(() => {});
   }, [searchParams]);
@@ -51,6 +58,8 @@ export function MemberList() {
                   <th>ID</th>
                   <th>고객명</th>
                   <th>등록일시</th>
+                  <th>사용여부</th>
+                  <th>삭제여부</th>
                 </tr>
               </thead>
               <tbody>
@@ -64,6 +73,22 @@ export function MemberList() {
                     <td>{member.memberId}</td>
                     <td>{member.name}</td>
                     <td>{member.insertDttm}</td>
+                    <td>
+                      <FormCheck
+                        type="switch"
+                        checked={member.useYn}
+                        disabled
+                        label={member.useYn ? "사용" : "미사용"}
+                      />
+                    </td>
+                    <td>
+                      <FormCheck
+                        type="switch"
+                        checked={member.delYn}
+                        disabled
+                        label={member.delYn ? "삭제" : "미삭제"}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>

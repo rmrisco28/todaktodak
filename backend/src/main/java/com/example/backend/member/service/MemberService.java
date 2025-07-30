@@ -121,6 +121,10 @@ public class MemberService {
 
         dbData.setState("DELETE");
 
+        dbData.setUseYn(false);
+
+        dbData.setDelYn(true);
+
         memberRepository.save(dbData);
     }
 

@@ -12,4 +12,8 @@ public interface MemberListInfo {
 
     LocalDateTime getInsertDttm();
 
+    Boolean getUseYn();
+
+    Boolean getDelYn();
+
 }
