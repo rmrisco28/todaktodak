@@ -59,11 +59,6 @@ export function CategoryList() {
     return <Spinner />;
   }
 
-  function handleTableRowClick(seq) {
-    // 게시물 상세 보기 이동
-    navigate(`/category/detail/${seq}`);
-  }
-
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumbers.push(i);
@@ -75,8 +70,7 @@ export function CategoryList() {
     setSearchParams(nextSearchParams);
   }
 
-  function handleDeleteCategoryModalShow(e, seq) {
-    e.stopPropagation();
+  function handleDeleteCategoryModalShow(seq) {
     setDeleteTarget(seq);
     return setModalShow(true);
   }
@@ -135,11 +129,18 @@ export function CategoryList() {
                 <tr>
                   <th style={{ width: "70px" }}>번호</th>
                   <th>카테고리명</th>
+                  {/*<th style={{ width: "70px" }}>사용</th>*/}
                   <th
                     className="d-none d-lg-table-cell"
                     style={{ width: "200px" }}
                   >
                     등록일시
+                  </th>
+                  <th
+                    className="d-none d-lg-table-cell"
+                    style={{ width: "200px" }}
+                  >
+                    수정일시
                   </th>
                   <th style={{ width: "70px" }}>수정</th>
                   <th style={{ width: "70px" }}>삭제</th>
@@ -147,19 +148,25 @@ export function CategoryList() {
               </thead>
               <tbody>
                 {categoryList.map((category) => (
-                  <tr
-                    key={category.seq}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleTableRowClick(category.seq)}
-                  >
+                  <tr key={category.seq} style={{ cursor: "pointer" }}>
                     <td>{category.seq}</td>
                     <td>
                       <div className="d-flex gap-2">
                         <span>{category.name}</span>
                       </div>
                     </td>
+                    {/*
+                    <td>
+                      <div className="d-flex gap-2">
+                        <span>{category.useYn}</span>
+                      </div>
+                    </td>
+                    */}
                     <td className="d-none d-lg-table-cell">
                       {category.timesAgo}
+                    </td>
+                    <td className="d-none d-lg-table-cell">
+                      {category.updateTimesAgo}
                     </td>
                     <td>
                       <Button
@@ -176,8 +183,8 @@ export function CategoryList() {
                       <Button
                         className="me-2"
                         variant="outline-danger"
-                        onClick={(e) =>
-                          handleDeleteCategoryModalShow(e, category.seq)
+                        onClick={() =>
+                          handleDeleteCategoryModalShow(category.seq)
                         }
                       >
                         {/*삭제*/}
