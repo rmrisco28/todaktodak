@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Table,
-  Button,
-  Container,
-  Form,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { Table, Button, Container, Form, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export function OrderList() {
@@ -35,9 +28,9 @@ export function OrderList() {
     }
 
     axios
-        .get("/api/order/list", { params })
-        .then((res) => setOrders(res.data))
-        .catch((err) => console.error("주문 조회 실패:", err));
+      .get("/api/order/list", { params })
+      .then((res) => setOrders(res.data))
+      .catch((err) => console.error("주문 조회 실패:", err));
   }, [memberSeq, status, keyword, startDate, endDate]);
 
   const handleDateRange = (months) => {
@@ -50,78 +43,80 @@ export function OrderList() {
 
   const handleStatusChange = (orderSeq, newStatus) => {
     axios
-        .post("/api/order/update-status", {
-          orderSeq,
-          status: newStatus,
-        })
-        .then(() => {
-          // 변경 후 다시 불러오기
-          const updatedOrders = orders.map((o) =>
-              o.seq === orderSeq ? { ...o, status: newStatus } : o
-          );
-          setOrders(updatedOrders);
-        })
-        .catch((err) => alert("상태 변경 실패"));
+      .post("/api/order/update-status", {
+        orderSeq,
+        status: newStatus,
+      })
+      .then(() => {
+        // 변경 후 다시 불러오기
+        const updatedOrders = orders.map((o) =>
+          o.seq === orderSeq ? { ...o, status: newStatus } : o,
+        );
+        setOrders(updatedOrders);
+      })
+      .catch((err) => alert("상태 변경 실패"));
   };
 
   return (
-      <Container className="mt-4">
-        <h2>{isAdmin ? "주문 관리" : "주문 내역"}</h2>
-        <Row className="my-3">
-          <Col>
-            <Button
-                variant="outline-secondary"
-                onClick={() => handleDateRange(1)}
-            >
-              1개월
-            </Button>{" "}
-            <Button
-                variant="outline-secondary"
-                onClick={() => handleDateRange(3)}
-            >
-              3개월
-            </Button>{" "}
-            <Button
-                variant="outline-secondary"
-                onClick={() => handleDateRange(6)}
-            >
-              6개월
-            </Button>{" "}
-            <Button
-                variant="secondary"
-                onClick={() => {
-                  setStatus("");
-                  setKeyword("");
-                  setStartDate("");
-                  setEndDate("");
-                }}
-            >
-              초기화
-            </Button>
-          </Col>
-          <Col>
-            <Form.Select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="">전체 상태</option>
-              <option value="배송중">배송중</option>
-              <option value="배송완료">배송완료</option>
-              <option value="주문취소">주문취소</option>
-            </Form.Select>
-          </Col>
-          <Col>
-            <Form.Control
-                type="text"
-                placeholder="상품명 검색"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-            />
-          </Col>
-        </Row>
+    <Container className="mt-4">
+      <h2>{isAdmin ? "주문 관리" : "주문 내역"}</h2>
+      <Row className="my-3">
+        <Col>
+          <Button
+            variant="outline-secondary"
+            onClick={() => handleDateRange(1)}
+          >
+            1개월
+          </Button>{" "}
+          <Button
+            variant="outline-secondary"
+            onClick={() => handleDateRange(3)}
+          >
+            3개월
+          </Button>{" "}
+          <Button
+            variant="outline-secondary"
+            onClick={() => handleDateRange(6)}
+          >
+            6개월
+          </Button>{" "}
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setStatus("");
+              setKeyword("");
+              setStartDate("");
+              setEndDate("");
+            }}
+          >
+            초기화
+          </Button>
+        </Col>
+        <Col>
+          <Form.Select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="">전체</option>
+            <option value="대여중">대여중</option>
+            <option value="반납완료">반납완료</option>
+            <option value="배송중">배송중</option>
+            <option value="배송완료">배송완료</option>
+            <option value="주문취소">주문취소</option>
+          </Form.Select>
+        </Col>
+        <Col>
+          <Form.Control
+            type="text"
+            placeholder="상품명 검색"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </Col>
+      </Row>
 
-        <Table striped bordered hover>
-          <thead>
+      <Table striped bordered hover>
+        <thead>
           <tr>
             <th>주문번호</th>
             <th>주문일자</th>
@@ -130,71 +125,69 @@ export function OrderList() {
             <th>상태</th>
             <th>처리</th>
           </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
           {orders.map((order) => (
-              <tr
-                  key={order.seq}
-                  style={{
-                    color: order.delYn === "Y" ? "gray" : "black",
-                  }}
-              >
-                <td>
-                  <Button
-                      variant="link"
-                      onClick={() =>
-                          navigate(`/order/${order.seq}`)
-                      }
+            <tr
+              key={order.seq}
+              style={{
+                color: order.delYn === "Y" ? "gray" : "black",
+              }}
+            >
+              <td>
+                <Button
+                  variant="link"
+                  onClick={() => navigate(`/order/${order.seq}`)}
+                >
+                  {order.orderNo}
+                </Button>
+              </td>
+              <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+              <td>{order.productNames}</td>
+              <td>{order.totalPrice.toLocaleString()}원</td>
+              <td>
+                {isAdmin ? (
+                  <Form.Select
+                    size="sm"
+                    value={order.status}
+                    onChange={(e) =>
+                      handleStatusChange(order.seq, e.target.value)
+                    }
                   >
-                    {order.orderNo}
+                    <option value="대여중">대여중</option>
+                    <option value="반납완료">반납완료</option>
+                    <option value="배송중">배송중</option>
+                    <option value="배송완료">배송완료</option>
+                    <option value="주문취소">주문취소</option>
+                  </Form.Select>
+                ) : (
+                  order.status
+                )}
+              </td>
+              <td>
+                {!isAdmin && order.status === "배송중" && (
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() =>
+                      navigate("/receive/${order.Seq}", {
+                        state: {
+                          orderSeq: order.seq,
+                          orderNo: order.orderNo,
+                          productNames: order.productNames,
+                          totalPrice: order.totalPrice,
+                        },
+                      })
+                    }
+                  >
+                    상품수령
                   </Button>
-                </td>
-                <td>
-                  {new Date(order.orderDate).toLocaleDateString()}
-                </td>
-                <td>{order.productNames}</td>
-                <td>{order.totalPrice.toLocaleString()}원</td>
-                <td>
-                  {isAdmin ? (
-                      <Form.Select
-                          size="sm"
-                          value={order.status}
-                          onChange={(e) =>
-                              handleStatusChange(order.seq, e.target.value)
-                          }
-                      >
-                        <option value="배송중">배송중</option>
-                        <option value="배송완료">배송완료</option>
-                        <option value="주문취소">주문취소</option>
-                      </Form.Select>
-                  ) : (
-                      order.status
-                  )}
-                </td>
-                <td>
-                  {!isAdmin && order.status === "배송완료" && (
-                      <Button
-                          size="sm"
-                          variant="danger"
-                          onClick={() =>
-                              navigate("/return", {
-                                state: {
-                                  orderSeq: order.seq,
-                                  orderNo: order.orderNo,
-                                  productNames: order.productNames,
-                                  totalPrice: order.totalPrice,
-                                },
-                              })
-                          }
-                      >
-                        반품신청
-                      </Button>
-                  )}
-                </td>
-              </tr>
+                )}
+              </td>
+            </tr>
           ))}
-          </tbody>
-        </Table>
-      </Container>
+        </tbody>
+      </Table>
+    </Container>
   );
 }

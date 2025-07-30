@@ -20,8 +20,7 @@ public class ReceiveService {
     private final ReceiveRepository receiveRepository;
 
     public void receive(ReceiveRequestDto dto) {
-        OrderManage orderManage = orderManageRepository.findById(dto.getOrderManageSeq())
-                .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
+        OrderManage orderManage = orderManageRepository.findBySeq(dto.getOrderManageSeq());
 
         Receive receive = Receive.builder()
                 .orderManage(orderManage)

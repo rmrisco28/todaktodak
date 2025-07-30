@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -8,8 +8,12 @@ import {
   Button,
 } from "react-bootstrap";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 export function ReturnForm() {
+  const location = useLocation();
+  const memberSeq = localStorage.getItem("memberSeq");
+
   const [form, setForm] = useState({
     orderNumber: "",
     productCode: "",
@@ -17,7 +21,19 @@ export function ReturnForm() {
     phoneNumber: "",
     reason: "",
   });
+
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (memberSeq && location.state) {
+      setForm((prev) => ({
+        ...prev,
+        orderNumber: location.state.orderNo || "",
+        customerName: location.state.customerName || "",
+        phoneNumber: location.state.phoneNumber || "",
+      }));
+    }
+  }, [location.state, memberSeq]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -43,9 +59,11 @@ export function ReturnForm() {
             <FormLabel>주문번호</FormLabel>
             <FormControl
               name="orderNumber"
+              value={form.orderNumber}
               placeholder="주문번호"
               onChange={handleChange}
               required
+              readOnly={!!memberSeq}
             />
           </FormGroup>
 
@@ -53,6 +71,7 @@ export function ReturnForm() {
             <FormLabel>상품코드</FormLabel>
             <FormControl
               name="productCode"
+              value={form.productCode}
               placeholder="상품코드"
               onChange={handleChange}
             />
@@ -62,9 +81,11 @@ export function ReturnForm() {
             <FormLabel>이름</FormLabel>
             <FormControl
               name="customerName"
+              value={form.customerName}
               placeholder="이름"
               onChange={handleChange}
               required
+              readOnly={!!memberSeq}
             />
           </FormGroup>
 
@@ -72,9 +93,11 @@ export function ReturnForm() {
             <FormLabel>전화번호</FormLabel>
             <FormControl
               name="phoneNumber"
+              value={form.phoneNumber}
               placeholder="전화번호"
               onChange={handleChange}
               required
+              readOnly={!!memberSeq}
             />
           </FormGroup>
 
@@ -83,6 +106,7 @@ export function ReturnForm() {
             <FormControl
               as="textarea"
               name="reason"
+              value={form.reason}
               placeholder="반납 사유를 입력해주세요."
               onChange={handleChange}
               required

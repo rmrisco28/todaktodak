@@ -15,7 +15,7 @@ public class ReceiveController {
 
     @PatchMapping("/receive")
     public ResponseEntity<Void> receiveOrder(@RequestBody ReceiveRequestDto dto) {
-//        receiveService.receive(dto);
+        receiveService.receive(dto);
         return ResponseEntity.ok().build();
     }
 }

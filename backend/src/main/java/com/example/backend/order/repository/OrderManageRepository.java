@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface OrderManageRepository extends JpaRepository<OrderManage, Integer> {
     List<OrderManage> findByMember_Seq(Integer memberId);
+
+    OrderManage findBySeq(Integer orderManageSeq);
 }

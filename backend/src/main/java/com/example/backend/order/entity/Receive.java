@@ -1,10 +1,7 @@
 package com.example.backend.order.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +10,9 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
-@Table(name="receive")
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "receive")
 public class Receive {
 
     @Id

@@ -84,7 +84,19 @@ export function OrderDetail() {
         >
           대여 연장 신청
         </Button>
-        <Button variant="outline-danger" onClick={() => navigate(`/return`)}>
+        <Button
+          variant="outline-danger"
+          onClick={() =>
+            navigate("/return", {
+              state: {
+                orderSeq: orderId,
+                orderNo: order.orderNo,
+                productNames: order.productNames,
+                totalPrice: order.totalPrice,
+              },
+            })
+          }
+        >
           반납 신청
         </Button>
       </div>
