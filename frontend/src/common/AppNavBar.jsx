@@ -1,6 +1,6 @@
 import { Link, NavLink, Route } from "react-router";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { CancelExec } from "../feacture/order/CancelExec.jsx";
+import { CancelExec } from "../feature/order/CancelExec.jsx";
 
 export function AppNavBar() {
   return (
