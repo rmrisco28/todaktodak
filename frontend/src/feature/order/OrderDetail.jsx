@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Card, Table, Button, Spinner, Row, Col } from "react-bootstrap";
+import { Card, Button, Spinner, Row, Col } from "react-bootstrap";
 
 export function OrderDetail() {
   const { orderId } = useParams();
