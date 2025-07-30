@@ -14,11 +14,11 @@ public class ReturnService {
 
     public boolean processReturn(ReturnRequestDto dto) {
         ReturnRequest entity = new ReturnRequest();
-        entity.setOrderNumber(dto.getOrderNumber());
-        entity.setProductCode(dto.getProductCode());
+        entity.setOrderNumber(dto.getOrderNo());
+        entity.setProductCode(dto.getProductNo());
         entity.setReason(dto.getReason());
         entity.setCustomerName(dto.getCustomerName());
-        entity.setPhoneNumber(dto.getPhoneNumber());
+        entity.setPhoneNumber(dto.getPhone());
 
         returnRequestRepository.save(entity);
         return true;

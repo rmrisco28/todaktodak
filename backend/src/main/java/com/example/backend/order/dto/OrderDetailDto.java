@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class OrderDetailDto {
-    private Integer orderManageSeq;
+    private Integer seq;
     private String orderNo;
     private LocalDateTime orderDate;
 
@@ -19,5 +19,5 @@ public class OrderDetailDto {
 
     private int totalPrice;
     private String status;
-    private String trackingNumber;
+    private String trackNo;
 }

@@ -25,7 +25,7 @@ public class Receive {
 
     private LocalDateTime receivedAt;
 
-    private String receivedBy;
+    private String memberNo;
 
     private String memo;
 }

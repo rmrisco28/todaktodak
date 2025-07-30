@@ -1,72 +1,77 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Button, Container, Row, Col, Modal } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
 
 export function ReceiveForm() {
-  const { orderId } = useParams(); // ✅ /receive/:orderId 에서 받기
-  const orderManageSeq = orderId; // 이름 맞추기
-  const memberNo = localStorage.getItem("memberNo"); // 로그인 정보
+    const { orderId } = useParams(); // = orderManageSeq
+    const navigate = useNavigate();
 
-  const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
+    const [order, setOrder] = useState(null);
+    const [memo, setMemo] = useState("");
 
-  useEffect(() => {
-    if (!orderManageSeq) {
-      alert("잘못된 접근입니다. 주문 정보가 없습니다.");
-      navigate("/order/list");
-    }
-  }, [orderManageSeq, navigate]);
+    useEffect(() => {
+        axios
+            .get("/api/receive", {
+                params: { orderManageSeq: orderId },
+            })
+            .then((res) => {
+                setOrder(res.data);
+            })
+            .catch(() => {
+                alert("수령 정보를 불러오는 데 실패했습니다.");
+            });
+    }, [orderId]);
 
-  const handleOpenModal = () => setShowModal(true);
-  const handleCloseModal = () => setShowModal(false);
+    const handleClick = () => {
+        const memberNo = localStorage.getItem("memberNo");
+        if (!memberNo) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
 
-  const handleReceiveConfirm = async () => {
-    try {
-      await axios.patch("/api/order/receive", {
-        orderManageSeq,
-        receivedBy: memberNo,
-        memo: "수령 확인",
-      });
+        navigate("/receive/exec", {
+            state: {
+                orderManageSeq: parseInt(orderId),
+                memberNo: memberNo,
+                memo: memo,
+            },
+        });
+    };
 
-      alert("상품을 수령 처리했습니다.");
-      navigate("/order/list", { state: { updated: true } });
-    } catch (error) {
-      console.error(error);
-      alert("상품 수령 처리에 실패했습니다.");
-    } finally {
-      handleCloseModal();
-    }
-  };
+    if (!order) return <div>로딩 중...</div>;
 
-  return (
-    <Container className="mt-5">
-      <Row className="justify-content-center">
-        <Col md={6}>
-          <h4 className="mb-4">상품 수령</h4>
-          <p>상품 수령 처리를 진행하시려면 아래 버튼을 눌러주세요.</p>
-          <Button variant="primary" onClick={handleOpenModal}>
-            수령 처리하기
-          </Button>
-        </Col>
-      </Row>
+    return (
+        <div className="container mt-4">
+            <h3>상품 수령 확인</h3>
+            <table className="table mt-3">
+                <tbody>
+                <tr>
+                    <th>주문번호</th>
+                    <td>{order.productName}</td>
+                </tr>
+                <tr>
+                    <th>배송 상태</th>
+                    <td>{order.status}</td>
+                </tr>
+                <tr>
+                    <th>주문 일자</th>
+                    <td>{order.orderDate}</td>
+                </tr>
+                </tbody>
+            </table>
 
-      <Modal show={showModal} onHide={handleCloseModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>상품 수령 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>정말로 상품을 수령하셨습니까?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            아니오
-          </Button>
-          <Button variant="primary" onClick={handleReceiveConfirm}>
-            예, 수령했습니다
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Container>
-  );
+            <div className="form-group mt-3">
+                <label>수령 메모</label>
+                <textarea
+                    className="form-control"
+                    value={memo}
+                    onChange={(e) => setMemo(e.target.value)}
+                />
+            </div>
+
+            <button className="btn btn-primary mt-3" onClick={handleClick}>
+                수령 확인
+            </button>
+        </div>
+    );
 }

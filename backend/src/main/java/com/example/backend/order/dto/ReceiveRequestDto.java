@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReceiveRequestDto {
-    private Integer orderManageSeq;
-    private String receivedBy;
+    private Integer seq;
+    private String memberNo;
     private String memo;
 }

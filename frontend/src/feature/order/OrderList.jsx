@@ -1,197 +1,147 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Table, Button, Container, Form, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export function OrderList() {
-  const navigate = useNavigate();
-  const auth = localStorage.getItem("auth"); // 'admin' or 'user'
-  const isAdmin = auth === "admin";
-  const memberSeq = localStorage.getItem("memberSeq");
+    const [orders, setOrders] = useState([]);
+    const navigate = useNavigate();
+    const isAdmin = localStorage.getItem("role") === "ADMIN";
+    const memberNo = localStorage.getItem("memberNo");
 
-  const [orders, setOrders] = useState([]);
-  const [status, setStatus] = useState("");
-  const [keyword, setKeyword] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [selectedRange, setSelectedRange] = useState(null); // 1, 3, 6개월 중 선택된 버튼 상태
-
-  useEffect(() => {
-    const params = {
-      status: status || undefined,
-      keyword: keyword || undefined,
-      startDate: startDate || undefined,
-      endDate: endDate || undefined,
-    };
-
-    if (!isAdmin) {
-      params.memberSeq = memberSeq;
+    // ✅ 비회원 차단
+    if (!memberNo && !isAdmin) {
+        return (
+            <div className="container mt-4">
+                <h4>로그인이 필요한 서비스입니다.</h4>
+            </div>
+        );
     }
 
-    axios
-      .get("/api/order/list", { params })
-      .then((res) => setOrders(res.data))
-      .catch((err) => console.error("주문 조회 실패:", err));
-  }, [memberSeq, status, keyword, startDate, endDate]);
+    // ✅ 주문 목록 조회
+    useEffect(() => {
+        const url = isAdmin
+            ? "/api/order/manage"
+            : `/api/order/list?memberNo=${memberNo}`;
 
-  const handleDateRange = (months) => {
-    const end = new Date();
-    const start = new Date();
-    start.setMonth(end.getMonth() - months);
-    setStartDate(start.toISOString().slice(0, 10));
-    setEndDate(end.toISOString().slice(0, 10));
-    setSelectedRange(months);
-  };
+        axios.get(url).then((res) => {
+            setOrders(res.data);
+        });
+    }, [isAdmin, memberNo]);
 
-  const handleStatusChange = (orderSeq, newStatus) => {
-    axios
-      .post("/api/order/update-status", {
-        orderSeq,
-        status: newStatus,
-      })
-      .then(() => {
-        const updatedOrders = orders.map((o) =>
-          o.seq === orderSeq ? { ...o, status: newStatus } : o,
-        );
-        setOrders(updatedOrders);
-      })
-      .catch(() => alert("상태 변경 실패"));
-  };
+    // ✅ 관리자 전용 삭제 기능
+    const handleDelete = (orderSeq) => {
+        if (!isAdmin) return;
+        if (window.confirm("정말 삭제하시겠습니까?")) {
+            axios
+                .delete(`/api/order/delete?orderManageSeq=${orderSeq}`)
+                .then(() => {
+                    alert("삭제되었습니다.");
+                    setOrders(orders.filter((o) => o.seq !== orderSeq));
+                })
+                .catch(() => {
+                    alert("삭제 실패");
+                });
+        }
+    };
 
-  return (
-    <Container className="mt-4">
-      <h2>{isAdmin ? "주문 관리" : "주문 내역"}</h2>
+    return (
+        <div className="container mt-4">
+            <h3>{isAdmin ? "주문 관리" : "내 주문 내역"}</h3>
 
-      <Row className="my-3">
-        <Col>
-          <Button
-            variant={selectedRange === 1 ? "secondary" : "outline-secondary"}
-            onClick={() => handleDateRange(1)}
-          >
-            1개월
-          </Button>{" "}
-          <Button
-            variant={selectedRange === 3 ? "secondary" : "outline-secondary"}
-            onClick={() => handleDateRange(3)}
-          >
-            3개월
-          </Button>{" "}
-          <Button
-            variant={selectedRange === 6 ? "secondary" : "outline-secondary"}
-            onClick={() => handleDateRange(6)}
-          >
-            6개월
-          </Button>{" "}
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setStatus("");
-              setKeyword("");
-              setStartDate("");
-              setEndDate("");
-              setSelectedRange(null);
-            }}
-          >
-            초기화
-          </Button>
-        </Col>
+            {/* 🔴 관리자 전용 등록 버튼 */}
+            {isAdmin && (
+                <div className="mb-2 text-end">
+                    <button className="btn btn-success">+ 주문 등록</button>
+                </div>
+            )}
 
-        <Col>
-          <Form.Select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="">전체</option>
-            <option value="대여중">대여중</option>
-            <option value="반납완료">반납완료</option>
-            <option value="배송중">배송중</option>
-            <option value="배송완료">배송완료</option>
-            <option value="주문취소">주문취소</option>
-          </Form.Select>
-        </Col>
+            <table className="table table-bordered">
+                <thead className="table-light">
+                <tr>
+                    <th>주문번호</th>
+                    <th>주문일자</th>
+                    <th>상태</th>
+                    <th>총금액</th>
+                    <th>기능</th>
+                    {isAdmin && <th>관리</th>}
+                </tr>
+                </thead>
+                <tbody>
+                {orders.map((order) => (
+                    <tr key={order.seq}>
+                        <td>{order.orderNo}</td>
+                        <td>{order.orderDate}</td>
+                        <td>{order.status}</td>
+                        <td>{order.totalPrice}</td>
 
-        <Col>
-          <Form.Control
-            type="text"
-            placeholder="상품명 검색"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-        </Col>
-      </Row>
+                        <td>
+                            {/* ✅ 상세 버튼: 회원/관리자 공통 */}
+                            <button
+                                className="btn btn-outline-info btn-sm me-2"
+                                onClick={() => navigate(`/order/${order.seq}`)}
+                            >
+                                상세
+                            </button>
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>주문번호</th>
-            <th>주문일자</th>
-            <th>상품명</th>
-            <th>결제금액</th>
-            <th>상태</th>
-            <th>처리</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr
-              key={order.seq}
-              style={{
-                color: order.delYn === "Y" ? "gray" : "black",
-              }}
-            >
-              <td>
-                <Button
-                  variant="link"
-                  onClick={() => navigate(`/order/${order.seq}`)}
-                >
-                  {order.orderNo}
-                </Button>
-              </td>
-              <td>{new Date(order.orderDate).toLocaleDateString()}</td>
-              <td>{order.productNames}</td>
-              <td>{order.totalPrice.toLocaleString()}원</td>
-              <td>
-                {isAdmin ? (
-                  <Form.Select
-                    size="sm"
-                    value={order.status}
-                    onChange={(e) =>
-                      handleStatusChange(order.seq, e.target.value)
-                    }
-                  >
-                    <option value="대여중">대여중</option>
-                    <option value="반납완료">반납완료</option>
-                    <option value="배송중">배송중</option>
-                    <option value="배송완료">배송완료</option>
-                    <option value="주문취소">주문취소</option>
-                  </Form.Select>
-                ) : (
-                  order.status
-                )}
-              </td>
-              <td>
-                {!isAdmin && order.status === "배송중" && (
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => {
-                      const memberNo = localStorage.getItem("memberNo");
-                      navigate(`/receive/${order.seq}`, {
-                        state: {
-                          orderManageSeq: order.seq,
-                          memberNo: memberNo,
-                        },
-                      });
-                    }}
-                  >
-                    상품수령
-                  </Button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
-  );
+                            {/* 🔵 회원 전용 상태별 버튼 */}
+                            {!isAdmin && (
+                                <>
+                                    {order.status === "배송완료" && (
+                                        <button
+                                            className="btn btn-outline-success btn-sm me-2"
+                                            onClick={() => navigate(`/receive/${order.seq}`)}
+                                        >
+                                            수령
+                                        </button>
+                                    )}
+
+                                    {order.status === "수령완료" && (
+                                        <button
+                                            className="btn btn-outline-warning btn-sm me-2"
+                                            onClick={() =>
+                                                navigate("/return", {
+                                                    state: {
+                                                        orderManageSeq: order.seq,
+                                                        memberNo: memberNo,
+                                                    },
+                                                })
+                                            }
+                                        >
+                                            반납
+                                        </button>
+                                    )}
+
+                                    {(order.status === "결제대기" ||
+                                        order.status === "결제완료") && (
+                                        <button
+                                            className="btn btn-outline-danger btn-sm"
+                                            onClick={() => navigate(`/cancel/${order.seq}`)}
+                                        >
+                                            취소
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </td>
+
+                        {/* 🔴 관리자 전용: 수정/삭제 */}
+                        {isAdmin && (
+                            <td>
+                                <button className="btn btn-outline-primary btn-sm me-2">
+                                    수정
+                                </button>
+                                <button
+                                    className="btn btn-outline-danger btn-sm"
+                                    onClick={() => handleDelete(order.seq)}
+                                >
+                                    삭제
+                                </button>
+                            </td>
+                        )}
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </div>
+    );
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class ReceiveDto {
-    private Integer productId;
+    private Integer seq;
     private String productName;
     private String orderName;
     private String orderPhone;

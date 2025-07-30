@@ -108,7 +108,7 @@ function App() {
             {/* 주문배송조회 상세 */}
             <Route path="order/:orderId" element={<OrderDetail />} />
             {/* 상품수령 상세 */}
-            <Route path="/receive/:orderId" element={<ReceiveForm />} />
+            <Route path="receive/:orderId" element={<ReceiveForm />} />
             {/* 상품수령 업데이트 */}
             <Route path="receive/exec" element={<ReceiveExec />} />
             {/* 상품취소 상세 */}

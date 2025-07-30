@@ -56,7 +56,7 @@ export function OrderDetail() {
               </p>
               <p>
                 <strong>송장번호:</strong>
-                {order.trackingNumber || "-"}
+                {order.trackNo || "-"}
               </p>
               <p>
                 <strong>상품명:</strong>
@@ -71,10 +71,18 @@ export function OrderDetail() {
       <div className="d-flex flex-wrap gap-2 mb-5">
         <Button
           variant="danger"
-          onClick={() => navigate(`/receive/${orderId}`)}
-        >
+          onClick={() => {
+          const memberNo = localStorage.getItem("memberNo");
+          navigate(`/receive/${order.seq}`, {
+            state: {
+              orderManageSeq: order.seq,
+              memberNo: memberNo,
+            },
+          });
+        }}
+          >
           상품수령
-        </Button>
+      </Button>
         <button
           className="btn btn-outline-danger"
           onClick={() =>

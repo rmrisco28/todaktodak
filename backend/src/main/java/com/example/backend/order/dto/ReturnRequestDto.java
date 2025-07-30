@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class ReturnRequestDto {
-    private String orderNumber;
-    private String productCode;
+    private String orderNo;
+    private String productNo;
     private String reason;
     private String customerName;
-    private String phoneNumber;
+    private String phone;
 }
