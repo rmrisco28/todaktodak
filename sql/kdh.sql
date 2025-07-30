@@ -1,49 +1,87 @@
 # 주문 관리 테이블: 주문 기본 정보 저장
 CREATE TABLE order_manage
 (
-    seq             INT AUTO_INCREMENT PRIMARY KEY,
-    order_no        VARCHAR(255),
-    order_date      DATETIME,
-    total_price     INT,
-    status          VARCHAR(50),
-    tracking_number VARCHAR(255),
-    member_id       INT,
-    FOREIGN KEY (member_id) REFERENCES member (seq)
+    seq         INT AUTO_INCREMENT NOT NULL,
+    order_no    VARCHAR(255)       NULL UNIQUE ,
+    order_date  datetime           NULL,
+    total_price INT                NULL,
+    status      VARCHAR(255)       NULL,
+    track_no    VARCHAR(255)       NULL,
+    member_seq  INT                NULL,
+    del_yn      VARCHAR(255)       NULL,
+    CONSTRAINT pk_order_manage PRIMARY KEY (seq)
 );
 
 ALTER TABLE order_manage
-    ADD CONSTRAINT FK_ORDERMANAGE_ON_MEMBER FOREIGN KEY (member_id) REFERENCES member (seq);
+    ADD CONSTRAINT FK_ORDER_MANAGE_ON_MEMBER_SEQ FOREIGN KEY (member_seq) REFERENCES member (seq);
 
 -- 반품 신청 테이블: 반품 관련 요청 정보 저장
 CREATE TABLE return_request
 (
-    id            INT AUTO_INCREMENT NOT NULL,
-    order_number  VARCHAR(255)          NULL,
-    product_code  VARCHAR(255)          NULL,
-    reason        VARCHAR(255)          NULL,
-    customer_name VARCHAR(255)          NULL,
-    phone_number  VARCHAR(255)          NULL,
-    created_at    datetime              NULL,
-    CONSTRAINT pk_return_request PRIMARY KEY (id)
+    seq            INT AUTO_INCREMENT PRIMARY KEY,
+    order_no       VARCHAR(100) NULL,
+    product_no     VARCHAR(100) NULL,
+    reason         VARCHAR(255) NULL,
+    customer_name  VARCHAR(255) NULL,
+    phone_number   VARCHAR(255) NULL,
+    created_at     DATETIME     NULL,
+    order_item_seq INT,
+    CONSTRAINT fk_return_order FOREIGN KEY (order_no) REFERENCES order_manage (order_no),
+    CONSTRAINT fk_return_item FOREIGN KEY (order_item_seq) REFERENCES order_items (seq)
 );
-
-ALTER TABLE return_request ADD COLUMN order_item_id INT;
-
-ALTER TABLE return_request
-    ADD FOREIGN KEY (order_item_id) REFERENCES order_items(seq);
 
 -- 주문 상품 테이블: 주문별 상품 내역 저장
 CREATE TABLE order_items
 (
     seq        INT AUTO_INCREMENT NOT NULL,
-    quantity   INT                   NOT NULL,
-    order_id   INT                   NULL,
-    product_id INT                   NULL,
+    quantity   INT                NULL,
+    order_no   VARCHAR(255)       NULL,
+    product_no VARCHAR(20)        NULL,
     CONSTRAINT pk_order_items PRIMARY KEY (seq)
 );
 
 ALTER TABLE order_items
-    ADD CONSTRAINT FK_ORDER_ITEMS_ON_ORDER FOREIGN KEY (order_id) REFERENCES order_manage (seq);
+    ADD CONSTRAINT FK_ORDER_ITEMS_ON_ORDER_NO FOREIGN KEY (order_no) REFERENCES order_manage (order_no);
 
 ALTER TABLE order_items
-    ADD CONSTRAINT FK_ORDER_ITEMS_ON_PRODUCT FOREIGN KEY (product_id) REFERENCES prj4.product (seq);
+    ADD CONSTRAINT FK_ORDER_ITEMS_ON_PRODUCT_NO FOREIGN KEY (product_no) REFERENCES prj4.product (product_no);
+
+INSERT INTO member (
+    member_no, auth, member_id, password, name, email, birth_date,
+    phone, addr, addr_detail, post_code
+)
+VALUES (
+           'M001', 'user', 'testuser', 'testpw', '테스트유저', 'test@example.com', '1995-01-01',
+           '010-1234-5678', '서울시 강남구', '역삼동 123', '06236'
+       );
+
+INSERT INTO product (
+    product_no, category, brand, name, standard, stock, price, note, state
+)
+VALUES (
+           'PROD901', '스킨케어', '토닥토닥', '테스트 상품', '500ml', 100, 15000, '테스트용 상품입니다', '판매중'
+       );
+
+-- 정상 주문
+INSERT INTO order_manage (
+    order_no, order_date, total_price, status, track_no, member_seq, del_yn
+)
+VALUES (
+           'ORD001', NOW(), 30000, '배송중', 'T1234567890', 1, 'N'
+       );
+
+-- 삭제된 주문
+INSERT INTO order_manage (
+    order_no, order_date, total_price, status, track_no, member_seq, del_yn
+)
+VALUES (
+           'ORD002', NOW(), 15000, '배송완료', 'T0000000001', 1, 'Y'
+       );
+
+-- ORD001: 정상 주문
+INSERT INTO order_items (quantity, order_no, product_no)
+VALUES (2, 'ORD001', 'PROD001');
+
+-- ORD002: 삭제된 주문
+INSERT INTO order_items (quantity, order_no, product_no)
+VALUES (1, 'ORD002', 'PROD001');

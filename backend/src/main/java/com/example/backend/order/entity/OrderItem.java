@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @Entity
 @Table(name = "order_items")
 @Getter
 @Setter
 @ToString
 public class OrderItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer seq;
@@ -19,10 +21,10 @@ public class OrderItem {
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_no", referencedColumnName = "order_no")
     private OrderManage orderManage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_no", referencedColumnName = "product_no")
     private Product product;
 }

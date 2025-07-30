@@ -106,13 +106,13 @@ function App() {
             {/* 주문배송조회 목록 */}
             <Route path="order/list" element={<OrderList />} />
             {/* 주문배송조회 상세 */}
-            <Route path="order/detail" element={<OrderDetail />} />
+            <Route path="order/:orderId" element={<OrderDetail />} />
             {/* 상품수령 상세 */}
-            <Route path="receive" element={<ReceiveForm />} />
+            <Route path="receive/:orderId" element={<ReceiveForm />} />
             {/* 상품수령 업데이트 */}
             <Route path="receive/exec" element={<ReceiveExec />} />
             {/* 상품취소 상세 */}
-            <Route path="cancel" element={<CancelForm />} />
+            <Route path="cancel/:orderId" element={<CancelForm />} />
             {/* 상품취소 업데이트 */}
             <Route path="cancel/exec" element={<CancelExec />} />
             {/* 카테고리 등록 */}

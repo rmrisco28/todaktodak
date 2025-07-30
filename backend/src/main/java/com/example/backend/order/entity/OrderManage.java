@@ -32,14 +32,16 @@ public class OrderManage {
 
     private String status;
 
-    @Column(name = "tracking_number")
-    private String trackingNumber;
+    @Column(name = "track_no")
+    private String trackNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_seq")
     private Member member;
 
-    // ✅ 추가된 부분
     @OneToMany(mappedBy = "orderManage", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
+
+    @Column(name = "del_yn")
+    private String delYn;
 }
