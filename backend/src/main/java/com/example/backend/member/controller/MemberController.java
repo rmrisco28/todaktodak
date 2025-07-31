@@ -53,7 +53,7 @@ public class MemberController {
 
     // 회원 삭제(관리자)
     @PutMapping("{seq}/delete")
-    public ResponseEntity<?> delete(@PathVariable Integer seq) {
+    public ResponseEntity<?> MemberDelete(@PathVariable Integer seq) {
         try {
             memberService.updateDelYn(seq);
         } catch (Exception e) {
@@ -112,6 +112,23 @@ public class MemberController {
     @GetMapping("myinfo/{memberId}")
     public ResponseEntity<?> getMyInfo(@PathVariable String memberId) {
         return ResponseEntity.ok().body(memberService.getMyInfo(memberId));
+    }
+
+    // 회원 탈퇴(회원)
+    @PutMapping("{memberId}/withdraw")
+    public ResponseEntity<?> delete(@PathVariable String memberId) {
+        try {
+            memberService.delete(memberId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", "회원탈퇴가 완료되었습니다.")));
     }
 
     // 회원 정보 수정(회원)
