@@ -32,7 +32,8 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
                         c.name,
                         c.view,
                         c.insertDttm,
-                        c.delYn)
+                        c.delYn,
+                        c.useYn)
             FROM Contact c
             WHERE (c.useYn = true
                    And c.delYn = false)
@@ -62,10 +63,11 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
                         c.name ,
                         c.view,
                         c.updateDttm,
-                        c.delYn)
+                        c.delYn,
+                        c.useYn)
                         FROM Contact c
                         WHERE (:keyword = '' OR c.name Like %:keyword% OR c.title LIKE %:keyword%)
-            ORDER By c.updateDttm DESC 
+            ORDER By c.updateDttm DESC
             """)
     Page<ContactDto> findAllByAdmin(String keyword, PageRequest pageRequest);
 

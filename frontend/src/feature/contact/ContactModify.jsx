@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
@@ -16,6 +17,7 @@ export function ContactModify() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [name, setName] = useState("");
+  const [useYn, setUseYn] = useState(true);
   const { seq } = useParams();
   const [isProcessing, setIsProcessing] = useState();
 
@@ -37,6 +39,7 @@ export function ContactModify() {
         setTitle(data.title);
         setContent(data.content);
         setName(data.name);
+        setUseYn(data.useYn);
       })
       .catch((err) => {
         console.log("no");
@@ -53,6 +56,7 @@ export function ContactModify() {
         title,
         content,
         name,
+        useYn,
       })
       .then((res) => {
         console.log("ok");
@@ -72,6 +76,13 @@ export function ContactModify() {
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <h2 className="mb-3">문의 내용 수정</h2>
+          <FormCheck
+            type="checkbox"
+            label={useYn ? "게시물 보임" : "게시물 숨김"}
+            checked={useYn}
+            onChange={(e) => setUseYn(e.target.checked)}
+            value={useYn}
+          />
           <div className="mb-3">
             <FormGroup>
               <FormLabel>제목</FormLabel>

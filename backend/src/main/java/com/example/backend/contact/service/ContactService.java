@@ -93,6 +93,7 @@ public class ContactService {
         caf.setName(contact.getName());
         caf.setReply(contact.getReply());
 
+
         return caf;
     }
 
@@ -106,6 +107,8 @@ public class ContactService {
         contact.setContent(cmf.getContent());
         contact.setName(cmf.getName());
         contact.setUpdateDttm(LocalDateTime.now());
+        contact.setUseYn(cmf.getUseYn());
+
         System.out.println(contact + "33333333333333333333333333");
 
 
