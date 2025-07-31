@@ -4,15 +4,17 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
 export function ProductAdd() {
+  const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
   const [brand, setBrand] = useState("");
   const [name, setName] = useState("");
@@ -24,6 +26,12 @@ export function ProductAdd() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get(`/api/category/formSelect`).then((res) => {
+      setCategoryList(res.data);
+    });
+  }, []);
 
   let validate = true;
   if (
@@ -71,14 +79,23 @@ export function ProductAdd() {
       <Col xs={12} md={8} lg={6}>
         <h2 className="mb-4">관리 상품 등록</h2>
         <div>
-          {/* TODO [@minki] Selectbox + 카테고리 관리DB 추가 */}
           <FormGroup className="mb-3" controlId="formCategory">
-            <FormLabel>분류</FormLabel>
-            <FormControl
-              value={category}
+            <FormLabel>카테고리</FormLabel>
+            <FormSelect
+              className="mb-3"
               onChange={(e) => setCategory(e.target.value)}
-            ></FormControl>
+            >
+              <option>카테고리 선택</option>
+              {categoryList.map((item) => (
+                <option value={item.name} key={item.seq}>
+                  {item.name}
+                </option>
+              ))}
+            </FormSelect>
           </FormGroup>
+          <Button variant="primary" onClick={() => navigate(`/category/add`)}>
+            카테고리 등록
+          </Button>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formName">

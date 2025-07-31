@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -114,6 +115,16 @@ public class CategoryController {
                     Map.of("type", "error", "text", e.getMessage())));
         }
 
+    }
+
+    /**
+     * FormSelect 카테고리 목록 조회 (관리자)
+     *
+     * @return
+     */
+    @GetMapping("formSelect")
+    public List<CategoryDto> getAllCategorys() {
+        return categoryService.categoryList();
     }
 
 }

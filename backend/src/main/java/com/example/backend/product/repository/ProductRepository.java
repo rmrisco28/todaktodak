@@ -2,6 +2,7 @@ package com.example.backend.product.repository;
 
 import com.example.backend.product.dto.ProductDto;
 import com.example.backend.product.dto.ProductListDto;
+import com.example.backend.product.dto.ProductNameListDto;
 import com.example.backend.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,4 +60,19 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Object> findByName(String productName);
 
     Product findByProductNo(String productNo);
+
+    @Query("""
+            SELECT new com.example.backend.product.dto.ProductNameListDto(
+                    p.seq,
+                    p.productNo,
+                    p.name,
+                    p.stock,
+                    p.price
+                    )
+                    FROM Product p
+                    WHERE p.category = :categoryName
+                      AND p.useYn = true
+                      AND p.delYn = false
+            """)
+    List<ProductNameListDto> findProductByCategory(String categoryName);
 }

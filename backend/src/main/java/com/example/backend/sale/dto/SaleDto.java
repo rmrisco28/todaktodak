@@ -13,6 +13,7 @@ import java.util.List;
 public class SaleDto {
     private Integer seq;
     private String saleNo;
+    private String productNo;
     private String category;
     private String title;
     private Integer Quantity;
@@ -26,9 +27,10 @@ public class SaleDto {
     private List<SaleImageThumbDto> thumbnails;
     private List<SaleImageContentDto> contentImages;
 
-    public SaleDto(Integer seq, String saleNo, String category, String title, Integer quantity, Integer price, Integer deliveryFee, String content, LocalDateTime insertDttm, LocalDateTime updateDttm, Boolean useYn) {
+    public SaleDto(Integer seq, String saleNo, String productNo, String category, String title, Integer quantity, Integer price, Integer deliveryFee, String content, LocalDateTime insertDttm, LocalDateTime updateDttm, Boolean useYn) {
         this.seq = seq;
         this.saleNo = saleNo;
+        this.productNo = productNo;
         this.category = category;
         this.title = title;
         Quantity = quantity;

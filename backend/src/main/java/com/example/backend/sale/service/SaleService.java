@@ -1,5 +1,7 @@
 package com.example.backend.sale.service;
 
+import com.example.backend.product.entity.Product;
+import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.sale.dto.*;
 import com.example.backend.sale.entity.*;
 import com.example.backend.sale.repository.SaleImageContentRepository;
@@ -31,6 +33,7 @@ public class SaleService {
     private final SaleRepository saleRepository;
     private final SaleImageThumbRepository saleImageThumbRepository;
     private final SaleImageContentRepository saleImageContentRepository;
+    private final ProductRepository productRepository;
 
     public void add(SaleAddForm dto) {
         // TODO [@minki] 권한 체크 (관리자)
@@ -47,6 +50,8 @@ public class SaleService {
         String seqStr = String.format("%07d", latestSeq);
 
         Sale sale = new Sale();
+        Product product = productRepository.findByProductNo(dto.getProductNo());
+        sale.setProductNo(product);
         sale.setSaleNo(code + date + seqStr);
         sale.setCategory(dto.getCategory());
         sale.setTitle(dto.getTitle());
@@ -235,6 +240,8 @@ public class SaleService {
         Sale dbData = saleRepository.findById(dto.getSeq()).get();
 
         dbData.setCategory(dto.getCategory());
+        Product product = productRepository.findByProductNo(dto.getProductNo());
+        dbData.setProductNo(product);
         dbData.setTitle(dto.getTitle());
         dbData.setQuantity(dto.getQuantity());
         dbData.setPrice(dto.getPrice());

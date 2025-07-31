@@ -38,6 +38,7 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
             SELECT new com.example.backend.sale.dto.SaleDto(
             s.seq,
             s.saleNo,
+            s.productNo.productNo,
             s.category,
             s.title,
             s.quantity,

@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class SaleAddForm {
     private String category;
+    private String productNo;
     private String title;
     private Integer quantity;
     private Integer price;
