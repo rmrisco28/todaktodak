@@ -43,7 +43,7 @@ export function MemberSignup() {
   const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
 
   const validatePassword = (value) =>
-    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/.test(value);
+    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 
   // 아이디 중복 확인
   const handleCheckMemberId = () => {
