@@ -17,6 +17,7 @@ import java.util.Map;
 public class BuyController {
     private final BuyService buyService;
 
+    // 주문 배송, 결제 정보
     @PostMapping("buy")
     public ResponseEntity<?> buy(@RequestBody OrderInfoDto oid) {
         System.out.println("BuyController.buy");

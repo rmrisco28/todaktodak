@@ -120,7 +120,7 @@ export function ContactDeletedDetail() {
         {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
         {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
         {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}
-        {/* 삭제 모달*/}
+        {/* 복구 모달*/}
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
             <Modal.Title>복구 여부 확인</Modal.Title>

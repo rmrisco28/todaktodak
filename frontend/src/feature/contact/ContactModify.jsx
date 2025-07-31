@@ -6,6 +6,7 @@ import {
   FormLabel,
   Modal,
   Row,
+  Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -16,10 +17,16 @@ export function ContactModify() {
   const [content, setContent] = useState("");
   const [name, setName] = useState("");
   const { seq } = useParams();
+  const [isProcessing, setIsProcessing] = useState();
 
   const [modalShow, setModalShow] = useState(false);
 
   let navigate = useNavigate();
+
+  let validate = true;
+  if (title.trim() === "" || content.trim() === "" || name.trim() === "") {
+    validate = false;
+  }
 
   useEffect(() => {
     axios
@@ -110,7 +117,13 @@ export function ContactModify() {
           >
             취소
           </Button>
-          <Button onClick={handleSaveButtonClick}>저장</Button>
+          <Button
+            onClick={handleSaveButtonClick}
+            disabled={isProcessing || !validate}
+          >
+            {isProcessing && <Spinner size="sm" />}
+            {isProcessing || "저장"}
+          </Button>
         </Col>
 
         {/* 취소 모달*/}

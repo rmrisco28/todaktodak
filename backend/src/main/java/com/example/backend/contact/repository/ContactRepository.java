@@ -69,6 +69,10 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
             """)
     Page<ContactDto> findAllByAdmin(String keyword, PageRequest pageRequest);
 
+
+    @Query("SELECT MAX(c.seq) FROM Contact c")
+    Integer findMaxSeq();
+
 //    @Query("SELECT MAX(c.seq)FROM Contact c")
 //    Integer findMaxSeq();
 }
