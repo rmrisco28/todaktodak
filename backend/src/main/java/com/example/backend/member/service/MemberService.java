@@ -214,7 +214,7 @@ public class MemberService {
         return true;
     }
 
-  
+
     public MyInfoDto getMyInfo(String memberId) {
         Member dbData = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다." + memberId));
@@ -248,7 +248,8 @@ public class MemberService {
         }
 
         memberRepository.save(dbData);
-      
+    }
+
     public String getToken(MemberLoginForm dto) {
         // id 조회
         Optional<Member> dbData = memberRepository.findByMemberId(dto.getMemberId());
@@ -277,6 +278,6 @@ public class MemberService {
         }
 
         throw new RuntimeException("아이디 및 패스워드가 일치하지 않습니다.");
-      
+
     }
 }
