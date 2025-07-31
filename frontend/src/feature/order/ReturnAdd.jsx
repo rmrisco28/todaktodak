@@ -1,43 +1,88 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Card, Button, Container } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export function ReturnAdd() {
-    const location = useLocation();
+// ✅ 상품 수령 확인 폼 컴포넌트
+// - 사용자가 배송 완료된 상품에 대해 "수령 확인"을 진행하는 화면
+export function ReceiveForm() {
+    const { orderId } = useParams(); // URL 파라미터에서 주문번호(seq) 가져옴
     const navigate = useNavigate();
-    const { orderId, productNames } = location.state || {};
 
-    if (!orderId || !productNames) {
-        return (
-            <Container className="mt-5 text-center">
-                <h4>잘못된 접근입니다.</h4>
-                <Button onClick={() => navigate("/")}>홈으로</Button>
-            </Container>
-        );
-    }
+    const [order, setOrder] = useState(null);  // 주문 정보 상태
+    const [memo, setMemo] = useState("");      // 수령 메모 상태
 
+    // ✅ 컴포넌트 마운트 시 주문 정보 불러오기
+    useEffect(() => {
+        axios
+            .get("/api/receive", {
+                params: { orderManageSeq: orderId }, // 백엔드에 전달할 주문번호
+            })
+            .then((res) => {
+                setOrder(res.data); // 응답 받은 주문 정보 저장
+            })
+            .catch(() => {
+                alert("수령 정보를 불러오는 데 실패했습니다.");
+            });
+    }, [orderId]);
+
+    // ✅ 수령 확인 버튼 클릭 시 처리
+    const handleClick = () => {
+        const memberNo = localStorage.getItem("memberNo");
+        if (!memberNo) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        // 수령 실행 페이지로 이동하며 필요한 데이터(state)를 함께 전달
+        navigate("/receive/exec", {
+            state: {
+                orderManageSeq: parseInt(orderId), // 주문 번호 (정수형)
+                memberNo: memberNo,                // 수령자 정보
+                memo: memo,                        // 수령 메모
+            },
+        });
+    };
+
+    // ✅ 주문 정보 로딩 중일 경우 메시지 표시
+    if (!order) return <div>로딩 중...</div>;
+
+    // ✅ 화면 출력 (주문 정보 + 수령 메모 입력 + 버튼)
     return (
-        <Container className="mt-5">
-            <Card className="text-center shadow">
-                <Card.Header className="bg-success text-white fs-4">
-                    반품 신청 완료
-                </Card.Header>
-                <Card.Body>
-                    <Card.Title>반품 신청이 접수되었습니다.</Card.Title>
-                    <Card.Text className="mt-3">
-                        <strong>주문번호:</strong> {orderId} <br />
-                        <strong>반품 상품:</strong> {productNames}
-                    </Card.Text>
-                    <Card.Text className="text-muted mt-2">
-                        접수된 반품은 평균 3~5일 내에 처리됩니다.
-                        <br />
-                        처리 상태는 마이페이지에서 확인 가능합니다.
-                    </Card.Text>
-                    <Button variant="primary" onClick={() => navigate("/mypage/orders")}>
-                        주문내역 보기
-                    </Button>
-                </Card.Body>
-            </Card>
-        </Container>
+        <div className="container mt-4">
+            <h3>상품 수령 확인</h3>
+
+            {/* 주문 정보 표시 테이블 */}
+            <table className="table mt-3">
+                <tbody>
+                <tr>
+                    <th>주문번호</th>
+                    <td>{order.productName}</td> {/* ❗ 실제로는 주문번호가 아니라 상품명으로 추정됨 */}
+                </tr>
+                <tr>
+                    <th>배송 상태</th>
+                    <td>{order.status}</td>
+                </tr>
+                <tr>
+                    <th>주문 일자</th>
+                    <td>{order.orderDate}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            {/* 수령 메모 입력란 */}
+            <div className="form-group mt-3">
+                <label>수령 메모</label>
+                <textarea
+                    className="form-control"
+                    value={memo}
+                    onChange={(e) => setMemo(e.target.value)}
+                />
+            </div>
+
+            {/* 수령 확인 버튼 */}
+            <button className="btn btn-primary mt-3" onClick={handleClick}>
+                수령 확인
+            </button>
+        </div>
     );
 }
