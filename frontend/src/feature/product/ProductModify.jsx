@@ -32,8 +32,8 @@ export function ProductModify() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`/api/product/category`).then((res) => {
-      setCategoryList(res.data.categoryList);
+    axios.get(`/api/category/formSelect`).then((res) => {
+      setCategoryList(res.data);
     });
   }, []);
 
