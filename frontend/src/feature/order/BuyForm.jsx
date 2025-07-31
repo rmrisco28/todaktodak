@@ -8,7 +8,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -24,9 +24,14 @@ export function BuyForm() {
   const [isCustom, setIsCustom] = useState(false);
   const [isProcessing, setIsProcessing] = useState();
 
+  const [orderCount, setOrderCount] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+
   let navigate = useNavigate();
 
   useEffect(() => {
+    setOrderCount(searchParams.get("orderCount") || 1);
+
     axios
       .get(`/api/sale/detail/${seq}`)
       .then((res) => {
