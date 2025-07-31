@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
   Image,
   ListGroup,
   ListGroupItem,
@@ -13,22 +14,28 @@ import {
   Stack,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { TfiTrash } from "react-icons/tfi";
 
 export function ProductModify() {
+  const [categoryList, setCategoryList] = useState([]);
   const [product, setProduct] = useState(null);
 
   const [images, setImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
   const [modalShow, setModalShow] = useState(false);
-  const [searchParams] = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const { seq } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get(`/api/product/category`).then((res) => {
+      setCategoryList(res.data.categoryList);
+    });
+  }, []);
 
   useEffect(() => {
     axios
@@ -108,13 +115,23 @@ export function ProductModify() {
         <div>
           {/* TODO [@minki] Selectbox + 카테고리 관리DB 추가 */}
           <FormGroup className="mb-3" controlId="formCategory">
-            <FormLabel>분류</FormLabel>
-            <FormControl
-              value={product.category}
+            <FormLabel>카테고리</FormLabel>
+            <FormSelect
+              className="mb-3"
               onChange={(e) =>
                 setProduct({ ...product, category: e.target.value })
               }
-            ></FormControl>
+            >
+              {categoryList.map((item) => (
+                <option
+                  value={item.name}
+                  key={item.seq}
+                  selected={item.name == product.category}
+                >
+                  {item.name}
+                </option>
+              ))}
+            </FormSelect>
           </FormGroup>
         </div>
         <div>
