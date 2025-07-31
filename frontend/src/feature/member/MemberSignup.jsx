@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Row,
 } from "react-bootstrap";
 import { useState } from "react";
@@ -12,6 +13,8 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 export function MemberSignup() {
+  // ---------- 상태 선언 ----------
+  // 입력 필드 값 상태
   const [memberId, setMemberId] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -23,12 +26,54 @@ export function MemberSignup() {
   const [addressDetail, setAddressDetail] = useState("");
   const [postCode, setPostCode] = useState("");
 
+  // 생년월일 구성용 연도/월/일
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
 
   const navigate = useNavigate();
 
+  // 유효성 검사 상태
+  const [errors, setErrors] = useState({});
+  const [valids, setValids] = useState({});
+
+  // 유효성 검사 함수
+  const validateEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+  const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
+
+  const validatePassword = (value) =>
+    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/.test(value);
+
+  // 아이디 중복 확인
+  const handleCheckMemberId = () => {
+    if (!memberId) return;
+
+    axios
+      .get(`/api/member/check-id?memberId=${memberId}`)
+      .then((res) => {
+        if (res.data.exists) {
+          // 이미 존재
+          setErrors((prev) => ({
+            ...prev,
+            memberId: "이미 존재하는 아이디입니다.",
+          }));
+          setValids((prev) => ({ ...prev, memberId: null }));
+        } else {
+          // 사용 가능
+          setErrors((prev) => ({ ...prev, memberId: null }));
+          setValids((prev) => ({
+            ...prev,
+            memberId: "사용 가능한 아이디입니다.",
+          }));
+        }
+      })
+      .catch(() => {
+        setErrors((prev) => ({ ...prev, memberId: "중복 확인 중 오류 발생" }));
+      });
+  };
+
+  // 주소 검색 버튼 클릭
   const handleSearchButtonClick = () => {
     new window.daum.Postcode({
       oncomplete: function (data) {
@@ -53,7 +98,28 @@ export function MemberSignup() {
     }).open();
   };
 
+  // 회원가입 버튼 클릭
   function handleSaveButtonClick() {
+    const newErrors = {};
+
+    // 각 항목 유효성 체크
+    if (!memberId) newErrors.memberId = "아이디를 입력하세요.";
+    if (!validatePassword(password))
+      newErrors.password =
+        "비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.";
+    if (password !== password2)
+      newErrors.password2 = "비밀번호가 일치하지 않습니다.";
+    if (!validateEmail(email))
+      newErrors.email = "이메일 형식이 올바르지 않습니다.";
+    if (!validatePhone(phone))
+      newErrors.phone = "휴대폰 번호 형식이 올바르지 않습니다.";
+    if (!birthDate) newErrors.birthDate = "생년월일을 선택해주세요.";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    // 회원가입 요청
     axios
       .post("/api/member/signup", {
         memberId: memberId,
@@ -75,30 +141,48 @@ export function MemberSignup() {
         navigate("/login");
       })
       .catch((err) => {
-        console.log("err");
+        console.log(err);
+        alert("회원가입 실패");
       })
       .finally(() => {});
   }
 
+  // 생년월일 조합
   function updateBirthDate(y, m, d) {
     if (y && m && d) {
       setBirthDate(`${y}-${m}-${d}`); // YYYY-MM-DD 형식
     }
   }
 
+  // 화면 렌더링
   return (
     <Row className="d-flex justify-content-center">
       <Col md="auto">
         <h3 className="mb-4 text-center">회원 가입</h3>
-        {/* 아이디 */}
+        {/* 아이디 / 중복확인 */}
         <div>
           <FormGroup className="mb-3" controlId="memberId">
             <FormLabel>아이디</FormLabel>
-            <FormControl
-              style={{ width: "400px" }}
-              value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
-            />
+            <div className="d-flex gap-2">
+              <FormControl
+                style={{ width: "300px" }}
+                value={memberId}
+                onChange={(e) => {
+                  setMemberId(e.target.value);
+                  setErrors((prev) => ({ ...prev, memberId: null }));
+                  setValids((prev) => ({ ...prev, memberId: null }));
+                }}
+              />
+              <Button variant="outline-secondary" onClick={handleCheckMemberId}>
+                중복 확인
+              </Button>
+            </div>
+            {errors.memberId && (
+              <FormText className="text-danger">{errors.memberId}</FormText>
+            )}
+            {valids.memberId && (
+              <FormText className="text-success">{valids.memberId}</FormText>
+            )}
           </FormGroup>
         </div>
         {/* 비밀번호 */}
@@ -109,8 +193,22 @@ export function MemberSignup() {
               type="password"
               value={password}
               style={{ width: "400px" }}
-              onChange={(e) => setPassword(e.target.value)}
-            ></FormControl>
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (!validatePassword(e.target.value)) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    password:
+                      "비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                  }));
+                } else {
+                  setErrors((prev) => ({ ...prev, password: null }));
+                }
+              }}
+            />
+            {errors.password && (
+              <FormText className="text-danger">{errors.password}</FormText>
+            )}
           </FormGroup>
         </div>
         {/* 비밀번호 확인 */}
@@ -121,8 +219,20 @@ export function MemberSignup() {
               type="password"
               style={{ width: "400px" }}
               value={password2}
-              onChange={(e) => setPassword2(e.target.value)}
+              onChange={(e) => {
+                setPassword2(e.target.value);
+                setErrors((prev) => ({
+                  ...prev,
+                  password2:
+                    e.target.value !== password
+                      ? "비밀번호가 일치하지 않습니다."
+                      : null,
+                }));
+              }}
             />
+            {errors.password2 && (
+              <FormText className="text-danger">{errors.password2}</FormText>
+            )}
           </FormGroup>
         </div>
         {/* 이름 */}
@@ -143,8 +253,19 @@ export function MemberSignup() {
             <FormControl
               style={{ width: "400px" }}
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => {
+                setPhone(e.target.value);
+                setErrors((prev) => ({
+                  ...prev,
+                  phone: validatePhone(e.target.value)
+                    ? null
+                    : "번호 형식이 올바르지 않습니다.",
+                }));
+              }}
             />
+            {errors.phone && (
+              <FormText className="text-danger">{errors.phone}</FormText>
+            )}
           </FormGroup>
         </div>
         {/* 생년월일 */}
@@ -206,6 +327,9 @@ export function MemberSignup() {
                 ))}
               </FormControl>
             </div>
+            {errors.birthDate && (
+              <FormText className="text-danger">{errors.birthDate}</FormText>
+            )}
           </FormGroup>
         </div>
         {/* 이메일 */}
@@ -216,8 +340,19 @@ export function MemberSignup() {
               type="email"
               style={{ width: "400px" }}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors((prev) => ({
+                  ...prev,
+                  email: validateEmail(e.target.value)
+                    ? null
+                    : "이메일 형식이 올바르지 않습니다.",
+                }));
+              }}
             />
+            {errors.email && (
+              <FormText className="text-danger">{errors.email}</FormText>
+            )}
           </FormGroup>
         </div>
         {/* 우편번호 */}

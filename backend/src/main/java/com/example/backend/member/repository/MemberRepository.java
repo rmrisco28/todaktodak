@@ -16,4 +16,6 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 
     @Query("SELECT MAX(m.seq) FROM Member m")
     Integer findMaxSeq();
+
+    boolean existsByMemberId(String memberId);
 }

@@ -68,6 +68,11 @@ public class MemberService {
         }
     }
 
+    // 아이디 중복 확인
+    public boolean existsByMemberId(String memberId) {
+        return memberRepository.existsByMemberId(memberId);
+    }
+
     // 유효성(중복) 검사
     public boolean validate(MemberSignupForm memberSignupForm) {
         // memberId 중복 여부

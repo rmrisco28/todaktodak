@@ -38,6 +38,13 @@ public class MemberController {
                         Map.of("type", "success", "text", "회원가입 되었습니다.")));
     }
 
+    // 아이디 중복 확인
+    @GetMapping("/check-id")
+    public ResponseEntity<?> checkMemberId(@RequestParam String memberId) {
+        boolean exists = memberService.existsByMemberId(memberId);
+        return ResponseEntity.ok().body(Map.of("exists", exists));
+    }
+
     // 회원 목록 보기
     @GetMapping("list")
     public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
