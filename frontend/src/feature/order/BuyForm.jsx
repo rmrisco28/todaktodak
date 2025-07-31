@@ -4,11 +4,12 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Image,
   Row,
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -23,10 +24,17 @@ export function BuyForm() {
   const [request, setRequest] = useState("집 앞에 놔주세요.");
   const [isCustom, setIsCustom] = useState(false);
   const [isProcessing, setIsProcessing] = useState();
+  const [mainThumbnail, setMainThumbnail] = useState([]);
+  const [orderCount, setOrderCount] = useState(1);
+  const [searchParams] = useSearchParams();
+
+  const handleThumbnailClick = (path) => setMainThumbnail(path);
 
   let navigate = useNavigate();
 
   useEffect(() => {
+    setOrderCount(searchParams.get("orderCount") || 1);
+
     axios
       .get(`/api/sale/detail/${seq}`)
       .then((res) => {
@@ -143,9 +151,13 @@ export function BuyForm() {
         name: name,
         phoneNo: phoneNumber,
         postCode: postalCode,
+        saleNo: sale.saleNo,
         addr: address,
         addrDetail: addressDetail,
         request: request,
+        price: sale.price,
+        deliveryFee: sale.deliveryFee,
+        orderCount: orderCount,
       })
       .then((res) => {
         console.log("ok");
@@ -165,10 +177,51 @@ export function BuyForm() {
   return (
     <>
       <Row className="justify-content-center">
+        <Col md={4} lg={4}>
+          <h2 className="mb-3">구매할 제품</h2>
+          <br />
+          <Image
+            src={sale.thumbnails[0]?.path}
+            fluid
+            rounded
+            className="border"
+          />
+          <div className="d-flex gap-2 flex-wrap">
+            {sale.thumbnails.map((image) => (
+              <Image
+                key={image.name}
+                src={image.path}
+                thumbnail
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  objectFit: "cover",
+                  cursor: "pointer",
+                  border:
+                    mainThumbnail === image.path
+                      ? "2px solid #007bff"
+                      : "1px solid #dee2e6",
+                }}
+                onClick={() => handleThumbnailClick(image.path)}
+              />
+            ))}
+          </div>
+        </Col>
+        <Col md={4} lg={4}>
+          <h5 className="mb-3">{sale.title}</h5>
+          <p>{sale.no}</p>
+          <p>
+            가격: {sale.price.toLocaleString()}
+            <br />
+            수량: {orderCount}
+            <br />
+            배송비: {sale.deliveryFee.toLocaleString()}
+          </p>
+        </Col>
+        <Col xs={12} md={8} lg={6}></Col>
         <Col xs={12} md={8} lg={6}>
-          <h2>상품구매 / 결제</h2>
           <hr />
-
+          <h2 className="mb-3">상품구매 / 결제</h2>
           <div className="mb-3">
             <FormGroup>
               <FormLabel>이름</FormLabel>
@@ -281,13 +334,24 @@ export function BuyForm() {
             </FormGroup>
           </div>
 
-          <div className="mb-5">
+          <div className="mb-3">
             <FormLabel>결제수단</FormLabel>
-            {/*todo gg 결제수단 api?*/}
+            {/*todo [@gg] 결제수단 api?*/}
             <FormControl value={"api?"} disabled />
           </div>
-          <hr className="mb-5" />
+          <hr className="mb-3" />
 
+          <div className="mb-5">
+            <FormLabel style={{ fontSize: "20px" }}>최종 결제 금액</FormLabel>
+            <FormControl
+              style={{ fontSize: "20px" }}
+              value={
+                (sale.price * orderCount + sale.deliveryFee).toLocaleString() +
+                "원"
+              }
+              readOnly
+            />
+          </div>
           {/*결제 버튼*/}
           <div className="d-grid gap-2 mx-auto">
             <Button onClick={handleSuccessButtonClick} disabled={!validate}>
