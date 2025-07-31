@@ -85,6 +85,7 @@ export function ProductAdd() {
               className="mb-3"
               onChange={(e) => setCategory(e.target.value)}
             >
+              <option>카테고리 선택</option>
               {categoryList.map((item) => (
                 <option value={item.name} key={item.seq}>
                   {item.name}
@@ -92,6 +93,9 @@ export function ProductAdd() {
               ))}
             </FormSelect>
           </FormGroup>
+          <Button variant="primary" onClick={() => navigate(`/category/add`)}>
+            카테고리 등록
+          </Button>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formName">
