@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -41,8 +40,9 @@ public class MemberController {
 
     // 회원 목록 보기
     @GetMapping("list")
-    public List<MemberListInfo> list() {
-        return memberService.list();
+    public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
+
+        return memberService.list(pageNumber);
     }
 
     // 회원 정보 상세 보기
@@ -108,6 +108,31 @@ public class MemberController {
                         Map.of("type", "success", "text", "회원등록이 완료되었습니다.")));
     }
 
+    // 회원 상세 보기(회원)
+    @GetMapping("myinfo/{memberId}")
+    public ResponseEntity<?> getMyInfo(@PathVariable String memberId) {
+        return ResponseEntity.ok().body(memberService.getMyInfo(memberId));
+    }
+
+    // 회원 정보 수정(회원)
+    @PutMapping("/myinfo/modify/{memberId}")
+    public ResponseEntity<?> MyInfoModify(@PathVariable String memberId,
+                                          @RequestBody MyInfoModifyDto dto) {
+        try {
+            memberService.MyInfoModify(memberId, dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", "회원 정보가 수정되었습니다.")));
+    }
+
+    // 로그인
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberLoginForm memberLoginForm) {
         try {

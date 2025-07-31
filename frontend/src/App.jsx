@@ -39,6 +39,8 @@ import { DeliveryAdd } from "./feature/delivery/DeliveryAdd.jsx";
 import { DeliveryDetail } from "./feature/delivery/DeliveryDetail.jsx";
 import { DeliveryList } from "./feature/delivery/DeliveryList.jsx";
 import { DeliveryModify } from "./feature/delivery/DeliveryModify.jsx";
+import { MemberMyInfo } from "./feature/member/MemberMyInfo.jsx";
+import { MemberMyInfoModify } from "./feature/member/MemberMyInfoModify.jsx";
 
 import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
 
@@ -57,14 +59,21 @@ function App() {
             <Route path="logout" element={<MemberLogout />} />
             {/* 회원가입 */}
             <Route path="signup" element={<MemberSignup />} />
-            {/* 회원목록 */}
+            {/* 회원목록(관리자) */}
             <Route path="member/list" element={<MemberList />} />
-            {/* 회원상세 */}
+            {/* 회원상세(관리자) */}
             <Route path="member" element={<MemberDetail />} />
-            {/* 회원수정 */}
+            {/* 회원수정(관리자) */}
             <Route path="member/modify" element={<MemberModify />} />
-            {/* 회원등록 */}
+            {/* 회원등록(관리자) */}
             <Route path="member/add" element={<MemberAdd />} />
+            {/* 회원상세(회원) */}
+            <Route path="member/myinfo/:memberId" element={<MemberMyInfo />} />
+            {/* 회원수정(회원) */}
+            <Route
+              path="member/myinfo/modify/:memberId"
+              element={<MemberMyInfoModify />}
+            />
             {/* 상품 등록 */}
             <Route path="product/add" element={<ProductAdd />} />
             {/* 상품조회 목록 */}

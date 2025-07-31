@@ -4,12 +4,16 @@ import java.time.LocalDateTime;
 
 public interface MemberListInfo {
     // 회원목록폼
-    String getSeq();
+    Integer getSeq();
 
     String getMemberId();
 
     String getName();
 
     LocalDateTime getInsertDttm();
+
+    Boolean getUseYn();
+
+    Boolean getDelYn();
 
 }

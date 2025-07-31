@@ -6,6 +6,8 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.AuthRepository;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,13 +79,30 @@ public class MemberService {
     }
 
     // 회원 목록(관리자)
-    public List<MemberListInfo> list() {
-        return memberRepository.findAllBy();
+    public Map<String, Object> list(Integer pageNumber) {
+        Page<MemberListInfo> memberListInfoPage
+                = memberRepository.findAllBy(PageRequest.of(pageNumber - 1, 10));
+
+        int totalPages = memberListInfoPage.getTotalPages(); // 마지막 페이지
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo,
+                "memberList", memberListInfoPage.getContent());
+
     }
 
     // 회원 상세보기(관리자)
     public MemberDetailForm getMember(Integer seq) {
-        Member db = memberRepository.findById(seq).get();
+        Member db = memberRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException(seq + "번 회원을 찾을 수 없습니다."));
 
         MemberDetailForm dto = new MemberDetailForm();
         dto.setMemberNo(db.getMemberNo());
@@ -114,6 +134,10 @@ public class MemberService {
         dbData.setUpdateDttm(now);
 
         dbData.setState("DELETE");
+
+        dbData.setUseYn(false);
+
+        dbData.setDelYn(true);
 
         memberRepository.save(dbData);
     }
@@ -190,6 +214,41 @@ public class MemberService {
         return true;
     }
 
+  
+    public MyInfoDto getMyInfo(String memberId) {
+        Member dbData = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다." + memberId));
+        MyInfoDto dto = new MyInfoDto();
+
+        dto.setMemberId(dbData.getMemberId());
+        dto.setName(dbData.getName());
+        dto.setEmail(dbData.getEmail());
+        dto.setBirthDate(dbData.getBirthDate());
+        dto.setPhone(dbData.getPhone());
+        dto.setPostCode(dbData.getPostCode());
+        dto.setAddr(dbData.getAddr());
+        dto.setAddrDetail(dbData.getAddrDetail());
+
+        return dto;
+    }
+
+    public void MyInfoModify(String memberId, MyInfoModifyDto dto) {
+        Member dbData = memberRepository.findByMemberId(memberId).get();
+
+        dbData.setMemberId(dto.getMemberId());
+        dbData.setName(dto.getName());
+        dbData.setEmail(dto.getEmail());
+        dbData.setPhone(dto.getPhone());
+        dbData.setPostCode(dto.getPostCode());
+        dbData.setAddr(dto.getAddr());
+        dbData.setAddrDetail(dto.getAddrDetail());
+
+        if (dto.getBirthDate() != null && !dto.getBirthDate().isBlank()) {
+            dbData.setBirthDate(LocalDate.parse(dto.getBirthDate()));
+        }
+
+        memberRepository.save(dbData);
+      
     public String getToken(MemberLoginForm dto) {
         // id 조회
         Optional<Member> dbData = memberRepository.findByMemberId(dto.getMemberId());
@@ -218,5 +277,6 @@ public class MemberService {
         }
 
         throw new RuntimeException("아이디 및 패스워드가 일치하지 않습니다.");
+      
     }
 }

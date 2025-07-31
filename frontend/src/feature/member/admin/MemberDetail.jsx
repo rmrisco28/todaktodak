@@ -222,7 +222,7 @@ export function MemberDetail() {
             </Col>
           </FormGroup>
         </div>
-        {/* 삭제, 수정, 목록 버튼*/}
+        {/* 삭제, 수정 버튼*/}
         <div>
           <Button
             className="me-2"
@@ -237,13 +237,6 @@ export function MemberDetail() {
             onClick={() => navigate(`/member/modify?seq=${params.get("seq")}`)}
           >
             수정
-          </Button>
-          <Button
-            className="ms-5"
-            variant="outline-dark"
-            onClick={() => navigate(`/member/list`)}
-          >
-            목록
           </Button>
         </div>
       </Col>
