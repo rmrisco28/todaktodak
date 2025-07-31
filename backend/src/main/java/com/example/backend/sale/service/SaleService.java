@@ -240,6 +240,8 @@ public class SaleService {
         Sale dbData = saleRepository.findById(dto.getSeq()).get();
 
         dbData.setCategory(dto.getCategory());
+        Product product = productRepository.findByProductNo(dto.getProductNo());
+        dbData.setProductNo(product);
         dbData.setTitle(dto.getTitle());
         dbData.setQuantity(dto.getQuantity());
         dbData.setPrice(dto.getPrice());

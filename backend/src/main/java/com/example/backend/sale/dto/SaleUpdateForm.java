@@ -9,6 +9,7 @@ import java.util.List;
 public class SaleUpdateForm {
     private Integer seq;
     private String category;
+    private String productNo;
     private String title;
     private Integer quantity;
     private Integer price;
