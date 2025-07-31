@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
   Image,
   ListGroup,
   ListGroupItem,
@@ -13,12 +14,17 @@ import {
   Stack,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { TfiTrash } from "react-icons/tfi";
 
 export function SaleModify() {
+  const [productList, setProductList] = useState([]);
+  const [productNo, setProductNo] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
+  const [category, setCategory] = useState("");
+
   const [sale, setSale] = useState(null);
 
   const [thumbnails, setThumbnails] = useState([]);
@@ -26,7 +32,6 @@ export function SaleModify() {
   const [contentImages, setContentImages] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
   const [modalShow, setModalShow] = useState(false);
-  const [searchParams] = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const { seq } = useParams();
@@ -37,6 +42,8 @@ export function SaleModify() {
       .get(`/api/sale/detail/${seq}`)
       .then((res) => {
         setSale(res.data);
+        setCategory(res.data.category);
+        setProductNo(res.data.productNo);
       })
       .catch((err) => {
         toast("해당 판매상품이 존재하지 않습니다.", { type: "warning" });
@@ -45,6 +52,22 @@ export function SaleModify() {
         console.log("항상 실행");
       });
   }, []);
+
+  useEffect(() => {
+    axios.get(`/api/category/formSelect`).then((res) => {
+      setCategoryList(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams();
+    searchParams.set("category", category);
+    axios
+      .get(`/api/product/formSelect`, { params: searchParams })
+      .then((res) => {
+        setProductList(res.data);
+      });
+  }, [category]);
 
   if (!sale) {
     return <Spinner />;
@@ -57,6 +80,7 @@ export function SaleModify() {
       .putForm(`/api/sale/modify/${seq}`, {
         // ...product,
         category: sale.category,
+        productNo: sale.productNo,
         title: sale.title,
         quantity: sale.quantity,
         price: sale.price,
@@ -108,27 +132,45 @@ export function SaleModify() {
       <Col xs={12} md={8} lg={6}>
         <h2 className="mb-4">판매 상품 수정</h2>
         <div>
-          {/* TODO [@minki] Selectbox + 카테고리 관리DB 추가 */}
           <FormGroup className="mb-3" controlId="formCategory">
-            <FormLabel>분류</FormLabel>
-            <FormControl
+            <FormLabel>카테고리</FormLabel>
+            <FormSelect
+              className="mb-3"
               value={sale.category}
-              onChange={(e) => setSale({ ...sale, category: e.target.value })}
-            ></FormControl>
+              onChange={(e) => {
+                setSale({ ...sale, category: e.target.value });
+                setCategory(e.target.value);
+              }}
+            >
+              <option>카테고리 선택</option>
+              {categoryList.map((item) => (
+                <option value={item.name} key={item.seq}>
+                  {item.name}
+                </option>
+              ))}
+            </FormSelect>
           </FormGroup>
         </div>
-        {/* TODO [@minki] 상품 테이블 조회 */}
-        {/*
         <div>
-          <FormGroup className="mb-3" controlId="formName">
-            <FormLabel>상품명</FormLabel>
-            <FormControl
-              value={sale.name}
-              onChange={(e) => setSale({ ...sale, name: e.target.value })}
-            ></FormControl>
+          <FormGroup className="mb-3" controlId="formProduct">
+            <FormLabel>상품</FormLabel>
+            <FormSelect
+              className="mb-3"
+              value={productNo}
+              onChange={(e) => {
+                setSale({ ...sale, productNo: e.target.value });
+                setProductNo(e.target.value);
+              }}
+            >
+              <option>상품 선택</option>
+              {productList.map((item) => (
+                <option value={item.productNo} key={item.seq}>
+                  {item.name}
+                </option>
+              ))}
+            </FormSelect>
           </FormGroup>
         </div>
-        */}
         <div>
           <FormGroup className="mb-3" controlId="formTitle">
             <FormLabel>제목</FormLabel>
@@ -138,59 +180,6 @@ export function SaleModify() {
             ></FormControl>
           </FormGroup>
         </div>
-        {/*
-        <div>
-          <FormGroup className="mb-3" controlId="formBrand">
-            <FormLabel>브랜드명</FormLabel>
-            <FormControl
-              value={sale.brand}
-              onChange={(e) => setSale({ ...sale, brand: e.target.value })}
-            ></FormControl>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formStandard">
-            <FormLabel>규격</FormLabel>
-            <FormControl
-              value={sale.standard}
-              onChange={(e) => setSale({ ...sale, standard: e.target.value })}
-            ></FormControl>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formStock">
-            <FormLabel>재고수량</FormLabel>
-            <FormControl
-              type="number"
-              step={1}
-              value={sale.stock}
-              onChange={(e) => setSale({ ...sale, stock: e.target.value })}
-            ></FormControl>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formPrice">
-            <FormLabel>개당 가격</FormLabel>
-            <FormControl
-              type="number"
-              step={10}
-              value={sale.price}
-              onChange={(e) => setSale({ ...sale, price: e.target.value })}
-            ></FormControl>
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formNote">
-            <FormLabel>비고</FormLabel>
-            <FormControl
-              as="textarea"
-              rows={6}
-              value={sale.note}
-              onChange={(e) => setSale({ ...sale, note: e.target.value })}
-            />
-          </FormGroup>
-        </div>
-        */}
         <div>
           <FormGroup className="mb-3" controlId="formQuantity">
             <FormLabel>판매건당수량</FormLabel>
@@ -200,6 +189,7 @@ export function SaleModify() {
               value={sale.quantity}
               onChange={(e) => setSale({ ...sale, quantity: e.target.value })}
             ></FormControl>
+            {/* TODO [@minki] 상품 테이블의 stock 출력 */}
           </FormGroup>
         </div>
         {/* TODO [@minki] 판매건당가격 price 용어 변경(판매가격 중복방지) */}
@@ -212,9 +202,11 @@ export function SaleModify() {
               value={sale.price}
               onChange={(e) => setSale({ ...sale, price: e.target.value })}
             ></FormControl>
+            {/* TODO [@minki] 상품 테이블의 price 출력 */}
           </FormGroup>
         </div>
         <div>
+          {/* TODO [@minki] 배달업체 데이터 조회  */}
           <FormGroup className="mb-3" controlId="formDeliveryFee">
             <FormLabel>배송비</FormLabel>
             <FormControl
