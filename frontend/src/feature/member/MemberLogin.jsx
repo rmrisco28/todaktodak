@@ -6,23 +6,36 @@ import {
   FormLabel,
   Row,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import { toast } from "react-toastify";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
   const [password, setPassword] = useState("");
+
+  // step2. Use the context (토큰 인증 context 호출)
+  const { login } = useContext(AuthenticationContext);
+
   const navigate = useNavigate();
 
   function handleLogInButtonClick() {
     axios
-      .post(`/member/login`, {
+      .post(`/api/member/login`, {
         memberId: memberId,
         password: password,
       })
       .then((res) => {
-        console.log(res);
+        const token = res.data.token;
+        login(token);
+
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        
         navigate("/");
       })
       .catch((err) => {

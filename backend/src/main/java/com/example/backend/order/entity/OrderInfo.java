@@ -14,7 +14,7 @@ public class OrderInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
-    private Integer id;
+    private Integer seq;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -33,5 +33,8 @@ public class OrderInfo {
 
     @Column(name = "request", nullable = false)
     private String request;
+
+    @Column(name = "order_no", nullable = false, length = 20)
+    private String orderNo;
 
 }

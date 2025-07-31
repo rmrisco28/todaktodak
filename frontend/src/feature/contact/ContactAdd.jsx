@@ -8,6 +8,7 @@ import {
   FormLabel,
   Modal,
   Row,
+  Spinner,
 } from "react-bootstrap";
 import axios from "axios";
 
@@ -15,12 +16,19 @@ export function ContactAdd() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [name, setName] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [modalShow, setModalShow] = useState(false);
 
   let navigate = useNavigate();
 
+  let validate = true;
+  if (title.trim() === "" || content.trim() === "" || name.trim() === "") {
+    validate = false;
+  }
+
   function handleSaveButtonClick() {
+    setIsProcessing(true);
     axios
       .post("/api/contact/add", {
         title: title,
@@ -38,6 +46,7 @@ export function ContactAdd() {
       })
       .finally(() => {
         console.log("finally");
+        setIsProcessing(false);
       });
   }
 
@@ -93,7 +102,13 @@ export function ContactAdd() {
           취소
         </Button>
 
-        <Button onClick={handleSaveButtonClick}>저장</Button>
+        <Button
+          onClick={handleSaveButtonClick}
+          disabled={isProcessing || !validate}
+        >
+          {isProcessing && <Spinner size="sm" />}
+          {isProcessing || "저장"}
+        </Button>
       </Col>
 
       {/* 취소 모달*/}

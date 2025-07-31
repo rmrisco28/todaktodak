@@ -24,7 +24,7 @@ CREATE TABLE contact
     del_yn      BOOLEAN        NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_contact PRIMARY KEY (seq)
 );
-
+/*
 # 게시판 트리거 걸기 자동 값 생성
 DELIMITER
 $$
@@ -42,7 +42,8 @@ BEGIN
                          );
 END $$
 
-DELIMITER;
+DELIMITER
+*/
 
 
 # 게시판 드랍
@@ -52,7 +53,7 @@ DROP TABLE contact;
 SELECT *
 FROM contact;
 
-#임시게시판
+#임시게시판 (사용x)
 CREATE TABLE contact
 (
     seq         INT            NOT NULL,
@@ -72,6 +73,7 @@ CREATE TABLE contact
 CREATE TABLE contact
 (
     seq         INT             NOT NULL AUTO_INCREMENT,
+    contact_no  VARCHAR(20)     NOT NULL UNIQUE,
     title       VARCHAR(255)    NOT NULL,
     name        VARCHAR(50)     NOT NULL,
     content     VARCHAR(10000)  NOT NULL,
@@ -92,6 +94,7 @@ DROP TABLE contact;
 CREATE TABLE order_info
 (
     seq         INT          NOT NUll AUTO_INCREMENT,
+    order_no    VARCHAR(20)  NOT NULL UNIQUE,
     name        VARCHAR(50)  NOT NULL,
     phone_no    VARCHAR(30)  NOT NULL,
     post_code   VARCHAR(10)  NOT NULL,
@@ -117,33 +120,11 @@ DROP TABLE order_info;
     view        INT            NOT NULL DEFAULT 0,
     insert_dttm DATETIME       NOT NULL DEFAULT NOW(),
     update_dttm DATETIME       NOT NULL DEFAULT NOW(),
+    reply       VARBINARY(1000) NOT NULL,
+    reply_dttm  DATETIME        NOT NULL DEFAULT NOW(),
     use_yn      BOOLEAN        NOT NULL DEFAULT TRUE,
     del_yn      BOOLEAN        NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_contact PRIMARY KEY (seq),
     FOREIGN KEY (member_no) REFERENCES member (member_no)
 );*/
 
-# 멤버 게시판 보기용
-/*
-CREATE TABLE member
-(
-    seq         INT AUTO_INCREMENT NOT NULL,
-    member_no   VARCHAR(20)        NOT NULL UNIQUE,
-    auth        VARCHAR(20),
-    member_id   VARCHAR(120)       NOT NULL UNIQUE,
-    password    VARCHAR(255)       NOT NULL,
-    name        VARCHAR(50)        NOT NULL,
-    email       VARCHAR(255)       NOT NULL,
-    birth_date  DATE               NOT NULL,
-    phone       VARCHAR(15)        NOT NULL,
-    addr        VARCHAR(255)       NOT NULL,
-    addr_detail VARCHAR(255)       NOT NULL,
-    post_code   VARCHAR(10)        NOT NULL,
-    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
-    state       VARCHAR(10)        NOT NULL DEFAULT '사용',
-    use_yn      BOOLEAN            NOT NULL DEFAULT TRUE,
-    del_yn      BOOLEAN            NOT NULL DEFAULT FALSE,
-    CONSTRAINT pk_member PRIMARY KEY (seq)
-);
-*/

@@ -1,28 +1,41 @@
 package com.example.backend.member.service;
 
 import com.example.backend.member.dto.*;
+import com.example.backend.member.entity.Auth;
 import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.AuthRepository;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class MemberService {
 
+    private final PasswordEncoder passwordEncoder;
+    private final AuthRepository authRepository;
     private final MemberRepository memberRepository;
+    private final JwtEncoder jwtEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     // 회원 가입
@@ -31,7 +44,7 @@ public class MemberService {
         if (this.validate(memberSignupForm)) {
             Member member = new Member();
             member.setMemberId(memberSignupForm.getMemberId());
-            member.setPassword(memberSignupForm.getPassword());
+            member.setPassword(passwordEncoder.encode(memberSignupForm.getPassword()));
             member.setName(memberSignupForm.getName());
             member.setPhone(memberSignupForm.getPhone());
             member.setBirthDate(LocalDate.parse(memberSignupForm.getBirthDate()));
@@ -151,7 +164,7 @@ public class MemberService {
 
         // 새 비밀번호 입력시에만 적용
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            dbData.setPassword(dto.getPassword());
+            dbData.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
         if (dto.getBirthDate() != null && !dto.getBirthDate().isBlank()) {
@@ -167,7 +180,7 @@ public class MemberService {
             Member member2 = new Member();
             member2.setAuth(memberAddForm.getAuth());
             member2.setMemberId(memberAddForm.getMemberId());
-            member2.setPassword(memberAddForm.getPassword());
+            member2.setPassword(passwordEncoder.encode(memberAddForm.getPassword()));
             member2.setName(memberAddForm.getName());
             member2.setPhone(memberAddForm.getPhone());
             member2.setBirthDate(LocalDate.parse(memberAddForm.getBirthDate()));
@@ -201,6 +214,7 @@ public class MemberService {
         return true;
     }
 
+  
     public MyInfoDto getMyInfo(String memberId) {
         Member dbData = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다." + memberId));
@@ -234,5 +248,35 @@ public class MemberService {
         }
 
         memberRepository.save(dbData);
+      
+    public String getToken(MemberLoginForm dto) {
+        // id 조회
+        Optional<Member> dbData = memberRepository.findByMemberId(dto.getMemberId());
+        if (dbData.isPresent()) {
+            // 입력 password 비교
+            String inputPassword = dto.getPassword();
+            String dbPassword = dbData.get().getPassword();
+            if (passwordEncoder.matches(inputPassword, dbPassword)) {
+                // 사용자 권한 조회
+                List<Auth> authList = authRepository.findByMember(dbData.get());
+                String authListStr = authList.stream()
+                        .map(auth -> auth.getId().getAuthName())
+                        .collect(Collectors.joining(","));
+                // 토큰 생성
+                JwtClaimsSet claim = JwtClaimsSet.builder()
+                        .subject(dto.getMemberId())
+                        .issuer("self")
+                        .issuedAt(Instant.now())
+                        .expiresAt(Instant.now().plusSeconds(60 * 60 * 24 * 365))
+                        .claim("scp", authListStr)
+                        .build();
+
+                // 생성한 토큰 MemberLogin.jsx로 반환
+                return jwtEncoder.encode(JwtEncoderParameters.from(claim)).getTokenValue();
+            }
+        }
+
+        throw new RuntimeException("아이디 및 패스워드가 일치하지 않습니다.");
+      
     }
 }

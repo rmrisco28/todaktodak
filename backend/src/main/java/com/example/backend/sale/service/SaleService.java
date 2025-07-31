@@ -177,7 +177,7 @@ public class SaleService {
             SaleImageThumbDto thumbDto = new SaleImageThumbDto();
             thumbDto.setName(thumb.getId().getName());
             thumbDto.setPath("http://localhost:8081/saleImageThumb/" + seq + "/" + thumb.getId().getName());
-            // TODO call aws s3
+            // TODO [@minki] call aws s3
 //            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
             thumbs.add(thumbDto);
         }
@@ -189,7 +189,7 @@ public class SaleService {
             SaleImageContentDto contentDto = new SaleImageContentDto();
             contentDto.setName(contentImg.getId().getName());
             contentDto.setPath("http://localhost:8081/saleImageContent/" + seq + "/" + contentImg.getId().getName());
-            // TODO call aws s3
+            // TODO [@minki] call aws s3
 //            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
             contentImgs.add(contentDto);
         }

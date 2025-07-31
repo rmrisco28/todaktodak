@@ -6,21 +6,30 @@ import com.example.backend.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/order")
-@RequiredArgsConstructor
+@RestController // ✅ REST API 컨트롤러로 동작하도록 지정 (View 반환 X, JSON 반환 O)
+@RequestMapping("/api/order") // ✅ 공통 URL 경로 설정
+@RequiredArgsConstructor // ✅ 생성자 주입 자동 생성 (final 필드 대상)
 public class OrderController {
 
     private final OrderService orderService;
 
+    /**
+     * ✅ 주문 목록 조회 API
+     * - 회원 번호를 기준으로 자신의 주문 내역을 조회
+     * - 상태, 키워드(상품명), 날짜범위 필터 가능
+     *
+     * @param memberSeq 회원 PK (기본값 1, 테스트용)
+     * @param status 주문 상태 필터 (선택)
+     * @param keyword 상품명 검색어 (선택)
+     * @param startDate 시작일 필터 (선택)
+     * @param endDate 종료일 필터 (선택)
+     * @return 주문 목록 DTO 리스트
+     */
     @GetMapping("/list")
     public List<OrderManageDto> getOrders(
             @RequestParam(defaultValue = "1") Integer memberSeq,
@@ -32,6 +41,13 @@ public class OrderController {
         return orderService.findOrders(memberSeq, status, keyword, startDate, endDate);
     }
 
+    /**
+     * ✅ 주문 상세 조회 API
+     * - 주문 번호(PK)를 기준으로 상세 정보 반환
+     *
+     * @param orderSeq 주문 기본키
+     * @return 주문 상세 정보 DTO
+     */
     @GetMapping("/detail")
     public ResponseEntity<OrderDetailDto> OrderDetail(@RequestParam Integer orderSeq) {
         return ResponseEntity.ok(orderService.getOrderDetail(orderSeq));

@@ -42,9 +42,11 @@ import { DeliveryModify } from "./feature/delivery/DeliveryModify.jsx";
 import { MemberMyInfo } from "./feature/member/MemberMyInfo.jsx";
 import { MemberMyInfoModify } from "./feature/member/MemberMyInfoModify.jsx";
 
+import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
+
 function App() {
   return (
-    <>
+    <AuthenticationContextProvider>
       <BrowserRouter>
         <Routes>
           {/* 상단 공통 메뉴 */}
@@ -89,7 +91,7 @@ function App() {
             {/* 판매상품 수정 */}
             <Route path="sale/modify/:seq" element={<SaleModify />} />
             {/* 상품구매 상세 */}
-            <Route path="buy" element={<BuyForm />} />
+            <Route path="buy/:seq" element={<BuyForm />} />
             {/* 상품구매 등록 */}
             <Route path="buy/add" element={<BuyAdd />} />
             {/* 반납신청 상세 */}
@@ -129,19 +131,19 @@ function App() {
             {/* 카테고리 목록 */}
             <Route path="category/list" element={<CategoryList />} />
             {/* 카테고리 수정 */}
-            <Route path="category/modify" element={<CategoryModify />} />
-            {/* 카테고리 등록 */}
+            <Route path="category/modify/:seq" element={<CategoryModify />} />
+            {/* 배송업체 등록 */}
             <Route path="delivery/add" element={<DeliveryAdd />} />
-            {/* 카테고리 목록 */}
+            {/* 배송업체 목록 */}
             <Route path="delivery/list" element={<DeliveryList />} />
-            {/* 카테고리 상세 */}
+            {/* 배송업체 상세 */}
             <Route path="delivery/detail/:seq" element={<DeliveryDetail />} />
-            {/* 카테고리 수정 */}
+            {/* 배송업체 수정 */}
             <Route path="delivery/modify" element={<DeliveryModify />} />
           </Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthenticationContextProvider>
   );
 }
 

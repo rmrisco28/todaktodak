@@ -1,67 +1,88 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Button, Container, Row, Col, Modal } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
 
+// ✅ 상품 수령 확인 폼 컴포넌트
+// - 사용자가 배송 완료된 상품에 대해 "수령 확인"을 진행하는 화면
 export function ReceiveForm() {
+    const { orderId } = useParams(); // URL 파라미터에서 주문번호(seq) 가져옴
     const navigate = useNavigate();
-    const location = useLocation();
-    const { orderManageSeq } = location.state || {};
 
-    const [showModal, setShowModal] = useState(false);
+    const [order, setOrder] = useState(null);  // 주문 정보 상태
+    const [memo, setMemo] = useState("");      // 수령 메모 상태
 
-    const handleOpenModal = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
-
-    const handleReceiveConfirm = async () => {
-        try {
-            await axios.patch("/api/order/receive", {
-                orderManageSeq,
-                receivedBy: "user01", // 필요시 사용자 정보 설정
-                memo: "수령 확인"
+    // ✅ 컴포넌트 마운트 시 주문 정보 불러오기
+    useEffect(() => {
+        axios
+            .get("/api/receive", {
+                params: { orderManageSeq: orderId }, // 백엔드에 전달할 주문번호
+            })
+            .then((res) => {
+                setOrder(res.data); // 응답 받은 주문 정보 저장
+            })
+            .catch(() => {
+                alert("수령 정보를 불러오는 데 실패했습니다.");
             });
-            alert("상품을 수령 처리했습니다.");
-            navigate(`/order/detail/${orderManageSeq}`);
-        } catch (error) {
-            console.error(error);
-            alert("상품 수령 처리에 실패했습니다.");
+    }, [orderId]);
+
+    // ✅ 수령 확인 버튼 클릭 시 처리
+    const handleClick = () => {
+        const memberNo = localStorage.getItem("memberNo");
+        if (!memberNo) {
+            alert("로그인이 필요합니다.");
+            return;
         }
+
+        // 수령 실행 페이지로 이동하며 필요한 데이터(state)를 함께 전달
+        navigate("/receive/exec", {
+            state: {
+                orderManageSeq: parseInt(orderId), // 주문 번호 (정수형)
+                memberNo: memberNo,                // 수령자 정보
+                memo: memo,                        // 수령 메모
+            },
+        });
     };
 
-    return (
-        <Container className="mt-5">
-            <Row className="justify-content-center">
-                <Col md={6}>
-                    <h4 className="mb-4">상품 수령</h4>
-                    <p>상품 수령 처리를 진행하시려면 아래 버튼을 눌러주세요.</p>
-                    <Button variant="primary" onClick={handleOpenModal}>
-                        수령 처리하기
-                    </Button>
-                </Col>
-            </Row>
+    // ✅ 주문 정보 로딩 중일 경우 메시지 표시
+    if (!order) return <div>로딩 중...</div>;
 
-            <Modal show={showModal} onHide={handleCloseModal} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>상품 수령 확인</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>정말로 상품을 수령하셨습니까?</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        아니오
-                    </Button>
-                    <Button
-                        variant="primary"
-                        onClick={() => {
-                            handleCloseModal();
-                            handleReceiveConfirm();
-                        }}
-                    >
-                        예, 수령했습니다
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </Container>
+    // ✅ 화면 출력 (주문 정보 + 수령 메모 입력 + 버튼)
+    return (
+        <div className="container mt-4">
+            <h3>상품 수령 확인</h3>
+
+            {/* 주문 정보 표시 테이블 */}
+            <table className="table mt-3">
+                <tbody>
+                <tr>
+                    <th>주문번호</th>
+                    <td>{order.productName}</td> {/* ❗ 실제로는 주문번호가 아니라 상품명으로 추정됨 */}
+                </tr>
+                <tr>
+                    <th>배송 상태</th>
+                    <td>{order.status}</td>
+                </tr>
+                <tr>
+                    <th>주문 일자</th>
+                    <td>{order.orderDate}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            {/* 수령 메모 입력란 */}
+            <div className="form-group mt-3">
+                <label>수령 메모</label>
+                <textarea
+                    className="form-control"
+                    value={memo}
+                    onChange={(e) => setMemo(e.target.value)}
+                />
+            </div>
+
+            {/* 수령 확인 버튼 */}
+            <button className="btn btn-primary mt-3" onClick={handleClick}>
+                수령 확인
+            </button>
+        </div>
     );
 }

@@ -284,8 +284,20 @@ CREATE TABLE category
     CONSTRAINT pk_category PRIMARY KEY (seq)
 );
 
-# 배송업체 관리 테이블
+# TODO [@minki] 배송업체 관리 테이블
 
+
+# 사용자 권한 관리 테이블 (관리자 권한)
+CREATE TABLE auth
+(
+    member_id VARCHAR(255) NOT NULL,
+    auth_name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (member_id, auth_name),
+    FOREIGN KEY (member_id) REFERENCES member (member_id)
+);
+
+INSERT INTO auth (member_id, auth_name)
+VALUES ('admin', 'ROLE_ADMIN');
 
 
 
