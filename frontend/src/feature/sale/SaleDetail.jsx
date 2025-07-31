@@ -10,8 +10,6 @@ import {
   FormGroup,
   FormLabel,
   Image,
-  ListGroup,
-  ListGroupItem,
   Modal,
   Row,
   Spinner,
@@ -24,7 +22,7 @@ export function SaleDetail() {
   const [modalShow, setModalShow] = useState(false);
 
   const [mainThumbnail, setMainThumbnail] = useState([]);
-  const [quantity, setQuantity] = useState(1);
+  const [orderCount, setOrderCount] = useState(1);
 
   useEffect(() => {
     axios
@@ -64,16 +62,16 @@ export function SaleDetail() {
   }
 
   const handleThumbnailClick = (path) => setMainThumbnail(path);
-  const handleQuantityChange = (e) => {
+  const handleOrderCountChange = (e) => {
     const value = parseInt(e.target.value, 10);
-    setQuantity(isNaN(value) || value < 1 ? 1 : value);
+    setOrderCount(isNaN(value) || value < 1 ? 1 : value);
   };
 
-  function handleCartAddButton() {
+  function handleCartAddButtonClick() {
     // TODO [@minki] 장바구니 추가 기능 (+회원 체크, input 체크)
   }
 
-  function handlePickAddButton() {
+  function handlePickAddButtonClick() {
     // TODO [@minki] 찜하기 추가 기능 (+회원 체크)
   }
 
@@ -134,13 +132,13 @@ export function SaleDetail() {
               : "무료배송"}
           </div>
 
-          <FormGroup className="mb-3" controlId="formQuantity">
-            <FormLabel>수량</FormLabel>
+          <FormGroup className="mb-3" controlId="formOrderCount">
+            <FormLabel>주문수량</FormLabel>
             <FormControl
               type="number"
               min={1}
-              value={quantity}
-              onChange={handleQuantityChange}
+              value={orderCount}
+              onChange={handleOrderCountChange}
               style={{ maxWidth: "120px" }}
             />
           </FormGroup>
@@ -150,14 +148,17 @@ export function SaleDetail() {
             <Button
               variant="primary"
               size="lg"
-              onClick={() => navigate(`/buy/${sale.seq}`)}
+              onClick={() => navigate(`/buy/${seq}?orderCount=${orderCount}`)}
             >
               대여하기
             </Button>
-            <Button variant="outline-primary" onClick={handleCartAddButton}>
+            <Button
+              variant="outline-primary"
+              onClick={handleCartAddButtonClick}
+            >
               장바구니 담기
             </Button>
-            <Button variant="outline-danger" onClick={handlePickAddButton}>
+            <Button variant="outline-danger" onClick={handlePickAddButtonClick}>
               찜하기
             </Button>
             <Button
