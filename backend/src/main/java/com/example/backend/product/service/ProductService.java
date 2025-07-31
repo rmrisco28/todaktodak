@@ -1,5 +1,7 @@
 package com.example.backend.product.service;
 
+import com.example.backend.category.dto.CategoryDto;
+import com.example.backend.category.repository.CategoryRepository;
 import com.example.backend.product.dto.*;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.entity.ProductImage;
@@ -29,6 +31,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
+    private final CategoryRepository categoryRepository;
     // TODO  [@minki]
     //    private final S3Client s3Client;
 
@@ -320,5 +323,11 @@ public class ProductService {
 //                deleteFile(objectKey);
             }
         }
+    }
+
+    public Map<String, Object> categoryList() {
+        List<CategoryDto> categoryList = categoryRepository.findCategoryAll();
+
+        return Map.of("categoryList", categoryList);
     }
 }

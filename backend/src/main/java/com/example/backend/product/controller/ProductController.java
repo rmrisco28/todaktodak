@@ -116,5 +116,14 @@ public class ProductController {
 
     }
 
+    /**
+     * 카테고리 목록 조회 (관리자)
+     *
+     * @return
+     */
+    @GetMapping("category")
+    public Map<String, Object> getAllCategorys() {
+        return productService.categoryList();
+    }
 
 }
