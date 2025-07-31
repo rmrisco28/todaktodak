@@ -2,12 +2,14 @@ package com.example.backend.product.controller;
 
 import com.example.backend.product.dto.ProductAddForm;
 import com.example.backend.product.dto.ProductDto;
+import com.example.backend.product.dto.ProductNameListDto;
 import com.example.backend.product.dto.ProductUpdateForm;
 import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -117,13 +119,13 @@ public class ProductController {
     }
 
     /**
-     * 카테고리 목록 조회 (관리자)
+     * 특정 카테고리의 상품 목록 조회
      *
      * @return
      */
-    @GetMapping("category")
-    public Map<String, Object> getAllCategorys() {
-        return productService.categoryList();
+    @GetMapping("formSelect")
+    public List<ProductNameListDto> getProductsByCategory(String category) {
+        return productService.productListByCategory(category);
     }
 
 }

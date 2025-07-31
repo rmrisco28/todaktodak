@@ -325,9 +325,7 @@ public class ProductService {
         }
     }
 
-    public Map<String, Object> categoryList() {
-        List<CategoryDto> categoryList = categoryRepository.findCategoryAll();
-
-        return Map.of("categoryList", categoryList);
+    public List<ProductNameListDto> productListByCategory(String categoryName) {
+        return productRepository.findProductByCategory(categoryName);
     }
 }
