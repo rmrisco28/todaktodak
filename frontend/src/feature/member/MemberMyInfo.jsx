@@ -35,6 +35,7 @@ export function MemberMyInfo() {
       });
   }, []);
 
+  // 회원탈퇴 버튼
   function handleDeleteButtonClick() {
     axios
       .put(`/api/member/${memberId}/withdraw`)
