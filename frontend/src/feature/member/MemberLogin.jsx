@@ -75,8 +75,11 @@ export function MemberLogin() {
             </FormGroup>
           </div>
         </Form>
-        <div>
+        <div className="d-flex justify-content-between">
           <Button onClick={handleLogInButtonClick}>로그인</Button>
+          <Button variant="outline-dark" onClick={() => navigate(`/signup`)}>
+            회원가입
+          </Button>
         </div>
       </Col>
     </Row>
