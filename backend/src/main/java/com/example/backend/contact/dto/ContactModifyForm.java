@@ -11,4 +11,5 @@ public class ContactModifyForm {
     private String content;
     private String name;
     private LocalDateTime updateDttm;
+    private Boolean useYn;
 }

@@ -93,15 +93,21 @@ DROP TABLE contact;
 # 주문 배송 정보
 CREATE TABLE order_info
 (
-    seq         INT          NOT NUll AUTO_INCREMENT,
-    order_no    VARCHAR(20)  NOT NULL UNIQUE,
-    name        VARCHAR(50)  NOT NULL,
-    phone_no    VARCHAR(30)  NOT NULL,
-    post_code   VARCHAR(10)  NOT NULL,
-    addr        VARCHAR(255) NOT NULL,
-    addr_detail VARCHAR(255) NOT NULL,
-    request     VARCHAR(255) NOT NULL,
-    Constraint pk_order_info PRIMARY KEY (seq)
+    seq          INT          NOT NUll AUTO_INCREMENT,
+    order_no     VARCHAR(20)  NOT NULL UNIQUE,
+    sale_no      VARCHAR(20)  NOT NULL,
+#     member_no   VARCHAR(20)  NOT NULL,
+    name         VARCHAR(50)  NOT NULL,
+    phone_no     VARCHAR(30)  NOT NULL,
+    post_code    VARCHAR(10)  NOT NULL,
+    addr         VARCHAR(255) NOT NULL,
+    addr_detail  VARCHAR(255) NOT NULL,
+    request      VARCHAR(255) NOT NULL,
+    price        INT          NOT NULL,
+    delivery_fee INT          NOT NULL,
+    order_count  INT          NOT NULL,
+    Constraint pk_order_info PRIMARY KEY (seq),
+    FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
 
 DROP TABLE order_info;

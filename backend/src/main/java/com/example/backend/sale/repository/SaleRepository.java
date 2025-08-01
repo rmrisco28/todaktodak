@@ -55,4 +55,6 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
               AND s.delYn = false
             """)
     SaleDto findSaleBySeq(Integer seq);
+
+    Sale findBySaleNo(String saleNo);
 }

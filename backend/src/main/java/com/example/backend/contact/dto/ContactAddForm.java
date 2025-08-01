@@ -13,4 +13,5 @@ public class ContactAddForm implements Serializable {
     String content;
     String name;
     String reply;
+    Boolean useYn;
 }

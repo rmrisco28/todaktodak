@@ -1,5 +1,6 @@
 package com.example.backend.order.entity;
 
+import com.example.backend.sale.entity.Sale;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,13 @@ public class OrderInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seq", nullable = false)
     private Integer seq;
+
+    @Column(name = "order_no", nullable = false, length = 20)
+    private String orderNo;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sale_no", nullable = false, referencedColumnName = "sale_no")
+    private Sale saleNo;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -34,7 +42,17 @@ public class OrderInfo {
     @Column(name = "request", nullable = false)
     private String request;
 
-    @Column(name = "order_no", nullable = false, length = 20)
-    private String orderNo;
+    @Column(name = "order_count", nullable = false)
+    private Integer orderCount;
+
+//    @Column(name = "member_no", nullable = false, length = 20)
+//    private String memberNo;
+
+    @Column(name = "price", nullable = false)
+    private Integer price;
+
+    @Column(name = "delivery_fee", nullable = false)
+    private Integer deliveryFee;
+
 
 }

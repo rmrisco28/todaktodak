@@ -20,7 +20,7 @@ export function BuyAdd() {
             <Button
               style={{ width: "250px" }}
               onClick={() => {
-                navigate("/product/list");
+                navigate("/sale/list");
               }}
               variant="success"
             >
@@ -29,7 +29,7 @@ export function BuyAdd() {
             <Button
               style={{ width: "250px" }}
               onClick={() => {
-                navigate("/member/");
+                navigate("/order/list");
               }}
               variant="warning"
             >

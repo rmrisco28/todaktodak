@@ -123,19 +123,29 @@ export function ContactList() {
                       });
                   }}
                 >
-                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                  <td
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? " bg-body-secondary" : ""}`}
+                  >
                     {contact.seq}
                   </td>
-                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                  <td
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary " : ""}`}
+                  >
                     {contact.title}
                   </td>
-                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                  <td
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary" : ""}`}
+                  >
                     {contact.name}
                   </td>
-                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                  <td
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary" : ""}`}
+                  >
                     {contact.insertDttm}
                   </td>
-                  <td className={contact.delYn ? "bg-danger-subtle" : ""}>
+                  <td
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary" : ""}`}
+                  >
                     {contact.view}
                   </td>
                 </tr>
@@ -166,6 +176,14 @@ export function ContactList() {
             </Form>
           </div>
           <hr />
+          <div
+            className="d-flex justify-content-center align-items-center mb-3"
+            style={{ color: "#808080" }}
+          >
+            <div style={{ color: "#f17878" }}>빨간색</div>은 삭제, &nbsp;
+            <div style={{ color: "#252525" }}>회색</div>은 숨김처리된
+            게시물입니다.
+          </div>
         </Col>
       </Row>
       {/* PageNation */}

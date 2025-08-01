@@ -26,6 +26,7 @@ public class ContactDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime insertDttm;
 
-    private boolean delYn;
+    boolean delYn;
+    boolean useYn;
 
 }
