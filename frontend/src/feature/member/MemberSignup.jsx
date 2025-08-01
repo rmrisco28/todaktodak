@@ -198,8 +198,11 @@ export function MemberSignup() {
                 value={password}
                 style={{ width: "400px" }}
                 onChange={(e) => {
-                  setPassword(e.target.value);
-                  if (!validatePassword(e.target.value)) {
+                  const value = e.target.value;
+                  setPassword(value);
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, password: null }));
+                  } else if (!validatePassword(e.target.value)) {
                     setErrors((prev) => ({
                       ...prev,
                       password:

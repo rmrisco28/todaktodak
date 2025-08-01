@@ -6,6 +6,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Modal,
   Row,
   Spinner,
@@ -31,6 +32,10 @@ export function MemberModify() {
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
+
+  const [errors, setErrors] = useState({});
+  const validatePassword = (value) =>
+    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 
   useEffect(() => {
     axios
@@ -61,6 +66,12 @@ export function MemberModify() {
 
   // 수정 버튼 클릭
   function handleModifyButtonClick() {
+    // 비밀번호 일치 확인
+    if (newPassword !== newPassword2) {
+      toast("새 비밀번호가 일치하지 않습니다.", { type: "error" });
+      return;
+    }
+
     // 기존 회원 정보 복사
     const modifiedMember = { ...member };
 
@@ -124,7 +135,7 @@ export function MemberModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={5}>
+      <Col lg={7}>
         <h3 className="mb-4">회원 정보 수정</h3>
         {/* 고객 번호 */}
         <div>
@@ -179,8 +190,27 @@ export function MemberModify() {
                   autoComplete="off"
                   type="password"
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setNewPassword(value);
+                    if (value.trim() === "") {
+                      setErrors((prev) => ({ ...prev, newPassword: null }));
+                    } else if (!validatePassword(e.target.value)) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        newPassword:
+                          "비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                      }));
+                    } else {
+                      setErrors((prev) => ({ ...prev, newPassword: null }));
+                    }
+                  }}
                 />
+                {errors.newPassword && (
+                  <FormText className="text-danger">
+                    {errors.newPassword}
+                  </FormText>
+                )}
               </Col>
             </FormGroup>
           </div>
@@ -195,8 +225,22 @@ export function MemberModify() {
                   autoComplete="off"
                   type="password"
                   value={newPassword2}
-                  onChange={(e) => setNewPassword2(e.target.value)}
+                  onChange={(e) => {
+                    setNewPassword2(e.target.value);
+                    setErrors((prev) => ({
+                      ...prev,
+                      newPassword2:
+                        e.target.value !== newPassword
+                          ? "비밀번호가 일치하지 않습니다."
+                          : null,
+                    }));
+                  }}
                 />
+                {errors.newPassword2 && (
+                  <FormText className="text-danger">
+                    {errors.newPassword2}
+                  </FormText>
+                )}
               </Col>
             </FormGroup>
           </div>
