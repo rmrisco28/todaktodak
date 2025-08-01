@@ -45,6 +45,7 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
             s.salePrice,
             s.deliveryFee,
             s.content,
+            s.view,
             s.insertDttm,
             s.updateDttm,
             s.useYn

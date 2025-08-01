@@ -16,10 +16,11 @@ public class SaleDto {
     private String productNo;
     private String category;
     private String title;
-    private Integer Quantity;
+    private Integer quantity;
     private Integer salePrice;
     private Integer deliveryFee;
     private String content;
+    private Integer view;
     private LocalDateTime insertDttm;
     private LocalDateTime updateDttm;
     private Boolean useYn;
@@ -27,16 +28,17 @@ public class SaleDto {
     private List<SaleImageThumbDto> thumbnails;
     private List<SaleImageContentDto> contentImages;
 
-    public SaleDto(Integer seq, String saleNo, String productNo, String category, String title, Integer quantity, Integer salePrice, Integer deliveryFee, String content, LocalDateTime insertDttm, LocalDateTime updateDttm, Boolean useYn) {
+    public SaleDto(Integer seq, String saleNo, String productNo, String category, String title, Integer quantity, Integer salePrice, Integer deliveryFee, String content, Integer view, LocalDateTime insertDttm, LocalDateTime updateDttm, Boolean useYn) {
         this.seq = seq;
         this.saleNo = saleNo;
         this.productNo = productNo;
         this.category = category;
         this.title = title;
-        Quantity = quantity;
+        this.quantity = quantity;
         this.salePrice = salePrice;
         this.deliveryFee = deliveryFee;
         this.content = content;
+        this.view = view;
         this.insertDttm = insertDttm;
         this.updateDttm = updateDttm;
         this.useYn = useYn;
