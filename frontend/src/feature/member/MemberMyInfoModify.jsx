@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Modal,
   Row,
   Spinner,
@@ -28,6 +29,13 @@ export function MemberMyInfoModify() {
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
+
+  // 비밀번호 변경 유효성 검사 상태
+  const [errors, setErrors] = useState({});
+
+  // 유효서 검사 함수
+  const validatePassword = (value) =>
+    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 
   useEffect(() => {
     axios
@@ -112,8 +120,50 @@ export function MemberMyInfoModify() {
     return <Spinner />;
   }
 
+  // 비밀번호 변경 버튼 클릭
   function handleChangePasswordButtonClick() {
-    axios.put(`/api/member/myinfo/modify/changePassword/${memberId}`);
+    const newErrors = {};
+
+    // 현재 비밀번호 입력 유무
+    if (!currentPassword.trim()) {
+      newErrors.currentPassword = "현재 비밀번호를 입력해주세요.";
+    }
+    // 새 비밀번호 유효성
+    if (!validatePassword(newPassword)) {
+      newErrors.newPassword =
+        "새 비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.";
+    }
+    // 비밀번호 일치 확인 검사
+    if (newPassword !== newPassword2) {
+      newErrors.newPassword2 = "비밀번호가 일치하지 않습니다.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
+    // 비밀번호 변경 요청
+    axios
+      .put(`/api/member/myinfo/modify/changePassword`, {
+        memberId: member.memberId,
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      })
+      .then((res) => {
+        console.log(res);
+        toast("비밀번호가 변경되었습니다.", { type: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setCurrentPassword("");
+        setNewPassword("");
+        setNewPassword2("");
+        setPasswordModalShow(false);
+      });
   }
 
   return (
@@ -314,6 +364,12 @@ export function MemberMyInfoModify() {
       <Modal
         show={passwordModalShow}
         onHide={() => setPasswordModalShow(false)}
+        onShow={() => {
+          setErrors({});
+          setCurrentPassword("");
+          setNewPassword("");
+          setNewPassword2("");
+        }}
       >
         <Modal.Header closeButton>
           <Modal.Title>비밀번호 변경</Modal.Title>
@@ -322,35 +378,71 @@ export function MemberMyInfoModify() {
           <FormGroup>
             <FormLabel>현재 비밀번호</FormLabel>
             <FormControl
-              className="mb-2"
               type="password"
               value={currentPassword}
               style={{ width: "300px" }}
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              onChange={(e) => {
+                setCurrentPassword(e.target.value);
+                setErrors((prev) => ({
+                  ...prev,
+                  currentPassword: e.target.value
+                    ? null
+                    : "현재 비밀번호를 입력해주세요.",
+                }));
+              }}
             />
+            {errors.currentPassword && (
+              <FormText className="text-danger">
+                {errors.currentPassword}
+              </FormText>
+            )}
           </FormGroup>
           <FormGroup>
-            <FormLabel>새 비밀번호</FormLabel>
+            <FormLabel className="mt-2">새 비밀번호</FormLabel>
             <FormControl
-              className="mb-2"
               type="password"
               value={newPassword}
               style={{ width: "300px" }}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={(e) => {
+                setNewPassword(e.target.value);
+                if (!validatePassword(e.target.value)) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    newPassword:
+                      "새 비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                  }));
+                } else {
+                  setErrors((prev) => ({ ...prev, newPassword: null }));
+                }
+              }}
             />
+            {errors.newPassword && (
+              <FormText className="text-danger">{errors.newPassword}</FormText>
+            )}
           </FormGroup>
           <FormGroup>
-            <FormLabel>새 비밀번호 확인</FormLabel>
+            <FormLabel className="mt-2">새 비밀번호 확인</FormLabel>
             <FormControl
               type="password"
               value={newPassword2}
               style={{ width: "300px" }}
-              className="mb-4"
-              onChange={(e) => setNewPassword2(e.target.value)}
+              onChange={(e) => {
+                setNewPassword2(e.target.value);
+                setErrors((prev) => ({
+                  ...prev,
+                  newPassword2:
+                    e.target.value !== newPassword
+                      ? "비밀번호가 일치하지 않습니다."
+                      : null,
+                }));
+              }}
             />
+            {errors.newPassword2 && (
+              <FormText className="text-danger">{errors.newPassword2}</FormText>
+            )}
           </FormGroup>
           <div
-            className="d-flex justify-content-start"
+            className="d-flex justify-content-start mt-3"
             style={{ width: "300px" }}
           >
             <Button

@@ -35,7 +35,7 @@ export function MemberLogin() {
         if (message) {
           toast(message.text, { type: message.type });
         }
-        
+
         navigate("/");
       })
       .catch((err) => {
@@ -64,6 +64,7 @@ export function MemberLogin() {
           <FormGroup className="mb-3" controlId="password">
             <FormLabel>비밀번호</FormLabel>
             <FormControl
+              type="password"
               style={{ width: "200px" }}
               value={password}
               onChange={(e) => setPassword(e.target.value)}

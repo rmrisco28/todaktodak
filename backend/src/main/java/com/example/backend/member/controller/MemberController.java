@@ -156,6 +156,14 @@ public class MemberController {
                         "text", "회원 정보가 수정되었습니다.")));
     }
 
+    // 비밀번호 변경(회원)
+    @PutMapping("myinfo/modify/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm dto) {
+        memberService.changePassword(dto);
+
+        return ResponseEntity.ok().body(Map.of("type", "success"));
+    }
+
     // 로그인
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody MemberLoginForm memberLoginForm) {

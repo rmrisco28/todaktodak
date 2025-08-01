@@ -217,6 +217,7 @@ public class MemberService {
     }
 
 
+    // 회원 정보 보기(회원)
     public MyInfoDto getMyInfo(String memberId) {
         Member dbData = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다." + memberId));
@@ -234,6 +235,7 @@ public class MemberService {
         return dto;
     }
 
+    // 회원탈퇴(회원)
     public void delete(String memberId) {
         Member dbData = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
@@ -251,6 +253,7 @@ public class MemberService {
     }
 
 
+    // 회원정보수정(회원)
     public void MyInfoModify(String memberId, MyInfoModifyDto dto) {
         Member dbData = memberRepository.findByMemberId(memberId).get();
 
@@ -269,6 +272,19 @@ public class MemberService {
         memberRepository.save(dbData);
     }
 
+    // 비밀번호 변경(회원)
+    public void changePassword(ChangePasswordForm dto) {
+        Member dbData = memberRepository.findByMemberId(dto.getMemberId()).get();
+
+        if (passwordEncoder.matches(dto.getCurrentPassword(), dbData.getPassword())) {
+            dbData.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+            memberRepository.save(dbData);
+        } else {
+            throw new RuntimeException("패스워드가 일치하지 않습니다.");
+        }
+    }
+
+    // 로그인(토큰생성)
     public String getToken(MemberLoginForm dto) {
         // id 조회
         Optional<Member> dbData = memberRepository.findByMemberId(dto.getMemberId());
