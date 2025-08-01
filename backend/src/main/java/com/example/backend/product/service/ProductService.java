@@ -15,6 +15,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -31,8 +36,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
-    // TODO  [@minki]
-    //    private final S3Client s3Client;
+    private final S3Client s3Client;
 
     @Value("${image.prefix}")
     private String imagePrefix;
@@ -83,50 +87,26 @@ public class ProductService {
 
                     productImageRepository.save(entity);
 
-                    // TODO [@minki] AWS S3 업로드
                     // AWS s3 파일 업로드
-//                    String objectKey = "prj3/board/" + product.getSeq() + "/" + image.getOriginalFilename();
-//                    uploadFile(image, objectKey);
+                    String objectKey = "prj4/productImage/" + product.getSeq() + "/" + image.getOriginalFilename();
+                    uploadFile(image, objectKey);
 
-                    // 실제 파일 server(local) disk 저장
-                    // 1) ../Temp/prj3/boardFile 에서 '게시물 번호'이름의 폴더 생성
-                    File folder = new File("D:/01.private_work/Choongang/workspaces/Temp/prj4/productImage/" + product.getSeq());
-                    if (!folder.exists()) {
-                        folder.mkdirs();
-                    }
-
-                    // 2) 폴더에 파일 저장
-                    try {
-                        BufferedInputStream bi = new BufferedInputStream(image.getInputStream());
-                        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(new File(folder, image.getOriginalFilename())));
-                        try (bi; bo) {
-                            byte[] b = new byte[1024];
-                            int len;
-                            while ((len = bi.read(b)) != -1) {
-                                bo.write(b, 0, len);
-                            }
-                            bo.flush();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
                 }
             }
         }
     }
 
-//    private void uploadFile(MultipartFile file, String objectKey) {
-//        try {
-//            PutObjectRequest putObjectRequest = PutObjectRequest
-//                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
-//                    .build();
-//            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            throw new RuntimeException("파일 전송이 실패하였습니다.");
-//        }
-//    }
+    private void uploadFile(MultipartFile file, String objectKey) {
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest
+                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("파일 전송이 실패하였습니다.");
+        }
+    }
 
     public boolean validateForAdd(ProductAddForm dto) {
 
@@ -180,9 +160,7 @@ public class ProductService {
         for (ProductImage image : imageList) {
             ProductImageDto imageDto = new ProductImageDto();
             imageDto.setName(image.getId().getName());
-            imageDto.setPath("http://localhost:8081/productImage/" + seq + "/" + image.getId().getName());
-            // TODO [@minki] call aws s3
-//            imageDto.setPath(imagePrefix + "prj4/dto/" + seq + "/" + image.getProductNo().getName());
+            imageDto.setPath(imagePrefix + "prj4/productImage/" + seq + "/" + image.getId().getName());
             images.add(imageDto);
         }
         dto.setImages(images);
@@ -244,62 +222,9 @@ public class ProductService {
         dbData.setUpdateDttm(now);
 
         deleteFiles(dbData, dto.getDeleteImages());
-        saveFiles(dbData, dto.getImages());
+        saveImages(dbData, dto.getImages());
 
         productRepository.save(dbData);
-    }
-
-    private void saveFiles(Product dbData, List<MultipartFile> images) {
-        if (images != null && images.size() > 0) {
-            for (MultipartFile image : images) {
-                if (image != null && image.getSize() > 0) {
-                    // 테이블 새 레코드 입력
-                    ProductImage productImage = new ProductImage();
-                    // entity set
-                    ProductImageId id = new ProductImageId();
-                    id.setProductNo(dbData.getProductNo());
-                    id.setName(image.getOriginalFilename());
-                    productImage.setProduct(dbData);
-                    productImage.setId(id);
-
-                    // repository
-                    productImageRepository.save(productImage);
-
-                    // AWS s3 파일 업로드
-//                    String objectKey = "prj4/productImage/" + dbData.getId() + "/" + image.getOriginalFilename();
-//                    uploadFile(image, objectKey);
-
-
-                    // 실제 파일 server(local) disk 저장
-                    // 1) ../Temp/prj3/boardFile 에서 '게시물 번호'이름의 폴더 생성
-                    File folder = new File("D:/01.private_work/Choongang/workspaces/Temp/prj4/productImage/" + dbData.getSeq());
-                    if (!folder.exists()) {
-                        folder.mkdirs();
-                    }
-
-                    // 2) 폴더에 파일 저장
-                    try {
-                        BufferedInputStream bi = new BufferedInputStream(image.getInputStream());
-                        BufferedOutputStream bo = new BufferedOutputStream(new FileOutputStream(new File(folder, image.getOriginalFilename())));
-                        try (bi; bo) {
-                            byte[] b = new byte[1024];
-                            int len;
-                            while ((len = bi.read(b)) != -1) {
-                                bo.write(b, 0, len);
-                            }
-                            bo.flush();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
-                    }
-
-
-                }
-            }
-
-        }
-
     }
 
     private void deleteFiles(Product dbData, String[] deleteImages) {
@@ -311,17 +236,19 @@ public class ProductService {
                 id.setName(image);
                 productImageRepository.deleteById(id);
 
-                File targetFile
-                        = new File("D:/01.private_work/Choongang/workspaces/Temp/prj4/productImages/" + dbData.getSeq() + "/" + image);
-                if (targetFile.exists()) {
-                    targetFile.delete();
-                }
-
                 // s3의 파일 지우기
-//                String objectKey = "prj4/product/" + dbData.getId() + "/" + file;
-//                deleteFile(objectKey);
+                String objectKey = "prj4/productImage/" + dbData.getSeq() + "/" + image;
+                deleteFile(objectKey);
             }
         }
+    }
+
+    private void deleteFile(String objectKey) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest
+                .builder().bucket(bucketName).key(objectKey)
+                .build();
+
+        s3Client.deleteObject(deleteObjectRequest);
     }
 
     public List<ProductNameListDto> productListByCategory(String categoryName) {
