@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Form,
   FormControl,
   FormGroup,
   FormLabel,
@@ -375,72 +376,81 @@ export function MemberMyInfoModify() {
           <Modal.Title>비밀번호 변경</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormGroup>
-            <FormLabel>현재 비밀번호</FormLabel>
-            <FormControl
-              type="password"
-              value={currentPassword}
-              style={{ width: "300px" }}
-              onChange={(e) => {
-                setCurrentPassword(e.target.value);
-                setErrors((prev) => ({
-                  ...prev,
-                  currentPassword: e.target.value
-                    ? null
-                    : "현재 비밀번호를 입력해주세요.",
-                }));
-              }}
-            />
-            {errors.currentPassword && (
-              <FormText className="text-danger">
-                {errors.currentPassword}
-              </FormText>
-            )}
-          </FormGroup>
-          <FormGroup>
-            <FormLabel className="mt-2">새 비밀번호</FormLabel>
-            <FormControl
-              type="password"
-              value={newPassword}
-              style={{ width: "300px" }}
-              onChange={(e) => {
-                setNewPassword(e.target.value);
-                if (!validatePassword(e.target.value)) {
+          <Form>
+            <FormGroup>
+              <FormLabel>현재 비밀번호</FormLabel>
+              <FormControl
+                autoComplete="off"
+                type="password"
+                value={currentPassword}
+                style={{ width: "300px" }}
+                onChange={(e) => {
+                  setCurrentPassword(e.target.value);
                   setErrors((prev) => ({
                     ...prev,
-                    newPassword:
-                      "새 비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                    currentPassword: e.target.value
+                      ? null
+                      : "현재 비밀번호를 입력해주세요.",
                   }));
-                } else {
-                  setErrors((prev) => ({ ...prev, newPassword: null }));
-                }
-              }}
-            />
-            {errors.newPassword && (
-              <FormText className="text-danger">{errors.newPassword}</FormText>
-            )}
-          </FormGroup>
-          <FormGroup>
-            <FormLabel className="mt-2">새 비밀번호 확인</FormLabel>
-            <FormControl
-              type="password"
-              value={newPassword2}
-              style={{ width: "300px" }}
-              onChange={(e) => {
-                setNewPassword2(e.target.value);
-                setErrors((prev) => ({
-                  ...prev,
-                  newPassword2:
-                    e.target.value !== newPassword
-                      ? "비밀번호가 일치하지 않습니다."
-                      : null,
-                }));
-              }}
-            />
-            {errors.newPassword2 && (
-              <FormText className="text-danger">{errors.newPassword2}</FormText>
-            )}
-          </FormGroup>
+                }}
+              />
+              {errors.currentPassword && (
+                <FormText className="text-danger">
+                  {errors.currentPassword}
+                </FormText>
+              )}
+            </FormGroup>
+            <FormGroup>
+              <FormLabel className="mt-2">새 비밀번호</FormLabel>
+              <FormControl
+                autoComplete="off"
+                type="password"
+                value={newPassword}
+                style={{ width: "300px" }}
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                  if (!validatePassword(e.target.value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      newPassword:
+                        "새 비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, newPassword: null }));
+                  }
+                }}
+              />
+              {errors.newPassword && (
+                <FormText className="text-danger">
+                  {errors.newPassword}
+                </FormText>
+              )}
+            </FormGroup>
+            <FormGroup>
+              <FormLabel className="mt-2">새 비밀번호 확인</FormLabel>
+              <FormControl
+                autoComplete="off"
+                type="password"
+                value={newPassword2}
+                style={{ width: "300px" }}
+                onChange={(e) => {
+                  setNewPassword2(e.target.value);
+                  setErrors((prev) => ({
+                    ...prev,
+                    newPassword2:
+                      e.target.value !== newPassword
+                        ? "비밀번호가 일치하지 않습니다."
+                        : null,
+                  }));
+                }}
+              />
+              {errors.newPassword2 && (
+                <FormText className="text-danger">
+                  {errors.newPassword2}
+                </FormText>
+              )}
+            </FormGroup>
+          </Form>
           <div
             className="d-flex justify-content-start mt-3"
             style={{ width: "300px" }}

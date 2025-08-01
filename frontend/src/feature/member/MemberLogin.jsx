@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Form,
   FormControl,
   FormGroup,
   FormLabel,
@@ -60,17 +61,20 @@ export function MemberLogin() {
             />
           </FormGroup>
         </div>
-        <div>
-          <FormGroup className="mb-3" controlId="password">
-            <FormLabel>비밀번호</FormLabel>
-            <FormControl
-              type="password"
-              style={{ width: "200px" }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </FormGroup>
-        </div>
+        <Form>
+          <div>
+            <FormGroup className="mb-3" controlId="password">
+              <FormLabel>비밀번호</FormLabel>
+              <FormControl
+                autoComplete="off"
+                type="password"
+                style={{ width: "200px" }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </FormGroup>
+          </div>
+        </Form>
         <div>
           <Button onClick={handleLogInButtonClick}>로그인</Button>
         </div>
