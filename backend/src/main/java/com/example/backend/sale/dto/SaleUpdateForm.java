@@ -12,7 +12,7 @@ public class SaleUpdateForm {
     private String productNo;
     private String title;
     private Integer quantity;
-    private Integer price;
+    private Integer salePrice;
     private Integer deliveryFee;
     private String content;
     private Boolean useYn;

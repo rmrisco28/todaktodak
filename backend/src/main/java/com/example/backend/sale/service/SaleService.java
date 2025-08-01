@@ -56,7 +56,7 @@ public class SaleService {
         sale.setCategory(dto.getCategory());
         sale.setTitle(dto.getTitle());
         sale.setQuantity(dto.getQuantity());
-        sale.setPrice(dto.getPrice());
+        sale.setSalePrice(dto.getSalePrice());
         sale.setDeliveryFee(dto.getDeliveryFee());
         sale.setContent(dto.getContent());
 
@@ -139,7 +139,7 @@ public class SaleService {
         if (dto.getQuantity() == null || dto.getQuantity() < 0) {
             return false;
         }
-        if (dto.getPrice() == null || dto.getPrice() < 0) {
+        if (dto.getSalePrice() == null || dto.getSalePrice() < 0) {
             return false;
         }
         if (dto.getDeliveryFee() == null || dto.getDeliveryFee() < 0) {
@@ -223,7 +223,7 @@ public class SaleService {
         if (dto.getQuantity() == null || dto.getQuantity() < 0) {
             return false;
         }
-        if (dto.getPrice() == null || dto.getPrice() < 0) {
+        if (dto.getSalePrice() == null || dto.getSalePrice() < 0) {
             return false;
         }
         if (dto.getDeliveryFee() == null || dto.getDeliveryFee() < 0) {
@@ -244,7 +244,7 @@ public class SaleService {
         dbData.setProductNo(product);
         dbData.setTitle(dto.getTitle());
         dbData.setQuantity(dto.getQuantity());
-        dbData.setPrice(dto.getPrice());
+        dbData.setSalePrice(dto.getSalePrice());
         dbData.setDeliveryFee(dto.getDeliveryFee());
         dbData.setContent(dto.getContent());
 

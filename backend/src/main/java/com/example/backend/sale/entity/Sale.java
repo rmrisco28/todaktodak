@@ -36,8 +36,8 @@ public class Sale {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
-    private Integer price;
+    @Column(name = "sale_price")
+    private Integer salePrice;
 
     @Column(name = "delivery_fee")
     private Integer deliveryFee;
