@@ -291,4 +291,10 @@ public class SaleService {
         s3Client.deleteObject(deleteObjectRequest);
     }
 
+    public void updateViewCount(Integer seq) {
+        Sale dbData = saleRepository.findById(seq).get();
+        Integer view = dbData.getView();
+        dbData.setView(view + 1);
+        saleRepository.save(dbData);
+    }
 }

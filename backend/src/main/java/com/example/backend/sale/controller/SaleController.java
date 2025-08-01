@@ -63,6 +63,7 @@ public class SaleController {
      */
     @GetMapping("detail/{seq}")
     public SaleDto getSaleBySeq(@PathVariable Integer seq) {
+        updateViewCount(seq);
         return saleService.getSaleBySeq(seq);
     }
 
@@ -112,6 +113,18 @@ public class SaleController {
                     Map.of("type", "error", "text", e.getMessage())));
         }
 
+    }
+
+    @PutMapping("update/view")
+    public ResponseEntity<?> updateViewCount(Integer seq) {
+        try {
+            saleService.updateViewCount(seq);
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "success", "text", "조회수 업데이트 완료")));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
     }
 
 
