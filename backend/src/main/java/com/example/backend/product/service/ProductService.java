@@ -333,6 +333,7 @@ public class ProductService {
         ProductDto productDto = new ProductDto();
         productDto.setSeq(product.getSeq());
         productDto.setProductNo(product.getProductNo());
+        productDto.setName(product.getName());
         productDto.setStock(product.getStock());
         productDto.setPrice(product.getPrice());
 

@@ -207,9 +207,11 @@ export function SaleModify() {
               value={sale.quantity}
               onChange={(e) => setSale({ ...sale, quantity: e.target.value })}
             ></FormControl>
-            <FormText className="text-danger">
-              상품 재고량: {product.stock}
-            </FormText>
+            {product?.stock ? (
+              <FormText className="text-danger">
+                상품 재고량: {product.stock}
+              </FormText>
+            ) : null}
           </FormGroup>
         </div>
         <div>
@@ -221,9 +223,11 @@ export function SaleModify() {
               value={sale.salePrice}
               onChange={(e) => setSale({ ...sale, salePrice: e.target.value })}
             ></FormControl>
-            <FormText className="text-danger">
-              상품 가격: {product.price}
-            </FormText>
+            {product?.price ? (
+              <FormText className="text-danger">
+                상품 가격: {product.price}
+              </FormText>
+            ) : null}
           </FormGroup>
         </div>
         <div>
