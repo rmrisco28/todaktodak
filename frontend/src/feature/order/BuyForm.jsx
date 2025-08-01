@@ -30,9 +30,6 @@ export function BuyForm() {
 
   const handleThumbnailClick = (path) => setMainThumbnail(path);
 
-  const [orderCount, setOrderCount] = useState(1);
-  const [searchParams, setSearchParams] = useSearchParams();
-
   let navigate = useNavigate();
 
   useEffect(() => {
