@@ -23,7 +23,7 @@ export function SaleAdd() {
   const [salePrice, setSalePrice] = useState(0);
 
   const [title, setTitle] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [content, setContent] = useState("");
   const [thumbnails, setThumbnails] = useState([]);
@@ -60,6 +60,8 @@ export function SaleAdd() {
         .get(`/api/product/detail`, { params: paramProductNo })
         .then((res) => {
           setProduct(res.data);
+          setTitle(res.data.name);
+          setSalePrice(res.data.price);
         });
     }
   }, [productNo]);
@@ -159,9 +161,11 @@ export function SaleAdd() {
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             ></FormControl>
-            <FormText className="text-danger">
-              상품 재고량: {product.stock}
-            </FormText>
+            {product?.stock ? (
+              <FormText className="text-danger">
+                상품 재고량: {product.stock}
+              </FormText>
+            ) : null}
           </FormGroup>
         </div>
         <div>
@@ -173,9 +177,11 @@ export function SaleAdd() {
               value={salePrice}
               onChange={(e) => setSalePrice(e.target.value)}
             ></FormControl>
-            <FormText className="text-danger">
-              상품 가격: {product.price}
-            </FormText>
+            {product?.price ? (
+              <FormText className="text-danger">
+                상품 가격: {product.price}
+              </FormText>
+            ) : null}
           </FormGroup>
         </div>
         <div>
