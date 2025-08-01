@@ -6,6 +6,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -17,6 +18,9 @@ import { toast } from "react-toastify";
 export function MemberModify() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
+
+  const [modalShow, setModalShow] = useState(false);
+
   const navigate = useNavigate();
 
   // 새 비밀번호 입력값 상태
@@ -411,11 +415,27 @@ export function MemberModify() {
           >
             취소
           </Button>
-          <Button variant="outline-primary" onClick={handleModifyButtonClick}>
+          <Button variant="outline-primary" onClick={() => setModalShow(true)}>
             수정
           </Button>
         </div>
       </Col>
+
+      {/*  수정 확인 모달*/}
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 정보 수정</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>이대로 수정하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="outline-primary" onClick={handleModifyButtonClick}>
+            수정
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

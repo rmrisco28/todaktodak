@@ -2,6 +2,8 @@ package com.example.backend.member.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class MyInfoModifyDto {
     private String memberId;
@@ -12,4 +14,5 @@ public class MyInfoModifyDto {
     private String postCode;
     private String addr;
     private String addrDetail;
+    private LocalDateTime updateDttm;
 }

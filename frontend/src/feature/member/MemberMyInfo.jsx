@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -15,6 +16,8 @@ import { toast } from "react-toastify";
 export function MemberMyInfo() {
   const [member, setMember] = useState(null);
   const { memberId } = useParams();
+
+  const [modalShow, setModalShow] = useState(false);
 
   const navigate = useNavigate();
 
@@ -140,26 +143,42 @@ export function MemberMyInfo() {
           </FormGroup>
         </div>
 
-        {/* 수정, 탈퇴 버튼*/}
+        {/* 변경, 탈퇴 버튼*/}
         <div>
           <Button
             className="mb-4"
             variant="outline-primary"
             onClick={() => navigate(`/member/myinfo/modify/${memberId}`)}
           >
-            수정
+            정보 변경
           </Button>
         </div>
         <div>
           <Button
             className="mb-2"
-            variant="outline-dark"
-            onClick={handleDeleteButtonClick}
+            variant="outline-danger"
+            onClick={() => setModalShow(true)}
           >
             회원 탈퇴
           </Button>
         </div>
       </Col>
+
+      {/*  탈퇴 확인 모달*/}
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 탈퇴 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>회원탈퇴를 하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
+            탈퇴
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

@@ -153,7 +153,7 @@ public class MemberController {
         }
         return ResponseEntity.ok().body(Map.of("message",
                 Map.of("type", "success",
-                        "text", "회원 정보가 수정되었습니다.")));
+                        "text", "회원 정보가 변경되었습니다.")));
     }
 
     // 비밀번호 변경(회원)

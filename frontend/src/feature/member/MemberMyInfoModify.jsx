@@ -23,6 +23,7 @@ export function MemberMyInfoModify() {
   const [newPassword2, setNewPassword2] = useState("");
 
   const [passwordModalShow, setPasswordModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,12 +66,12 @@ export function MemberMyInfoModify() {
     return <Spinner />;
   }
 
-  // 수정 버튼 클릭
+  // 변경 버튼 클릭
   function handleModifyButtonClick() {
     // 기존 회원 정보 복사
     const modifiedMember = { ...member };
 
-    // 생년월일이 모두 입력된 경우에만 수정
+    // 생년월일이 모두 입력된 경우에만 변경
     if (birthYear && birthMonth && birthDay) {
       modifiedMember.birthDate = `${birthYear}-${birthMonth}-${birthDay}`;
     }
@@ -170,7 +171,7 @@ export function MemberMyInfoModify() {
   return (
     <Row className="justify-content-center">
       <Col lg={4}>
-        <h3 className="mb-4">회원 정보 수정</h3>
+        <h3 className="mb-4">회원 정보 변경</h3>
         {/* 아이디 */}
         <div>
           <FormGroup as={Row} controlId="memberId" className="mb-4">
@@ -346,7 +347,7 @@ export function MemberMyInfoModify() {
             </Col>
           </FormGroup>
         </div>
-        {/* 취소 수정 버튼*/}
+        {/* 취소, 변경 버튼*/}
         <div>
           <Button
             className="me-2"
@@ -355,8 +356,8 @@ export function MemberMyInfoModify() {
           >
             취소
           </Button>
-          <Button variant="outline-primary" onClick={handleModifyButtonClick}>
-            수정
+          <Button variant="outline-primary" onClick={() => setModalShow(true)}>
+            변경
           </Button>
         </div>
       </Col>
@@ -470,6 +471,22 @@ export function MemberMyInfoModify() {
             </Button>
           </div>
         </Modal.Body>
+      </Modal>
+
+      {/*  변경 확인 모달*/}
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 정보 변경</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>이대로 변경하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="outline-primary" onClick={handleModifyButtonClick}>
+            변경
+          </Button>
+        </Modal.Footer>
       </Modal>
     </Row>
   );

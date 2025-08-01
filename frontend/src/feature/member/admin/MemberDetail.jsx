@@ -38,8 +38,10 @@ export function MemberDetail() {
       .then((res) => {
         console.log("실행완료");
         const message = res.data.message;
-        toast(message.text, { type: message.type });
-        navigate("list"); // 목록 페이지로 이동
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate("list");
       })
       .catch((err) => {
         console.log(err);
