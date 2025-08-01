@@ -118,10 +118,9 @@ export function SaleDetail() {
             {sale.category}
           </div>
           <div className="mb-3">
-            {/* TODO [@minki] 판매건당가격 price 용어 변경(상품가격 중복방지) */}
             <strong>가격:</strong>{" "}
             <span className="text-danger fw-bold">
-              {sale.price.toLocaleString()}원
+              {sale.salePrice.toLocaleString()}원
             </span>
           </div>
           <div className="mb-3">

@@ -83,7 +83,7 @@ export function SaleModify() {
         productNo: sale.productNo,
         title: sale.title,
         quantity: sale.quantity,
-        price: sale.price,
+        salePrice: sale.salePrice,
         deliveryFee: sale.deliveryFee,
         content: sale.content,
         thumbnails: thumbnails,
@@ -120,7 +120,7 @@ export function SaleModify() {
     sale.category.trim() === "" ||
     sale.title.trim() === "" ||
     sale.quantity < 0 ||
-    sale.price < 0 ||
+    sale.salePrice < 0 ||
     sale.deliveryFee < 0 ||
     sale.content.trim() === ""
   ) {
@@ -192,15 +192,14 @@ export function SaleModify() {
             {/* TODO [@minki] 상품 테이블의 stock 출력 */}
           </FormGroup>
         </div>
-        {/* TODO [@minki] 판매건당가격 price 용어 변경(판매가격 중복방지) */}
         <div>
-          <FormGroup className="mb-3" controlId="formPrice">
+          <FormGroup className="mb-3" controlId="formSalePrice">
             <FormLabel>판매건당가격</FormLabel>
             <FormControl
               type="number"
               step={10}
-              value={sale.price}
-              onChange={(e) => setSale({ ...sale, price: e.target.value })}
+              value={sale.salePrice}
+              onChange={(e) => setSale({ ...sale, salePrice: e.target.value })}
             ></FormControl>
             {/* TODO [@minki] 상품 테이블의 price 출력 */}
           </FormGroup>

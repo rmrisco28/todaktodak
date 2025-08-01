@@ -18,7 +18,7 @@ export function SaleAdd() {
   const [productNo, setProductNo] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState(0);
+  const [salePrice, setSalePrice] = useState(0);
 
   const [title, setTitle] = useState("");
   const [quantity, setQuantity] = useState(0);
@@ -52,7 +52,7 @@ export function SaleAdd() {
     category.trim() === "" ||
     title.trim() === "" ||
     quantity < 0 ||
-    price < 0 ||
+    salePrice < 0 ||
     deliveryFee < 0 ||
     content.trim() === ""
   ) {
@@ -67,7 +67,7 @@ export function SaleAdd() {
         productNo: productNo,
         title: title,
         quantity: quantity,
-        price: price,
+        salePrice: salePrice,
         deliveryFee: deliveryFee,
         content: content,
         thumbnails: thumbnails,
@@ -145,14 +145,13 @@ export function SaleAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* TODO [@minki] 판매건당가격 price 용어 변경(판매가격 중복방지) */}
-          <FormGroup className="mb-3" controlId="formPrice">
+          <FormGroup className="mb-3" controlId="formSalePrice">
             <FormLabel>판매건당가격</FormLabel>
             <FormControl
               type="number"
               step={10}
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={salePrice}
+              onChange={(e) => setSalePrice(e.target.value)}
             ></FormControl>
             {/* TODO [@minki] 상품 테이블의 price 출력 */}
           </FormGroup>
