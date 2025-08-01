@@ -68,6 +68,11 @@ public class MemberService {
         }
     }
 
+    // 아이디 중복 확인
+    public boolean existsByMemberId(String memberId) {
+        return memberRepository.existsByMemberId(memberId);
+    }
+
     // 유효성(중복) 검사
     public boolean validate(MemberSignupForm memberSignupForm) {
         // memberId 중복 여부
@@ -135,9 +140,6 @@ public class MemberService {
 
         dbData.setState("DELETE");
 
-        dbData.setUseYn(false);
-
-        dbData.setDelYn(true);
 
         memberRepository.save(dbData);
     }
@@ -232,6 +234,23 @@ public class MemberService {
         return dto;
     }
 
+    public void delete(String memberId) {
+        Member dbData = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+        // del_yn = true
+        dbData.setDelYn(true);
+
+        dbData.setState("DELETE");
+
+        memberRepository.save(dbData);
+
+    }
+
+
     public void MyInfoModify(String memberId, MyInfoModifyDto dto) {
         Member dbData = memberRepository.findByMemberId(memberId).get();
 
@@ -280,4 +299,5 @@ public class MemberService {
         throw new RuntimeException("아이디 및 패스워드가 일치하지 않습니다.");
 
     }
+
 }

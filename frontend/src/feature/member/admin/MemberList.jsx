@@ -72,7 +72,7 @@ export function MemberList() {
                     <td>{member.seq}</td>
                     <td>{member.memberId}</td>
                     <td>{member.name}</td>
-                    <td>{member.insertDttm}</td>
+                    <td>{member.insertDttm?.replace("T", " ")}</td>
                     <td>
                       <FormCheck
                         type="switch"

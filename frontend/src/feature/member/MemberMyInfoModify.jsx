@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -15,6 +16,12 @@ import { toast } from "react-toastify";
 export function MemberMyInfoModify() {
   const [member, setMember] = useState(null);
   const { memberId } = useParams();
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
+
+  const [passwordModalShow, setPasswordModalShow] = useState(false);
+
   const navigate = useNavigate();
 
   // 생년월일 관련 상태(드랍다운 분리)
@@ -105,6 +112,10 @@ export function MemberMyInfoModify() {
     return <Spinner />;
   }
 
+  function handleChangePasswordButtonClick() {
+    axios.put(`/api/member/myinfo/modify/changePassword/${memberId}`);
+  }
+
   return (
     <Row className="justify-content-center">
       <Col lg={4}>
@@ -120,14 +131,16 @@ export function MemberMyInfoModify() {
             </Col>
           </FormGroup>
         </div>
-        {/* 비밀번호 */}
+        {/* 비밀번호 / 비밀번호 변경 */}
         <div>
           <FormGroup as={Row} controlId="password" className="mb-4">
             <FormLabel column lg={3}>
               비밀번호
             </FormLabel>
             <Col lg={7} className="text-center">
-              <Button>비밀번호 변경</Button>
+              <Button onClick={() => setPasswordModalShow(true)}>
+                비밀번호 변경
+              </Button>
             </Col>
           </FormGroup>
         </div>
@@ -296,6 +309,66 @@ export function MemberMyInfoModify() {
           </Button>
         </div>
       </Col>
+
+      {/*  비밀번호 변경 모달 */}
+      <Modal
+        show={passwordModalShow}
+        onHide={() => setPasswordModalShow(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>비밀번호 변경</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FormGroup>
+            <FormLabel>현재 비밀번호</FormLabel>
+            <FormControl
+              className="mb-2"
+              type="password"
+              value={currentPassword}
+              style={{ width: "300px" }}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>새 비밀번호</FormLabel>
+            <FormControl
+              className="mb-2"
+              type="password"
+              value={newPassword}
+              style={{ width: "300px" }}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup>
+            <FormLabel>새 비밀번호 확인</FormLabel>
+            <FormControl
+              type="password"
+              value={newPassword2}
+              style={{ width: "300px" }}
+              className="mb-4"
+              onChange={(e) => setNewPassword2(e.target.value)}
+            />
+          </FormGroup>
+          <div
+            className="d-flex justify-content-start"
+            style={{ width: "300px" }}
+          >
+            <Button
+              className="me-3"
+              variant="outline-danger"
+              onClick={() => setPasswordModalShow(false)}
+            >
+              취소
+            </Button>
+            <Button
+              variant="outline-primary"
+              onClick={handleChangePasswordButtonClick}
+            >
+              변경
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </Row>
   );
 }

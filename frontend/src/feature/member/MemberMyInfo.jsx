@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "react-toastify";
 
 export function MemberMyInfo() {
   const [member, setMember] = useState(null);
@@ -31,11 +32,30 @@ export function MemberMyInfo() {
       });
   }, []);
 
+  function handleDeleteButtonClick() {
+    axios
+      .put(`/api/member/${memberId}/withdraw`)
+      .then((res) => {
+        console.log("ok");
+        const message = res.data.message;
+        toast(message.text, { type: message.type });
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+      })
+      .finally(() => {
+        console.log("항상 실행");
+      });
+  }
+
   if (!member) {
     return <Spinner />;
   }
-
-  function handleDeleteButtonClick() {}
 
   return (
     <Row className="justify-content-center">

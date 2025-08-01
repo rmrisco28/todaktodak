@@ -165,14 +165,20 @@ export function MemberDetail() {
         <div>
           <FormGroup controlId="insertDttm" className="mb-3">
             <FormLabel>등록일시</FormLabel>
-            <FormControl value={member.insertDttm} readOnly={true} />
+            <FormControl
+              value={member.insertDttm?.replace("T", "  ")}
+              readOnly={true}
+            />
           </FormGroup>
         </div>
         {/* 수정일시 */}
         <div>
           <FormGroup controlId="updatetDttm" className="mb-3">
             <FormLabel>수정일시</FormLabel>
-            <FormControl value={member.updateDttm} readOnly={true} />
+            <FormControl
+              value={member.updateDttm?.replace("T", "  ")}
+              readOnly={true}
+            />
           </FormGroup>
         </div>
         {/* 회원상태 */}
