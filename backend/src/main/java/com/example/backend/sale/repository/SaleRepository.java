@@ -19,7 +19,7 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
                         s.seq,
                         t.id.name,
                         s.title,
-                        s.price,
+                        s.salePrice,
                         s.saleNo,
                         s.insertDttm
                         )
@@ -42,7 +42,7 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
             s.category,
             s.title,
             s.quantity,
-            s.price,
+            s.salePrice,
             s.deliveryFee,
             s.content,
             s.insertDttm,

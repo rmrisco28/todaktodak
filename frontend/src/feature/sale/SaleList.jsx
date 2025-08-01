@@ -125,8 +125,8 @@ export function SaleList() {
                         {sale.title}
                       </Card.Title>
                       <Card.Text className="text-muted mb-0">
-                        {sale.price
-                          ? sale.price.toLocaleString() + "원"
+                        {sale.salePrice
+                          ? sale.salePrice.toLocaleString() + "원"
                           : "가격 미정"}
                       </Card.Text>
                     </Card.Body>

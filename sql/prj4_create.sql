@@ -75,7 +75,7 @@ CREATE TABLE sale
     category     VARCHAR(20),
     title        VARCHAR(255),
     quantity     INT,
-    price        INT,
+    sale_price   INT,
     delivery_fee INT,
     content      VARCHAR(10000),
     view         INT,
