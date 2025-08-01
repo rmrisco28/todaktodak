@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 export function SaleAdd() {
   const [productList, setProductList] = useState([]);
@@ -33,10 +33,15 @@ export function SaleAdd() {
 
   const navigate = useNavigate();
 
+  const [params] = useSearchParams();
+
   // 카테고리 목록 조회
   useEffect(() => {
     axios.get(`/api/category/formSelect`).then((res) => {
       setCategoryList(res.data);
+      if (params.get("categoryName")) {
+        setCategory(params.get("categoryName"));
+      }
     });
   }, []);
 
@@ -48,6 +53,9 @@ export function SaleAdd() {
       .get(`/api/product/formSelect`, { params: paramCategory })
       .then((res) => {
         setProductList(res.data);
+        if (params.get("productNo")) {
+          setProductNo(params.get("productNo"));
+        }
       });
   }, [category]);
 
@@ -116,6 +124,7 @@ export function SaleAdd() {
             <FormLabel>카테고리</FormLabel>
             <FormSelect
               className="mb-3"
+              value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
               <option>카테고리 선택</option>
@@ -132,6 +141,7 @@ export function SaleAdd() {
             <FormLabel>판매상품</FormLabel>
             <FormSelect
               className="mb-3"
+              value={productNo}
               onChange={(e) => setProductNo(e.target.value)}
             >
               <option>판매상품 선택</option>

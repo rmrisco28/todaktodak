@@ -59,11 +59,24 @@ export function ProductDetail() {
       });
   }
 
+  function handleMoveSaleAddButtonClick() {
+    // 카테고리명, 상품번호
+    const searchParams = new URLSearchParams();
+    searchParams.set("categoryName", product.category);
+    searchParams.set("productNo", product.productNo);
+    navigate(`/sale/add?${searchParams.toString()}`);
+  }
+
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
         <div className="d-flex justify-content-between">
           <h2 className="mb-4">{product.seq} 번 상품</h2>
+        </div>
+        <div>
+          <Button variant="primary" onClick={handleMoveSaleAddButtonClick}>
+            판매 등록
+          </Button>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formName">
