@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormLabel,
   FormSelect,
+  FormText,
   Image,
   ListGroup,
   ListGroupItem,
@@ -22,6 +23,7 @@ import { TfiTrash } from "react-icons/tfi";
 export function SaleModify() {
   const [productList, setProductList] = useState([]);
   const [productNo, setProductNo] = useState("");
+  const [product, setProduct] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
 
@@ -37,6 +39,7 @@ export function SaleModify() {
   const { seq } = useParams();
   const navigate = useNavigate();
 
+  // 판매상품 상세 조회
   useEffect(() => {
     axios
       .get(`/api/sale/detail/${seq}`)
@@ -53,12 +56,14 @@ export function SaleModify() {
       });
   }, []);
 
+  // 카테고리 목록 조회
   useEffect(() => {
     axios.get(`/api/category/formSelect`).then((res) => {
       setCategoryList(res.data);
     });
   }, []);
 
+  // 상품 목록 조회 by카테고리
   useEffect(() => {
     const searchParams = new URLSearchParams();
     searchParams.set("category", category);
@@ -68,6 +73,19 @@ export function SaleModify() {
         setProductList(res.data);
       });
   }, [category]);
+
+  // 상품의 데이터(재고,가격) 조회 by상품
+  useEffect(() => {
+    if (productNo !== null && productNo !== "") {
+      const paramProductNo = new URLSearchParams();
+      paramProductNo.set("productNo", productNo);
+      axios
+        .get(`/api/product/detail`, { params: paramProductNo })
+        .then((res) => {
+          setProduct(res.data);
+        });
+    }
+  }, [productNo]);
 
   if (!sale) {
     return <Spinner />;
@@ -189,7 +207,9 @@ export function SaleModify() {
               value={sale.quantity}
               onChange={(e) => setSale({ ...sale, quantity: e.target.value })}
             ></FormControl>
-            {/* TODO [@minki] 상품 테이블의 stock 출력 */}
+            <FormText className="text-danger">
+              상품 재고량: {product.stock}
+            </FormText>
           </FormGroup>
         </div>
         <div>
@@ -201,11 +221,12 @@ export function SaleModify() {
               value={sale.salePrice}
               onChange={(e) => setSale({ ...sale, salePrice: e.target.value })}
             ></FormControl>
-            {/* TODO [@minki] 상품 테이블의 price 출력 */}
+            <FormText className="text-danger">
+              상품 가격: {product.price}
+            </FormText>
           </FormGroup>
         </div>
         <div>
-          {/* TODO [@minki] 배달업체 데이터 조회  */}
           <FormGroup className="mb-3" controlId="formDeliveryFee">
             <FormLabel>배송비</FormLabel>
             <FormControl

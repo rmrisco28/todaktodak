@@ -31,7 +31,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
-    private final CategoryRepository categoryRepository;
     // TODO  [@minki]
     //    private final S3Client s3Client;
 
@@ -327,5 +326,16 @@ public class ProductService {
 
     public List<ProductNameListDto> productListByCategory(String categoryName) {
         return productRepository.findProductByCategory(categoryName);
+    }
+
+    public ProductDto productByProductNo(String productNo) {
+        Product product = productRepository.findByProductNo(productNo);
+        ProductDto productDto = new ProductDto();
+        productDto.setSeq(product.getSeq());
+        productDto.setProductNo(product.getProductNo());
+        productDto.setStock(product.getStock());
+        productDto.setPrice(product.getPrice());
+
+        return productDto;
     }
 }
