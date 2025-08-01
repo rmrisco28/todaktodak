@@ -128,4 +128,14 @@ public class ProductController {
         return productService.productListByCategory(category);
     }
 
+    /**
+     * 특정 상품의 상품 상세 조회
+     *
+     * @return
+     */
+    @GetMapping("detail")
+    public ProductDto getProductByProductNo(String productNo) {
+        return productService.productByProductNo(productNo);
+    }
+
 }

@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormLabel,
   FormSelect,
+  FormText,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -16,6 +17,7 @@ import { useNavigate } from "react-router";
 export function SaleAdd() {
   const [productList, setProductList] = useState([]);
   const [productNo, setProductNo] = useState("");
+  const [product, setProduct] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [category, setCategory] = useState("");
   const [salePrice, setSalePrice] = useState(0);
@@ -31,21 +33,36 @@ export function SaleAdd() {
 
   const navigate = useNavigate();
 
+  // 카테고리 목록 조회
   useEffect(() => {
     axios.get(`/api/category/formSelect`).then((res) => {
       setCategoryList(res.data);
     });
   }, []);
 
+  // 상품 목록 조회 by카테고리
   useEffect(() => {
-    const searchParams = new URLSearchParams();
-    searchParams.set("category", category);
+    const paramCategory = new URLSearchParams();
+    paramCategory.set("category", category);
     axios
-      .get(`/api/product/formSelect`, { params: searchParams })
+      .get(`/api/product/formSelect`, { params: paramCategory })
       .then((res) => {
         setProductList(res.data);
       });
   }, [category]);
+
+  // 상품의 데이터(재고,가격) 조회 by상품
+  useEffect(() => {
+    if (productNo !== null && productNo !== "") {
+      const paramProductNo = new URLSearchParams();
+      paramProductNo.set("productNo", productNo);
+      axios
+        .get(`/api/product/detail`, { params: paramProductNo })
+        .then((res) => {
+          setProduct(res.data);
+        });
+    }
+  }, [productNo]);
 
   let validate = true;
   if (
@@ -110,11 +127,12 @@ export function SaleAdd() {
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formProduct">
-            <FormLabel>판매상품 선택</FormLabel>
+            <FormLabel>판매상품</FormLabel>
             <FormSelect
               className="mb-3"
               onChange={(e) => setProductNo(e.target.value)}
             >
+              <option>판매상품 선택</option>
               {productList.map((item) => (
                 <option value={item.productNo} key={item.seq}>
                   {item.name}
@@ -141,7 +159,9 @@ export function SaleAdd() {
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             ></FormControl>
-            {/* TODO [@minki] 상품 테이블의 stock 출력 */}
+            <FormText className="text-danger">
+              상품 재고량: {product.stock}
+            </FormText>
           </FormGroup>
         </div>
         <div>
@@ -153,7 +173,9 @@ export function SaleAdd() {
               value={salePrice}
               onChange={(e) => setSalePrice(e.target.value)}
             ></FormControl>
-            {/* TODO [@minki] 상품 테이블의 price 출력 */}
+            <FormText className="text-danger">
+              상품 가격: {product.price}
+            </FormText>
           </FormGroup>
         </div>
         <div>
