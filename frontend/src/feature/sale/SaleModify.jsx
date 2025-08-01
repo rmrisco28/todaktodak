@@ -171,7 +171,7 @@ export function SaleModify() {
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formProduct">
-            <FormLabel>상품</FormLabel>
+            <FormLabel>판매상품</FormLabel>
             <FormSelect
               className="mb-3"
               value={productNo}
@@ -180,7 +180,7 @@ export function SaleModify() {
                 setProductNo(e.target.value);
               }}
             >
-              <option>상품 선택</option>
+              <option>판매상품 선택</option>
               {productList.map((item) => (
                 <option value={item.productNo} key={item.seq}>
                   {item.name}
