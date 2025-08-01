@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Form,
   FormCheck,
   FormControl,
   FormGroup,
@@ -20,6 +21,7 @@ export function MemberModify() {
 
   // 새 비밀번호 입력값 상태
   const [newPassword, setNewPassword] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
 
   // 생년월일 관련 상태(드랍다운 분리)
   const [birthYear, setBirthYear] = useState("");
@@ -118,7 +120,7 @@ export function MemberModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={4}>
+      <Col lg={5}>
         <h3 className="mb-4">회원 정보 수정</h3>
         {/* 고객 번호 */}
         <div>
@@ -126,7 +128,7 @@ export function MemberModify() {
             <FormLabel column lg={3}>
               고객 번호
             </FormLabel>
-            <Col lg={7}>
+            <Col lg={5}>
               <FormControl value={member.memberNo} readOnly={true} />
             </Col>
           </FormGroup>
@@ -137,7 +139,7 @@ export function MemberModify() {
             <FormLabel column lg={3}>
               권한
             </FormLabel>
-            <Col lg={7}>
+            <Col lg={5}>
               <FormControl
                 value={member.auth || ""}
                 onChange={(e) => setMember({ ...member, auth: e.target.value })}
@@ -151,7 +153,7 @@ export function MemberModify() {
             <FormLabel column lg={3}>
               아이디
             </FormLabel>
-            <Col lg={7}>
+            <Col lg={5}>
               <FormControl
                 value={member.memberId}
                 onChange={(e) =>
@@ -162,27 +164,46 @@ export function MemberModify() {
           </FormGroup>
         </div>
         {/* 새 비밀번호 입력*/}
-        <div>
-          <FormGroup as={Row} controlId="password" className="mb-4">
-            <FormLabel column lg={3}>
-              비밀번호
-            </FormLabel>
-            <Col lg={7} className="text-center">
-              <FormControl
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </Col>
-          </FormGroup>
-        </div>
+        <Form>
+          <div>
+            <FormGroup as={Row} controlId="password" className="mb-4">
+              <FormLabel column lg={3}>
+                비밀번호
+              </FormLabel>
+              <Col lg={5} className="text-center">
+                <FormControl
+                  autoComplete="off"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 새 비밀번호 확인*/}
+          <div>
+            <FormGroup as={Row} controlId="password2" className="mb-4">
+              <FormLabel column lg={3}>
+                비밀번호 확인
+              </FormLabel>
+              <Col lg={5} className="text-center">
+                <FormControl
+                  autoComplete="off"
+                  type="password"
+                  value={newPassword2}
+                  onChange={(e) => setNewPassword2(e.target.value)}
+                />
+              </Col>
+            </FormGroup>
+          </div>
+        </Form>
         {/* 이름 */}
         <div>
           <FormGroup as={Row} controlId="name" className="mb-4">
             <FormLabel column sm={3}>
               이름
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.name}
                 onChange={(e) => setMember({ ...member, name: e.target.value })}
@@ -196,7 +217,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               이메일
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.email}
                 onChange={(e) =>
@@ -212,7 +233,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               생년월일
             </FormLabel>
-            <Col sm={9} className="d-flex" style={{ gap: "10px" }}>
+            <Col sm={5} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
               <FormControl
                 as="select"
@@ -267,7 +288,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               연락처
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.phone}
                 onChange={(e) =>
@@ -283,7 +304,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               우편번호
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={6}>
               <div className="d-flex" style={{ gap: "10px" }}>
                 <FormControl
                   value={member.postCode}
@@ -308,7 +329,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               주소
             </FormLabel>
-            <Col md={9}>
+            <Col sm={8}>
               <FormControl value={member.addr} readOnly={true} />
             </Col>
           </FormGroup>
@@ -317,7 +338,7 @@ export function MemberModify() {
         <div>
           <FormGroup as={Row} controlId="addressDetail" className="mb-4">
             <FormLabel column sm={3}></FormLabel>
-            <Col sm={9}>
+            <Col sm={8}>
               <FormControl
                 value={member.addrDetail || ""}
                 onChange={(e) =>
@@ -333,7 +354,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               회원 상태
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.state}
                 onChange={(e) =>
@@ -349,7 +370,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               사용여부
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormCheck
                 type="switch"
                 id="useYn-switch"
@@ -368,7 +389,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               삭제여부
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormCheck
                 type="switch"
                 id="useYn-switch"

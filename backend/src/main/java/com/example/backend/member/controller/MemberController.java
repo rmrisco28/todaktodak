@@ -179,5 +179,9 @@ public class MemberController {
         }
     }
 
-
+    // AuthenticationContextProvider용 요청
+    @GetMapping(params = "memberId")
+    public ResponseEntity<?> getTokenInfo(@RequestParam String memberId) {
+        return ResponseEntity.ok().body(memberService.getTokenInfo(memberId));
+    }
 }

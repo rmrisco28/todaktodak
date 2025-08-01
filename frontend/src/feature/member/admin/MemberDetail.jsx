@@ -229,7 +229,7 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         {/* 삭제, 수정 버튼*/}
-        <div>
+        <div className="mb-3">
           <Button
             className="me-2"
             variant="outline-danger"

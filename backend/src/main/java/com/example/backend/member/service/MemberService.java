@@ -316,4 +316,12 @@ public class MemberService {
 
     }
 
+    public TokenInfoDto getTokenInfo(String memberId) {
+        Member dbData = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+
+        return new TokenInfoDto(dbData.getMemberId(), dbData.getName());
+    }
+
 }
