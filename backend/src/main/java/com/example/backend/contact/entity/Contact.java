@@ -45,7 +45,7 @@ public class Contact {
     private String reply = "아직 답변이 없습니다. (readonly로 수정 못하게 할 예정)\n\n아래 답변 저장 버튼을 관리자만 볼 수 있게 해서,\n\n관리자만 수정 할 수 있게 할 예정";
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "reply_dttm", nullable = false, insertable = false)
+    @Column(name = "reply_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime replyDttm;
 
     @ColumnDefault("1")

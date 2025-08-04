@@ -155,7 +155,7 @@ export function BuyForm() {
         addr: address,
         addrDetail: addressDetail,
         request: request,
-        price: sale.price,
+        price: sale.salePrice,
         deliveryFee: sale.deliveryFee,
         orderCount: orderCount,
       })
@@ -177,16 +177,19 @@ export function BuyForm() {
   return (
     <>
       <Row className="justify-content-center">
-        <Col md={4} lg={4}>
+        <Col md={2}></Col>
+        <Col xs={12} md={8}>
           <h2 className="mb-3">구매할 제품</h2>
-          <br />
+        </Col>
+        <Col md={2}></Col>
+        <Col md={4} lg={4}>
           <Image
             src={sale.thumbnails[0]?.path}
             fluid
             rounded
             className="border"
           />
-          <div className="d-flex gap-2 flex-wrap">
+          {/*<div className="d-flex gap-2 flex-wrap">
             {sale.thumbnails.map((image) => (
               <Image
                 key={image.name}
@@ -205,20 +208,24 @@ export function BuyForm() {
                 onClick={() => handleThumbnailClick(image.path)}
               />
             ))}
-          </div>
+          </div>*/}
         </Col>
         <Col md={4} lg={4}>
           <h5 className="mb-3">{sale.title}</h5>
-          <p>{sale.no}</p>
+          <hr />
+          {/*<p>{sale.saleNo}</p>*/}
           <p>
-            가격: {sale.price.toLocaleString()}
+            가격: {sale.salePrice.toLocaleString()}원
             <br />
-            수량: {orderCount}
+            수량: {orderCount} 개
             <br />
-            배송비: {sale.deliveryFee.toLocaleString()}
+            배송비:{" "}
+            {sale.deliveryFee > 0
+              ? `${sale.deliveryFee.toLocaleString()}원`
+              : "무료배송"}
           </p>
         </Col>
-        <Col xs={12} md={8} lg={6}></Col>
+
         <Col xs={12} md={8} lg={6}>
           <hr />
           <h2 className="mb-3">상품구매 / 결제</h2>
@@ -346,8 +353,10 @@ export function BuyForm() {
             <FormControl
               style={{ fontSize: "20px" }}
               value={
-                (sale.price * orderCount + sale.deliveryFee).toLocaleString() +
-                "원"
+                (
+                  sale.salePrice * orderCount +
+                  sale.deliveryFee
+                ).toLocaleString() + "원"
               }
               readOnly
             />

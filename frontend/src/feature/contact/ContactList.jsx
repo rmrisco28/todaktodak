@@ -114,6 +114,10 @@ export function ContactList() {
                       .then(() => {
                         if (contact.delYn === true) {
                           navigate(`/contact/deleted/detail/${contact.seq}`);
+                        } else if (isAdmin === true) {
+                          navigate(
+                            `/contact/detail/${contact.seq}?isAdmin=true`,
+                          );
                         } else {
                           navigate(`/contact/detail/${contact.seq}`);
                         }
