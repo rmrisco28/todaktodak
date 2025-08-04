@@ -18,6 +18,8 @@ export function ContactDetail() {
   const { seq } = useParams();
 
   let navigate = useNavigate();
+  const isAdmin =
+    new URLSearchParams(location.search).get("isAdmin") === "true";
 
   useEffect(() => {
     axios
@@ -40,11 +42,11 @@ export function ContactDetail() {
 
   function handleSaveButtonClick() {
     axios
-      .put(`/api/contact/reply/${seq}`, { reply })
+      .put(`/api/contact/reply/${seq}?isAdmin=true`, { reply })
       .then((res) => {
         console.log("ok");
         alert(res.data.message);
-        navigate(`/contact/detail/${seq}`, { replace: true });
+        navigate(`/contact/detail/${seq}?isAdmin=true`, { replace: true });
       })
       .catch((err) => {
         console.log("no");
@@ -96,13 +98,24 @@ export function ContactDetail() {
               <FormControl value={contact.name} readOnly />
             </FormGroup>
           </div>
-          <Button
-            variant="secondary"
-            className="me-2"
-            onClick={() => navigate("/contact/list")}
-          >
-            목록
-          </Button>
+          {isAdmin && (
+            <Button
+              variant="secondary"
+              className="me-2"
+              onClick={() => navigate("/contact/list?isAdmin=true")}
+            >
+              목록
+            </Button>
+          )}
+          {!isAdmin && (
+            <Button
+              variant="secondary"
+              className="me-2"
+              onClick={() => navigate("/contact/list")}
+            >
+              목록
+            </Button>
+          )}
           <Button
             variant="danger"
             className="me-2"
@@ -122,25 +135,46 @@ export function ContactDetail() {
           {/*관리자 답변 */}
           <br />
           <hr />
-          <div>
-            <FormGroup className="mb-3" controlId="content1">
-              <FormLabel className="mb-3">문의 답변 </FormLabel>
-              <FormControl
-                as="textarea"
-                rows={6}
-                value={reply}
-                onChange={(e) => {
-                  setReply(e.target.value);
-                }}
-              />
-            </FormGroup>
-          </div>
-          <Button
-            title="관리자에게만 보이게 할 예정"
-            onClick={handleSaveButtonClick}
-          >
-            답변저장
-          </Button>
+          {isAdmin && (
+            <div>
+              <FormGroup className="mb-3" controlId="content1">
+                <FormLabel className="mb-3">문의 답변 </FormLabel>
+                <FormControl
+                  as="textarea"
+                  rows={6}
+                  value={reply}
+                  onChange={(e) => {
+                    setReply(e.target.value);
+                  }}
+                />
+              </FormGroup>
+            </div>
+          )}
+          {!isAdmin && (
+            <div>
+              <FormGroup className="mb-3" controlId="content1">
+                <FormLabel className="mb-3">문의 답변 </FormLabel>
+                <FormControl
+                  as="textarea"
+                  rows={6}
+                  value={reply}
+                  readOnly
+                  onChange={(e) => {
+                    setReply(e.target.value);
+                  }}
+                />
+              </FormGroup>
+            </div>
+          )}
+
+          {isAdmin && (
+            <Button
+              title="관리자에게만 보이게 할 예정"
+              onClick={handleSaveButtonClick}
+            >
+              답변저장
+            </Button>
+          )}
         </Col>
 
         {/*모오오오오오오오오오오오오오오오다아아아아아아아아아아아아아아아아알ㄹㄹㄹㄹ*/}

@@ -133,8 +133,14 @@ public class ContactService {
     }
 
     // 답글 저장
-    public void reply(ReplyDto rd) {
-        Contact contact = contactRepository.findBySeq(rd.getSeq());
+    public void reply(ReplyDto rd, Boolean isAdmin) {
+        Contact contact;
+
+        if (isAdmin) {
+            contact = contactRepository.findBySeq(rd.getSeq());
+        } else {
+            contact = contactRepository.findBySeq(rd.getSeq());
+        }
 
         contact.setReply(rd.getReply());
         contact.setReplyDttm(rd.getReplyDttm());

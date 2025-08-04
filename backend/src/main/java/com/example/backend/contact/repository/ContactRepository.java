@@ -51,7 +51,7 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
                         c.updateDttm)
                         FROM Contact c
                                     WHERE (c.delYn=true) AND (:keyword = '' OR c.name Like %:keyword% OR c.title LIKE %:keyword%)
-            ORDER By c.updateDttm DESC 
+            ORDER By c.seq DESC 
             """)
     Page<ContactDeletedDto> findAllByDeleted(String keyword, PageRequest of);
 
@@ -67,7 +67,7 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
                         c.useYn)
                         FROM Contact c
                         WHERE (:keyword = '' OR c.name Like %:keyword% OR c.title LIKE %:keyword%)
-            ORDER By c.updateDttm DESC
+            ORDER By c.seq DESC
             """)
     Page<ContactDto> findAllByAdmin(String keyword, PageRequest pageRequest);
 

@@ -39,7 +39,7 @@ export function ContactModify() {
         setTitle(data.title);
         setContent(data.content);
         setName(data.name);
-        setUseYn(data.useYn);
+        setUseYn(data.useYn === "Y" ? true : false);
       })
       .catch((err) => {
         console.log("no");

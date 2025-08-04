@@ -26,9 +26,11 @@ public class ContactController {
 
     // 답변 기능
     @PutMapping("reply/{seq}")
-    public ResponseEntity<?> reply(@PathVariable Integer seq, @RequestBody ReplyDto rd) {
+    public ResponseEntity<?> reply(@PathVariable Integer seq,
+                                   @RequestBody ReplyDto rd,
+                                   @RequestParam(value = "isAdmin", defaultValue = "false") Boolean isAdmin) {
         rd.setSeq(seq);
-        contactService.reply(rd);
+        contactService.reply(rd, isAdmin);
         return ResponseEntity.ok(Map.of("message", "저장되었습니다."));
     }
 
