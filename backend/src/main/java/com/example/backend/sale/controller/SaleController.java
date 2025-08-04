@@ -49,10 +49,11 @@ public class SaleController {
      */
     @GetMapping("list")
     public Map<String, Object> getAllSales(
+            @RequestParam(value = "c", required = false) Integer category,
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
     ) {
-        return saleService.list(keyword, pageNumber);
+        return saleService.list(category, keyword, pageNumber);
     }
 
     /**

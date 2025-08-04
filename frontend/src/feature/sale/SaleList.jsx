@@ -36,7 +36,7 @@ export function SaleList() {
   // 판매상품 목록 조회
   useEffect(() => {
     const q = searchParams.get("q") || "";
-    const category = searchParams.get("category");
+    const category = searchParams.get("c");
 
     setKeyword(q);
     setActiveCategory(category ? parseInt(category) : null);
@@ -119,7 +119,7 @@ export function SaleList() {
                   onClick={() => {
                     setActiveCategory(item.seq);
                     const params = new URLSearchParams(searchParams);
-                    params.set("category", item.seq);
+                    params.set("c", item.seq);
                     setSearchParams(params);
                   }}
                 >
