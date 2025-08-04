@@ -26,13 +26,16 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
             FROM Sale s
             LEFT JOIN SaleImageThumb t 
                 ON t.sale.saleNo = s.saleNo
+            LEFT JOIN Category c
+                   ON c.name = s.category
             WHERE (s.useYn = true 
                 AND s.delYn = false)
                 AND (s.title LIKE %:keyword%
                 OR s.saleNo LIKE %:keyword%)
+                AND (:category IS NULL OR c.seq = :category)
             ORDER BY s.seq DESC
             """)
-    Page<SaleListDto> searchSaleList(@Param("keyword") String keyword, Pageable pageable);
+    Page<SaleListDto> searchSaleList(@Param("category") Integer category, @Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = """
             SELECT new com.example.backend.sale.dto.SaleDto(

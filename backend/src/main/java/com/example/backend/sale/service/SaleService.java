@@ -150,8 +150,8 @@ public class SaleService {
         return true;
     }
 
-    public Map<String, Object> list(String keyword, Integer pageNumber) {
-        Page<SaleListDto> saleListDtoPage = saleRepository.searchSaleList(keyword, PageRequest.of(pageNumber - 1, 10));
+    public Map<String, Object> list(Integer category, String keyword, Integer pageNumber) {
+        Page<SaleListDto> saleListDtoPage = saleRepository.searchSaleList(category, keyword, PageRequest.of(pageNumber - 1, 10));
         int totalPages = saleListDtoPage.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
         int leftPageNumber = rightPageNumber - 9;

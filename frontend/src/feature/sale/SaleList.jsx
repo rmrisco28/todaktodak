@@ -11,27 +11,35 @@ import {
   Pagination,
   Row,
   Spinner,
-  Table,
 } from "react-bootstrap";
-import { FaThumbsUp } from "react-icons/fa6";
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
 
 export function SaleList() {
   const [keyword, setKeyword] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
   const [saleList, setSaleList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  // 카테고리 목록 조회
   useEffect(() => {
-    const q = searchParams.get("q");
-    if (q) {
-      setKeyword(q);
-    } else {
-      setKeyword("");
-    }
+    axios.get(`/api/category/formSelect`).then((res) => {
+      setCategoryList(res.data);
+    });
+  }, []);
+
+  // 판매상품 목록 조회
+  useEffect(() => {
+    const q = searchParams.get("q") || "";
+    const category = searchParams.get("c");
+
+    setKeyword(q);
+    setActiveCategory(category ? parseInt(category) : null);
 
     axios
       .get(`/api/sale/list?${searchParams}`)
@@ -83,6 +91,43 @@ export function SaleList() {
           <Button variant="primary" onClick={() => navigate(`/sale/add`)}>
             판매상품 등록
           </Button>
+
+          {/* 카테고리 버튼 */}
+          <div className="mb-4">
+            <div className="d-flex flex-wrap gap-2">
+              <Button
+                variant={activeCategory === null ? "dark" : "outline-dark"}
+                size="sm"
+                style={{ minWidth: 100, textAlign: "center" }}
+                onClick={() => {
+                  setActiveCategory(null);
+                  const params = new URLSearchParams(searchParams);
+                  params.delete("c");
+                  setSearchParams(params);
+                }}
+              >
+                전체
+              </Button>
+              {categoryList.map((item) => (
+                <Button
+                  key={item.seq}
+                  variant={
+                    activeCategory === item.seq ? "dark" : "outline-dark"
+                  }
+                  size="sm"
+                  style={{ minWidth: 100, textAlign: "center" }}
+                  onClick={() => {
+                    setActiveCategory(item.seq);
+                    const params = new URLSearchParams(searchParams);
+                    params.set("c", item.seq);
+                    setSearchParams(params);
+                  }}
+                >
+                  {item.name}
+                </Button>
+              ))}
+            </div>
+          </div>
 
           <Form
             inline="true"
