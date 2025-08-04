@@ -22,6 +22,8 @@ export function MemberMyInfoModify() {
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
 
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const [passwordModalShow, setPasswordModalShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
@@ -35,7 +37,7 @@ export function MemberMyInfoModify() {
   // 비밀번호 변경 유효성 검사 상태
   const [errors, setErrors] = useState({});
 
-  // 유효서 검사 함수
+  // 유효성 검사 함수
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 
@@ -125,15 +127,20 @@ export function MemberMyInfoModify() {
   // 비밀번호 변경 버튼 클릭
   function handleChangePasswordButtonClick() {
     const newErrors = {};
+    setHasSubmitted(true);
 
     // 현재 비밀번호 입력 유무
     if (!currentPassword.trim()) {
       newErrors.currentPassword = "현재 비밀번호를 입력해주세요.";
     }
-    // 새 비밀번호 유효성
-    if (!validatePassword(newPassword)) {
+    // 새 비밀번호 입력 유무
+    if (!newPassword.trim()) {
+      newErrors.newPassword = "새 비밀번호를 입력해주세요.";
+    }
+    // 비밀번호 유효성 검사
+    if (newPassword.trim() && !validatePassword(newPassword)) {
       newErrors.newPassword =
-        "새 비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.";
+        "비밀번호는 8자 이상, 숫자/특수문자를 포함해야합니다.";
     }
     // 비밀번호 일치 확인 검사
     if (newPassword !== newPassword2) {
@@ -159,12 +166,14 @@ export function MemberMyInfoModify() {
       })
       .catch((err) => {
         console.log(err);
+        toast("비밀번호 변경에 실패하였습니다.", { type: "error" });
       })
       .finally(() => {
         setCurrentPassword("");
         setNewPassword("");
         setNewPassword2("");
         setPasswordModalShow(false);
+        setHasSubmitted(false);
       });
   }
 
@@ -361,7 +370,6 @@ export function MemberMyInfoModify() {
           </Button>
         </div>
       </Col>
-
       {/*  비밀번호 변경 모달 */}
       <Modal
         show={passwordModalShow}
@@ -386,13 +394,11 @@ export function MemberMyInfoModify() {
                 value={currentPassword}
                 style={{ width: "300px" }}
                 onChange={(e) => {
-                  setCurrentPassword(e.target.value);
-                  setErrors((prev) => ({
-                    ...prev,
-                    currentPassword: e.target.value
-                      ? null
-                      : "현재 비밀번호를 입력해주세요.",
-                  }));
+                  const value = e.target.value;
+                  setCurrentPassword(value);
+                  if (hasSubmitted && value.trim() !== "") {
+                    setErrors((prev) => ({ ...prev, currentPassword: null }));
+                  }
                 }}
               />
               {errors.currentPassword && (
@@ -409,12 +415,15 @@ export function MemberMyInfoModify() {
                 value={newPassword}
                 style={{ width: "300px" }}
                 onChange={(e) => {
-                  setNewPassword(e.target.value);
-                  if (!validatePassword(e.target.value)) {
+                  const value = e.target.value;
+                  setNewPassword(value);
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, newPassword: null }));
+                  } else if (!validatePassword(value)) {
                     setErrors((prev) => ({
                       ...prev,
                       newPassword:
-                        "새 비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                        "비밀번호는 8자 이상, 숫자/특수문자를 포함해야합니다.",
                     }));
                   } else {
                     setErrors((prev) => ({ ...prev, newPassword: null }));
@@ -472,7 +481,6 @@ export function MemberMyInfoModify() {
           </div>
         </Modal.Body>
       </Modal>
-
       {/*  변경 확인 모달*/}
       <Modal show={modalShow} onHide={() => setModalShow(false)}>
         <Modal.Header closeButton>

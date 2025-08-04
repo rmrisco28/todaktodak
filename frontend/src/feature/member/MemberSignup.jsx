@@ -263,13 +263,18 @@ export function MemberSignup() {
               style={{ width: "400px" }}
               value={phone}
               onChange={(e) => {
-                setPhone(e.target.value);
-                setErrors((prev) => ({
-                  ...prev,
-                  phone: validatePhone(e.target.value)
-                    ? null
-                    : "번호 형식이 올바르지 않습니다.",
-                }));
+                const value = e.target.value;
+                setPhone(value);
+                if (value.trim() === "") {
+                  setErrors((prev) => ({ ...prev, phone: null }));
+                } else if (!validatePhone(value)) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    phone: "번호 형식이 올바르지 않습니다.",
+                  }));
+                } else {
+                  setErrors((prev) => ({ ...prev, phone: null }));
+                }
               }}
             />
             {errors.phone && (
@@ -351,13 +356,18 @@ export function MemberSignup() {
               style={{ width: "400px" }}
               value={email}
               onChange={(e) => {
-                setEmail(e.target.value);
-                setErrors((prev) => ({
-                  ...prev,
-                  email: validateEmail(e.target.value)
-                    ? null
-                    : "이메일 형식이 올바르지 않습니다.",
-                }));
+                const value = e.target.value;
+                setEmail(value);
+                if (value.trim() === "") {
+                  setErrors((prev) => ({ ...prev, email: null }));
+                } else if (!validateEmail(value)) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    email: "이메일 형식이 올바르지 않습니다.",
+                  }));
+                } else {
+                  setErrors((prev) => ({ ...prev, email: null }));
+                }
               }}
             />
             {errors.email && (
