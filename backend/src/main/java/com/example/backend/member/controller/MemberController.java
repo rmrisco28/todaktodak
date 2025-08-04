@@ -153,7 +153,15 @@ public class MemberController {
         }
         return ResponseEntity.ok().body(Map.of("message",
                 Map.of("type", "success",
-                        "text", "회원 정보가 수정되었습니다.")));
+                        "text", "회원 정보가 변경되었습니다.")));
+    }
+
+    // 비밀번호 변경(회원)
+    @PutMapping("myinfo/modify/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm dto) {
+        memberService.changePassword(dto);
+
+        return ResponseEntity.ok().body(Map.of("type", "success"));
     }
 
     // 로그인
@@ -171,5 +179,9 @@ public class MemberController {
         }
     }
 
-
+    // AuthenticationContextProvider용 요청
+    @GetMapping(params = "memberId")
+    public ResponseEntity<?> getTokenInfo(@RequestParam String memberId) {
+        return ResponseEntity.ok().body(memberService.getTokenInfo(memberId));
+    }
 }

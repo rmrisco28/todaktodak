@@ -1,10 +1,13 @@
 import {
   Button,
   Col,
+  Form,
   FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
+  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -16,15 +19,23 @@ import { toast } from "react-toastify";
 export function MemberModify() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
+
+  const [modalShow, setModalShow] = useState(false);
+
   const navigate = useNavigate();
 
   // 새 비밀번호 입력값 상태
   const [newPassword, setNewPassword] = useState("");
+  const [newPassword2, setNewPassword2] = useState("");
 
   // 생년월일 관련 상태(드랍다운 분리)
   const [birthYear, setBirthYear] = useState("");
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
+
+  const [errors, setErrors] = useState({});
+  const validatePassword = (value) =>
+    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 
   useEffect(() => {
     axios
@@ -55,6 +66,12 @@ export function MemberModify() {
 
   // 수정 버튼 클릭
   function handleModifyButtonClick() {
+    // 비밀번호 일치 확인
+    if (newPassword !== newPassword2) {
+      toast("새 비밀번호가 일치하지 않습니다.", { type: "error" });
+      return;
+    }
+
     // 기존 회원 정보 복사
     const modifiedMember = { ...member };
 
@@ -118,7 +135,7 @@ export function MemberModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={4}>
+      <Col lg={7}>
         <h3 className="mb-4">회원 정보 수정</h3>
         {/* 고객 번호 */}
         <div>
@@ -126,7 +143,7 @@ export function MemberModify() {
             <FormLabel column lg={3}>
               고객 번호
             </FormLabel>
-            <Col lg={7}>
+            <Col lg={5}>
               <FormControl value={member.memberNo} readOnly={true} />
             </Col>
           </FormGroup>
@@ -137,7 +154,7 @@ export function MemberModify() {
             <FormLabel column lg={3}>
               권한
             </FormLabel>
-            <Col lg={7}>
+            <Col lg={5}>
               <FormControl
                 value={member.auth || ""}
                 onChange={(e) => setMember({ ...member, auth: e.target.value })}
@@ -151,7 +168,7 @@ export function MemberModify() {
             <FormLabel column lg={3}>
               아이디
             </FormLabel>
-            <Col lg={7}>
+            <Col lg={5}>
               <FormControl
                 value={member.memberId}
                 onChange={(e) =>
@@ -162,27 +179,79 @@ export function MemberModify() {
           </FormGroup>
         </div>
         {/* 새 비밀번호 입력*/}
-        <div>
-          <FormGroup as={Row} controlId="password" className="mb-4">
-            <FormLabel column lg={3}>
-              비밀번호
-            </FormLabel>
-            <Col lg={7} className="text-center">
-              <FormControl
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </Col>
-          </FormGroup>
-        </div>
+        <Form>
+          <div>
+            <FormGroup as={Row} controlId="password" className="mb-4">
+              <FormLabel column lg={3}>
+                비밀번호
+              </FormLabel>
+              <Col lg={5} className="text-center">
+                <FormControl
+                  autoComplete="off"
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setNewPassword(value);
+                    if (value.trim() === "") {
+                      setErrors((prev) => ({ ...prev, newPassword: null }));
+                    } else if (!validatePassword(e.target.value)) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        newPassword:
+                          "비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                      }));
+                    } else {
+                      setErrors((prev) => ({ ...prev, newPassword: null }));
+                    }
+                  }}
+                />
+                {errors.newPassword && (
+                  <FormText className="text-danger">
+                    {errors.newPassword}
+                  </FormText>
+                )}
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 새 비밀번호 확인*/}
+          <div>
+            <FormGroup as={Row} controlId="password2" className="mb-4">
+              <FormLabel column lg={3}>
+                비밀번호 확인
+              </FormLabel>
+              <Col lg={5} className="text-center">
+                <FormControl
+                  autoComplete="off"
+                  type="password"
+                  value={newPassword2}
+                  onChange={(e) => {
+                    setNewPassword2(e.target.value);
+                    setErrors((prev) => ({
+                      ...prev,
+                      newPassword2:
+                        e.target.value !== newPassword
+                          ? "비밀번호가 일치하지 않습니다."
+                          : null,
+                    }));
+                  }}
+                />
+                {errors.newPassword2 && (
+                  <FormText className="text-danger">
+                    {errors.newPassword2}
+                  </FormText>
+                )}
+              </Col>
+            </FormGroup>
+          </div>
+        </Form>
         {/* 이름 */}
         <div>
           <FormGroup as={Row} controlId="name" className="mb-4">
             <FormLabel column sm={3}>
               이름
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.name}
                 onChange={(e) => setMember({ ...member, name: e.target.value })}
@@ -196,7 +265,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               이메일
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.email}
                 onChange={(e) =>
@@ -212,7 +281,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               생년월일
             </FormLabel>
-            <Col sm={9} className="d-flex" style={{ gap: "10px" }}>
+            <Col sm={5} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
               <FormControl
                 as="select"
@@ -267,7 +336,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               연락처
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.phone}
                 onChange={(e) =>
@@ -283,7 +352,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               우편번호
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={6}>
               <div className="d-flex" style={{ gap: "10px" }}>
                 <FormControl
                   value={member.postCode}
@@ -308,7 +377,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               주소
             </FormLabel>
-            <Col md={9}>
+            <Col sm={8}>
               <FormControl value={member.addr} readOnly={true} />
             </Col>
           </FormGroup>
@@ -317,7 +386,7 @@ export function MemberModify() {
         <div>
           <FormGroup as={Row} controlId="addressDetail" className="mb-4">
             <FormLabel column sm={3}></FormLabel>
-            <Col sm={9}>
+            <Col sm={8}>
               <FormControl
                 value={member.addrDetail || ""}
                 onChange={(e) =>
@@ -333,7 +402,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               회원 상태
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormControl
                 value={member.state}
                 onChange={(e) =>
@@ -349,7 +418,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               사용여부
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormCheck
                 type="switch"
                 id="useYn-switch"
@@ -368,7 +437,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               삭제여부
             </FormLabel>
-            <Col sm={7}>
+            <Col sm={5}>
               <FormCheck
                 type="switch"
                 id="useYn-switch"
@@ -390,11 +459,27 @@ export function MemberModify() {
           >
             취소
           </Button>
-          <Button variant="outline-primary" onClick={handleModifyButtonClick}>
+          <Button variant="outline-primary" onClick={() => setModalShow(true)}>
             수정
           </Button>
         </div>
       </Col>
+
+      {/*  수정 확인 모달*/}
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>회원 정보 수정</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>이대로 수정하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button variant="outline-primary" onClick={handleModifyButtonClick}>
+            수정
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }

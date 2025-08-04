@@ -38,8 +38,10 @@ export function MemberDetail() {
       .then((res) => {
         console.log("실행완료");
         const message = res.data.message;
-        toast(message.text, { type: message.type });
-        navigate("list"); // 목록 페이지로 이동
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate("list");
       })
       .catch((err) => {
         console.log(err);
@@ -229,7 +231,7 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         {/* 삭제, 수정 버튼*/}
-        <div>
+        <div className="mb-3">
           <Button
             className="me-2"
             variant="outline-danger"

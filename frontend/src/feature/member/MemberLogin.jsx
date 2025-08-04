@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Form,
   FormControl,
   FormGroup,
   FormLabel,
@@ -35,7 +36,7 @@ export function MemberLogin() {
         if (message) {
           toast(message.text, { type: message.type });
         }
-        
+
         navigate("/");
       })
       .catch((err) => {
@@ -60,18 +61,25 @@ export function MemberLogin() {
             />
           </FormGroup>
         </div>
-        <div>
-          <FormGroup className="mb-3" controlId="password">
-            <FormLabel>비밀번호</FormLabel>
-            <FormControl
-              style={{ width: "200px" }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </FormGroup>
-        </div>
-        <div>
+        <Form>
+          <div>
+            <FormGroup className="mb-3" controlId="password">
+              <FormLabel>비밀번호</FormLabel>
+              <FormControl
+                autoComplete="off"
+                type="password"
+                style={{ width: "200px" }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </FormGroup>
+          </div>
+        </Form>
+        <div className="d-flex justify-content-between">
           <Button onClick={handleLogInButtonClick}>로그인</Button>
+          <Button variant="outline-dark" onClick={() => navigate(`/signup`)}>
+            회원가입
+          </Button>
         </div>
       </Col>
     </Row>
