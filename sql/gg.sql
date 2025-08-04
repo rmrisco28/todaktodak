@@ -72,23 +72,33 @@ CREATE TABLE contact
 # 임시임시 게시판
 CREATE TABLE contact
 (
-    seq         INT             NOT NULL AUTO_INCREMENT,
-    contact_no  VARCHAR(20)     NOT NULL UNIQUE,
-    title       VARCHAR(255)    NOT NULL,
-    name        VARCHAR(50)     NOT NULL,
-    content     VARCHAR(10000)  NOT NULL,
-    view        INT                      DEFAULT 0,
-    insert_dttm DATETIME        NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME        NOT NULL DEFAULT NOW(),
-    reply       VARBINARY(1000) NOT NULL,
-    reply_dttm  DATETIME        NOT NULL DEFAULT NOW(),
-    use_yn      BOOLEAN         NOT NULL DEFAULT TRUE,
-    del_yn      BOOLEAN         NOT NULL DEFAULT FALSE,
+    seq         INT            NOT NULL AUTO_INCREMENT,
+    contact_no  VARCHAR(20)    NOT NULL UNIQUE,
+    title       VARCHAR(255)   NOT NULL,
+    name        VARCHAR(50)    NOT NULL,
+    content     VARCHAR(10000) NOT NULL,
+    view        INT                     DEFAULT 0,
+    insert_dttm DATETIME       NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME       NOT NULL DEFAULT NOW(),
+    reply       VARCHAR(1000)  NOT NULL,
+    reply_dttm  DATETIME       NOT NULL DEFAULT NOW(),
+    use_yn      BOOLEAN        NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN        NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_contact PRIMARY KEY (seq)
 );
 
 DROP TABLE contact;
 
+# 게시판 답글 답변여부
+SELECT c.seq,
+       c.title,
+       c.reply,
+       c.reply_dttm,
+       CASE
+           WHEN c.reply = '아직 답변이 없습니다.' THEN false
+           ELSE true
+           END AS replied
+FROM contact c;
 
 # 주문 배송 정보
 CREATE TABLE order_info

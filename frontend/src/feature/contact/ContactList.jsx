@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { BsFillReplyFill, BsReply } from "react-icons/bs";
 
 export function ContactList() {
   const [contactList, setContactList] = useState(null);
@@ -136,6 +137,17 @@ export function ContactList() {
                     className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary " : ""}`}
                   >
                     {contact.title}
+                    {contact.replied === true ? (
+                      <div style={{ color: "#1ec5f2" }} className="ml-2">
+                        {/*&nbsp;*/}
+                        {/*<BsFillReplyFill />*/}
+                        {/*&nbsp;*/}
+                        <span>[답변완료]</span>
+                      </div>
+                    ) : (
+                      <></>
+                      // <BsReply />
+                    )}
                   </td>
                   <td
                     className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary" : ""}`}
