@@ -176,14 +176,16 @@ export function ContactList() {
             </Form>
           </div>
           <hr />
-          <div
-            className="d-flex justify-content-center align-items-center mb-3"
-            style={{ color: "#808080" }}
-          >
-            <div style={{ color: "#f17878" }}>빨간색</div>은 삭제, &nbsp;
-            <div style={{ color: "#252525" }}>회색</div>은 숨김처리된
-            게시물입니다.
-          </div>
+          {isAdmin && (
+            <div
+              className="d-flex justify-content-center align-items-center mb-3"
+              style={{ color: "#808080" }}
+            >
+              <div style={{ color: "#f17878" }}>빨간색</div>은 삭제, &nbsp;
+              <div style={{ color: "#252525" }}>회색</div>은 숨김처리된
+              게시물입니다.
+            </div>
+          )}
         </Col>
       </Row>
       {/* PageNation */}
