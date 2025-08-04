@@ -33,6 +33,17 @@ export function BuyAdd() {
               }}
               variant="warning"
             >
+              주문 조회 현황
+            </Button>
+          </div>
+          <div className="d-flex justify-content-center mb-4">
+            <Button
+              style={{ width: "250px" }}
+              onClick={() => {
+                navigate("/rental/list");
+              }}
+              variant="primary"
+            >
               대여 현황 확인하기
             </Button>
           </div>
