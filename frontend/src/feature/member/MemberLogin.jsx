@@ -8,7 +8,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import { toast } from "react-toastify";
@@ -50,12 +50,11 @@ export function MemberLogin() {
   return (
     <Row className="d-flex justify-content-center">
       <Col md="auto">
-        <h3 className="d-flex text-center mb-4">Login</h3>
+        <h3 className="d-flex justify-content-center mb-4">Login</h3>
         <div>
           <FormGroup className="mb-3" controlId="memberId">
             <FormLabel>아이디</FormLabel>
             <FormControl
-              style={{ width: "200px" }}
               value={memberId}
               onChange={(e) => setMemberId(e.target.value)}
             />
@@ -68,7 +67,6 @@ export function MemberLogin() {
               <FormControl
                 autoComplete="off"
                 type="password"
-                style={{ width: "200px" }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -76,10 +74,28 @@ export function MemberLogin() {
           </div>
         </Form>
         <div className="d-flex justify-content-between">
-          <Button onClick={handleLogInButtonClick}>로그인</Button>
-          <Button variant="outline-dark" onClick={() => navigate(`/signup`)}>
-            회원가입
+          <Button className="w-100 mb-4" onClick={handleLogInButtonClick}>
+            로그인
           </Button>
+        </div>
+        <div className="text-center">
+          <Link to="/" className="mx-2 text-decoration-none text-secondary">
+            아이디찾기
+          </Link>
+          <span>|</span>
+          <Link
+            to="/member/find_password/email_auth"
+            className="mx-2 text-decoration-none text-secondary"
+          >
+            비밀번호찾기
+          </Link>
+          <span>|</span>
+          <Link
+            to="/signup"
+            className="mx-2 text-decoration-none text-secondary"
+          >
+            회원가입
+          </Link>
         </div>
       </Col>
     </Row>
