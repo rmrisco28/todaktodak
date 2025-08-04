@@ -102,7 +102,7 @@ export function SaleList() {
                 onClick={() => {
                   setActiveCategory(null);
                   const params = new URLSearchParams(searchParams);
-                  params.delete("category");
+                  params.delete("c");
                   setSearchParams(params);
                 }}
               >
