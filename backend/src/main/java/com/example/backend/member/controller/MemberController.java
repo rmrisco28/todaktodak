@@ -159,7 +159,16 @@ public class MemberController {
     // 비밀번호 변경(회원)
     @PutMapping("myinfo/modify/changePassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm dto) {
-        memberService.changePassword(dto);
+
+        try {
+            memberService.changePassword(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", "비밀번호가 변경되지 않았습니다.")));
+        }
 
         return ResponseEntity.ok().body(Map.of("type", "success"));
     }
