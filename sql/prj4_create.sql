@@ -284,6 +284,21 @@ CREATE TABLE category
     CONSTRAINT pk_category PRIMARY KEY (seq)
 );
 
+# 메인 배너 관리 테이블
+CREATE TABLE banner
+(
+    seq         INT AUTO_INCREMENT NOT NULL,
+    title       VARCHAR(255)       NOT NULL,
+    name        VARCHAR(255)       NOT NULL,
+    link        VARCHAR(255)       NOT NULL,
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    use_yn      BOOLEAN            NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN            NOT NULL DEFAULT FALSE,
+    CONSTRAINT pk_banner PRIMARY KEY (seq)
+);
+
+
 # TODO [@minki] 배송업체 관리 테이블
 
 
