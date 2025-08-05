@@ -315,4 +315,36 @@ INSERT INTO auth (member_id, auth_name)
 VALUES ('admin', 'ROLE_ADMIN');
 
 
+# 주문 배송 정보 (ref: 판매상품)
+# seq, 주문번호, 판매상품번호, 주문자 성함, 수령인, 수령인 연락처, 수령인 우편번호, 수령인 주소, 수령인 상세주소
+# 수령인 요청사항, 총 결제금액, 배송비, 전체 상품 금액, 상품금액, 주문수량, 대여기간, 주문상태,
+# 배송업체명, 운송장번호, 주문일시(insertDttm), 수정일시, useYn, delYn
+CREATE TABLE order_list
+(
+    seq              INT          NOT NUll AUTO_INCREMENT,
+    order_no         VARCHAR(20)  NOT NULL UNIQUE,
+    sale_no          VARCHAR(20)  NOT NULL,
+    name             VARCHAR(50)  NOT NULL,
+    recipient        VARCHAR(50)  NOT NULL,
+    phone            VARCHAR(30)  NOT NULL,
+    post             VARCHAR(10)  NOT NULL,
+    addr             VARCHAR(255) NOT NULL,
+    addr_detail      VARCHAR(255) NOT NULL,
+    request          VARCHAR(255),
+    total_price      INT          NOT NULL,
+    delivery_fee     INT          NOT NULL,
+    tot_prod_price   INT          NOT NULL,
+    prod_price       INT          NOT NULL,
+    order_count      INT          NOT NULL,
+    rental_period    INT          NOT NULL,
+    state            VARCHAR(10)  NOT NULL,
+    delivery_company VARCHAR(50)  NOT NULL,
+    tracking         VARCHAR(100) NOT NULL,
+    insert_dttm      DATETIME     NOT NULL DEFAULT NOW(),
+    update_dttm      DATETIME     NOT NULL DEFAULT NOW(),
+    use_yn           BOOLEAN      NOT NULL DEFAULT TRUE,
+    del_yn           BOOLEAN      NOT NULL DEFAULT FALSE,
+    Constraint pk_order PRIMARY KEY (seq),
+    FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
+);
 
