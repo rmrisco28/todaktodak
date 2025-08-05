@@ -59,7 +59,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Object> findByName(String productName);
 
-    Product findByProductNo(String productNo);
 
     @Query("""
             SELECT new com.example.backend.product.dto.ProductNameListDto(
@@ -75,4 +74,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
                       AND p.delYn = false
             """)
     List<ProductNameListDto> findProductByCategory(String categoryName);
+
+    Product findByProductNo(String productNo);
 }

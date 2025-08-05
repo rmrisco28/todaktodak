@@ -33,6 +33,7 @@ export function RentalList() {
                 <th>가격</th>
                 <th>대여일시</th>
                 <th>반납일시</th>
+                <th>상태</th>
                 <th>반납하기</th>
                 <th>연장하기</th>
               </tr>
@@ -58,6 +59,7 @@ export function RentalList() {
                 <td>39,800원</td>
                 <td>2025.08.04.</td>
                 <td>2025.12.04.</td>
+                <td>대여중</td>
                 <td>
                   <Button style={{}}>반납하기</Button>
                 </td>

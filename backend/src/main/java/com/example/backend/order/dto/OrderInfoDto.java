@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * DTO for {@link OrderInfo}
@@ -25,4 +26,5 @@ public class OrderInfoDto implements Serializable {
     private Integer price;
     private Integer deliveryFee;
     private Integer orderCount;
+    private String productNo;
 }

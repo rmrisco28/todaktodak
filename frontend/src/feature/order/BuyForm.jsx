@@ -146,6 +146,7 @@ export function BuyForm() {
   function handleSuccessButtonClick() {
     window.open("https://payment-demo.kakaopay.com/online", "_blank");
     setIsProcessing(true);
+
     axios
       .post("/api/buy", {
         name: name,
@@ -158,8 +159,10 @@ export function BuyForm() {
         price: sale.salePrice,
         deliveryFee: sale.deliveryFee,
         orderCount: orderCount,
+        productNo: sale.productNo,
       })
       .then((res) => {
+        axios.put("/api/rental/save", {});
         console.log("ok");
         alert(res.data.message);
         navigate("/buy/add");

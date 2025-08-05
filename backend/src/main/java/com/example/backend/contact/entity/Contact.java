@@ -49,7 +49,7 @@ public class Contact {
     private LocalDateTime replyDttm;
 
     @ColumnDefault("1")
-    @Column(name = "use_yn", nullable = true)
+    @Column(name = "use_yn", nullable = false)
     private Boolean useYn = true;
 
     @ColumnDefault("0")
