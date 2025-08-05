@@ -148,7 +148,7 @@ export function CategoryList() {
               </thead>
               <tbody>
                 {categoryList.map((category) => (
-                  <tr key={category.seq} style={{ cursor: "pointer" }}>
+                  <tr key={category.seq}>
                     <td>{category.seq}</td>
                     <td>
                       <div className="d-flex gap-2">

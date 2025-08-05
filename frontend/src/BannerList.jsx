@@ -148,7 +148,7 @@ export function BannerList() {
               </thead>
               <tbody>
                 {bannerList.map((banner) => (
-                  <tr key={banner.seq} style={{ cursor: "pointer" }}>
+                  <tr key={banner.seq}>
                     <td>{banner.seq}</td>
                     <td>
                       <div className="d-flex gap-2">
