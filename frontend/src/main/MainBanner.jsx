@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 import "../css/MainBanner.css";
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
+import { HiViewList } from "react-icons/hi";
 
 export function MainBanner() {
   const swiperRef = useRef(null);
@@ -80,7 +81,7 @@ export function MainBanner() {
         <div className="btnSpotAll">
           {/* 배너 전체보기 */}
           <button type="button" onClick={() => setShowModal(true)}>
-            전체보기
+            <HiViewList />
           </button>
         </div>
       </div>
