@@ -43,6 +43,8 @@ import { MemberMyInfo } from "./feature/member/MemberMyInfo.jsx";
 import { MemberMyInfoModify } from "./feature/member/MemberMyInfoModify.jsx";
 
 import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
+import { FindPassword } from "./feature/member/FindPassword.jsx";
+import { EmailAuth } from "./feature/member/EmailAuth.jsx";
 
 function App() {
   return (
@@ -73,6 +75,13 @@ function App() {
             <Route
               path="member/myinfo/modify/:memberId"
               element={<MemberMyInfoModify />}
+            />
+            {/* 비밀번호 찾기*/}
+            <Route path="member/find_password" element={<FindPassword />} />
+            {/* 비밀번호 찾기-이메일인증 */}
+            <Route
+              path="member/find_password/email_auth"
+              element={<EmailAuth />}
             />
             {/* 상품 등록 */}
             <Route path="product/add" element={<ProductAdd />} />
