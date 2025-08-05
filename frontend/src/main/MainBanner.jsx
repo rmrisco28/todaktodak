@@ -8,11 +8,19 @@ import "../css/MainBanner.css";
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { HiViewList } from "react-icons/hi";
+import axios from "axios";
 
 export function MainBanner() {
   const swiperRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [banners, setBanners] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/banner/slide").then((res) => {
+      setBanners(res.data);
+    });
+  }, []);
 
   const handleThumbnailClick = (index) => {
     swiperRef.current.slideToLoop(index);
@@ -26,24 +34,6 @@ export function MainBanner() {
       });
     }
   }, []);
-
-  const slideImages = [
-    {
-      src: "https://img.makeshop.co.kr/4/29457/202508/fd83412ccde7470499c17380e2674163.jpg",
-      alt: "이벤트 배너 1",
-      link: "/sale/list",
-    },
-    {
-      src: "https://img.makeshop.co.kr/4/29457/202508/8e610b64c196e7246e631221ae592993.jpg",
-      alt: "이벤트 배너 2",
-      link: "/sale/list",
-    },
-    {
-      src: "https://img.makeshop.co.kr/4/29457/202508/eea1b4599305f52bde334df23808e50b.jpg",
-      alt: "이벤트 배너 3",
-      link: "/sale/list",
-    },
-  ];
 
   return (
     <div className="mainSpotSliderArea billboard position-relative">
@@ -61,13 +51,13 @@ export function MainBanner() {
           swiperRef.current = swiper;
         }}
       >
-        {slideImages.map((slide, index) => (
+        {banners.map((banner, index) => (
           <SwiperSlide key={index}>
-            <a href={slide.link}>
+            <a href={banner.link}>
               <img
                 className="d-block w-100"
-                src={slide.src}
-                alt={slide.alt}
+                src={banner.path}
+                alt={banner.title}
                 style={{ maxHeight: "600px", objectFit: "cover" }}
               />
             </a>
@@ -99,11 +89,11 @@ export function MainBanner() {
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex flex-wrap justify-content-center gap-3">
-            {slideImages.map((slide, idx) => (
+            {banners.map((banner, idx) => (
               <img
                 key={idx}
-                src={slide.src}
-                alt={slide.alt}
+                src={banner.path}
+                alt={banner.title}
                 className={`thumbnail-image ${
                   activeIndex === idx ? "active" : ""
                 }`}

@@ -1,9 +1,6 @@
 package com.example.backend.banner.service;
 
-import com.example.backend.banner.dto.BannerAddForm;
-import com.example.backend.banner.dto.BannerDto;
-import com.example.backend.banner.dto.BannerListDto;
-import com.example.backend.banner.dto.BannerUpdateForm;
+import com.example.backend.banner.dto.*;
 import com.example.backend.banner.entity.Banner;
 import com.example.backend.banner.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +18,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -154,5 +152,11 @@ public class BannerService {
         BannerDto dto = bannerRepository.findBannerBySeq(seq);
         dto.setPath(imagePrefix + "prj4/bannerImage/" + dto.getName());
         return dto;
+    }
+
+    public List<BannerSlideDto> slideBannerList() {
+        List<BannerSlideDto> list = bannerRepository.findBanners();
+        list.forEach(dto -> dto.setPath(imagePrefix + "prj4/bannerImage/" + dto.getName()));
+        return list;
     }
 }

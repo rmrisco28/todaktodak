@@ -2,12 +2,14 @@ package com.example.backend.banner.controller;
 
 import com.example.backend.banner.dto.BannerAddForm;
 import com.example.backend.banner.dto.BannerDto;
+import com.example.backend.banner.dto.BannerSlideDto;
 import com.example.backend.banner.dto.BannerUpdateForm;
 import com.example.backend.banner.service.BannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -115,6 +117,17 @@ public class BannerController {
                     Map.of("type", "error", "text", e.getMessage())));
         }
 
+    }
+
+    /**
+     * @return
+     * @brief View banner List (permission: Administrator)
+     * @author minki-jeon
+     */
+    @GetMapping("slide")
+    public List<BannerSlideDto> getAllBanner(
+    ) {
+        return bannerService.slideBannerList();
     }
 
 }
