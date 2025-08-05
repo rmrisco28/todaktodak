@@ -49,6 +49,7 @@ import { RentalList } from "./feature/rental/RentalList.jsx";
 import { BannerAdd } from "./feature/banner/BannerAdd.jsx";
 import { BannerList } from "./BannerList.jsx";
 import { BannerModify } from "./BannerModify.jsx";
+import { OrderAdminList } from "./feature/order/admin/OrderAdminList.jsx";
 
 function App() {
   return (
@@ -131,6 +132,10 @@ function App() {
             <Route path="order/list" element={<OrderList />} />
             {/* 주문배송조회 상세 */}
             <Route path="order/:orderId" element={<OrderDetail />} />
+
+            {/* 주문배송조회 목록 (관리자) */}
+            <Route path="order/admin/list" element={<OrderAdminList />} />
+
             {/* 상품수령 상세 */}
             <Route path="receive/:orderId" element={<ReceiveForm />} />
             {/* 상품수령 업데이트 */}

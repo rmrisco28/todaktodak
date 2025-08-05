@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController // ✅ REST API 컨트롤러로 동작하도록 지정 (View 반환 X, JSON 반환 O)
 @RequestMapping("/api/order") // ✅ 공통 URL 경로 설정
@@ -24,10 +25,10 @@ public class OrderController {
      * - 상태, 키워드(상품명), 날짜범위 필터 가능
      *
      * @param memberSeq 회원 PK (기본값 1, 테스트용)
-     * @param status 주문 상태 필터 (선택)
-     * @param keyword 상품명 검색어 (선택)
+     * @param status    주문 상태 필터 (선택)
+     * @param keyword   상품명 검색어 (선택)
      * @param startDate 시작일 필터 (선택)
-     * @param endDate 종료일 필터 (선택)
+     * @param endDate   종료일 필터 (선택)
      * @return 주문 목록 DTO 리스트
      */
     @GetMapping("/list")
@@ -51,5 +52,21 @@ public class OrderController {
     @GetMapping("/detail")
     public ResponseEntity<OrderDetailDto> OrderDetail(@RequestParam Integer orderSeq) {
         return ResponseEntity.ok(orderService.getOrderDetail(orderSeq));
+    }
+
+
+    /**
+     * 주문관리 목록 조회 (관리자)
+     *
+     * @param keyword
+     * @param pageNumber
+     * @return
+     */
+    @GetMapping("admin/list")
+    public Map<String, Object> getAllOrders(
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
+    ) {
+        return orderService.listAll(keyword, pageNumber);
     }
 }
