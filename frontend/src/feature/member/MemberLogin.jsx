@@ -47,20 +47,25 @@ export function MemberLogin() {
       });
   }
 
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    handleLogInButtonClick();
+  }
+
   return (
     <Row className="d-flex justify-content-center">
       <Col md="auto">
         <h3 className="d-flex justify-content-center mb-4">Login</h3>
-        <div>
-          <FormGroup className="mb-3" controlId="memberId">
-            <FormLabel>아이디</FormLabel>
-            <FormControl
-              value={memberId}
-              onChange={(e) => setMemberId(e.target.value)}
-            />
-          </FormGroup>
-        </div>
-        <Form>
+        <Form onSubmit={handleFormSubmit}>
+          <div>
+            <FormGroup className="mb-3" controlId="memberId">
+              <FormLabel>아이디</FormLabel>
+              <FormControl
+                value={memberId}
+                onChange={(e) => setMemberId(e.target.value)}
+              />
+            </FormGroup>
+          </div>
           <div>
             <FormGroup className="mb-3" controlId="password">
               <FormLabel>비밀번호</FormLabel>
@@ -72,12 +77,12 @@ export function MemberLogin() {
               />
             </FormGroup>
           </div>
+          <div className="d-flex justify-content-between">
+            <Button type="submit" className="w-100 mb-4">
+              로그인
+            </Button>
+          </div>
         </Form>
-        <div className="d-flex justify-content-between">
-          <Button className="w-100 mb-4" onClick={handleLogInButtonClick}>
-            로그인
-          </Button>
-        </div>
         <div className="text-center">
           <Link to="/" className="mx-2 text-decoration-none text-secondary">
             아이디찾기
