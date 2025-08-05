@@ -46,6 +46,9 @@ import { AuthenticationContextProvider } from "./common/AuthenticationContextPro
 import { FindPassword } from "./feature/member/FindPassword.jsx";
 import { EmailAuth } from "./feature/member/EmailAuth.jsx";
 import { RentalList } from "./feature/rental/RentalList.jsx";
+import { BannerAdd } from "./feature/banner/BannerAdd.jsx";
+import { BannerList } from "./BannerList.jsx";
+import { BannerModify } from "./BannerModify.jsx";
 
 function App() {
   return (
@@ -152,6 +155,12 @@ function App() {
             <Route path="delivery/modify" element={<DeliveryModify />} />
             {/*  대여 현황 */}
             <Route path="rental/list" element={<RentalList />} />
+            {/* 메인 배너 이미지 등록  */}
+            <Route path="banner/add" element={<BannerAdd />} />
+            {/* 메인 배너 이미지 목록 */}
+            <Route path="banner/list" element={<BannerList />} />
+            {/* 메인 배너 이미지 수정 */}
+            <Route path="banner/modify/:seq" element={<BannerModify />} />
           </Route>
         </Routes>
       </BrowserRouter>
