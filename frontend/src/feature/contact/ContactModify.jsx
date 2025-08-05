@@ -24,6 +24,8 @@ export function ContactModify() {
   const [modalShow, setModalShow] = useState(false);
 
   let navigate = useNavigate();
+  const isAdmin =
+    new URLSearchParams(location.search).get("isAdmin") === "true";
 
   let validate = true;
   if (title.trim() === "" || content.trim() === "" || name.trim() === "") {
@@ -76,13 +78,15 @@ export function ContactModify() {
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <h2 className="mb-3">문의 내용 수정</h2>
-          <FormCheck
-            type="checkbox"
-            label={useYn ? "게시물 보임" : "게시물 숨김"}
-            checked={useYn}
-            onChange={(e) => setUseYn(e.target.checked)}
-            value={useYn}
-          />
+          {isAdmin && (
+            <FormCheck
+              type="checkbox"
+              label={useYn ? "게시물 보임" : "게시물 숨김"}
+              checked={useYn}
+              onChange={(e) => setUseYn(e.target.checked)}
+              value={useYn}
+            />
+          )}
           <div className="mb-3">
             <FormGroup>
               <FormLabel>제목</FormLabel>

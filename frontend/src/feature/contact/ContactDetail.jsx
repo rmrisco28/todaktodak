@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
@@ -98,24 +99,17 @@ export function ContactDetail() {
               <FormControl value={contact.name} readOnly />
             </FormGroup>
           </div>
-          {isAdmin && (
-            <Button
-              variant="secondary"
-              className="me-2"
-              onClick={() => navigate("/contact/list?isAdmin=true")}
-            >
-              목록
-            </Button>
-          )}
-          {!isAdmin && (
-            <Button
-              variant="secondary"
-              className="me-2"
-              onClick={() => navigate("/contact/list")}
-            >
-              목록
-            </Button>
-          )}
+
+          <Button
+            variant="secondary"
+            className="me-2"
+            onClick={() =>
+              navigate(`/contact/list?${isAdmin ? "?isAdmin=true" : ""}`)
+            }
+          >
+            목록
+          </Button>
+
           <Button
             variant="danger"
             className="me-2"
@@ -127,7 +121,11 @@ export function ContactDetail() {
           <Button
             variant="warning"
             className="me-2"
-            onClick={() => navigate(`/contact/modify/${seq}`)}
+            onClick={() =>
+              navigate(
+                `/contact/modify/${seq}${isAdmin ? "?isAdmin=true" : ""}`,
+              )
+            }
           >
             수정
           </Button>
@@ -135,45 +133,37 @@ export function ContactDetail() {
           {/*관리자 답변 */}
           <br />
           <hr />
-          {isAdmin && (
-            <div>
-              <FormGroup className="mb-3" controlId="content1">
-                <FormLabel className="mb-3">문의 답변 </FormLabel>
-                <FormControl
-                  as="textarea"
-                  rows={6}
-                  value={reply}
-                  onChange={(e) => {
-                    setReply(e.target.value);
-                  }}
-                />
-              </FormGroup>
-            </div>
-          )}
-          {!isAdmin && (
-            <div>
-              <FormGroup className="mb-3" controlId="content1">
-                <FormLabel className="mb-3">문의 답변 </FormLabel>
-                <FormControl
-                  as="textarea"
-                  rows={6}
-                  value={reply}
-                  readOnly
-                  onChange={(e) => {
-                    setReply(e.target.value);
-                  }}
-                />
-              </FormGroup>
-            </div>
-          )}
+          <div>
+            <FormGroup className="mb-3" controlId="content1">
+              <FormLabel>문의 답변 </FormLabel>
+              <div
+                className="mb-3"
+                style={{ color: "#808080", fontSize: "11.5px" }}
+              >
+                답변을 변경할 경우, 자동으로 게시판 목록의 답변 완료 상태가
+                변경됩니다.
+              </div>
+              <FormControl
+                as="textarea"
+                rows={6}
+                value={reply}
+                readOnly={!isAdmin}
+                onChange={(e) => {
+                  setReply(e.target.value);
+                }}
+              />
+            </FormGroup>
+          </div>
 
           {isAdmin && (
-            <Button
-              title="관리자에게만 보이게 할 예정"
-              onClick={handleSaveButtonClick}
-            >
-              답변저장
-            </Button>
+            <>
+              <Button
+                title="관리자에게만 보이게 할 예정"
+                onClick={handleSaveButtonClick}
+              >
+                답변저장
+              </Button>
+            </>
           )}
         </Col>
 

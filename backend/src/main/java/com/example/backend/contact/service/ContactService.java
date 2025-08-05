@@ -74,6 +74,7 @@ public class ContactService {
                 "rightPageNumber", rightPageNumber,
                 "leftPageNumber", leftPageNumber,
                 "currentPageNumber", pageNumber);
+        
 
         return Map.of("pageInfo", pageInfo,
                 "contactList", contactListDtoPage.getContent());
@@ -164,6 +165,7 @@ public class ContactService {
                 "rightPageNumber", rightPageNumber,
                 "leftPageNumber", leftPageNumber,
                 "currentPageNumber", pageNumber);
+
 
         return Map.of("pageInfo", pageInfo, "contactDeletedList", contactDeletedListDtoPage.getContent());
     }
