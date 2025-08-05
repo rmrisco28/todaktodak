@@ -53,4 +53,24 @@ public class BannerController {
         return bannerService.list(keyword, pageNumber);
     }
 
+    /**
+     * @param seq
+     * @return
+     * @brief Delete Banner (permission: Administrator)
+     * @author minki-jeon
+     */
+    @PutMapping("{seq}")
+    public ResponseEntity<?> deleteBanner(@PathVariable Integer seq) {
+
+        try {
+            bannerService.updateDelYn(seq);
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "warning", "text", seq + "번 배너가 삭제되었습니다.")));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
+    }
+
 }

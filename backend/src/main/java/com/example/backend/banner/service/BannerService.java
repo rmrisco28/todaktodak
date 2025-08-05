@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -90,5 +91,16 @@ public class BannerService {
                 "currentPageNumber", pageNumber);
 
         return Map.of("pageInfo", pageInfo, "bannerList", bannerListDtoPage.getContent());
+    }
+
+    public void updateDelYn(Integer seq) {
+        Banner dbData = bannerRepository.findById(seq).get();
+        // del_yn = true
+        dbData.setDelYn(true);
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        bannerRepository.save(dbData);
     }
 }
