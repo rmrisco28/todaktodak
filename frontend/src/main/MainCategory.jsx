@@ -29,7 +29,12 @@ export function MainCategory() {
                   key={item.seq}
                   variant={"outline-dark"}
                   size="sm"
-                  style={{ minWidth: 100, textAlign: "center" }}
+                  style={{
+                    minWidth: 100,
+                    textAlign: "center",
+                    padding: "30px",
+                    marginTop: "30px",
+                  }}
                   onClick={() => {
                     navigate("/sale/list?c=" + item.seq);
                   }}

@@ -19,11 +19,11 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { FaRegPenToSquare, FaXmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-export function CategoryList() {
+export function BannerList() {
   const [deleteTarget, setDeleteTarget] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [keyword, setKeyword] = useState("");
-  const [categoryList, setCategoryList] = useState(null);
+  const [bannerList, setBannerList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -37,9 +37,9 @@ export function CategoryList() {
     }
 
     axios
-      .get(`/api/category/list?${searchParams}`)
+      .get(`/api/banner/list?${searchParams}`)
       .then((res) => {
-        setCategoryList(res.data.categoryList);
+        setBannerList(res.data.bannerList);
         setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
@@ -52,10 +52,10 @@ export function CategoryList() {
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
-    navigate("/category/list?q=" + keyword);
+    navigate("/banner/list?q=" + keyword);
   }
 
-  if (!categoryList) {
+  if (!bannerList) {
     return <Spinner />;
   }
 
@@ -77,7 +77,7 @@ export function CategoryList() {
 
   function handleDeleteButtonClick() {
     axios
-      .put(`/api/category/${deleteTarget}`)
+      .put(`/api/banner/${deleteTarget}`)
       .then((res) => {
         const message = res.data.message;
         console.log(message);
@@ -90,7 +90,7 @@ export function CategoryList() {
       })
       .catch((err) => {
         console.log("동작 오류");
-        toast("카테고리가 삭제되지 않았습니다.", { type: "warning" });
+        toast("배너가 삭제되지 않았습니다.", { type: "warning" });
       })
       .finally(() => {
         console.log("항상 실행");
@@ -102,9 +102,9 @@ export function CategoryList() {
     <>
       <Row>
         <Col>
-          <h2 className="mb-4">카테고리 목록</h2>
-          <Button variant="primary" onClick={() => navigate(`/category/add`)}>
-            카테고리 등록
+          <h2 className="mb-4">메인 배너 목록</h2>
+          <Button variant="primary" onClick={() => navigate(`/banner/add`)}>
+            배너 등록
           </Button>
 
           <Form
@@ -123,13 +123,13 @@ export function CategoryList() {
             </InputGroup>
           </Form>
 
-          {categoryList.length > 0 ? (
+          {bannerList.length > 0 ? (
             <Table striped={true} hover={true}>
               <thead>
                 <tr>
                   <th style={{ width: "70px" }}>번호</th>
-                  <th>카테고리명</th>
-                  {/*<th style={{ width: "70px" }}>사용</th>*/}
+                  <th>배너 제목</th>
+                  <th style={{ width: "100px" }}>사용여부</th>
                   <th
                     className="d-none d-lg-table-cell"
                     style={{ width: "200px" }}
@@ -147,33 +147,29 @@ export function CategoryList() {
                 </tr>
               </thead>
               <tbody>
-                {categoryList.map((category) => (
-                  <tr key={category.seq}>
-                    <td>{category.seq}</td>
+                {bannerList.map((banner) => (
+                  <tr key={banner.seq}>
+                    <td>{banner.seq}</td>
                     <td>
                       <div className="d-flex gap-2">
-                        <span>{category.name}</span>
+                        <span>{banner.title}</span>
                       </div>
                     </td>
-                    {/*
                     <td>
                       <div className="d-flex gap-2">
-                        <span>{category.useYn}</span>
+                        <span>{banner.useYn ? "사용중" : "미사용"}</span>
                       </div>
                     </td>
-                    */}
                     <td className="d-none d-lg-table-cell">
-                      {category.timesAgo}
+                      {banner.timesAgo}
                     </td>
                     <td className="d-none d-lg-table-cell">
-                      {category.updateTimesAgo}
+                      {banner.updateTimesAgo}
                     </td>
                     <td>
                       <Button
                         variant="outline-secondary"
-                        onClick={() =>
-                          navigate(`/category/modify/${category.seq}`)
-                        }
+                        onClick={() => navigate(`/banner/modify/${banner.seq}`)}
                       >
                         {/*수정*/}
                         <FaRegPenToSquare />
@@ -184,7 +180,7 @@ export function CategoryList() {
                         className="me-2"
                         variant="outline-danger"
                         onClick={() =>
-                          handleDeleteCategoryModalShow(category.seq)
+                          handleDeleteCategoryModalShow(banner.seq)
                         }
                       >
                         {/*삭제*/}
@@ -196,7 +192,7 @@ export function CategoryList() {
               </tbody>
             </Table>
           ) : (
-            <p>등록된 카테고리가 존재하지 않습니다.</p>
+            <p>등록된 배너가 존재하지 않습니다.</p>
           )}
         </Col>
       </Row>
@@ -247,11 +243,9 @@ export function CategoryList() {
 
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>카테고리 삭제 확인</Modal.Title>
+            <Modal.Title>배너 삭제 확인</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            {deleteTarget} 번 카테고리를 삭제하시겠습니까?
-          </Modal.Body>
+          <Modal.Body>{deleteTarget} 번 배너를 삭제하시겠습니까?</Modal.Body>
           <Modal.Footer>
             <Button variant="outline-dark" onClick={() => setModalShow(false)}>
               취소
