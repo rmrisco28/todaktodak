@@ -1,6 +1,8 @@
 package com.example.backend.banner.controller;
 
 import com.example.backend.banner.dto.BannerAddForm;
+import com.example.backend.banner.dto.BannerDto;
+import com.example.backend.banner.dto.BannerUpdateForm;
 import com.example.backend.banner.service.BannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +68,48 @@ public class BannerController {
             bannerService.updateDelYn(seq);
             return ResponseEntity.ok().body(Map.of("message",
                     Map.of("type", "warning", "text", seq + "번 배너가 삭제되었습니다.")));
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
+    }
+
+    /**
+     * @param seq
+     * @return
+     * @brief View Banner Details (permission: Administrator)
+     * @author minki-jeon
+     */
+    @GetMapping("detail/{seq}")
+    public BannerDto getDetailBySeq(@PathVariable Integer seq) {
+        return bannerService.getBannerBySeq(seq);
+    }
+
+
+    /**
+     * @param seq
+     * @param dto
+     * @return
+     * @brief Edit Banner (permission: Administrator)
+     * @author minki-jeon
+     */
+    @PutMapping("modify/{seq}")
+    public ResponseEntity<?> updateBanner(@PathVariable Integer seq, BannerUpdateForm dto) {
+
+        boolean result = bannerService.validateForUpdate(dto);
+
+        try {
+            if (result) {
+                bannerService.update(dto);
+
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", seq + " 번 배너가 수정되었습니다.")));
+            } else {
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", "입력한 내용이 유효하지 않습니다.")));
+            }
+
         } catch (Exception e) {
             return ResponseEntity.ok().body(Map.of("message",
                     Map.of("type", "error", "text", e.getMessage())));

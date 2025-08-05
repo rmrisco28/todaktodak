@@ -1,7 +1,9 @@
 package com.example.backend.banner.service;
 
 import com.example.backend.banner.dto.BannerAddForm;
+import com.example.backend.banner.dto.BannerDto;
 import com.example.backend.banner.dto.BannerListDto;
+import com.example.backend.banner.dto.BannerUpdateForm;
 import com.example.backend.banner.entity.Banner;
 import com.example.backend.banner.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -65,19 +68,6 @@ public class BannerService {
         bannerRepository.save(banner);
     }
 
-
-    public void uploadFile(MultipartFile file, String objectKey) {
-        try {
-            PutObjectRequest putObjectRequest = PutObjectRequest
-                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
-                    .build();
-            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("파일 전송이 실패하였습니다.");
-        }
-    }
-
     public Map<String, Object> list(String keyword, Integer pageNumber) {
         Page<BannerListDto> bannerListDtoPage = bannerRepository.searchBannerList(keyword, PageRequest.of(pageNumber - 1, 10));
         int totalPages = bannerListDtoPage.getTotalPages();
@@ -102,5 +92,67 @@ public class BannerService {
         dbData.setUpdateDttm(now);
 
         bannerRepository.save(dbData);
+    }
+
+    public boolean validateForUpdate(BannerUpdateForm dto) {
+        if (dto.getTitle() == null || dto.getTitle().trim().isBlank()) {
+            return false;
+        }
+        if (dto.getLink() == null || dto.getLink().trim().isBlank()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void update(BannerUpdateForm dto) {
+        Banner dbData = bannerRepository.findById(dto.getSeq()).get();
+
+        dbData.setTitle(dto.getTitle());
+        dbData.setLink(dto.getLink());
+
+        // update_dttm = NOW()
+        LocalDateTime now = LocalDateTime.now();
+        dbData.setUpdateDttm(now);
+
+        // upload image
+        if (dto.getImage() != null && dto.getImage().getSize() > 0) {
+            // 이미지 파일을 등록했으면, 기존의 이미지 파일 삭제
+            String deleteObjectKey = "prj4/bannerImage/" + dbData.getName();
+            deleteFile(deleteObjectKey);
+
+            // 이미지 파일 s3 저장(업로드)
+            String objectKey = "prj4/bannerImage/" + dto.getImage().getOriginalFilename();
+            uploadFile(dto.getImage(), objectKey);
+            dbData.setName(dto.getImage().getOriginalFilename());
+        }
+
+        bannerRepository.save(dbData);
+    }
+
+    public void uploadFile(MultipartFile file, String objectKey) {
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest
+                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("파일 전송이 실패하였습니다.");
+        }
+    }
+
+    private void deleteFile(String objectKey) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest
+                .builder().bucket(bucketName).key(objectKey)
+                .build();
+
+        s3Client.deleteObject(deleteObjectRequest);
+    }
+
+    public BannerDto getBannerBySeq(Integer seq) {
+        BannerDto dto = bannerRepository.findBannerBySeq(seq);
+        dto.setPath(imagePrefix + "prj4/bannerImage/" + dto.getName());
+        return dto;
     }
 }

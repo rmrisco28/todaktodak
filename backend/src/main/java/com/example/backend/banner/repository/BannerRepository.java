@@ -1,5 +1,6 @@
 package com.example.backend.banner.repository;
 
+import com.example.backend.banner.dto.BannerDto;
 import com.example.backend.banner.dto.BannerListDto;
 import com.example.backend.banner.entity.Banner;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,19 @@ public interface BannerRepository extends JpaRepository<Banner, Integer> {
             """)
     Page<BannerListDto> searchBannerList(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query("""
+                SELECT new com.example.backend.banner.dto.BannerDto (
+                b.seq,
+                b.title,
+                b.name,
+                b.link,
+                b.useYn,
+                b.insertDttm,
+                b.updateDttm
+                )
+                FROM Banner b
+                WHERE b.seq = :seq
+                  AND b.delYn = false
+            """)
+    BannerDto findBannerBySeq(Integer seq);
 }
