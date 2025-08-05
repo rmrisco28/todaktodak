@@ -1,10 +1,13 @@
 package com.example.backend.banner.service;
 
 import com.example.backend.banner.dto.BannerAddForm;
+import com.example.backend.banner.dto.BannerListDto;
 import com.example.backend.banner.entity.Banner;
 import com.example.backend.banner.repository.BannerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +17,7 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -73,4 +77,18 @@ public class BannerService {
         }
     }
 
+    public Map<String, Object> list(String keyword, Integer pageNumber) {
+        Page<BannerListDto> bannerListDtoPage = bannerRepository.searchBannerList(keyword, PageRequest.of(pageNumber - 1, 10));
+        int totalPages = bannerListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo, "bannerList", bannerListDtoPage.getContent());
+    }
 }

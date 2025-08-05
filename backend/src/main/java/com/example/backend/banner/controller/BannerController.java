@@ -4,9 +4,7 @@ import com.example.backend.banner.dto.BannerAddForm;
 import com.example.backend.banner.service.BannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -38,6 +36,21 @@ public class BannerController {
             return ResponseEntity.badRequest().body(Map.of("message",
                     Map.of("type", "error", "text", "입력한 내용이 유효하지 않습니다.")));
         }
+    }
+
+    /**
+     * @param keyword
+     * @param pageNumber
+     * @return
+     * @brief View banner List (permission: Administrator)
+     * @author minki-jeon
+     */
+    @GetMapping("list")
+    public Map<String, Object> getAllBanner(
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
+    ) {
+        return bannerService.list(keyword, pageNumber);
     }
 
 }
