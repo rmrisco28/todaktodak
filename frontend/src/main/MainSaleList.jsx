@@ -90,7 +90,11 @@ export function MainSaleList() {
             <p>등록된 판매상품이 존재하지 않습니다.</p>
           )}
         </Col>
-        <Button variant="primary" onClick={handleAddListButtonClick}>
+        <Button
+          variant="primary"
+          className="mt-3"
+          onClick={handleAddListButtonClick}
+        >
           더보기
         </Button>
       </Row>
