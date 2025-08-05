@@ -56,7 +56,6 @@ export function ProductList() {
   }
 
   function handleTableRowClick(seq) {
-    // 게시물 상세 보기 이동
     navigate(`/product/detail/${seq}`);
   }
 
