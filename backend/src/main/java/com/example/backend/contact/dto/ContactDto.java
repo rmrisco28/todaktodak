@@ -28,5 +28,20 @@ public class ContactDto implements Serializable {
 
     boolean delYn;
     boolean useYn;
+    boolean replied;
 
+    String reply;
+
+    public ContactDto(Integer seq, String title, String name, Integer view, LocalDateTime insertDttm, boolean delYn, boolean useYn, String reply) {
+        this.seq = seq;
+        this.title = title;
+        this.name = name;
+        this.view = view;
+        this.insertDttm = insertDttm;
+        this.delYn = delYn;
+        this.useYn = useYn;
+        this.reply = reply;
+
+        this.replied = !"아직 답변이 없습니다.".equals(reply);
+    }
 }

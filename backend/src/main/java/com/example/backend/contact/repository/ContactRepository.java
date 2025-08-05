@@ -33,7 +33,8 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
                         c.view,
                         c.insertDttm,
                         c.delYn,
-                        c.useYn)
+                        c.useYn,
+                        c.reply)
             FROM Contact c
             WHERE (c.useYn = true
                    And c.delYn = false)
@@ -42,6 +43,23 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
             """)
     Page<ContactDto> findAllBy(String keyword, PageRequest pageRequest);
 
+    @Query(value = """
+            SELECT new com.example.backend.contact.dto.ContactDto(
+                        c.seq,
+                        c.title,
+                        c.name ,
+                        c.view,
+                        c.updateDttm,
+                        c.delYn,
+                        c.useYn,
+                        c.reply)
+                        FROM Contact c
+                        WHERE (:keyword = '' OR c.name Like %:keyword% OR c.title LIKE %:keyword%)
+            ORDER By c.seq DESC
+            """)
+    Page<ContactDto> findAllByAdmin(String keyword, PageRequest pageRequest);
+
+    // 관리자 페이지
     @Query(value = """
             SELECT new com.example.backend.contact.dto.ContactDeletedDto(
                         c.seq,
@@ -54,22 +72,6 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
             ORDER By c.seq DESC 
             """)
     Page<ContactDeletedDto> findAllByDeleted(String keyword, PageRequest of);
-
-
-    @Query(value = """
-            SELECT new com.example.backend.contact.dto.ContactDto(
-                        c.seq,
-                        c.title,
-                        c.name ,
-                        c.view,
-                        c.updateDttm,
-                        c.delYn,
-                        c.useYn)
-                        FROM Contact c
-                        WHERE (:keyword = '' OR c.name Like %:keyword% OR c.title LIKE %:keyword%)
-            ORDER By c.seq DESC
-            """)
-    Page<ContactDto> findAllByAdmin(String keyword, PageRequest pageRequest);
 
 
     @Query("SELECT MAX(c.seq) FROM Contact c")

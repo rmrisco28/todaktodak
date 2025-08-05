@@ -45,6 +45,7 @@ import { MemberMyInfoModify } from "./feature/member/MemberMyInfoModify.jsx";
 import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
 import { FindPassword } from "./feature/member/FindPassword.jsx";
 import { EmailAuth } from "./feature/member/EmailAuth.jsx";
+import { RentalList } from "./feature/rental/RentalList.jsx";
 
 function App() {
   return (
@@ -149,6 +150,8 @@ function App() {
             <Route path="delivery/detail/:seq" element={<DeliveryDetail />} />
             {/* 배송업체 수정 */}
             <Route path="delivery/modify" element={<DeliveryModify />} />
+            {/*  대여 현황 */}
+            <Route path="rental/list" element={<RentalList />} />
           </Route>
         </Routes>
       </BrowserRouter>
