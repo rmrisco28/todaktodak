@@ -6,7 +6,6 @@ export function MainView() {
   return (
     <div>
       <div className="mb-3">
-        <h2>메인 화면</h2>
         {/* TODO [@MINKI] 메인배너: 배너관리CRUD 추가, 배너이미지 변경, 링크 적용 */}
         <MainBanner />
         {/* TODO [@MINKI] 카테고리: 버튼 디자인 변경 (icon-img 또는 깔끔한디자인) */}
