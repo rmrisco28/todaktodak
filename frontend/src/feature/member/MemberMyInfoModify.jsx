@@ -22,8 +22,6 @@ export function MemberMyInfoModify() {
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
 
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-
   const [passwordModalShow, setPasswordModalShow] = useState(false);
   const [modalShow, setModalShow] = useState(false);
 
@@ -127,7 +125,6 @@ export function MemberMyInfoModify() {
   // 비밀번호 변경 버튼 클릭
   function handleChangePasswordButtonClick() {
     const newErrors = {};
-    setHasSubmitted(true);
 
     // 현재 비밀번호 입력 유무
     if (!currentPassword.trim()) {
@@ -173,7 +170,6 @@ export function MemberMyInfoModify() {
         setNewPassword("");
         setNewPassword2("");
         setPasswordModalShow(false);
-        setHasSubmitted(false);
       });
   }
 
@@ -396,7 +392,7 @@ export function MemberMyInfoModify() {
                 onChange={(e) => {
                   const value = e.target.value;
                   setCurrentPassword(value);
-                  if (hasSubmitted && value.trim() !== "") {
+                  if (value.trim() !== "") {
                     setErrors((prev) => ({ ...prev, currentPassword: null }));
                   }
                 }}
