@@ -144,3 +144,49 @@ DROP TABLE order_info;
     FOREIGN KEY (member_no) REFERENCES member (member_no)
 );*/
 
+# 대여 관리
+CREATE TABLE rental
+(
+    seq         INT         NOT NULL AUTO_INCREMENT,
+    rental_no   VARCHAR(20) NOT NULL UNIQUE,
+    product_no  VARCHAR(20) NOT NULL,
+    order_no    VARCHAR(20) NOT NULL,
+    member_no   VARCHAR(20) NOT NULL,
+    insert_dttm DATETIME    NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME    NOT NULL DEFAULT NOW(),
+    use_yn      BOOLEAN     NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN     NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT pk_rental PRIMARY KEY (seq),
+    FOREIGN KEY (order_no) REFERENCES order_info (order_no),
+    FOREIGN KEY (product_no) REFERENCES product (product_no),
+    FOREIGN KEY (member_no) REFERENCES member (member_no)
+);
+
+DROP TABLE rental;
+
+# 임시 대여 관리
+CREATE TABLE rental
+(
+    seq        INT         NOT NULL AUTO_INCREMENT,
+    rental_no  VARCHAR(20) NOT NULL UNIQUE,
+
+    order_no   VARCHAR(20) NOT NULL,
+    product_no VARCHAR(20) NOT NULL,
+    #member_no  VARCHAR(20) NOT NULL,
+
+    start_dttm DATETIME    NOT NULL DEFAULT NOW(),
+    end_dttm   DATETIME,
+    status     VARCHAR(20) NOT NULL,
+    use_yn     BOOLEAN     NOT NULL DEFAULT TRUE,
+    del_yn     BOOLEAN     NOT NULL DEFAULT FALSE,
+
+    CONSTRAINT pk_rental PRIMARY KEY (seq),
+    FOREIGN KEY (order_no) REFERENCES order_info (order_no),
+    FOREIGN KEY (product_no) REFERENCES product (product_no)
+);
+
+INSERT INTO rental
+(seq, rental_no, product_no, order_no, member_no, insert_dttm, update_dttm, use_yn, del_yn)
+VALUES (1, 'R1', 'P1', 'O1', 'M1', NOW(), NOW(), TRUE, FALSE);
+

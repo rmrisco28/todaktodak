@@ -7,7 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -16,7 +16,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
-@Controller
+@Service
 @RequiredArgsConstructor
 @Transactional
 public class ContactService {
@@ -74,7 +74,7 @@ public class ContactService {
                 "rightPageNumber", rightPageNumber,
                 "leftPageNumber", leftPageNumber,
                 "currentPageNumber", pageNumber);
-        
+
 
         return Map.of("pageInfo", pageInfo,
                 "contactList", contactListDtoPage.getContent());
