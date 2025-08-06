@@ -34,22 +34,190 @@ export function ComplexNavbar() {
         <Container className="py-2">
           <Navbar.Brand
             href="#home"
-            className="text-dark text-lg font-weight-bold me-4"
+            className="text-dark text-lg font-weight-bold me-10"
           >
-            Astro Ecommerce
+            토닥토닥
           </Navbar.Brand>
-          <Nav className="ms-12">
+          <Nav className="ms-auto justify-content-end align-items-center">
             <Nav.Link href="#store" className="px-3">
-              Store
+              로그인
             </Nav.Link>
             <Nav.Link href="#designers" className="px-3">
-              Designers
+              주문내역
             </Nav.Link>
             <Nav.Link href="#fashion" className="px-3">
-              Fashion
+              로그아웃
             </Nav.Link>
-          </Nav>
-          <Nav className="ms-auto justify-content-end align-items-center">
+
+            <NavDropdown
+              title="_회원명_"
+              id="notification-dropdown"
+              align="end"
+              className="px-2"
+            >
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">내정보</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">주문내역</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">대여현황</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">관심상품</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">장바구니</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+            </NavDropdown>
+
+            <NavDropdown
+              title="관리자"
+              id="notification-dropdown"
+              align="end"
+              className="px-2"
+            >
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">대시보드</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">회원관리</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">상품관리</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">판매상품</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">주문</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">대여</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">반납</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">문의</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">통계</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">카테고리</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">배너</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.1" className="mb-2">
+                <div className="d-flex py-1">
+                  <div className="d-flex flex-column justify-content-center">
+                    <h6 className="text-sm font-weight-normal mb-1">
+                      <span className="font-weight-bold">배송업체</span>
+                    </h6>
+                  </div>
+                </div>
+              </NavDropdown.Item>
+            </NavDropdown>
+
             <Nav.Link href="#settings" className="px-3">
               <IoSettingsSharp size={16} />
             </Nav.Link>
@@ -168,13 +336,13 @@ export function ComplexNavbar() {
         <Container>
           <Nav>
             {/* 'Store' Mega Menu Dropdown */}
-            <NavDropdown title="Store" id="store-mega-menu" className="px-3">
-              {/* dropdown-xxl 클래스는 커스텀 CSS로 직접 정의해야 합니다. */}
+            {/*<NavDropdown title="Store" id="store-mega-menu" className="px-3">*/}
+            {/* dropdown-xxl 클래스는 커스텀 CSS로 직접 정의해야 합니다. */}
+            {/*
               <div
                 className="dropdown-menu dropdown-xxl"
                 aria-labelledby="store-mega-menu"
               >
-                {/*
                 <div className="row m-3">
                   {data.categories.slice(0, 3).map((category, index) =>
                     <div className="col-md-4" key={index}>
@@ -186,18 +354,18 @@ export function ComplexNavbar() {
                     </div>
                   )}
                 </div>
-                */}
               </div>
-            </NavDropdown>
+                */}
+            {/*</NavDropdown>*/}
 
             <Nav.Link href="#messages" className="px-3">
-              Messages
+              상품
             </Nav.Link>
             <Nav.Link href="#pricing" className="px-3">
-              Pricing
+              반납신청
             </Nav.Link>
             <Nav.Link href="#notifications" className="px-3">
-              Notifications
+              문의
             </Nav.Link>
           </Nav>
 
