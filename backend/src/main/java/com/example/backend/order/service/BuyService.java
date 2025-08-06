@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Service
@@ -34,9 +36,9 @@ public class BuyService {
 
         String code = "ON";
 
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-        String date = formatter.format(now);
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter_ymd = DateTimeFormatter.ofPattern("yyMMdd");
+        String date = today.format(formatter_ymd);
 
         Integer maxSeq = orderInfoRepository.findMaxSeq();
         int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
