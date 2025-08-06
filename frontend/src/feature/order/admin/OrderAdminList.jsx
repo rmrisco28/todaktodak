@@ -12,14 +12,13 @@ import {
   Spinner,
   Table,
 } from "react-bootstrap";
-import { FaThumbsUp } from "react-icons/fa6";
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
 
-export function ProductList() {
+export function OrderAdminList() {
   const [keyword, setKeyword] = useState("");
-  const [productList, setProductList] = useState(null);
+  const [orderList, setOrderList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -33,9 +32,9 @@ export function ProductList() {
     }
 
     axios
-      .get(`/api/product/list?${searchParams}`)
+      .get(`/api/order/admin/list?${searchParams}`)
       .then((res) => {
-        setProductList(res.data.productList);
+        setOrderList(res.data.orderList);
         setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
@@ -48,15 +47,15 @@ export function ProductList() {
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
-    navigate("/product/list?q=" + keyword);
+    navigate("/order/list?q=" + keyword);
   }
 
-  if (!productList) {
+  if (!orderList) {
     return <Spinner />;
   }
 
   function handleTableRowClick(seq) {
-    navigate(`/product/detail/${seq}`);
+    navigate(`/order/detail/${seq}`);
   }
 
   const pageNumbers = [];
@@ -76,12 +75,7 @@ export function ProductList() {
     <>
       <Row>
         <Col>
-          <h2 className="mb-4">관리 상품 목록</h2>
-          {/* 상품 등록 */}
-          <Button variant="primary" onClick={() => navigate(`/product/add`)}>
-            상품 등록
-          </Button>
-
+          <h2 className="mb-4">주문 목록</h2>
           <Form
             inline="true"
             onSubmit={handleSearchFormSubmit}
@@ -98,51 +92,89 @@ export function ProductList() {
             </InputGroup>
           </Form>
 
-          {productList.length > 0 ? (
+          {orderList.length > 0 ? (
             <Table striped={true} hover={true}>
               <thead>
                 <tr>
                   <th style={{ width: "70px" }}>번호</th>
                   <th
                     className="d-none d-md-table-cell"
-                    style={{ width: "200px" }}
+                    style={{ width: "100px" }}
                   >
-                    상품번호
+                    주문번호
                   </th>
-                  <th>상품명</th>
+                  <th>주문상품명</th>
+                  <th
+                    className="d-none d-md-table-cell"
+                    style={{ width: "100px" }}
+                  >
+                    주문자명
+                  </th>
+                  <th
+                    className="d-none d-md-table-cell"
+                    style={{ width: "100px" }}
+                  >
+                    총 결제금액
+                  </th>
+                  <th
+                    className="d-none d-md-table-cell"
+                    style={{ width: "100px" }}
+                  >
+                    주문상태
+                  </th>
                   <th
                     className="d-none d-lg-table-cell"
                     style={{ width: "200px" }}
                   >
-                    등록일시
+                    주문일시
+                  </th>
+                  <th
+                    className="d-none d-lg-table-cell"
+                    style={{ width: "200px" }}
+                  >
+                    수정일시
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {productList.map((product) => (
+                {orderList.map((order) => (
                   <tr
-                    key={product.seq}
+                    key={order.seq}
                     style={{ cursor: "pointer" }}
-                    onClick={() => handleTableRowClick(product.seq)}
+                    onClick={() => handleTableRowClick(order.seq)}
                   >
-                    <td>{product.seq}</td>
-                    <td className="d-none d-md-table-cell">
-                      {product.productNo}
+                    <td>{order.seq}</td>
+                    <td className="d-none d-md-table-cell">{order.orderNo}</td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <span>{order.saleTitle}</span>
+                      </div>
                     </td>
                     <td>
                       <div className="d-flex gap-2">
-                        <span>{product.name}</span>
+                        <span>{order.name}</span>
                       </div>
                     </td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <span>{order.totalPrice}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <span>{order.state}</span>
+                      </div>
+                    </td>
+                    <td className="d-none d-lg-table-cell">{order.timesAgo}</td>
                     <td className="d-none d-lg-table-cell">
-                      {product.timesAgo}
+                      {order.updateTimesAgo}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </Table>
           ) : (
-            <p>등록된 상품이 존재하지 않습니다.</p>
+            <p>등록된 주문이 존재하지 않습니다.</p>
           )}
         </Col>
       </Row>

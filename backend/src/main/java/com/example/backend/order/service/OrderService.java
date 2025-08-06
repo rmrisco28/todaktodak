@@ -1,18 +1,23 @@
 package com.example.backend.order.service;
 
 import com.example.backend.order.dto.OrderDetailDto;
+import com.example.backend.order.dto.OrderListAllDto;
 import com.example.backend.order.dto.OrderManageDto;
 import com.example.backend.order.entity.OrderItem;
 import com.example.backend.order.entity.OrderManage;
 import com.example.backend.order.repository.OrderItemRepository;
+import com.example.backend.order.repository.OrderListRepository;
 import com.example.backend.order.repository.OrderManageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service // ✅ 비즈니스 로직을 처리하는 서비스 계층 클래스
 @RequiredArgsConstructor // ✅ 생성자 주입을 Lombok이 자동 생성
@@ -22,16 +27,18 @@ public class OrderService {
     private final OrderManageRepository orderManageRepository; // 주문 정보 저장소
     private final OrderItemRepository orderItemRepository;     // 주문상품 저장소
 
+    private final OrderListRepository orderListRepository;
+
     /**
      * 📌 주문 목록 조회
      * - 회원별로 주문 내역을 조건 필터링하여 조회
      * - 필터 조건: 상태, 날짜범위, 상품명 키워드
      *
      * @param memberSeq 회원 식별자
-     * @param status 주문 상태 필터 (선택)
-     * @param keyword 상품명 키워드 (선택)
+     * @param status    주문 상태 필터 (선택)
+     * @param keyword   상품명 키워드 (선택)
      * @param startDate 시작일 필터 (선택)
-     * @param endDate 종료일 필터 (선택)
+     * @param endDate   종료일 필터 (선택)
      * @return 주문 목록 DTO 리스트
      */
     public List<OrderManageDto> findOrders(
@@ -151,5 +158,20 @@ public class OrderService {
                 order.getStatus(),
                 order.getTrackNo()
         );
+    }
+
+    public Map<String, Object> listAll(String keyword, Integer pageNumber) {
+        Page<OrderListAllDto> orderListDtoPage = orderListRepository.searchOrderListAll(keyword, PageRequest.of(pageNumber - 1, 10));
+        int totalPages = orderListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo, "orderList", orderListDtoPage.getContent());
     }
 }
