@@ -61,4 +61,5 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
     SaleDto findSaleBySeq(Integer seq);
 
     Sale findBySaleNo(String saleNo);
+
 }
