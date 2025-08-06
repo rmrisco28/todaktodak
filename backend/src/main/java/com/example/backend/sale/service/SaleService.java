@@ -22,7 +22,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,9 +53,9 @@ public class SaleService {
         // 조합번호 생성 (코드 + 현재일자 + 시퀀스)
         String code = "SA";
 
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-        String date = formatter.format(now);
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        String todayStr = today.format(formatter);
 
         Integer maxSeq = saleRepository.findMaxSeq();
         int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
@@ -62,7 +64,7 @@ public class SaleService {
         Sale sale = new Sale();
         Product product = productRepository.findByProductNo(dto.getProductNo());
         sale.setProductNo(product);
-        sale.setSaleNo(code + date + seqStr);
+        sale.setSaleNo(code + todayStr + seqStr);
         sale.setCategory(dto.getCategory());
         sale.setTitle(dto.getTitle());
         sale.setQuantity(dto.getQuantity());
