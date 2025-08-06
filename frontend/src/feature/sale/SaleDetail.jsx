@@ -9,6 +9,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
   Image,
   Modal,
   Row,
@@ -23,6 +24,7 @@ export function SaleDetail() {
 
   const [mainThumbnail, setMainThumbnail] = useState([]);
   const [orderCount, setOrderCount] = useState(1);
+  const [period, setPeriod] = useState(30);
 
   useEffect(() => {
     axios
@@ -131,6 +133,19 @@ export function SaleDetail() {
               : "무료배송"}
           </div>
 
+          <FormGroup className="mb-3" controlId="formPeriod">
+            <FormLabel>대여기간</FormLabel>
+            <FormSelect
+              className="mb-3"
+              onChange={(e) => setPeriod(e.target.value)}
+            >
+              <option value={30}>30일 대여</option>
+              <option value={90}>90일 대여</option>
+              <option value={180}>180일 대여</option>
+              <option value={360}>360일 대여</option>
+            </FormSelect>
+          </FormGroup>
+
           <FormGroup className="mb-3" controlId="formOrderCount">
             <FormLabel>주문수량</FormLabel>
             <FormControl
@@ -147,7 +162,11 @@ export function SaleDetail() {
             <Button
               variant="primary"
               size="lg"
-              onClick={() => navigate(`/buy/${seq}?orderCount=${orderCount}`)}
+              onClick={() =>
+                navigate(
+                  `/buy/${seq}?orderCount=${orderCount}&period=${period}`,
+                )
+              }
             >
               대여하기
             </Button>
