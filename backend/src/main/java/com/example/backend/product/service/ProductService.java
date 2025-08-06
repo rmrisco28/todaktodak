@@ -23,7 +23,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,16 +51,16 @@ public class ProductService {
         // 조합번호 생성 (코드 + 현재일자 + 시퀀스)
         String code = "PR";
 
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-        String date = formatter.format(now);
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        String todayStr = today.format(formatter);
 
         Integer maxSeq = productRepository.findMaxSeq();
         int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
         String seqStr = String.format("%07d", latestSeq);
 
         Product product = new Product();
-        product.setProductNo(code + date + seqStr);
+        product.setProductNo(code + todayStr + seqStr);
         product.setCategory(dto.getCategory());
         product.setBrand(dto.getBrand());
         product.setName(dto.getName());
