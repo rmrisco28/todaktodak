@@ -9,9 +9,10 @@ import {
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function MemberMyInfo() {
   const [member, setMember] = useState(null);
@@ -21,9 +22,11 @@ export function MemberMyInfo() {
 
   const navigate = useNavigate();
 
+  const { logout } = useContext(AuthenticationContext);
+
   useEffect(() => {
     axios
-      .get(`/api/member/myinfo/${memberId}`)
+      .get(`/api/member/myinfo`)
       .then((res) => {
         setMember(res.data);
       })
@@ -38,12 +41,13 @@ export function MemberMyInfo() {
   // 회원탈퇴 버튼
   function handleDeleteButtonClick() {
     axios
-      .put(`/api/member/${memberId}/withdraw`)
+      .put(`/api/member/withdraw`)
       .then((res) => {
         console.log("ok");
         const message = res.data.message;
         toast(message.text, { type: message.type });
         navigate("/");
+        logout();
       })
       .catch((err) => {
         console.log(err);
@@ -63,7 +67,7 @@ export function MemberMyInfo() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={4}>
+      <Col lg={5}>
         <h2 className="mb-4">내 정보</h2>
         <div>
           <FormGroup as={Row} controlId="memberId" className="mb-4">
@@ -149,7 +153,7 @@ export function MemberMyInfo() {
           <Button
             className="mb-4"
             variant="outline-primary"
-            onClick={() => navigate(`/member/myinfo/modify/${memberId}`)}
+            onClick={() => navigate(`/member/myinfo/modify`)}
           >
             정보 변경
           </Button>

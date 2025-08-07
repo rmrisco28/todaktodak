@@ -4,6 +4,8 @@ import com.example.backend.member.dto.*;
 import com.example.backend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -116,14 +118,21 @@ public class MemberController {
     }
 
     // 회원 상세 보기(회원)
-    @GetMapping("myinfo/{memberId}")
-    public ResponseEntity<?> getMyInfo(@PathVariable String memberId) {
-        return ResponseEntity.ok().body(memberService.getMyInfo(memberId));
+    @GetMapping("myinfo")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getMyInfo(Authentication authentication) {
+        String memberId = authentication.getName();
+        if (authentication.getName().equals(memberId)) {
+            return ResponseEntity.ok().body(memberService.getMyInfo(memberId));
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     // 회원 탈퇴(회원)
-    @PutMapping("{memberId}/withdraw")
-    public ResponseEntity<?> delete(@PathVariable String memberId) {
+    @PutMapping("withdraw")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> delete(Authentication authentication) {
+        String memberId = authentication.getName();
         try {
             memberService.delete(memberId);
         } catch (Exception e) {
@@ -139,9 +148,10 @@ public class MemberController {
     }
 
     // 회원 정보 수정(회원)
-    @PutMapping("/myinfo/modify/{memberId}")
-    public ResponseEntity<?> MyInfoModify(@PathVariable String memberId,
-                                          @RequestBody MyInfoModifyDto dto) {
+    @PutMapping("/myinfo/modify")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> MyInfoModify(@RequestBody MyInfoModifyDto dto, Authentication authentication) {
+        String memberId = authentication.getName();
         try {
             memberService.MyInfoModify(memberId, dto);
         } catch (Exception e) {

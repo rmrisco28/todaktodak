@@ -60,7 +60,7 @@ export function MemberDetail() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={4}>
+      <Col lg={5}>
         <h3 className="mb-4">회원 정보 관리</h3>
         {/* 고객 번호 */}
         <div>
@@ -231,9 +231,9 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         {/* 삭제, 수정 버튼*/}
-        <div className="mb-3">
+        <div className="mb-3 text-center">
           <Button
-            className="me-2"
+            className="me-3"
             variant="outline-danger"
             onClick={() => setModalShow(true)}
           >

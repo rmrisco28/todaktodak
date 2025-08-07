@@ -48,7 +48,7 @@ export function MemberMyInfoModify() {
 
   useEffect(() => {
     axios
-      .get(`/api/member/myinfo/${memberId}`)
+      .get(`/api/member/myinfo`)
       .then((res) => {
         console.log("성공");
         setMember(res.data);
@@ -100,7 +100,7 @@ export function MemberMyInfoModify() {
     }
 
     axios
-      .put(`/api/member/myinfo/modify/${memberId}`, modifiedMember)
+      .put(`/api/member/myinfo/modify`, modifiedMember)
       .then((res) => {
         console.log("성공");
         setMember(res.data);
@@ -108,7 +108,7 @@ export function MemberMyInfoModify() {
         if (message) {
           toast(message.text, { type: message.type });
         }
-        navigate(`/member/myinfo/${memberId}`);
+        navigate(`/member/myinfo`);
       })
       .catch((err) => {
         console.log(err);
@@ -203,7 +203,7 @@ export function MemberMyInfoModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={4}>
+      <Col lg={5}>
         <h3 className="mb-4">회원 정보 변경</h3>
         {/* 아이디 */}
         <div>
@@ -281,7 +281,7 @@ export function MemberMyInfoModify() {
             <FormLabel column sm={3}>
               생년월일
             </FormLabel>
-            <Col sm={9} className="d-flex" style={{ gap: "10px" }}>
+            <Col sm={7} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
               <Form.Select
                 value={birthYear}
