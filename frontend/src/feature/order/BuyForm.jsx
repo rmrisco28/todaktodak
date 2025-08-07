@@ -27,6 +27,9 @@ export function BuyForm() {
   const [mainThumbnail, setMainThumbnail] = useState([]);
   const [orderCount, setOrderCount] = useState(1);
   const [recipient, setRecipient] = useState("");
+  
+  const [period, setPeriod] = useState(30);
+  
   const [searchParams] = useSearchParams();
 
   const handleThumbnailClick = (path) => setMainThumbnail(path);
@@ -35,6 +38,7 @@ export function BuyForm() {
 
   useEffect(() => {
     setOrderCount(searchParams.get("orderCount") || 1);
+    setPeriod(searchParams.get("period") || 30);
 
     axios
       .get(`/api/sale/detail/${seq}`)
@@ -171,6 +175,8 @@ export function BuyForm() {
         // state: "대여중", 기본값
         deliveryCompany: "cj",
         tracking: "trk123456789",
+      
+        period: period,
         productNo: sale.productNo,
       })
       .then((res) => {

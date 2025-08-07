@@ -5,6 +5,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  InputGroup,
   Row,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
@@ -12,10 +13,12 @@ import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // step2. Use the context (토큰 인증 context 호출)
   const { login } = useContext(AuthenticationContext);
@@ -56,27 +59,84 @@ export function MemberLogin() {
     <Row className="d-flex justify-content-center">
       <Col md="auto">
         <h3 className="d-flex justify-content-center mb-4">Login</h3>
+        {/* 아이디 */}
         <Form onSubmit={handleFormSubmit}>
           <div>
             <FormGroup className="mb-3" controlId="memberId">
               <FormLabel>아이디</FormLabel>
-              <FormControl
-                value={memberId}
-                onChange={(e) => setMemberId(e.target.value)}
-              />
+              <div style={{ position: "relative" }}>
+                <FormControl
+                  value={memberId}
+                  onChange={(e) => setMemberId(e.target.value)}
+                  style={{ paddingRight: "36px" }}
+                />
+                {/* ❌ 아이디 초기화 버튼 */}
+                {memberId && (
+                  <span
+                    onClick={() => setMemberId("")}
+                    style={{
+                      position: "absolute",
+                      top: "45%",
+                      right: "10px",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                      color: "black",
+                      fontSize: "18px",
+                    }}
+                  >
+                    <FaTimes />
+                  </span>
+                )}
+              </div>
             </FormGroup>
           </div>
-          <div>
-            <FormGroup className="mb-3" controlId="password">
-              <FormLabel>비밀번호</FormLabel>
+          {/* 패스워드 */}
+          <FormGroup className="mb-3" controlId="password">
+            <FormLabel>비밀번호</FormLabel>
+            <div style={{ position: "relative" }}>
               <FormControl
                 autoComplete="off"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                style={{ paddingRight: "60px" }}
               />
-            </FormGroup>
-          </div>
+              {/* 👁 비밀번호 보기 토글 */}
+              {password && (
+                <span
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  style={{
+                    position: "absolute",
+                    top: "45%",
+                    right: "36px",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    color: "black",
+                    fontSize: "18px",
+                  }}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              )}
+              {/* ❌ 비밀번호 초기화 (입력값 있을 때만) */}
+              {password && (
+                <span
+                  onClick={() => setPassword("")}
+                  style={{
+                    position: "absolute",
+                    top: "45%",
+                    right: "10px",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    color: "black",
+                    fontSize: "18px",
+                  }}
+                >
+                  <FaTimes />
+                </span>
+              )}
+            </div>
+          </FormGroup>
           <div className="d-flex justify-content-between">
             <Button type="submit" className="w-100 mb-4">
               로그인
