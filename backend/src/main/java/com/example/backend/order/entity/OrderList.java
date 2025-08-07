@@ -63,9 +63,9 @@ public class OrderList {
     @Column(name = "order_count", nullable = false)
     private Integer orderCount;
 
-    @ColumnDefault("60")
+    //    @ColumnDefault("60")
     @Column(name = "rental_period", nullable = false)
-    private Integer rentalPeriod = 60;
+    private Integer rentalPeriod;
 
     @ColumnDefault("대여중")
     @Column(name = "state", nullable = false, length = 10)

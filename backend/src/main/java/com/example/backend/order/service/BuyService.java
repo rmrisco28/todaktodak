@@ -74,8 +74,8 @@ public class BuyService {
         orderList.setProdPrice(old.getProdPrice());
         orderList.setOrderCount(old.getOrderCount());
 
-//        orderList.setRentalPeriod(old.getRentalPeriod());
-//        orderList.setState(old.getState());
+        orderList.setRentalPeriod(old.getRentalPeriod());
+//        orderList.setState(old.getState()); 기본값 대여중
         orderList.setDeliveryCompany(old.getDeliveryCompany());
         orderList.setTracking(old.getTracking());
 
