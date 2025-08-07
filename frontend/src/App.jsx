@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-// import "./assets/astro-ecommerce.scss";
+import "./assets/astro-ecommerce.scss";
 
 import { BrowserRouter, Route, Routes } from "react-router";
 import { MainLayout } from "./common/MainLayout.jsx";

@@ -6,9 +6,12 @@ import { AppNavBar } from "./AppNavBar.jsx";
 export function MainLayout() {
   return (
     <div>
-      <div className="mb-3">
-        <AppNavBar />
-        {/*<ComplexNavbar />*/}
+      <div
+        className="mb-3"
+        // className="pb-lg-7 pb-md-7 pb-sm-7 pt-xl-7"
+      >
+        {/*<AppNavBar />*/}
+        <ComplexNavbar />
       </div>
       <Container>
         <Outlet />
