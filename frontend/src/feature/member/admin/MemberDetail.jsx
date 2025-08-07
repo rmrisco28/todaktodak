@@ -154,13 +154,21 @@ export function MemberDetail() {
         <div>
           <FormGroup controlId="address" className="mb-2">
             <FormLabel>주소</FormLabel>
-            <FormControl value={member.addr} readOnly={true} />
+            <FormControl
+              style={{ width: "80%" }}
+              value={member.addr}
+              readOnly={true}
+            />
           </FormGroup>
         </div>
         {/* 상세주소 */}
         <div>
           <FormGroup controlId="addressDetail" className="mb-3">
-            <FormControl value={member.addrDetail} readOnly={true} />
+            <FormControl
+              style={{ width: "80%" }}
+              value={member.addrDetail}
+              readOnly={true}
+            />
           </FormGroup>
         </div>
         {/* 등록일시 */}
@@ -168,6 +176,7 @@ export function MemberDetail() {
           <FormGroup controlId="insertDttm" className="mb-3">
             <FormLabel>등록일시</FormLabel>
             <FormControl
+              style={{ width: "80%" }}
               value={member.insertDttm?.replace("T", "  ")}
               readOnly={true}
             />
@@ -178,6 +187,7 @@ export function MemberDetail() {
           <FormGroup controlId="updatetDttm" className="mb-3">
             <FormLabel>수정일시</FormLabel>
             <FormControl
+              style={{ width: "80%" }}
               value={member.updateDttm?.replace("T", "  ")}
               readOnly={true}
             />

@@ -47,14 +47,14 @@ public class MemberController {
         return ResponseEntity.ok().body(Map.of("exists", exists));
     }
 
-    // 회원 목록 보기
+    // 회원 목록 보기(관리자)
     @GetMapping("list")
     public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
 
         return memberService.list(pageNumber);
     }
 
-    // 회원 정보 상세 보기
+    // 회원 정보 상세 보기(관리자)
     @GetMapping(params = "seq")
     public ResponseEntity<?> getMember(@RequestParam Integer seq) {
         return ResponseEntity.ok().body(memberService.getMember(seq));
@@ -193,8 +193,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
-            return ResponseEntity.status(401).body(Map.of("message",
-                    Map.of("type", "error", "text", message)));
+            return ResponseEntity.status(401).build();
         }
     }
 

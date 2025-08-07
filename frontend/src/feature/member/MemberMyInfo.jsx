@@ -138,13 +138,21 @@ export function MemberMyInfo() {
         <div>
           <FormGroup controlId="address" className="mb-2">
             <FormLabel>주소</FormLabel>
-            <FormControl value={member.addr} readOnly={true} />
+            <FormControl
+              value={member.addr}
+              readOnly={true}
+              style={{ width: "80%" }}
+            />
           </FormGroup>
         </div>
         {/* 상세주소 */}
         <div>
           <FormGroup controlId="addressDetail" className="mb-3">
-            <FormControl value={member.addrDetail} readOnly={true} />
+            <FormControl
+              style={{ width: "80%" }}
+              value={member.addrDetail}
+              readOnly={true}
+            />
           </FormGroup>
         </div>
 

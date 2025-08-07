@@ -5,14 +5,12 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  InputGroup,
   Row,
 } from "react-bootstrap";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
-import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 
 export function MemberLogin() {
@@ -35,11 +33,7 @@ export function MemberLogin() {
         const token = res.data.token;
         login(token);
 
-        const message = res.data.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
-
+        alert("로그인 되었습니다.");
         navigate("/");
       })
       .catch((err) => {

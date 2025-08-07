@@ -138,10 +138,7 @@ export function MemberSignup() {
       })
       .then((res) => {
         console.log(res.data);
-        const message = res.data.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
+        alert("회원가입이 완료되었습니다.");
         navigate("/login");
       })
       .catch((err) => {
