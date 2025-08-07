@@ -55,7 +55,7 @@ export function OrderAdminList() {
   }
 
   function handleTableRowClick(seq) {
-    navigate(`/order/detail/${seq}`);
+    navigate(`/order/${seq}`);
   }
 
   const pageNumbers = [];

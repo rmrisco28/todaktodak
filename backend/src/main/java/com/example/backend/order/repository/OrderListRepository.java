@@ -1,5 +1,6 @@
 package com.example.backend.order.repository;
 
+import com.example.backend.order.dto.OrderDto;
 import com.example.backend.order.dto.OrderListAllDto;
 import com.example.backend.order.entity.OrderList;
 import org.springframework.data.domain.Page;
@@ -32,4 +33,37 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 OR ol.state LIKE %:keyword%)
             """)
     Page<OrderListAllDto> searchOrderListAll(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("""
+                        SELECT new com.example.backend.order.dto.OrderDto
+                        (
+                        ol.seq,
+                        s.saleNo,
+                        s.title saleTitle,
+                        ol.orderNo,
+                        ol.prodPrice,
+                        ol.orderCount,
+                        ol.rentalPeriod,
+                        ol.state,
+                        ol.insertDttm,
+                        ol.recipient,
+                        ol.phone,
+                        ol.post,
+                        ol.addr,
+                        ol.addrDetail,
+                        ol.request,
+                        ol.deliveryCompany,
+                        ol.tracking,
+                        ol.totalPrice,
+                        ol.deliveryFee,
+                        ol.totProdPrice
+                        ) FROM OrderList ol
+                        LEFT JOIN Sale s
+                               ON s.saleNo = ol.sale.saleNo
+                        WHERE ol.seq = :seq
+                            AND (ol.useYn = true
+                            AND ol.delYn = false)
+            
+            """)
+    OrderDto findOrderDetailBySeq(Integer seq);
 }
