@@ -35,16 +35,34 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
     @Query(value = """
             SELECT new com.example.backend.rental.dto.RentalDto(
                         r.seq,
+                        r.rentalNo,
                         r.orderNo.orderCount,
                         r.productNo.name,
                         r.productNo.price,
+            
                         r.startDttm,
                         r.endDttm,
-                        r.status)
+                        r.status,
+                        r.orderNo.name,
+                        r.orderNo.post,
+            
+                        r.orderNo.addr,
+                        r.orderNo.addrDetail,
+                        r.orderNo.phone,
+                        r.orderNo.orderNo,
+                        r.productNo.productNo,
+            
+                        r.orderNo.sale.saleNo
+                        )
                     FROM Rental r
                     WHERE r.seq = :seq
                     AND r.useYn=true
                     AND r.delYn=false
             """)
     RentalDto findRentalBySeq(Integer seq);
+
+
+    Rental findStatusByRentalNo(String rentalNo);
+
+    Rental findByRentalNo(String rentalNo);
 }
