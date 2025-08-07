@@ -67,7 +67,7 @@ export function MemberMyInfo() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={5}>
+      <Col lg={4}>
         <h2 className="mb-4">내 정보</h2>
         <div>
           <FormGroup as={Row} controlId="memberId" className="mb-4">
@@ -138,28 +138,24 @@ export function MemberMyInfo() {
         <div>
           <FormGroup controlId="address" className="mb-2">
             <FormLabel>주소</FormLabel>
-            <FormControl
-              value={member.addr}
-              readOnly={true}
-              style={{ width: "80%" }}
-            />
+            <Col lg={10}>
+              <FormControl value={member.addr} readOnly={true} />
+            </Col>
           </FormGroup>
         </div>
         {/* 상세주소 */}
         <div>
           <FormGroup controlId="addressDetail" className="mb-3">
-            <FormControl
-              style={{ width: "80%" }}
-              value={member.addrDetail}
-              readOnly={true}
-            />
+            <Col sm={10}>
+              <FormControl value={member.addrDetail} readOnly={true} />
+            </Col>
           </FormGroup>
         </div>
 
         {/* 변경, 탈퇴 버튼*/}
         <div>
           <Button
-            className="mb-4"
+            className="mb-4 mt-3"
             variant="outline-primary"
             onClick={() => navigate(`/member/myinfo/modify`)}
           >

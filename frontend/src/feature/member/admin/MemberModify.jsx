@@ -140,7 +140,7 @@ export function MemberModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={7}>
+      <Col lg={6}>
         <h3 className="mb-4">회원 정보 수정</h3>
         {/* 고객 번호 */}
         <div>
@@ -283,10 +283,10 @@ export function MemberModify() {
         {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               생년월일
             </FormLabel>
-            <Col sm={5} className="d-flex" style={{ gap: "10px" }}>
+            <Col lg={5} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
               <Form.Select
                 value={birthYear}
@@ -354,10 +354,10 @@ export function MemberModify() {
         {/* 우편번호 */}
         <div>
           <FormGroup as={Row} controlId="postCode" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               우편번호
             </FormLabel>
-            <Col sm={6}>
+            <Col lg={5}>
               <div className="d-flex" style={{ gap: "10px" }}>
                 <FormControl
                   value={member.postCode}
@@ -379,10 +379,10 @@ export function MemberModify() {
         {/* 주소 */}
         <div>
           <FormGroup as={Row} controlId="address" className="mb-2">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               주소
             </FormLabel>
-            <Col sm={8}>
+            <Col lg={6}>
               <FormControl value={member.addr} readOnly={true} />
             </Col>
           </FormGroup>
@@ -391,7 +391,7 @@ export function MemberModify() {
         <div>
           <FormGroup as={Row} controlId="addressDetail" className="mb-4">
             <FormLabel column sm={3}></FormLabel>
-            <Col sm={8}>
+            <Col sm={6}>
               <FormControl
                 value={member.addrDetail || ""}
                 onChange={(e) =>

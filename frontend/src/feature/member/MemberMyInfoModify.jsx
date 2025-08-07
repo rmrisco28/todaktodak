@@ -278,10 +278,10 @@ export function MemberMyInfoModify() {
         {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               생년월일
             </FormLabel>
-            <Col sm={7} className="d-flex" style={{ gap: "10px" }}>
+            <Col lg={9} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
               <Form.Select
                 value={birthYear}

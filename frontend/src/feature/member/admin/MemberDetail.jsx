@@ -60,7 +60,7 @@ export function MemberDetail() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={5}>
+      <Col lg={4}>
         <h3 className="mb-4">회원 정보 관리</h3>
         {/* 고객 번호 */}
         <div>
@@ -98,10 +98,10 @@ export function MemberDetail() {
         {/* 이름 */}
         <div>
           <FormGroup as={Row} controlId="name" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               이름
             </FormLabel>
-            <Col sm={7}>
+            <Col lg={7}>
               <FormControl value={member.name} readOnly={true} />
             </Col>
           </FormGroup>
@@ -109,10 +109,10 @@ export function MemberDetail() {
         {/* 이메일 */}
         <div>
           <FormGroup as={Row} controlId="email" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               이메일
             </FormLabel>
-            <Col sm={7}>
+            <Col lg={7}>
               <FormControl value={member.email} readOnly={true} />
             </Col>
           </FormGroup>
@@ -120,10 +120,10 @@ export function MemberDetail() {
         {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               생년월일
             </FormLabel>
-            <Col sm={7}>
+            <Col lg={7}>
               <FormControl value={member.birthDate} readOnly={true} />
             </Col>
           </FormGroup>
@@ -142,10 +142,10 @@ export function MemberDetail() {
         {/* 우편번호 */}
         <div>
           <FormGroup as={Row} controlId="postCode" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               우편번호
             </FormLabel>
-            <Col sm={7}>
+            <Col lg={7}>
               <FormControl value={member.postCode} readOnly={true} />
             </Col>
           </FormGroup>
@@ -153,44 +153,44 @@ export function MemberDetail() {
         {/* 주소 */}
         <div>
           <FormGroup controlId="address" className="mb-2">
-            <FormLabel>주소</FormLabel>
-            <FormControl
-              style={{ width: "80%" }}
-              value={member.addr}
-              readOnly={true}
-            />
+            <FormLabel column lg={3}>
+              주소
+            </FormLabel>
+            <Col lg={10}>
+              <FormControl value={member.addr} readOnly={true} />
+            </Col>
           </FormGroup>
         </div>
         {/* 상세주소 */}
         <div>
           <FormGroup controlId="addressDetail" className="mb-3">
-            <FormControl
-              style={{ width: "80%" }}
-              value={member.addrDetail}
-              readOnly={true}
-            />
+            <Col lg={10}>
+              <FormControl value={member.addrDetail} readOnly={true} />
+            </Col>
           </FormGroup>
         </div>
         {/* 등록일시 */}
         <div>
           <FormGroup controlId="insertDttm" className="mb-3">
             <FormLabel>등록일시</FormLabel>
-            <FormControl
-              style={{ width: "80%" }}
-              value={member.insertDttm?.replace("T", "  ")}
-              readOnly={true}
-            />
+            <Col lg={10}>
+              <FormControl
+                value={member.insertDttm?.replace("T", "  ")}
+                readOnly={true}
+              />
+            </Col>
           </FormGroup>
         </div>
         {/* 수정일시 */}
         <div>
           <FormGroup controlId="updatetDttm" className="mb-3">
             <FormLabel>수정일시</FormLabel>
-            <FormControl
-              style={{ width: "80%" }}
-              value={member.updateDttm?.replace("T", "  ")}
-              readOnly={true}
-            />
+            <Col lg={10}>
+              <FormControl
+                value={member.updateDttm?.replace("T", "  ")}
+                readOnly={true}
+              />
+            </Col>
           </FormGroup>
         </div>
         {/* 회원상태 */}
@@ -207,11 +207,12 @@ export function MemberDetail() {
         {/* 사용여부 */}
         <div>
           <FormGroup as={Row} controlId="useYn" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               사용여부
             </FormLabel>
-            <Col sm={7} className="d-flex align-items-center">
+            <Col sm={7}>
               <FormCheck
+                className="d-flex justify-content-center"
                 type="switch"
                 id="useYn-switch"
                 label={member.useYn ? "사용중" : "미사용"}
@@ -225,11 +226,12 @@ export function MemberDetail() {
         {/* 삭제여부 */}
         <div>
           <FormGroup as={Row} controlId="delYn" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               삭제여부
             </FormLabel>
             <Col sm={7}>
               <FormCheck
+                className="d-flex justify-content-center"
                 type="switch"
                 id="delYn-switch"
                 label={member.delYn ? "삭제" : "미삭제"}
@@ -241,7 +243,7 @@ export function MemberDetail() {
           </FormGroup>
         </div>
         {/* 삭제, 수정 버튼*/}
-        <div className="mb-3 text-center">
+        <div className="mb-3">
           <Button
             className="me-3"
             variant="outline-danger"
