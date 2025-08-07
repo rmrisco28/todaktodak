@@ -108,6 +108,11 @@ export function MemberModify() {
       });
   }
 
+  // 월별 일수 계산 함수
+  function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate(); // month는 1부터 시작
+  }
+
   // 다음 주소 검색 API 연동
   const handleSearchButtonClick = () => {
     new window.daum.Postcode({
@@ -283,8 +288,7 @@ export function MemberModify() {
             </FormLabel>
             <Col sm={5} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthYear}
                 onChange={(e) => setBirthYear(e.target.value)}
                 style={{ width: "100px" }}
@@ -298,10 +302,9 @@ export function MemberModify() {
                     </option>
                   );
                 })}
-              </FormControl>
+              </Form.Select>
               {/* 월 */}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthMonth}
                 onChange={(e) => setBirthMonth(e.target.value)}
                 style={{ width: "70px" }}
@@ -312,21 +315,23 @@ export function MemberModify() {
                     {i + 1}
                   </option>
                 ))}
-              </FormControl>
+              </Form.Select>
               {/* 일*/}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthDay}
                 onChange={(e) => setBirthDay(e.target.value)}
                 style={{ width: "70px" }}
               >
                 <option value="">일</option>
-                {Array.from({ length: 31 }, (_, i) => (
-                  <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
-                    {i + 1}
-                  </option>
-                ))}
-              </FormControl>
+                {Array.from(
+                  { length: getDaysInMonth(birthYear, birthMonth) || 31 },
+                  (_, i) => (
+                    <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
+                      {i + 1}
+                    </option>
+                  ),
+                )}
+              </Form.Select>
             </Col>
           </FormGroup>
         </div>

@@ -47,7 +47,7 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode(memberSignupForm.getPassword()));
             member.setName(memberSignupForm.getName());
             member.setPhone(memberSignupForm.getPhone());
-            member.setBirthDate(LocalDate.parse(memberSignupForm.getBirthDate()));
+            member.setBirthDate(memberSignupForm.getBirthDate());
             member.setEmail(memberSignupForm.getEmail());
             member.setAddr(memberSignupForm.getAddr());
             member.setAddrDetail(memberSignupForm.getAddrDetail());
@@ -185,7 +185,7 @@ public class MemberService {
             member2.setPassword(passwordEncoder.encode(memberAddForm.getPassword()));
             member2.setName(memberAddForm.getName());
             member2.setPhone(memberAddForm.getPhone());
-            member2.setBirthDate(LocalDate.parse(memberAddForm.getBirthDate()));
+            member2.setBirthDate(memberAddForm.getBirthDate());
             member2.setEmail(memberAddForm.getEmail());
             member2.setAddr(memberAddForm.getAddr());
             member2.setAddrDetail(memberAddForm.getAddrDetail());
@@ -265,8 +265,8 @@ public class MemberService {
         dbData.setAddr(dto.getAddr());
         dbData.setAddrDetail(dto.getAddrDetail());
 
-        if (dto.getBirthDate() != null && !dto.getBirthDate().isBlank()) {
-            dbData.setBirthDate(LocalDate.parse(dto.getBirthDate()));
+        if (dto.getBirthDate() != null) {
+            dbData.setBirthDate(dto.getBirthDate());
         }
 
         LocalDateTime now = LocalDateTime.now();
