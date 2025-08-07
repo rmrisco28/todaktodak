@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 
-// react-bootstrap 컴포넌트 임포트
 import {
   Navbar,
   Container,
@@ -11,28 +10,53 @@ import {
   Image,
 } from "react-bootstrap";
 
-// react-icons 임포트 (필요한 아이콘들을 가져옵니다)
 import { IoSettingsSharp, IoNotifications, IoSearch } from "react-icons/io5";
 import { FaClock } from "react-icons/fa";
 import { BsChevronDown } from "react-icons/bs";
-import { FaDiscord, FaGithub } from "react-icons/fa6";
-
-// JSON 데이터 임포트 (경로는 프로젝트 구조에 맞게 수정해주세요)
-// import data from '../../public/data.json';
-
-// CardCategory 컴포넌트 임포트 (이 컴포넌트도 생성해야 합니다)
-// import CardCategory from './products/CardCategory';
+import "../css/navbar.css";
 
 export function ComplexNavbar() {
-  return (
+  // 여러 드롭다운의 열림 상태를 관리하기 위한 state
+  const [openDropdowns, setOpenDropdowns] = useState({});
+
+  // 모바일 메뉴(햄버거) 열림/닫힘 상태 추가
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // 드롭다운이 토글될 때 호출되는 함수
+  const handleToggle = (dropdownId, isOpen) => {
+    setOpenDropdowns((prev) => ({ ...prev, [dropdownId]: isOpen }));
+  };
+
+  // 각 드롭다운의 제목을 동적으로 생성하는 함수
+  const getDropdownTitle = (title, dropdownId) => (
     <>
+      {title}
+      <BsChevronDown
+        className={`ms-2 dropdown-toggle-icon ${
+          openDropdowns[dropdownId] ? "rotate-180" : ""
+        }`}
+      />
+    </>
+  );
+
+  return (
+    <div
+    // className="position-fixed "
+    // expand="lg"
+    // className="top-0 d-none d-lg-block shadow-sm py-0 sticky-top navbar-translucent blur"
+    // style={{ zIndex: 1032 }} // 하단 Navbar보다 높은 z-index 부여
+    >
       {/**************************************************
        데스크탑용 Navbar (d-none d-lg-block)
        - navbar 2단 구조
        ***************************************************/}
       {/* 상단 네비게이션 */}
-      <Navbar expand="lg" className="top-0 d-none d-lg-block shadow-sm py-0">
-        <Container className="py-2">
+      <Navbar
+        expand="lg"
+        className="top-0 d-none d-lg-block shadow-sm py-0 sticky-top navbar-translucent blur"
+        style={{ zIndex: 1031 }} // 하단 Navbar보다 높은 z-index 부여
+      >
+        <Container fluid className="py-2">
           <Navbar.Brand
             href="/"
             className="text-dark text-lg font-weight-bold me-10"
@@ -51,10 +75,11 @@ export function ComplexNavbar() {
             </Nav.Link>
 
             <NavDropdown
-              title="_회원명_"
-              id="notification-dropdown"
+              title={getDropdownTitle("_회원명_", "member-desktop")}
+              id="member-dropdown-desktop"
               align="end"
               className="px-2"
+              onToggle={(isOpen) => handleToggle("member-desktop", isOpen)}
             >
               <NavDropdown.Item href="/member/detail" className="mb-2">
                 <div className="d-flex py-1 flex-column justify-content-center">
@@ -94,10 +119,11 @@ export function ComplexNavbar() {
             </NavDropdown>
 
             <NavDropdown
-              title="관리자"
-              id="notification-dropdown"
+              title={getDropdownTitle("관리자", "admin-desktop")}
+              id="admin-dropdown-desktop"
               align="end"
               className="px-2"
+              onToggle={(isOpen) => handleToggle("admin-desktop", isOpen)}
             >
               <NavDropdown.Item href="/admin" className="mb-2">
                 <div className="d-flex py-1 flex-column justify-content-center">
@@ -189,10 +215,9 @@ export function ComplexNavbar() {
               <IoSettingsSharp size={16} />
             </Nav.Link>
 
-            {/* 알림 드롭다운 */}
             <NavDropdown
               title={<IoNotifications size={16} />}
-              id="notification-dropdown"
+              id="notification-dropdown-desktop"
               align="end"
               className="px-2"
             >
@@ -238,7 +263,6 @@ export function ComplexNavbar() {
               <NavDropdown.Item href="#action/3.3">
                 <div className="d-flex py-1">
                   <div className="avatar avatar-sm bg-gradient-secondary me-3 my-auto">
-                    {/* SVG 아이콘은 직접 사용하거나 react-icons에서 비슷한 아이콘을 찾을 수 있습니다. */}
                     <svg
                       width="12px"
                       height="12px"
@@ -295,34 +319,17 @@ export function ComplexNavbar() {
           </Nav>
         </Container>
       </Navbar>
-      <hr className="horizontal dark my-0 w-100 d-none d-lg-block" />
+
+      {/*<hr className="horizontal dark my-0 w-100 d-none d-lg-block" />*/}
+
       {/* 하단 네비게이션 (Mega Menu 포함) */}
-      <Navbar expand="lg" className="d-none d-lg-block pt-3 pb-3">
+      <Navbar
+        expand="lg"
+        className="d-none d-lg-block pt-3 pb-3 sticky-top navbar-translucent-bottom"
+        style={{ zIndex: 1030 }} // 상단 Navbar보다 낮은 z-index 부여
+      >
         <Container>
           <Nav>
-            {/* 'Store' Mega Menu Dropdown */}
-            {/*<NavDropdown title="Store" id="store-mega-menu" className="px-3">*/}
-            {/* dropdown-xxl 클래스는 커스텀 CSS로 직접 정의해야 합니다. */}
-            {/*
-              <div
-                className="dropdown-menu dropdown-xxl"
-                aria-labelledby="store-mega-menu"
-              >
-                <div className="row m-3">
-                  {data.categories.slice(0, 3).map((category, index) =>
-                    <div className="col-md-4" key={index}>
-                      <CardCategory
-                        thumb_src={category.thumb_src}
-                        title={category.title}
-                        collection={category.collection}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-                */}
-            {/*</NavDropdown>*/}
-
             <Nav.Link href="/sale/list" className="px-3">
               상품
             </Nav.Link>
@@ -353,10 +360,11 @@ export function ComplexNavbar() {
        모바일용 Navbar (d-lg-none)
        - 햄버거 아이콘 메뉴
        ***************************************************/}
-      {/* d-lg-none 클래스를 추가하여 lg 사이즈 이상(데스크탑)에서는 이 Navbar가 보이지 않도록 설정 */}
       <Navbar
         expand="lg"
-        className="blur border-radius-sm top-0 z-index-3 shadow position-sticky py-3 start-0 end-0 d-lg-none"
+        className="top-0 z-index-3 shadow start-0 end-0 d-lg-none sticky-top navbar-translucent blur"
+        expanded={isMobileMenuOpen} // Navbar의 열림 상태를 state와 동기화
+        onToggle={(expanded) => setMobileMenuOpen(expanded)} // 토글 시 state 변경
       >
         <Container className="px-1">
           <Navbar.Brand href="/" className="font-weight-bolder ms-lg-0">
@@ -375,10 +383,12 @@ export function ComplexNavbar() {
               />
             </InputGroup>
           </div>
-          
-          {/* Navbar.Toggle이 data-bs-toggle, data-bs-target 등을 자동으로 처리합니다. */}
-          <Navbar.Toggle aria-controls="mobile-navigation">
-            {/* 햄버거 메뉴 아이콘의 막대(bar) 스타일은 커스텀 CSS에 정의되어 있습니다. */}
+
+          {/* [수정] 햄버거 아이콘 X자 변환을 위해 className 동적 적용 */}
+          <Navbar.Toggle
+            aria-controls="mobile-navigation"
+            className={isMobileMenuOpen ? "toggled" : ""}
+          >
             <span className="navbar-toggler-icon mt-2">
               <span className="navbar-toggler-bar bar1"></span>
               <span className="navbar-toggler-bar bar2"></span>
@@ -387,7 +397,6 @@ export function ComplexNavbar() {
           </Navbar.Toggle>
 
           <Navbar.Collapse id="mobile-navigation">
-            {/* ms-auto 클래스로 네비게이션 항목들을 오른쪽으로 정렬합니다. */}
             <Nav className="ms-auto">
               <Nav.Link
                 href="/sale/list"
@@ -420,14 +429,10 @@ export function ComplexNavbar() {
                 로그아웃
               </Nav.Link>
 
-              {/* NavDropdown 컴포넌트로 드롭다운 메뉴를 구현합니다. */}
               <NavDropdown
-                title={
-                  // 드롭다운 제목에 아이콘을 함께 표시합니다.
-                  <span className="text-dark font-weight-bold">
-                    _회원명_ <BsChevronDown size={12} className="ms-1" />
-                  </span>
-                }
+                title={getDropdownTitle("_회원명_", "member-mobile")}
+                id="member-dropdown-mobile"
+                onToggle={(isOpen) => handleToggle("member-mobile", isOpen)}
               >
                 <NavDropdown.Item href="/member/detail">
                   내 정보
@@ -438,12 +443,9 @@ export function ComplexNavbar() {
                 <NavDropdown.Item href="/cart/list">장바구니</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown
-                title={
-                  // 드롭다운 제목에 아이콘을 함께 표시합니다.
-                  <span className="text-dark font-weight-bold">
-                    관리자 <BsChevronDown size={12} className="ms-1" />
-                  </span>
-                }
+                title={getDropdownTitle("관리자", "admin-mobile")}
+                id="admin-dropdown-mobile"
+                onToggle={(isOpen) => handleToggle("admin-mobile", isOpen)}
               >
                 <NavDropdown.Item href="/admin">대시보드</NavDropdown.Item>
                 <NavDropdown.Item href="/member/list">
@@ -474,27 +476,10 @@ export function ComplexNavbar() {
                   배송업체
                 </NavDropdown.Item>
               </NavDropdown>
-
-              {/*
-              <Nav.Link
-                href="https://github.com/creativetimofficial/astro-ecommerce"
-                className="text-dark font-weight-bold"
-              >
-                <FaGithub size={18} />
-              </Nav.Link>
-              <Nav.Link
-                href="https://discord.com/invite/TGZqBvZB"
-                target="_blank"
-                rel="nofollow"
-                className="text-dark font-weight-bold"
-              >
-                <FaDiscord size={18} />
-              </Nav.Link>
-              */}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-    </>
+    </div>
   );
 }
