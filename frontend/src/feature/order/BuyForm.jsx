@@ -26,7 +26,10 @@ export function BuyForm() {
   const [isProcessing, setIsProcessing] = useState();
   const [mainThumbnail, setMainThumbnail] = useState([]);
   const [orderCount, setOrderCount] = useState(1);
+  const [recipient, setRecipient] = useState("");
+  
   const [period, setPeriod] = useState(30);
+  
   const [searchParams] = useSearchParams();
 
   const handleThumbnailClick = (path) => setMainThumbnail(path);
@@ -40,7 +43,6 @@ export function BuyForm() {
     axios
       .get(`/api/sale/detail/${seq}`)
       .then((res) => {
-        console.log(res.data);
         setSale(res.data);
       })
       .catch((err) => {
@@ -146,21 +148,34 @@ export function BuyForm() {
 
   // 결제 버튼
   function handleSuccessButtonClick() {
-    window.open("https://payment-demo.kakaopay.com/online", "_blank");
+    // window.open("https://payment-demo.kakaopay.com/online", "_blank");
     setIsProcessing(true);
+    const totalPrice = sale.salePrice * orderCount + sale.deliveryFee;
+    const totProdPrice = sale.salePrice * orderCount;
 
     axios
       .post("/api/buy", {
+        saleSaleNo: sale.saleNo,
         name: name,
-        phoneNo: phoneNumber,
-        postCode: postalCode,
-        saleNo: sale.saleNo,
+        recipient: recipient,
+
+        phone: phoneNumber,
+        post: postalCode,
         addr: address,
         addrDetail: addressDetail,
         request: request,
-        price: sale.salePrice,
+
+        totalPrice: totalPrice,
         deliveryFee: sale.deliveryFee,
+        totProdPrice: totProdPrice,
+        prodPrice: sale.salePrice,
         orderCount: orderCount,
+
+        // rentalPeriod: 60, 기본값
+        // state: "대여중", 기본값
+        deliveryCompany: "cj",
+        tracking: "trk123456789",
+      
         period: period,
         productNo: sale.productNo,
       })
@@ -172,7 +187,6 @@ export function BuyForm() {
       })
       .catch((err) => {
         console.log("no");
-        console.log(addressDetail);
       })
       .finally(() => {
         console.log("finally");
@@ -237,13 +251,26 @@ export function BuyForm() {
           <h2 className="mb-3">상품구매 / 결제</h2>
           <div className="mb-3">
             <FormGroup>
-              <FormLabel>이름</FormLabel>
+              <FormLabel>주문자명</FormLabel>
 
               <FormControl
-                placeholder="배송 받을 분의 성함을 입력해주세요."
+                placeholder="주문하시는 분의 성함을 입력해주세요."
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
+                }}
+              />
+            </FormGroup>
+          </div>
+          <div className="mb-3">
+            <FormGroup>
+              <FormLabel>수령인</FormLabel>
+
+              <FormControl
+                placeholder="수령 받을 분의 성함을 입력해주세요."
+                value={recipient}
+                onChange={(e) => {
+                  setRecipient(e.target.value);
                 }}
               />
             </FormGroup>

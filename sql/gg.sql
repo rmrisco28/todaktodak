@@ -175,14 +175,14 @@ CREATE TABLE rental
     product_no VARCHAR(20) NOT NULL,
     #member_no  VARCHAR(20) NOT NULL,
 
-    start_dttm DATETIME    NOT NULL DEFAULT NOW(),
-    end_dttm   DATETIME,
-    status     VARCHAR(20) NOT NULL,
+    start_dttm VARCHAR(20),
+    end_dttm   VARCHAR(20),
+    status     VARCHAR(20) NOT NULL DEFAULT '대여중',
     use_yn     BOOLEAN     NOT NULL DEFAULT TRUE,
     del_yn     BOOLEAN     NOT NULL DEFAULT FALSE,
 
     CONSTRAINT pk_rental PRIMARY KEY (seq),
-    FOREIGN KEY (order_no) REFERENCES order_info (order_no),
+    FOREIGN KEY (order_no) REFERENCES order_list (order_no),
     FOREIGN KEY (product_no) REFERENCES product (product_no)
 );
 

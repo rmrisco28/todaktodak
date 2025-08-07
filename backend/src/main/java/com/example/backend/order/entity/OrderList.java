@@ -63,11 +63,13 @@ public class OrderList {
     @Column(name = "order_count", nullable = false)
     private Integer orderCount;
 
+    @ColumnDefault("60")
     @Column(name = "rental_period", nullable = false)
-    private Integer rentalPeriod;
+    private Integer rentalPeriod = 60;
 
+    @ColumnDefault("대여중")
     @Column(name = "state", nullable = false, length = 10)
-    private String state;
+    private String state = "대여중";
 
     @Column(name = "delivery_company", nullable = false, length = 50)
     private String deliveryCompany;
@@ -90,5 +92,6 @@ public class OrderList {
     @ColumnDefault("0")
     @Column(name = "del_yn", nullable = false)
     private Boolean delYn = false;
+
 
 }

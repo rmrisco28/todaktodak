@@ -1,8 +1,11 @@
 package com.example.backend.order.service;
 
 import com.example.backend.order.dto.OrderInfoDto;
+import com.example.backend.order.dto.OrderListDtoMadeByGG;
 import com.example.backend.order.entity.OrderInfo;
+import com.example.backend.order.entity.OrderList;
 import com.example.backend.order.repository.OrderInfoRepository;
+import com.example.backend.order.repository.OrderListRepositoryMadeByGG;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
 import com.example.backend.rental.entity.Rental;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Service
@@ -21,52 +26,65 @@ import java.util.Date;
 @Transactional
 public class BuyService {
 
-    private final OrderInfoRepository orderInfoRepository;
+    private final OrderListRepositoryMadeByGG orderListRepositoryMadeByGG;
     private final SaleRepository saleRepository;
     private final RentalRepository rentalRepository;
     private final ProductRepository productRepository;
 
-    public Integer buyAndRentalSave(OrderInfoDto oid) {
+    public void buyAndRentalSave(OrderListDtoMadeByGG old) {
         // 결제 테이블 데이터 저장
         // 결제 코드 여기부터
         // 주문 배송, 결제 정보 order_no
         // 조합번호 생성 (코드 + 현재일자 + 시퀀스)
 
-        String code = "ON";
+        String code = "OR";
 
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-        String date = formatter.format(now);
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter_ymd = DateTimeFormatter.ofPattern("yyMMdd");
+        String date = today.format(formatter_ymd);
 
-        Integer maxSeq = orderInfoRepository.findMaxSeq();
+        Integer maxSeq = orderListRepositoryMadeByGG.findMaxSeq();
         int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
         String seqStr = String.format("%07d", latestSeq);
 
         // 여기까지(결제코드)
-        Sale sale = saleRepository.findBySaleNo(oid.getSaleNo());
+        Sale sale = saleRepository.findBySaleNo(old.getSaleSaleNo());
 
-        OrderInfo orderInfo = new OrderInfo();
+
+        OrderList orderList = new OrderList();
+        System.out.println("old.getTotalPrice() = " + old.getTotalPrice());
+        System.out.println("old.getTotProdPrice() = " + old.getTotProdPrice());
+        System.out.println("old.getProdPrice() = " + old.getProdPrice());
+
         String orderNo = code + date + seqStr;
-        orderInfo.setOrderNo(orderNo);
+        orderList.setOrderNo(orderNo);
+        orderList.setSale(sale);
+        orderList.setName(old.getName());
+        orderList.setRecipient(old.getRecipient());
 
+        orderList.setPhone(old.getPhone());
+        orderList.setPost(old.getPost());
+        orderList.setAddr(old.getAddr());
+        orderList.setAddrDetail(old.getAddrDetail());
+        orderList.setRequest(old.getRequest());
 
-        orderInfo.setName(oid.getName());
-        orderInfo.setPhoneNo(oid.getPhoneNo());
-        orderInfo.setPostCode(oid.getPostCode());
-        orderInfo.setSaleNo(sale);
-        orderInfo.setAddr(oid.getAddr());
-        orderInfo.setAddrDetail(oid.getAddrDetail());
-        orderInfo.setRequest(oid.getRequest());
-        orderInfo.setPrice(oid.getPrice());
-        orderInfo.setDeliveryFee(oid.getDeliveryFee());
-        orderInfo.setOrderCount(oid.getOrderCount());
+        orderList.setTotalPrice(old.getTotalPrice());
+        orderList.setDeliveryFee(old.getDeliveryFee());
+        orderList.setTotProdPrice(old.getTotProdPrice());
+        orderList.setProdPrice(old.getProdPrice());
+        orderList.setOrderCount(old.getOrderCount());
 
+//        orderList.setRentalPeriod(old.getRentalPeriod());
+//        orderList.setState(old.getState());
+        orderList.setDeliveryCompany(old.getDeliveryCompany());
+        orderList.setTracking(old.getTracking());
 
-        orderInfoRepository.save(orderInfo);
+        orderListRepositoryMadeByGG.save(orderList);
+
 
         // 렌탈 테이블
         // 렌탈 코드(여기부터)
-        String rentalCode = "ON";
+        String rentalCode = "RT";
 
         Integer rentalMaxSeq = rentalRepository.findMaxSeq();
         int rentalLatestSeq = (rentalMaxSeq != null) ? rentalMaxSeq + 1 : 1;
@@ -80,20 +98,22 @@ public class BuyService {
 
 //        OrderInfo orderInfoRental = new OrderInfo();
 //        orderInfoRental.setOrderCount(rsd.getOrderNoOrderCount());
-        rental.setOrderNo(orderInfo);
+        rental.setOrderNo(orderList);
 
 
-        Product product = productRepository.findByProductNo(oid.getProductNo());
-
+        Product product = productRepository.findByProductNo(old.getProductNo());
         rental.setProductNo(product);
 
-        rental.setStartDttm(date);
-        rental.setEndDttm(date);
+        DateTimeFormatter formatter_ymdChange = DateTimeFormatter.ofPattern("yyMMdd");
 
+        String startDttm = today.format(formatter_ymdChange);
+        LocalDate endDate = today.plusDays(60);
+        String endDttm = endDate.format(formatter_ymdChange);
+
+        rental.setStartDttm(startDttm);
+        rental.setEndDttm(endDttm);
 
         rentalRepository.save(rental);
-
-        return maxSeq;
     }
 
 }

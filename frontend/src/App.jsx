@@ -50,6 +50,8 @@ import { BannerAdd } from "./feature/banner/BannerAdd.jsx";
 import { BannerList } from "./BannerList.jsx";
 import { BannerModify } from "./BannerModify.jsx";
 import { OrderAdminList } from "./feature/order/admin/OrderAdminList.jsx";
+import { RentalRenew } from "./feature/rental/RentalRenew.jsx";
+import { RentalReturn } from "./feature/rental/RentalReturn.jsx";
 
 function App() {
   return (
@@ -158,8 +160,14 @@ function App() {
             <Route path="delivery/detail/:seq" element={<DeliveryDetail />} />
             {/* 배송업체 수정 */}
             <Route path="delivery/modify" element={<DeliveryModify />} />
-            {/*  대여 현황 */}
+            {/* 대여 현황 */}
             <Route path="rental/list" element={<RentalList />} />
+            {/* 대여 연장 */}
+            {/*todo gg 아래 세개 /:seq 추가하기*/}
+            <Route path="rental/renew/:seq" element={<RentalRenew />} />
+            {/* 대여 반납 */}
+            <Route path="rental/return/:seq" element={<RentalReturn />} />
+
             {/* 메인 배너 이미지 등록  */}
             <Route path="banner/add" element={<BannerAdd />} />
             {/* 메인 배너 이미지 목록 */}
