@@ -39,10 +39,13 @@ export function MemberSignup() {
   const [valids, setValids] = useState({});
 
   // 유효성 검사 함수
-  const validateEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
+  // 이메일
+  const validateEmail = (value) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+  // 연락처
   const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
-
+  // 비밀번호
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 

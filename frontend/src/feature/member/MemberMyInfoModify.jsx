@@ -36,8 +36,15 @@ export function MemberMyInfoModify() {
   const [errors, setErrors] = useState({});
 
   // 유효성 검사 함수
+
+  // 비밀번호
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
+  // 이메일
+  const validateEmail = (value) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+  // 연락처
+  const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
 
   useEffect(() => {
     axios
@@ -74,6 +81,22 @@ export function MemberMyInfoModify() {
     // 생년월일이 모두 입력된 경우에만 변경
     if (birthYear && birthMonth && birthDay) {
       modifiedMember.birthDate = `${birthYear}-${birthMonth}-${birthDay}`;
+    }
+
+    //유효성 검사 체크
+    const newErrors = {};
+
+    if (!member.name.trim()) newErrors.name = "이름을 입력해주세요.";
+    if (!validateEmail(member.email))
+      newErrors.email = "이메일 형식이 올바르지 않습니다.";
+    if (!validatePhone(member.phone))
+      newErrors.phone = "전화번호 형식이 올바르지 않습니다.";
+    // ... 생년월일도 필요하면 추가
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return; // 유효성 실패 시 요청 막기
     }
 
     axios
@@ -228,11 +251,27 @@ export function MemberMyInfoModify() {
             </FormLabel>
             <Col sm={7}>
               <FormControl
+                autoComplete="off"
+                type="email"
                 value={member.email}
-                onChange={(e) =>
-                  setMember({ ...member, email: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setMember({ ...member, email: value });
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, email: null }));
+                  } else if (!validateEmail(value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      email: "이메일 형식이 올바르지 않습니다.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, email: null }));
+                  }
+                }}
               />
+              {errors.email && (
+                <FormText className="text-danger">{errors.email}</FormText>
+              )}
             </Col>
           </FormGroup>
         </div>
@@ -300,10 +339,24 @@ export function MemberMyInfoModify() {
             <Col sm={7}>
               <FormControl
                 value={member.phone}
-                onChange={(e) =>
-                  setMember({ ...member, phone: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setMember({ ...member, phone: value });
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, phone: null }));
+                  } else if (!validatePhone(value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      phone: "번호 형식이 올바르지 않습니다.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, phone: null }));
+                  }
+                }}
               />
+              {errors.phone && (
+                <FormText className="text-danger">{errors.phone}</FormText>
+              )}
             </Col>
           </FormGroup>
         </div>
@@ -371,6 +424,7 @@ export function MemberMyInfoModify() {
           </Button>
         </div>
       </Col>
+
       {/*  비밀번호 변경 모달 */}
       <Modal
         show={passwordModalShow}
