@@ -39,7 +39,6 @@ import { CategoryAdd } from "./feature/category/CategoryAdd.jsx";
 import { CategoryModify } from "./feature/category/CategoryModify.jsx";
 import { CategoryList } from "./feature/category/CategoryList.jsx";
 import { DeliveryAdd } from "./feature/delivery/DeliveryAdd.jsx";
-import { DeliveryDetail } from "./feature/delivery/DeliveryDetail.jsx";
 import { DeliveryList } from "./feature/delivery/DeliveryList.jsx";
 import { DeliveryModify } from "./feature/delivery/DeliveryModify.jsx";
 import { MemberMyInfo } from "./feature/member/MemberMyInfo.jsx";
