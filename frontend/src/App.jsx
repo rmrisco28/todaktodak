@@ -39,7 +39,6 @@ import { CategoryAdd } from "./feature/category/CategoryAdd.jsx";
 import { CategoryModify } from "./feature/category/CategoryModify.jsx";
 import { CategoryList } from "./feature/category/CategoryList.jsx";
 import { DeliveryAdd } from "./feature/delivery/DeliveryAdd.jsx";
-import { DeliveryDetail } from "./feature/delivery/DeliveryDetail.jsx";
 import { DeliveryList } from "./feature/delivery/DeliveryList.jsx";
 import { DeliveryModify } from "./feature/delivery/DeliveryModify.jsx";
 import { MemberMyInfo } from "./feature/member/MemberMyInfo.jsx";
@@ -159,10 +158,8 @@ function App() {
             <Route path="delivery/add" element={<DeliveryAdd />} />
             {/* 배송업체 목록 */}
             <Route path="delivery/list" element={<DeliveryList />} />
-            {/* 배송업체 상세 */}
-            <Route path="delivery/detail/:seq" element={<DeliveryDetail />} />
             {/* 배송업체 수정 */}
-            <Route path="delivery/modify" element={<DeliveryModify />} />
+            <Route path="delivery/modify/:seq" element={<DeliveryModify />} />
             {/* 대여 현황 */}
             <Route path="rental/list" element={<RentalList />} />
             {/* 대여 연장 */}

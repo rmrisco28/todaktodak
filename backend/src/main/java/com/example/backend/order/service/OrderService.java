@@ -1,10 +1,9 @@
 package com.example.backend.order.service;
 
-import com.example.backend.order.dto.OrderDetailDto;
-import com.example.backend.order.dto.OrderDto;
-import com.example.backend.order.dto.OrderListAllDto;
-import com.example.backend.order.dto.OrderManageDto;
+import com.example.backend.common.Constant;
+import com.example.backend.order.dto.*;
 import com.example.backend.order.entity.OrderItem;
+import com.example.backend.order.entity.OrderList;
 import com.example.backend.order.entity.OrderManage;
 import com.example.backend.order.repository.OrderItemRepository;
 import com.example.backend.order.repository.OrderListRepository;
@@ -22,13 +21,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Service // ✅ 비즈니스 로직을 처리하는 서비스 계층 클래스
 @RequiredArgsConstructor // ✅ 생성자 주입을 Lombok이 자동 생성
-@Transactional(readOnly = true) // 기본적으로 읽기 전용 트랜잭션 (조회용 서비스)
+//@Transactional(readOnly = true) // 기본적으로 읽기 전용 트랜잭션 (조회용 서비스)
+@Transactional
 public class OrderService {
 
     private final SaleRepository saleRepository;
@@ -202,5 +203,88 @@ public class OrderService {
         dto.setImage(imageDto);
 
         return dto;
+    }
+
+    public boolean validateForStateUpdate(OrderStateUpdateForm dto) {
+        String state = dto.getState();
+        if (state == null || state.trim().isBlank()) {
+            return false;
+        }
+
+        String prevState = orderListRepository.findBySeq(dto.getSeq()).getState();
+        // 상태값에 따른 유효성 체크
+        switch (prevState) {
+            case Constant.ORDER_STATE_DELIVERY_READY
+            , Constant.ORDER_STATE_DELIVERY_PROGRESS
+            , Constant.ORDER_STATE_DELIVERY_COMPLETED -> {
+                // 배송대기, 배송중, 배송완료
+                if (dto.getDeliveryCompany() == null || dto.getDeliveryCompany().trim().isBlank()) {
+                    return false;
+                }
+                if (dto.getTracking() == null || dto.getTracking().trim().isBlank()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void update(OrderStateUpdateForm dto) {
+        OrderList orderList = orderListRepository.findBySeq(dto.getSeq());
+
+        if (!(orderList.getState()).equals(dto.getState())) {
+            // 상태값이 변경된 경우
+            String state = dto.getState();
+            // 후처리
+            processingByState(orderList, state);
+            orderList.setState(state);
+        }
+        if (!(orderList.getRequest()).equals(dto.getRequest())) {
+            // 요청사항 변경된 경우
+            orderList.setRequest(dto.getRequest());
+        }
+        if (!(orderList.getDeliveryCompany()).equals(dto.getDeliveryCompany())) {
+            // 배송업체 변경된 경우
+            orderList.setDeliveryCompany(dto.getDeliveryCompany());
+        }
+        if (!(orderList.getTracking()).equals(dto.getTracking())) {
+            // 운송장번호 변경된 경우
+            orderList.setTracking(dto.getTracking());
+        }
+
+        orderList.setUpdateDttm(LocalDateTime.now());
+
+        orderListRepository.save(orderList);
+
+    }
+
+    /**
+     * 주문 상태값 변경에 따른 후처리
+     *
+     * @param orderList, state
+     */
+    private void processingByState(OrderList orderList, String state) {
+        //* TODO [@MINKI] 후처리
+        switch (state) {
+            case Constant.ORDER_STATE_PAYMENT_COMPLETED -> {
+                // 결제완료
+                // - 결제 내역 데이터 삽입
+            }
+            case Constant.ORDER_STATE_RECEIVED_COMPLETED -> {
+                // 수령완료
+                // - 매출 관리 데이터 삽입
+            }
+            case Constant.ORDER_STATE_RETURN_COMPLETED -> {
+                // 반송완료
+                // - 결제 내역 상태값(취소) 업데이트
+            }
+            case Constant.ORDER_STATE_CANCEL_COMPLETED -> {
+                // 취소완료
+                // - 결제 내역 상태값(취소) 업데이트
+            }
+
+
+        }
     }
 }
