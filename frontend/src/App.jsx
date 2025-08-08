@@ -1,3 +1,6 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./assets/astro-ecommerce.scss";
+
 import { BrowserRouter, Route, Routes } from "react-router";
 import { MainLayout } from "./common/MainLayout.jsx";
 import { MainView } from "./main/MainView.jsx";
@@ -77,10 +80,10 @@ function App() {
             {/* 회원등록(관리자) */}
             <Route path="member/add" element={<MemberAdd />} />
             {/* 회원상세(회원) */}
-            <Route path="member/myinfo/:memberId" element={<MemberMyInfo />} />
+            <Route path="member/myinfo" element={<MemberMyInfo />} />
             {/* 회원수정(회원) */}
             <Route
-              path="member/myinfo/modify/:memberId"
+              path="member/myinfo/modify"
               element={<MemberMyInfoModify />}
             />
             {/* 비밀번호 찾기*/}

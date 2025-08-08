@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,7 +48,7 @@ public class MemberService {
             member.setPassword(passwordEncoder.encode(memberSignupForm.getPassword()));
             member.setName(memberSignupForm.getName());
             member.setPhone(memberSignupForm.getPhone());
-            member.setBirthDate(LocalDate.parse(memberSignupForm.getBirthDate()));
+            member.setBirthDate(memberSignupForm.getBirthDate());
             member.setEmail(memberSignupForm.getEmail());
             member.setAddr(memberSignupForm.getAddr());
             member.setAddrDetail(memberSignupForm.getAddrDetail());
@@ -73,13 +74,38 @@ public class MemberService {
         return memberRepository.existsByMemberId(memberId);
     }
 
-    // 유효성(중복) 검사
+    // 회원가입 유효성 검사
     public boolean validate(MemberSignupForm memberSignupForm) {
         // memberId 중복 여부
         Optional<Member> dbData = memberRepository.findByMemberId(memberSignupForm.getMemberId());
         if (dbData.isPresent()) {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
+
+
+        // 아이디 입력 유무
+        if (memberSignupForm.getMemberId().trim().isBlank()) {
+            throw new RuntimeException("아이디를 입력해야 합니다.");
+        }
+        // 비밀번호 유효성 검사
+        String password = memberSignupForm.getPassword();
+        if (!Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$", password)) {
+            throw new RuntimeException("패스워드 형식에 맞지 않습니다.");
+        }
+        // 비밀번호 입력 유무
+        if (memberSignupForm.getPassword().trim().isBlank()) {
+            throw new RuntimeException("비밀번호를 입력해야 합니다.");
+        }
+        // 이메일 유효성 검사
+        String email = memberSignupForm.getEmail();
+        if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
+            throw new RuntimeException("이메일 형싣에 맞지 않습니다.");
+        }
+        // 이메일 입력 유무
+        if (memberSignupForm.getEmail().trim().isBlank()) {
+            throw new RuntimeException("이메일을 입력해야 합니다.");
+        }
+
         return true;
     }
 
@@ -185,7 +211,7 @@ public class MemberService {
             member2.setPassword(passwordEncoder.encode(memberAddForm.getPassword()));
             member2.setName(memberAddForm.getName());
             member2.setPhone(memberAddForm.getPhone());
-            member2.setBirthDate(LocalDate.parse(memberAddForm.getBirthDate()));
+            member2.setBirthDate(memberAddForm.getBirthDate());
             member2.setEmail(memberAddForm.getEmail());
             member2.setAddr(memberAddForm.getAddr());
             member2.setAddrDetail(memberAddForm.getAddrDetail());
@@ -206,7 +232,7 @@ public class MemberService {
         }
     }
 
-    // 유효성(중복) 검사
+    // 회원 등록(관리자) 유효성 검사
     public boolean validate2(MemberAddForm memberAddForm) {
         // memberId 중복 여부
         Optional<Member> dbData = memberRepository.findByMemberId(memberAddForm.getMemberId());
@@ -255,36 +281,62 @@ public class MemberService {
 
     // 회원정보수정(회원)
     public void MyInfoModify(String memberId, MyInfoModifyDto dto) {
-        Member dbData = memberRepository.findByMemberId(memberId).get();
+        if (this.validate3(dto)) {
+            Member dbData = memberRepository.findByMemberId(memberId).get();
 
-        dbData.setMemberId(dto.getMemberId());
-        dbData.setName(dto.getName());
-        dbData.setEmail(dto.getEmail());
-        dbData.setPhone(dto.getPhone());
-        dbData.setPostCode(dto.getPostCode());
-        dbData.setAddr(dto.getAddr());
-        dbData.setAddrDetail(dto.getAddrDetail());
+            dbData.setMemberId(dto.getMemberId());
+            dbData.setName(dto.getName());
+            dbData.setEmail(dto.getEmail());
+            dbData.setPhone(dto.getPhone());
+            dbData.setPostCode(dto.getPostCode());
+            dbData.setAddr(dto.getAddr());
+            dbData.setAddrDetail(dto.getAddrDetail());
 
-        if (dto.getBirthDate() != null && !dto.getBirthDate().isBlank()) {
-            dbData.setBirthDate(LocalDate.parse(dto.getBirthDate()));
+            if (dto.getBirthDate() != null) {
+                dbData.setBirthDate(dto.getBirthDate());
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+            dbData.setUpdateDttm(now);
+
+            memberRepository.save(dbData);
+
+        }
+    }
+
+    //회원정보수정(회원) 유효성 검사
+    public boolean validate3(MyInfoModifyDto dto) {
+
+        // 이메일 유효성 검사
+        String email = dto.getEmail();
+        if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
+            throw new RuntimeException("이메일 형싣에 맞지 않습니다.");
+        }
+        // 이메일 입력 유무
+        if (dto.getEmail().trim().isBlank()) {
+            throw new RuntimeException("이메일을 입력해야 합니다.");
         }
 
-        LocalDateTime now = LocalDateTime.now();
-        dbData.setUpdateDttm(now);
-
-        memberRepository.save(dbData);
+        return true;
     }
 
     // 비밀번호 변경(회원)
     public void changePassword(ChangePasswordForm dto) {
         Member dbData = memberRepository.findByMemberId(dto.getMemberId()).get();
 
-        if (passwordEncoder.matches(dto.getCurrentPassword(), dbData.getPassword())) {
-            dbData.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-            memberRepository.save(dbData);
-        } else {
+        // 현재 비밀번호 일치 확인
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), dbData.getPassword())) {
             throw new RuntimeException("패스워드가 일치하지 않습니다.");
         }
+
+        // 새 비밀번호 유효성 검사
+        String newPassword = dto.getNewPassword();
+        if (!Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$", newPassword)) {
+            throw new RuntimeException("비밀번호 형식이 맞지 않습니다.");
+        }
+        // 변경 및 저장
+        dbData.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        memberRepository.save(dbData);
     }
 
     // 로그인(토큰생성)

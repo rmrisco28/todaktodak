@@ -39,10 +39,13 @@ export function MemberSignup() {
   const [valids, setValids] = useState({});
 
   // 유효성 검사 함수
-  const validateEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
+  // 이메일
+  const validateEmail = (value) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+  // 연락처
   const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
-
+  // 비밀번호
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 
@@ -135,10 +138,7 @@ export function MemberSignup() {
       })
       .then((res) => {
         console.log(res.data);
-        const message = res.data.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
+        alert("회원가입이 완료되었습니다.");
         navigate("/login");
       })
       .catch((err) => {
@@ -146,6 +146,11 @@ export function MemberSignup() {
         alert("회원가입 실패");
       })
       .finally(() => {});
+  }
+
+  // 월별 일수 계산 함수
+  function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate(); // month는 1부터 시작
   }
 
   // 생년월일 조합
@@ -287,8 +292,7 @@ export function MemberSignup() {
           <FormGroup className="mb-3" controlId="birthDate">
             <FormLabel>생년월일</FormLabel>
             <div className="d-flex" style={{ gap: "10px" }}>
-              <FormControl
-                as="select"
+              <Form.Select
                 style={{ width: "130px" }}
                 value={birthYear}
                 onChange={(e) => {
@@ -305,10 +309,9 @@ export function MemberSignup() {
                     </option>
                   );
                 })}
-              </FormControl>
+              </Form.Select>
 
-              <FormControl
-                as="select"
+              <Form.Select
                 style={{ width: "100px" }}
                 value={birthMonth}
                 onChange={(e) => {
@@ -322,10 +325,9 @@ export function MemberSignup() {
                     {i + 1}
                   </option>
                 ))}
-              </FormControl>
+              </Form.Select>
 
-              <FormControl
-                as="select"
+              <Form.Select
                 style={{ width: "100px" }}
                 value={birthDay}
                 onChange={(e) => {
@@ -334,18 +336,23 @@ export function MemberSignup() {
                 }}
               >
                 <option value="">일</option>
-                {Array.from({ length: 31 }, (_, i) => (
-                  <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
-                    {i + 1}
-                  </option>
-                ))}
-              </FormControl>
+                {Array.from(
+                  { length: getDaysInMonth(birthYear, birthMonth) || 31 },
+
+                  (_, i) => (
+                    <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
+                      {i + 1}
+                    </option>
+                  ),
+                )}
+              </Form.Select>
             </div>
             {errors.birthDate && (
               <FormText className="text-danger">{errors.birthDate}</FormText>
             )}
           </FormGroup>
         </div>
+
         {/* 이메일 */}
         <div>
           <FormGroup className="mb-3" controlId="email">

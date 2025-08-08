@@ -1,6 +1,5 @@
-import { Link, NavLink, Route } from "react-router";
+import { Link, NavLink } from "react-router";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { CancelExec } from "../feature/order/CancelExec.jsx";
 
 export function AppNavBar() {
   return (
@@ -50,6 +49,8 @@ export function AppNavBar() {
               {/*추후 삭제 */}
               <Nav.Link as={NavLink} to="/rental/list">
                 렌탈 현황(추후 삭제)
+              <Nav.Link as={NavLink} to="/member/myinfo">
+                내정보
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>
