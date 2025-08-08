@@ -36,12 +36,19 @@ export function MemberMyInfoModify() {
   const [errors, setErrors] = useState({});
 
   // 유효성 검사 함수
+
+  // 비밀번호
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
+  // 이메일
+  const validateEmail = (value) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+  // 연락처
+  const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
 
   useEffect(() => {
     axios
-      .get(`/api/member/myinfo/${memberId}`)
+      .get(`/api/member/myinfo`)
       .then((res) => {
         console.log("성공");
         setMember(res.data);
@@ -76,8 +83,24 @@ export function MemberMyInfoModify() {
       modifiedMember.birthDate = `${birthYear}-${birthMonth}-${birthDay}`;
     }
 
+    //유효성 검사 체크
+    const newErrors = {};
+
+    if (!member.name.trim()) newErrors.name = "이름을 입력해주세요.";
+    if (!validateEmail(member.email))
+      newErrors.email = "이메일 형식이 올바르지 않습니다.";
+    if (!validatePhone(member.phone))
+      newErrors.phone = "전화번호 형식이 올바르지 않습니다.";
+    // ... 생년월일도 필요하면 추가
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return; // 유효성 실패 시 요청 막기
+    }
+
     axios
-      .put(`/api/member/myinfo/modify/${memberId}`, modifiedMember)
+      .put(`/api/member/myinfo/modify`, modifiedMember)
       .then((res) => {
         console.log("성공");
         setMember(res.data);
@@ -85,12 +108,17 @@ export function MemberMyInfoModify() {
         if (message) {
           toast(message.text, { type: message.type });
         }
-        navigate(`/member/myinfo/${memberId}`);
+        navigate(`/member/myinfo`);
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {});
+  }
+
+  // 월별 일수 계산 함수
+  function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate(); // month는 1부터 시작
   }
 
   // 다음 주소 검색 API 연동
@@ -175,7 +203,7 @@ export function MemberMyInfoModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={4}>
+      <Col lg={5}>
         <h3 className="mb-4">회원 정보 변경</h3>
         {/* 아이디 */}
         <div>
@@ -223,24 +251,39 @@ export function MemberMyInfoModify() {
             </FormLabel>
             <Col sm={7}>
               <FormControl
+                autoComplete="off"
+                type="email"
                 value={member.email}
-                onChange={(e) =>
-                  setMember({ ...member, email: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setMember({ ...member, email: value });
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, email: null }));
+                  } else if (!validateEmail(value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      email: "이메일 형식이 올바르지 않습니다.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, email: null }));
+                  }
+                }}
               />
+              {errors.email && (
+                <FormText className="text-danger">{errors.email}</FormText>
+              )}
             </Col>
           </FormGroup>
         </div>
         {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               생년월일
             </FormLabel>
-            <Col sm={9} className="d-flex" style={{ gap: "10px" }}>
+            <Col lg={9} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthYear}
                 onChange={(e) => setBirthYear(e.target.value)}
                 style={{ width: "100px" }}
@@ -254,10 +297,9 @@ export function MemberMyInfoModify() {
                     </option>
                   );
                 })}
-              </FormControl>
+              </Form.Select>
               {/* 월 */}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthMonth}
                 onChange={(e) => setBirthMonth(e.target.value)}
                 style={{ width: "70px" }}
@@ -268,21 +310,23 @@ export function MemberMyInfoModify() {
                     {i + 1}
                   </option>
                 ))}
-              </FormControl>
+              </Form.Select>
               {/* 일*/}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthDay}
                 onChange={(e) => setBirthDay(e.target.value)}
                 style={{ width: "70px" }}
               >
                 <option value="">일</option>
-                {Array.from({ length: 31 }, (_, i) => (
-                  <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
-                    {i + 1}
-                  </option>
-                ))}
-              </FormControl>
+                {Array.from(
+                  { length: getDaysInMonth(birthYear, birthMonth || 31) },
+                  (_, i) => (
+                    <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
+                      {i + 1}
+                    </option>
+                  ),
+                )}
+              </Form.Select>
             </Col>
           </FormGroup>
         </div>
@@ -295,10 +339,24 @@ export function MemberMyInfoModify() {
             <Col sm={7}>
               <FormControl
                 value={member.phone}
-                onChange={(e) =>
-                  setMember({ ...member, phone: e.target.value })
-                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setMember({ ...member, phone: value });
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, phone: null }));
+                  } else if (!validatePhone(value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      phone: "번호 형식이 올바르지 않습니다.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, phone: null }));
+                  }
+                }}
               />
+              {errors.phone && (
+                <FormText className="text-danger">{errors.phone}</FormText>
+              )}
             </Col>
           </FormGroup>
         </div>
@@ -366,6 +424,7 @@ export function MemberMyInfoModify() {
           </Button>
         </div>
       </Col>
+
       {/*  비밀번호 변경 모달 */}
       <Modal
         show={passwordModalShow}

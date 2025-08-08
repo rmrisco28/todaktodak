@@ -9,9 +9,10 @@ import {
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function MemberMyInfo() {
   const [member, setMember] = useState(null);
@@ -21,9 +22,11 @@ export function MemberMyInfo() {
 
   const navigate = useNavigate();
 
+  const { logout } = useContext(AuthenticationContext);
+
   useEffect(() => {
     axios
-      .get(`/api/member/myinfo/${memberId}`)
+      .get(`/api/member/myinfo`)
       .then((res) => {
         setMember(res.data);
       })
@@ -38,12 +41,13 @@ export function MemberMyInfo() {
   // 회원탈퇴 버튼
   function handleDeleteButtonClick() {
     axios
-      .put(`/api/member/${memberId}/withdraw`)
+      .put(`/api/member/withdraw`)
       .then((res) => {
         console.log("ok");
         const message = res.data.message;
         toast(message.text, { type: message.type });
         navigate("/");
+        logout();
       })
       .catch((err) => {
         console.log(err);
@@ -134,22 +138,26 @@ export function MemberMyInfo() {
         <div>
           <FormGroup controlId="address" className="mb-2">
             <FormLabel>주소</FormLabel>
-            <FormControl value={member.addr} readOnly={true} />
+            <Col lg={10}>
+              <FormControl value={member.addr} readOnly={true} />
+            </Col>
           </FormGroup>
         </div>
         {/* 상세주소 */}
         <div>
           <FormGroup controlId="addressDetail" className="mb-3">
-            <FormControl value={member.addrDetail} readOnly={true} />
+            <Col sm={10}>
+              <FormControl value={member.addrDetail} readOnly={true} />
+            </Col>
           </FormGroup>
         </div>
 
         {/* 변경, 탈퇴 버튼*/}
         <div>
           <Button
-            className="mb-4"
+            className="mb-4 mt-3"
             variant="outline-primary"
-            onClick={() => navigate(`/member/myinfo/modify/${memberId}`)}
+            onClick={() => navigate(`/member/myinfo/modify`)}
           >
             정보 변경
           </Button>

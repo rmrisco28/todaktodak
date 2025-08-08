@@ -108,6 +108,11 @@ export function MemberModify() {
       });
   }
 
+  // 월별 일수 계산 함수
+  function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate(); // month는 1부터 시작
+  }
+
   // 다음 주소 검색 API 연동
   const handleSearchButtonClick = () => {
     new window.daum.Postcode({
@@ -135,7 +140,7 @@ export function MemberModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={7}>
+      <Col lg={6}>
         <h3 className="mb-4">회원 정보 수정</h3>
         {/* 고객 번호 */}
         <div>
@@ -278,13 +283,12 @@ export function MemberModify() {
         {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               생년월일
             </FormLabel>
-            <Col sm={5} className="d-flex" style={{ gap: "10px" }}>
+            <Col lg={5} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthYear}
                 onChange={(e) => setBirthYear(e.target.value)}
                 style={{ width: "100px" }}
@@ -298,10 +302,9 @@ export function MemberModify() {
                     </option>
                   );
                 })}
-              </FormControl>
+              </Form.Select>
               {/* 월 */}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthMonth}
                 onChange={(e) => setBirthMonth(e.target.value)}
                 style={{ width: "70px" }}
@@ -312,21 +315,23 @@ export function MemberModify() {
                     {i + 1}
                   </option>
                 ))}
-              </FormControl>
+              </Form.Select>
               {/* 일*/}
-              <FormControl
-                as="select"
+              <Form.Select
                 value={birthDay}
                 onChange={(e) => setBirthDay(e.target.value)}
                 style={{ width: "70px" }}
               >
                 <option value="">일</option>
-                {Array.from({ length: 31 }, (_, i) => (
-                  <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
-                    {i + 1}
-                  </option>
-                ))}
-              </FormControl>
+                {Array.from(
+                  { length: getDaysInMonth(birthYear, birthMonth) || 31 },
+                  (_, i) => (
+                    <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
+                      {i + 1}
+                    </option>
+                  ),
+                )}
+              </Form.Select>
             </Col>
           </FormGroup>
         </div>
@@ -349,10 +354,10 @@ export function MemberModify() {
         {/* 우편번호 */}
         <div>
           <FormGroup as={Row} controlId="postCode" className="mb-4">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               우편번호
             </FormLabel>
-            <Col sm={6}>
+            <Col lg={5}>
               <div className="d-flex" style={{ gap: "10px" }}>
                 <FormControl
                   value={member.postCode}
@@ -374,10 +379,10 @@ export function MemberModify() {
         {/* 주소 */}
         <div>
           <FormGroup as={Row} controlId="address" className="mb-2">
-            <FormLabel column sm={3}>
+            <FormLabel column lg={3}>
               주소
             </FormLabel>
-            <Col sm={8}>
+            <Col lg={6}>
               <FormControl value={member.addr} readOnly={true} />
             </Col>
           </FormGroup>
@@ -386,7 +391,7 @@ export function MemberModify() {
         <div>
           <FormGroup as={Row} controlId="addressDetail" className="mb-4">
             <FormLabel column sm={3}></FormLabel>
-            <Col sm={8}>
+            <Col sm={6}>
               <FormControl
                 value={member.addrDetail || ""}
                 onChange={(e) =>

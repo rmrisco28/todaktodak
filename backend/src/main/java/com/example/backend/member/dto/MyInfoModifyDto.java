@@ -2,6 +2,7 @@ package com.example.backend.member.dto;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -9,7 +10,7 @@ public class MyInfoModifyDto {
     private String memberId;
     private String name;
     private String email;
-    private String birthDate;
+    private LocalDate birthDate;
     private String phone;
     private String postCode;
     private String addr;

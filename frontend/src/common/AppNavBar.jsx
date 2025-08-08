@@ -46,6 +46,9 @@ export function AppNavBar() {
               <Nav.Link as={NavLink} to="/logout">
                 로그아웃
               </Nav.Link>
+              <Nav.Link as={NavLink} to="/member/myinfo">
+                내정보
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
