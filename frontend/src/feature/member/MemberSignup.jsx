@@ -14,7 +14,6 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 export function MemberSignup() {
-  // ---------- 상태 선언 ----------
   // 입력 필드 값 상태
   const [memberId, setMemberId] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +25,11 @@ export function MemberSignup() {
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [postCode, setPostCode] = useState("");
+
+  // 이메일 인증 상태
+  const [emailSent, setEmailSent] = useState(false); // 인증번호 발송 여부
+  const [emailCode, setEmailCode] = useState(""); // 입력한 인증번호
+  const [emailVerified, setEmailVerified] = useState(false); // 인증 완료 여부
 
   // 생년월일 구성용 연도/월/일
   const [birthYear, setBirthYear] = useState("");
@@ -100,6 +104,39 @@ export function MemberSignup() {
         setPostCode(data.zonecode); // 우편번호 저장
       },
     }).open();
+  };
+
+  // 이메일 인증번호 발송
+  const handleSendEmailCode = () => {
+    if (!validateEmail(email)) {
+      setErrors((prev) => ({ ...prev, email: "올바른 이메일을 입력하세요." }));
+      return;
+    }
+
+    axios
+      .post("/api/member/email/request", { email })
+      .then(() => {
+        toast.success("인증번호가 발송되었습니다. 메일을 확인하세요.");
+        setEmailSent(true);
+      })
+      .catch(() => {
+        toast.error("이메일 발송에 실패했습니다.");
+      });
+  };
+
+  // 이메일 인증번호 확인
+  const handleVerifyEmailCode = () => {
+    axios
+      .post("/api/member/email/verify", { email, code: emailCode })
+      .then(() => {
+        toast.success("이메일 인증이 완료되었습니다.");
+        setEmailVerified(true);
+        setValids((prev) => ({ ...prev, email: "이메일 인증 완료" }));
+        setErrors((prev) => ({ ...prev, email: null }));
+      })
+      .catch(() => {
+        toast.error("인증번호가 틀렸거나 만료되었습니다.");
+      });
   };
 
   // 회원가입 버튼 클릭
@@ -357,30 +394,65 @@ export function MemberSignup() {
         <div>
           <FormGroup className="mb-3" controlId="email">
             <FormLabel>이메일</FormLabel>
-            <FormControl
-              autoComplete="off"
-              type="email"
-              style={{ width: "400px" }}
-              value={email}
-              onChange={(e) => {
-                const value = e.target.value;
-                setEmail(value);
-                if (value.trim() === "") {
-                  setErrors((prev) => ({ ...prev, email: null }));
-                } else if (!validateEmail(value)) {
-                  setErrors((prev) => ({
-                    ...prev,
-                    email: "이메일 형식이 올바르지 않습니다.",
-                  }));
-                } else {
-                  setErrors((prev) => ({ ...prev, email: null }));
-                }
-              }}
-            />
+            <div className="d-flex gap-2">
+              <FormControl
+                autoComplete="off"
+                type="email"
+                style={{ width: "400px" }}
+                value={email}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setEmail(value);
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, email: null }));
+                  } else if (!validateEmail(value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      email: "이메일 형식이 올바르지 않습니다.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, email: null }));
+                  }
+                }}
+                disabled={emailVerified} // 인증 완료되면 수정 불가
+              />
+              {!emailVerified && (
+                <Button
+                  variant="outline-secondary"
+                  onClick={handleSendEmailCode}
+                >
+                  인증번호 발송
+                </Button>
+              )}
+            </div>
             {errors.email && (
               <FormText className="text-danger">{errors.email}</FormText>
             )}
+            {valids.email && (
+              <FormText className="text-success">{valids.email}</FormText>
+            )}
           </FormGroup>
+          {/* 인증번호 입력 */}
+          {emailSent && !emailVerified && (
+            <FormGroup className="mb-3" controlId="emailCode">
+              <FormLabel>인증번호</FormLabel>
+              <div className="d-flex gap-2">
+                <FormControl
+                  autoComplete="off"
+                  placeholder="인증번호 입력"
+                  style={{ width: "200px" }}
+                  value={emailCode}
+                  onChange={(e) => setEmailCode(e.target.value)}
+                />
+                <Button
+                  variant="outline-success"
+                  onClick={handleVerifyEmailCode}
+                >
+                  인증 확인
+                </Button>
+              </div>
+            </FormGroup>
+          )}
         </div>
         {/* 우편번호 */}
         <div>
