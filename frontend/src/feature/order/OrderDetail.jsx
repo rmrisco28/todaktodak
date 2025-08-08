@@ -243,6 +243,7 @@ export function OrderDetail() {
                 setOrder({ ...order, deliveryCompany: e.target.value })
               }
             >
+              <option>배송업체 선택</option>
               {deliveryList.map((item) => (
                 <option
                   value={item.name}
