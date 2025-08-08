@@ -1,0 +1,70 @@
+{
+  "orderStateList": [
+    {
+      "id": 1,
+      "code": "P.RDY",
+      "kor": "결제대기",
+      "eng": "PAYMENT-READY"
+    },
+    {
+      "id": 2,
+      "code": "P.CPLT",
+      "kor": "결제완료",
+      "eng": "PAYMENT-COMPLETED"
+    },
+    {
+      "id": 3,
+      "code": "D.RDY",
+      "kor": "배송준비",
+      "eng": "DELIVERY-READY"
+    },
+    {
+      "id": 4,
+      "code": "D.PRG",
+      "kor": "배송중",
+      "eng": "DELIVERY-PROGRESS"
+    },
+    {
+      "id": 5,
+      "code": "D.CPLT",
+      "kor": "배송완료",
+      "eng": "DELIVERY-COMPLETE"
+    },
+    {
+      "id": 6,
+      "code": "RV.CPLT",
+      "kor": "수령완료",
+      "eng": "RECEIVED-COMPLETED"
+    },
+    {
+      "id": 7,
+      "code": "RT.REQ",
+      "kor": "반송요청",
+      "eng": "RETURN-REQUEST"
+    },
+    {
+      "id": 8,
+      "code": "RT.PRG",
+      "kor": "반송진행",
+      "eng": "RETURN-PROGRESS"
+    },
+    {
+      "id": 9,
+      "code": "RT.CPLT",
+      "kor": "반송완료",
+      "eng": "RETURN-PROGRESS"
+    },
+    {
+      "id": 10,
+      "code": "C.REQ",
+      "kor": "취소요청",
+      "eng": "CANCEL-REQUEST"
+    },
+    {
+      "id": 11,
+      "code": "C.CPLT",
+      "kor": "취소완료",
+      "eng": "CANCEL-COMPLETE"
+    }
+  ]
+}
