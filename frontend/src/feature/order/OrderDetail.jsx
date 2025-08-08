@@ -14,90 +14,38 @@ import {
   ListGroupItem,
   Image,
   Modal,
+  FormSelect,
 } from "react-bootstrap";
 import { toast } from "react-toastify";
 
+import data from "../../json/stateOrder.json";
+
 // 주문 상태값 목록
-const orderStateList = [
-  {
-    id: 1,
-    code: "P.RDY",
-    kor: "결제대기",
-    eng: "PAYMENT-READY",
-  },
-  {
-    id: 2,
-    code: "P.CPLT",
-    kor: "결제완료",
-    eng: "PAYMENT-COMPLETED",
-  },
-  {
-    id: 3,
-    code: "D.RDY",
-    kor: "배송준비",
-    eng: "DELIVERY-READY",
-  },
-  {
-    id: 4,
-    code: "D.PRG",
-    kor: "배송중",
-    eng: "DELIVERY-PROGRESS",
-  },
-  {
-    id: 5,
-    code: "D.CPLT",
-    kor: "배송완료",
-    eng: "DELIVERY-COMPLETE",
-  },
-  {
-    id: 6,
-    code: "RV.CPLT",
-    kor: "수령완료",
-    eng: "RECEIVED-COMPLETED",
-  },
-  {
-    id: 7,
-    code: "RT.REQ",
-    kor: "반송요청",
-    eng: "RETURN-REQUEST",
-  },
-  {
-    id: 8,
-    code: "RT.PRG",
-    kor: "반송진행",
-    eng: "RETURN-PROGRESS",
-  },
-  {
-    id: 9,
-    code: "RT.CPLT",
-    kor: "반송완료",
-    eng: "RETURN-PROGRESS",
-  },
-  {
-    id: 10,
-    code: "C.REQ",
-    kor: "취소요청",
-    eng: "CANCEL-REQUEST",
-  },
-  {
-    id: 11,
-    code: "C.CPLT",
-    kor: "취소완료",
-    eng: "CANCEL-COMPLETE",
-  },
-];
+const stateList = [];
+data.orderStateList.map((i) =>
+  stateList.push({ id: i.id, code: i.code, kor: i.kor }),
+);
 
 export function OrderDetail() {
   const [order, setOrder] = useState(null);
   const { seq } = useParams();
   const navigate = useNavigate();
   const [modalShow, setModalShow] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const [state, setState] = useState("");
+  const [request, setRequest] = useState("");
+  const [deliveryCompany, setDeliveryCompany] = useState("");
+  const [tracking, setTracking] = useState("");
 
   useEffect(() => {
     axios
       .get(`/api/order/detail/${seq}`)
       .then((res) => {
         setOrder(res.data);
+        setRequest(res.data.request);
+        setDeliveryCompany(res.data.deliveryCompany);
+        setTracking(res.data.tracking);
       })
       .catch((err) => {
         toast("해당 주문 정보가 존재하지 않습니다.", { type: "warning" });
@@ -109,6 +57,44 @@ export function OrderDetail() {
 
   if (!order) {
     return <Spinner />;
+  }
+
+  let validate = true;
+  if (
+    state === null
+    // TODO [@MINKI] state의 값에 따라 필요한 validate 확인
+  ) {
+    validate = false;
+  }
+
+  function handleSaveButtonClick() {
+    setIsProcessing(true);
+    // console.log(product);
+    axios
+      .putForm(`/api/order/modify/${seq}`, {
+        state: order.state,
+        request: order.request,
+        deliveryCompany: order.deliveryCompany,
+        tracking: order.tracking,
+      })
+      .then((res) => {
+        const message = res.data.message;
+        toast(message.text, { type: message.type });
+        navigate(`/order/detail/${seq}`);
+      })
+      .catch((err) => {
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        } else {
+          toast("주문 수정 시 오류가 발생하였습니다.", { type: "warning" });
+        }
+      })
+      .finally(() => {
+        console.log("always");
+        setModalShow(false);
+        setIsProcessing(false);
+      });
   }
 
   return (
@@ -158,12 +144,6 @@ export function OrderDetail() {
           </FormGroup>
         </div>
         <div>
-          <FormGroup className="mb-3" controlId="formState">
-            <FormLabel>주문상태</FormLabel>
-            <FormControl value={order.state} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
           <FormGroup className="mb-3" controlId="formInsertDttm">
             <FormLabel>주문일시</FormLabel>
             <FormControl
@@ -173,13 +153,34 @@ export function OrderDetail() {
             />
           </FormGroup>
         </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formState">
+            <FormLabel>주문상태</FormLabel>
+            <FormSelect
+              className="mb-3"
+              onChange={(e) => setOrder({ ...order, state: e.target.value })}
+            >
+              {stateList.map((item) => (
+                <option
+                  value={item.code}
+                  key={item.id}
+                  selected={item.code == order.state}
+                >
+                  {item.kor}
+                </option>
+              ))}
+            </FormSelect>
+          </FormGroup>
+        </div>
 
         <div>
           <Button
             variant="outline-info"
-            onClick={() => navigate(`/order/modify/${order.seq}`)}
+            onClick={() => setModalShow(true)}
+            disabled={isProcessing || !validate}
           >
-            주문 상태 변경
+            {isProcessing && <Spinner size="sm" />}
+            {isProcessing || "주문 상태 변경"}
           </Button>
         </div>
 
@@ -218,19 +219,33 @@ export function OrderDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formRequest">
             <FormLabel>배송요청사항</FormLabel>
-            <FormControl value={order.request} readOnly={true} />
+            <FormControl
+              value={order.request}
+              placeholder={request}
+              onChange={(e) => setOrder({ ...order, request: e.target.value })}
+            />
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formDeliveryCompany">
             <FormLabel>배송업체명</FormLabel>
-            <FormControl value={order.deliveryCompany} readOnly={true} />
+            <FormControl
+              value={order.deliveryCompany}
+              placeholder={deliveryCompany}
+              onChange={(e) =>
+                setOrder({ ...order, deliveryCompany: e.target.value })
+              }
+            />
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formTracking">
             <FormLabel>운송장번호</FormLabel>
-            <FormControl value={order.tracking} readOnly={true} />
+            <FormControl
+              value={order.tracking}
+              placeholder={tracking}
+              onChange={(e) => setOrder({ ...order, tracking: e.target.value })}
+            />
           </FormGroup>
         </div>
 
@@ -255,6 +270,26 @@ export function OrderDetail() {
           </FormGroup>
         </div>
       </Col>
+
+      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>상태값 변경 확인</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{order.seq} 주문의 상태 수정하시겠습니까?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
+          </Button>
+          <Button
+            disabled={isProcessing}
+            variant="primary"
+            onClick={handleSaveButtonClick}
+          >
+            {isProcessing && <Spinner size="sm" />}
+            {isProcessing || "수정"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Row>
   );
 }
