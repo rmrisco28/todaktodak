@@ -93,8 +93,8 @@ public class MemberService {
 
         // 이메일 발송
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("whsnoo@naver.com");  // 로그인한 네이버 이메일 주소 반드시 넣기
-        message.setTo("jihun8138@gmail.com");
+        message.setFrom("jihun8138@gmail.com");  // 로그인한 네이버 이메일 주소 반드시 넣기
+        message.setTo("whsnoo@naver.com");
         message.setSubject("회원가입 이메일 인증번호");
         message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
         mailSender.send(message);
@@ -121,6 +121,7 @@ public class MemberService {
         return false;
     }
 
+    // 인증번호 생성
     private String createAuthCode() {
         Random random = new Random();
         int code = 100000 + random.nextInt(900000);

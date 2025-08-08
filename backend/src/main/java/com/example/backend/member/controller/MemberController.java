@@ -40,7 +40,7 @@ public class MemberController {
                         Map.of("type", "success", "text", "회원가입 되었습니다.")));
     }
 
-
+    // 이메일 인증 요청
     @PostMapping("/email/request")
     public ResponseEntity<?> requestEmailAuth(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -53,6 +53,7 @@ public class MemberController {
         }
     }
 
+    // 이메일 인증번호 학인
     @PostMapping("/email/verify")
     public ResponseEntity<?> verifyEmailAuth(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -65,7 +66,7 @@ public class MemberController {
             return ResponseEntity.badRequest().body(Map.of("message", "인증번호가 틀렸거나 만료되었습니다."));
         }
     }
-    
+
     // 아이디 중복 확인
     @GetMapping("/check-id")
     public ResponseEntity<?> checkMemberId(@RequestParam String memberId) {
