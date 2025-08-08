@@ -80,7 +80,7 @@ export function OrderDetail() {
       .then((res) => {
         const message = res.data.message;
         toast(message.text, { type: message.type });
-        navigate(`/order/detail/${seq}`);
+        navigate(`/order/${seq}`);
       })
       .catch((err) => {
         const message = err.response.data.message;
@@ -160,6 +160,7 @@ export function OrderDetail() {
               className="mb-3"
               onChange={(e) => setOrder({ ...order, state: e.target.value })}
             >
+              {/* TODO [@MINKI] 기존 상태값에 따라 선택가능한 상태값만 보여줄 것 */}
               {stateList.map((item) => (
                 <option
                   value={item.code}

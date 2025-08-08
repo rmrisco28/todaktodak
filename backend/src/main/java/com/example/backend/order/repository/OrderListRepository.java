@@ -66,4 +66,6 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
             
             """)
     OrderDto findOrderDetailBySeq(Integer seq);
+
+    OrderList findBySeq(Integer seq);
 }

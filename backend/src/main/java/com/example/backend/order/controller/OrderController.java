@@ -2,7 +2,9 @@ package com.example.backend.order.controller;
 
 import com.example.backend.order.dto.OrderDto;
 import com.example.backend.order.dto.OrderManageDto;
+import com.example.backend.order.dto.OrderStateUpdateForm;
 import com.example.backend.order.service.OrderService;
+import com.example.backend.product.dto.ProductUpdateForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -84,5 +86,35 @@ public class OrderController {
         return orderService.getOrderBySeq(seq);
     }
 
+
+    /**
+     * 상품 수정
+     *
+     * @param seq
+     * @param dto
+     * @return
+     */
+    @PutMapping("modify/{seq}")
+    public ResponseEntity<?> updateOrderState(@PathVariable Integer seq, OrderStateUpdateForm dto) {
+        dto.setSeq(seq);
+        boolean result = orderService.validateForStateUpdate(dto);
+
+        try {
+            if (result) {
+                orderService.update(dto);
+
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", seq + " 번 주문이 업데이트되었습니다.")));
+            } else {
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", "입력한 내용이 유효하지 않습니다.")));
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+
+    }
 
 }
