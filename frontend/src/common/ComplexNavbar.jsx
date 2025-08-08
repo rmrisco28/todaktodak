@@ -81,7 +81,7 @@ export function ComplexNavbar() {
               className="px-2"
               onToggle={(isOpen) => handleToggle("member-desktop", isOpen)}
             >
-              <NavDropdown.Item href="/member/detail" className="mb-2">
+              <NavDropdown.Item href="/member/myinfo" className="mb-2">
                 <div className="d-flex py-1 flex-column justify-content-center">
                   <h6 className="text-sm font-weight-normal mb-1 font-weight-bold">
                     내 정보
@@ -224,7 +224,7 @@ export function ComplexNavbar() {
               <NavDropdown.Item href="#action/3.1" className="mb-2">
                 <div className="d-flex py-1">
                   <Image
-                    src={`/public/vite.svg`}
+                    src={`/vite.svg`}
                     className="avatar avatar-sm me-3"
                     alt="user image"
                   />
@@ -244,7 +244,7 @@ export function ComplexNavbar() {
                 <div className="d-flex py-1">
                   <div className="my-auto">
                     <Image
-                      src={`/public/vite.svg`}
+                      src={`/vite.svg`}
                       className="avatar avatar-sm bg-gradient-dark me-3"
                       alt="logo spotify"
                     />
@@ -310,7 +310,7 @@ export function ComplexNavbar() {
             <Nav.Link href="#profile" className="ps-2">
               <div className="avatar avatar-sm position-relative">
                 <Image
-                  src={`/public/vite.svg`}
+                  src={`/vite.svg`}
                   alt="profile_image"
                   className="w-100 border-radius-md"
                 />
@@ -434,7 +434,7 @@ export function ComplexNavbar() {
                 id="member-dropdown-mobile"
                 onToggle={(isOpen) => handleToggle("member-mobile", isOpen)}
               >
-                <NavDropdown.Item href="/member/detail">
+                <NavDropdown.Item href="/member/myinfo">
                   내 정보
                 </NavDropdown.Item>
                 <NavDropdown.Item href="/order/list">주문내역</NavDropdown.Item>
