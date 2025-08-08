@@ -190,3 +190,29 @@ INSERT INTO rental
 (seq, rental_no, product_no, order_no, member_no, insert_dttm, update_dttm, use_yn, del_yn)
 VALUES (1, 'R1', 'P1', 'O1', 'M1', NOW(), NOW(), TRUE, FALSE);
 
+# 반납 내역
+CREATE TABLE return_order
+(
+    seq         INT           NOT NULL AUTO_INCREMENT,
+    return_no   VARCHAR(20)   NOT NULL UNIQUE,
+    rental_no   VARCHAR(20)   NOT NULL,
+    sale_no     VARCHAR(20)   NOT NULL,
+    product_no  VARCHAR(20)   NOT NULL,
+    order_no    VARCHAR(20)   NOT NULL,
+    post        VARCHAR(10)   NOT NULL,
+    addr        VARCHAR(255)  NOT NULL,
+    addr_detail VARCHAR(255)  NOT NULL,
+    name        VARCHAR(50)   NOT NULL,
+    phone       VARCHAR(30)   NOT NULL,
+    content     VARCHAR(1000) NOT NULL,
+    state       VARCHAR(10)   NOT NULL DEFAULT '반납 확인중',
+    insert_dttm DATETIME      NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME      NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_return_order PRIMARY KEY (seq),
+    FOREIGN KEY (rental_no) REFERENCES rental (rental_no),
+    FOREIGN KEY (sale_no) REFERENCES sale (sale_no),
+    FOREIGN KEY (product_no) REFERENCES product (product_no),
+    FOREIGN KEY (order_no) REFERENCES order_list (order_no)
+);
+
+DROP TABLE return_order;

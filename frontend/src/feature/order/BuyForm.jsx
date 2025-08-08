@@ -27,9 +27,9 @@ export function BuyForm() {
   const [mainThumbnail, setMainThumbnail] = useState([]);
   const [orderCount, setOrderCount] = useState(1);
   const [recipient, setRecipient] = useState("");
-  
+
   const [period, setPeriod] = useState(30);
-  
+
   const [searchParams] = useSearchParams();
 
   const handleThumbnailClick = (path) => setMainThumbnail(path);
@@ -173,10 +173,10 @@ export function BuyForm() {
 
         // rentalPeriod: 60, 기본값
         // state: "대여중", 기본값
+        rentalPeriod: period,
         deliveryCompany: "cj",
         tracking: "trk123456789",
-      
-        period: period,
+
         productNo: sale.productNo,
       })
       .then((res) => {

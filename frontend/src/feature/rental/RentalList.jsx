@@ -92,7 +92,7 @@ export function RentalList() {
                   <td>
                     <Button
                       onClick={() => navigate(`/rental/return/${rental.seq}`)}
-                      variant="success"
+                      variant="outline-primary"
                       className="mr-2"
                     >
                       반납하기
@@ -102,7 +102,7 @@ export function RentalList() {
                     <Button
                       style={{}}
                       onClick={() => navigate(`/rental/renew/${rental.seq}`)}
-                      variant="warning"
+                      variant="outline-success"
                     >
                       연장하기
                     </Button>
