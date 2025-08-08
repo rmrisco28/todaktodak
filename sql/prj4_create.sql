@@ -299,7 +299,18 @@ CREATE TABLE banner
 );
 
 
-# TODO [@minki] 배송업체 관리 테이블
+# 배송업체 관리 테이블
+CREATE TABLE delivery
+(
+    seq         INT AUTO_INCREMENT NOT NULL,
+    name        VARCHAR(255)       NOT NULL,
+    call_no     VARCHAR(20)        NOT NULL,
+    insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    update_dttm DATETIME           NOT NULL DEFAULT NOW(),
+    use_yn      BOOLEAN            NOT NULL DEFAULT TRUE,
+    del_yn      BOOLEAN            NOT NULL DEFAULT FALSE,
+    CONSTRAINT pk_delivery PRIMARY KEY (seq)
+);
 
 
 # 사용자 권한 관리 테이블 (관리자 권한)
