@@ -38,8 +38,8 @@ public class Rental {
     @Column(name = "end_dttm")
     private String endDttm;
 
-    @Column(name = "status", nullable = false, length = 20)
-    private String status = "대여중";
+    @Column(name = "state", nullable = false, length = 10)
+    private String state = "대여중";
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)

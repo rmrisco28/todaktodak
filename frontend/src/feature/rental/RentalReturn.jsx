@@ -33,7 +33,7 @@ export function RentalReturn() {
       .then((res) => {
         console.log(res.data);
         setRentalData(res.data);
-        setState(res.data.status);
+        setState(res.data.state);
       })
       .catch((err) => {
         console.log(err);
@@ -182,7 +182,7 @@ export function RentalReturn() {
       .put(`/api/rental/return/cancel/${rentalData.rentalNo}`, {
         rentalNo: rentalData.rentalNo,
         state: "대여중",
-        rentalStatus: "대여중",
+        rentalState: "대여중",
       })
       .then((res) => {
         console.log(res.data);
@@ -320,7 +320,7 @@ export function RentalReturn() {
             {state === "대여중" && (
               <Button
                 variant="primary"
-                style={{ width: "100px" }}
+                style={{ width: "150px", margin: "10px" }}
                 disabled={!validate}
                 onClick={handleReturnButtonClick}
               >

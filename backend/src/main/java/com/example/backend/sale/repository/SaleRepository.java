@@ -62,4 +62,5 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
 
     Sale findBySaleNo(String saleNo);
 
+    Sale findSaleBySaleNo(String saleNoSaleNo);
 }

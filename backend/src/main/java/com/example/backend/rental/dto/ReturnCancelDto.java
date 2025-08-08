@@ -16,5 +16,5 @@ import java.io.Serializable;
 public class ReturnCancelDto implements Serializable {
     String rentalNo;
     String state;
-    String rentalStatus;
+    String rentalState;
 }

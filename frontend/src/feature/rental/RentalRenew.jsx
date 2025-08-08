@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormSelect,
   Modal,
   Row,
 } from "react-bootstrap";
@@ -13,6 +14,9 @@ import axios from "axios";
 
 export function RentalRenew() {
   const [modalShow, setModalShow] = useState(false);
+  const [rentalData, setRentalData] = useState(null);
+  const [period, setPeriod] = useState(null);
+  const [content, setContent] = useState("");
 
   const navigate = useNavigate();
   const { seq } = useParams();
@@ -22,6 +26,7 @@ export function RentalRenew() {
       .get(`/api/rental/renew/${seq}`, {})
       .then((res) => {
         console.log(res.data);
+        setRentalData(res.data);
       })
       .catch((err) => {
         console.log("no");
@@ -31,18 +36,29 @@ export function RentalRenew() {
       });
   }, []);
 
-  function handleReturnButtonClick() {}
+  if (!rentalData) return <div>로딩 중...</div>;
 
-  // 결제 버튼 클릭시 공란 여부 확인
-  let validate = true;
-  if (
-    name.trim() === "" ||
-    postalCode.trim() === "" ||
-    address.trim() === "" ||
-    addressDetail.trim() === "" ||
-    phone.trim() === ""
-  ) {
-    validate = false;
+  function handleReturnButtonClick() {
+    if (period === null) {
+      alert("기간을 선택해주세요.");
+    } else {
+      console.log(rentalData.startDttm);
+      console.log(rentalData.endDttm);
+      console.log(period);
+      axios
+        .get(`/api/rental/renew/finish/${seq}?period=${period}`, {})
+        .then((res) => {
+          console.log(res.data);
+          alert(res.data.message);
+          navigate("/rental/list");
+        })
+        .catch((err) => {
+          console.log("no");
+        })
+        .finally(() => {
+          console.log("always");
+        });
+    }
   }
 
   return (
@@ -63,46 +79,56 @@ export function RentalRenew() {
             onMouseLeave={(e) => (e.target.style.color = "#000")}
             onClick={() => navigate("/rental/list")}
           >
-            내 렌탈 현황(반납)
+            내 렌탈 현황(연장)
           </h2>
 
           <div>
             <FormGroup className="mb-3">
               <FormLabel>제품명</FormLabel>
-              <FormControl value={"제품명"} readOnly />
+              <FormControl value={rentalData.productNoName} disabled />
             </FormGroup>
           </div>
           <div>
             <FormGroup className="mb-3">
               <FormLabel>제품 대여 개수</FormLabel>
-              <FormControl value={"제품 대여 개수"} readOnly />
-            </FormGroup>
-          </div>
-          <div>
-            <FormGroup className="mb-3">
-              <FormLabel>현재 상태</FormLabel>
-              <FormControl value={"대여중"} readOnly />
+              <FormControl value={rentalData.orderNoOrderCount} disabled />
             </FormGroup>
           </div>
           <div>
             <FormGroup className="mb-3">
               <FormLabel>남은 대여 기간</FormLabel>
-              <FormControl value={"남은 대여기간"} readOnly />
+              <FormControl value={rentalData.endDttm} disabled />
+            </FormGroup>
+          </div>
+
+          <FormGroup className="mb-3">
+            <FormLabel>추가 연장 기간</FormLabel>
+            <FormSelect
+              className="mb-3"
+              onChange={(e) => setPeriod(e.target.value)}
+            >
+              <option value={null}>연장기간 선택</option>
+              <option value={10}>10일 연장</option>
+              <option value={30}>30일 연장</option>
+              <option value={90}>90일 연장</option>
+              <option value={180}>180일 연장</option>
+            </FormSelect>
+          </FormGroup>
+
+          <div>
+            <FormGroup className="mb-3">
+              <FormLabel>주문자 성명</FormLabel>
+              <FormControl value={rentalData.orderNoName} disabled />
             </FormGroup>
           </div>
           <div>
             <FormGroup className="mb-3">
-              <FormLabel>주문자 성명</FormLabel>
-              <FormControl
-                value={"이름"}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-              />
+              <FormLabel>연락처</FormLabel>
+
+              <FormControl value={rentalData.orderNoPhone} disabled />
             </FormGroup>
           </div>
-
-          <div className="mb-3">
+          {/*    <div className="mb-3">
             <FormGroup>
               <FormLabel>남기실 메모</FormLabel>
               <FormControl
@@ -114,19 +140,18 @@ export function RentalRenew() {
                 }}
               />
             </FormGroup>
-          </div>
+          </div>*/}
           <div className="d-flex justify-content-center gap-4">
             <Button
               variant="primary"
-              style={{ width: "100px" }}
-              disabled={!validate}
+              style={{ width: "150px", marginRight: "10px" }}
               onClick={handleReturnButtonClick}
             >
-              반납하기
+              연장하기
             </Button>
             <Button
               variant="warning"
-              style={{ width: "100px" }}
+              style={{ width: "150px", marginLeft: "10px" }}
               onClick={() => {
                 setModalShow(true);
               }}

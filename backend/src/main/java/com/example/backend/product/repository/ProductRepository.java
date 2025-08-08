@@ -76,4 +76,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<ProductNameListDto> findProductByCategory(String categoryName);
 
     Product findByProductNo(String productNo);
+
+    Product findProductByProductNo(String productNoProductNo);
 }

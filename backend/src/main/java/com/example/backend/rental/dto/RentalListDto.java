@@ -21,5 +21,5 @@ public class RentalListDto implements Serializable {
     Integer productNoPrice;
     String startDttm;
     String endDttm;
-    String status;
+    String state;
 }

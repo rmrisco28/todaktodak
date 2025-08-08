@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReturnOrderDto implements Serializable {
-    Integer id;
+    Integer seq;
     String returnNo;
     String rentalNo;
     String saleNo;

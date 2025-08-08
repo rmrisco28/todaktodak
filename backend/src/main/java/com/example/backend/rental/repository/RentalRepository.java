@@ -1,5 +1,6 @@
 package com.example.backend.rental.repository;
 
+import com.example.backend.rental.dto.RenewDto;
 import com.example.backend.rental.dto.RentalDto;
 import com.example.backend.rental.dto.RentalListDto;
 import com.example.backend.rental.entity.Rental;
@@ -24,7 +25,7 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
                     r.productNo.price,
                     r.startDttm,
                     r.endDttm,
-                    r.status
+                    r.state
                     )
                     FROM Rental r
                     WHERE (r.useYn = true
@@ -45,7 +46,7 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
             
                         r.startDttm,
                         r.endDttm,
-                        r.status,
+                        r.state,
                         r.orderNo.name,
                         r.orderNo.post,
             
@@ -64,6 +65,8 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
             """)
     RentalDto findRentalBySeq(Integer seq);
 
-
     Optional<Rental> findByRentalNo(String rentalNo);
+
+    RenewDto findRenewBySeq(Integer seq);
+
 }
