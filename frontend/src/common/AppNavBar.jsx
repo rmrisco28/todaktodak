@@ -49,6 +49,7 @@ export function AppNavBar() {
               {/*추후 삭제 */}
               <Nav.Link as={NavLink} to="/rental/list">
                 렌탈 현황(추후 삭제)
+              </Nav.Link>
               <Nav.Link as={NavLink} to="/member/myinfo">
                 내정보
               </Nav.Link>
