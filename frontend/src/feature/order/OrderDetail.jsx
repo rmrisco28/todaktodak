@@ -37,6 +37,13 @@ export function OrderDetail() {
   const [request, setRequest] = useState("");
   const [deliveryCompany, setDeliveryCompany] = useState("");
   const [tracking, setTracking] = useState("");
+  const [deliveryList, setDeliveryList] = useState([]);
+
+  useEffect(() => {
+    axios.get(`/api/delivery/formSelect`).then((res) => {
+      setDeliveryList(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     axios
@@ -230,13 +237,22 @@ export function OrderDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formDeliveryCompany">
             <FormLabel>배송업체명</FormLabel>
-            <FormControl
-              value={order.deliveryCompany}
-              placeholder={deliveryCompany}
+            <FormSelect
+              className="mb-3"
               onChange={(e) =>
                 setOrder({ ...order, deliveryCompany: e.target.value })
               }
-            />
+            >
+              {deliveryList.map((item) => (
+                <option
+                  value={item.name}
+                  key={item.seq}
+                  selected={item.name == order.deliveryCompany}
+                >
+                  {item.name}
+                </option>
+              ))}
+            </FormSelect>
           </FormGroup>
         </div>
         <div>
