@@ -136,7 +136,7 @@ function App() {
             {/* 주문배송조회 목록 */}
             <Route path="order/list" element={<OrderList />} />
             {/* 주문배송조회 상세 */}
-            <Route path="order/:orderId" element={<OrderDetail />} />
+            <Route path="order/:seq" element={<OrderDetail />} />
 
             {/* 주문배송조회 목록 (관리자) */}
             <Route path="order/admin/list" element={<OrderAdminList />} />

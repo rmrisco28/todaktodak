@@ -1,6 +1,6 @@
 package com.example.backend.order.controller;
 
-import com.example.backend.order.dto.OrderDetailDto;
+import com.example.backend.order.dto.OrderDto;
 import com.example.backend.order.dto.OrderManageDto;
 import com.example.backend.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class OrderController {
      * @param endDate   종료일 필터 (선택)
      * @return 주문 목록 DTO 리스트
      */
+    /*
     @GetMapping("/list")
     public List<OrderManageDto> getOrders(
             @RequestParam(defaultValue = "1") Integer memberSeq,
@@ -41,7 +42,7 @@ public class OrderController {
     ) {
         return orderService.findOrders(memberSeq, status, keyword, startDate, endDate);
     }
-
+*/
     /**
      * ✅ 주문 상세 조회 API
      * - 주문 번호(PK)를 기준으로 상세 정보 반환
@@ -49,11 +50,13 @@ public class OrderController {
      * @param orderSeq 주문 기본키
      * @return 주문 상세 정보 DTO
      */
+    /*
     @GetMapping("/detail")
     public ResponseEntity<OrderDetailDto> OrderDetail(@RequestParam Integer orderSeq) {
         return ResponseEntity.ok(orderService.getOrderDetail(orderSeq));
     }
 
+*/
 
     /**
      * 주문관리 목록 조회 (관리자)
@@ -69,4 +72,17 @@ public class OrderController {
     ) {
         return orderService.listAll(keyword, pageNumber);
     }
+
+    /**
+     * 주문관리 상세 조회 (관리자)
+     *
+     * @param seq
+     * @return
+     */
+    @GetMapping("detail/{seq}")
+    public OrderDto getOrderBySeq(@PathVariable Integer seq) {
+        return orderService.getOrderBySeq(seq);
+    }
+
+
 }

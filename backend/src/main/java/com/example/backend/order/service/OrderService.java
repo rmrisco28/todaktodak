@@ -1,6 +1,7 @@
 package com.example.backend.order.service;
 
 import com.example.backend.order.dto.OrderDetailDto;
+import com.example.backend.order.dto.OrderDto;
 import com.example.backend.order.dto.OrderListAllDto;
 import com.example.backend.order.dto.OrderManageDto;
 import com.example.backend.order.entity.OrderItem;
@@ -8,7 +9,13 @@ import com.example.backend.order.entity.OrderManage;
 import com.example.backend.order.repository.OrderItemRepository;
 import com.example.backend.order.repository.OrderListRepository;
 import com.example.backend.order.repository.OrderManageRepository;
+import com.example.backend.sale.dto.SaleImageThumbDto;
+import com.example.backend.sale.entity.Sale;
+import com.example.backend.sale.entity.SaleImageThumb;
+import com.example.backend.sale.repository.SaleImageThumbRepository;
+import com.example.backend.sale.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,10 +31,15 @@ import java.util.Map;
 @Transactional(readOnly = true) // 기본적으로 읽기 전용 트랜잭션 (조회용 서비스)
 public class OrderService {
 
+    private final SaleRepository saleRepository;
+    @Value("${image.prefix}")
+    private String imagePrefix;
+
     private final OrderManageRepository orderManageRepository; // 주문 정보 저장소
     private final OrderItemRepository orderItemRepository;     // 주문상품 저장소
 
     private final OrderListRepository orderListRepository;
+    private final SaleImageThumbRepository saleImageThumbRepository;
 
     /**
      * 📌 주문 목록 조회
@@ -173,5 +185,22 @@ public class OrderService {
                 "currentPageNumber", pageNumber);
 
         return Map.of("pageInfo", pageInfo, "orderList", orderListDtoPage.getContent());
+    }
+
+    public OrderDto getOrderBySeq(Integer seq) {
+        OrderDto dto = orderListRepository.findOrderDetailBySeq(seq);
+
+        Sale sale = new Sale();
+        sale.setSaleNo(dto.getSaleNo());
+        sale = saleRepository.findBySaleNo(sale.getSaleNo());
+        SaleImageThumb image = saleImageThumbRepository.findBySale(sale).getFirst();
+
+        SaleImageThumbDto imageDto = new SaleImageThumbDto();
+        imageDto.setName(image.getId().getName());
+        imageDto.setPath(imagePrefix + "prj4/saleImageThumb/" + sale.getSeq() + "/" + image.getId().getName());
+
+        dto.setImage(imageDto);
+
+        return dto;
     }
 }
