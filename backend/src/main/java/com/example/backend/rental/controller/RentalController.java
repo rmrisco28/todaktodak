@@ -30,18 +30,31 @@ public class RentalController {
         return rentalService.returnDetail(seq);
     }
 
+    /*    @PostMapping("return/finish")
+        public ResponseEntity<?> returnOrder(@RequestBody ReturnOrderDto rod) {
+            rentalService.returnOrder(rod);
+
+            return ResponseEntity.ok(Map.of("message", "반납 요청 완료되었습니다."));
+        }
+
+        @PutMapping("return/cancel/{rentalNo}")
+        public ResponseEntity<?> returnCancel(
+                @PathVariable String rentalNo,
+                @RequestBody ReturnCancelDto rcd) {
+            rcd.setRentalNo(rentalNo);
+            rentalService.returnCancel(rcd);
+            return ResponseEntity.ok(Map.of("message", "반납 요청이 취소되었습니다."));
+        }*/
     @PostMapping("return/finish")
     public ResponseEntity<?> returnOrder(@RequestBody ReturnOrderDto rod) {
-        rentalService.returnOrder(rod);
-
+        rentalService.processReturn(rod.getRentalNo(), "반납 신청", rod);
         return ResponseEntity.ok(Map.of("message", "반납 요청 완료되었습니다."));
     }
 
-    @PutMapping("return/cancel/{seq}")
-    public ResponseEntity<?> returnCancel(@PathVariable Integer seq, @RequestBody ReturnCancelDto rcd) {
-        rcd.setSeq(seq);
-        rentalService.returnCancel(rcd);
+    @PutMapping("return/cancel/{rentalNo}")
+    public ResponseEntity<?> returnCancel(
+            @PathVariable String rentalNo) {
+        rentalService.processReturn(rentalNo, "반납 취소", null);
         return ResponseEntity.ok(Map.of("message", "반납 요청이 취소되었습니다."));
     }
-
 }

@@ -179,22 +179,19 @@ export function RentalReturn() {
 
   function handleCancellationOfReturnButton() {
     axios
-      .put(`/api/rental/return/cancel/${seq}`, {
-        seq: seq,
+      .put(`/api/rental/return/cancel/${rentalData.rentalNo}`, {
         rentalNo: rentalData.rentalNo,
-        state: state,
-        rentalStatus: state,
+        state: "대여중",
+        rentalStatus: "대여중",
       })
       .then((res) => {
         console.log(res.data);
-        // alert(res.data.message);
+        alert(res.data.message);
         navigate("/rental/list");
       })
       .finally(() => {
         console.log(seq);
         console.log(rentalData.rentalNo);
-        console.log(state);
-        console.log(state);
       });
   }
 
@@ -222,25 +219,25 @@ export function RentalReturn() {
           <div>
             <FormGroup className="mb-3">
               <FormLabel>제품명</FormLabel>
-              <FormControl value={rentalData.productName} readOnly />
+              <FormControl value={rentalData.productName} disabled />
             </FormGroup>
           </div>
           <div>
             <FormGroup className="mb-3">
               <FormLabel>제품 대여 개수</FormLabel>
-              <FormControl value={rentalData.orderCount} readOnly />
+              <FormControl value={rentalData.orderCount} disabled />
             </FormGroup>
           </div>
           <div>
             <FormGroup className="mb-3">
               <FormLabel>현재 상태</FormLabel>
-              <FormControl value={state} readOnly />
+              <FormControl value={state} disabled />
             </FormGroup>
           </div>
           <div>
             <FormGroup className="mb-3">
               <FormLabel>남은 대여 기간</FormLabel>
-              <FormControl value={rentalData.endDttm} readOnly />
+              <FormControl value={rentalData.endDttm} disabled />
             </FormGroup>
           </div>
           <div>
@@ -320,14 +317,16 @@ export function RentalReturn() {
           </div>
 
           <div className="d-flex justify-content-center gap-4 mb-3">
-            <Button
-              variant="primary"
-              style={{ width: "100px" }}
-              disabled={!validate}
-              onClick={handleReturnButtonClick}
-            >
-              반납하기
-            </Button>
+            {state === "대여중" && (
+              <Button
+                variant="primary"
+                style={{ width: "100px" }}
+                disabled={!validate}
+                onClick={handleReturnButtonClick}
+              >
+                반납하기
+              </Button>
+            )}
             <Button
               variant="warning"
               style={{ width: "100px" }}

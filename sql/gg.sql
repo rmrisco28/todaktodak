@@ -186,10 +186,6 @@ CREATE TABLE rental
     FOREIGN KEY (product_no) REFERENCES product (product_no)
 );
 
-INSERT INTO rental
-(seq, rental_no, product_no, order_no, member_no, insert_dttm, update_dttm, use_yn, del_yn)
-VALUES (1, 'R1', 'P1', 'O1', 'M1', NOW(), NOW(), TRUE, FALSE);
-
 # 반납 내역
 CREATE TABLE return_order
 (
