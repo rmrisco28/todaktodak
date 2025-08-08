@@ -159,10 +159,8 @@ function App() {
             <Route path="delivery/add" element={<DeliveryAdd />} />
             {/* 배송업체 목록 */}
             <Route path="delivery/list" element={<DeliveryList />} />
-            {/* 배송업체 상세 */}
-            <Route path="delivery/detail/:seq" element={<DeliveryDetail />} />
             {/* 배송업체 수정 */}
-            <Route path="delivery/modify" element={<DeliveryModify />} />
+            <Route path="delivery/modify/:seq" element={<DeliveryModify />} />
             {/* 대여 현황 */}
             <Route path="rental/list" element={<RentalList />} />
             {/* 대여 연장 */}
