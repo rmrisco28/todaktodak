@@ -1,20 +1,20 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
-
 import "../css/MainBanner.css";
+
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { HiViewList } from "react-icons/hi";
 import axios from "axios";
+import { Link } from "react-router";
 
 export function MainBanner() {
   const swiperRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
   const [banners, setBanners] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(1);
 
   useEffect(() => {
     axios.get("/api/banner/slide").then((res) => {
@@ -27,80 +27,80 @@ export function MainBanner() {
     setShowModal(false);
   };
 
-  useEffect(() => {
-    if (swiperRef.current) {
-      swiperRef.current.on("slideChange", () => {
-        setActiveIndex(swiperRef.current.realIndex);
-      });
-    }
-  }, []);
-
   return (
-    <div className="mainSpotSliderArea billboard position-relative">
+    <div
+      className="fullwidth-banner-container"
+      style={{ position: "relative" }}
+    >
       <Swiper
-        modules={[Pagination, Navigation]}
+        modules={[Navigation, Autoplay]}
         loop={true}
-        pagination={{
-          el: ".swiper-pagination.spot-pagination.swiper-pagination-custom",
-          clickable: true,
-          renderBullet: (index, className) =>
-            `<span class="${className}">${index + 1}</span>`,
-        }}
         navigation
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
+          setCurrentIndex(swiper.realIndex + 1);
         }}
+        onSlideChange={(swiper) => {
+          setCurrentIndex(swiper.realIndex + 1);
+        }}
+        slidesPerView={1}
+        style={{ width: "100%", height: "auto" }}
       >
-        {banners.map((banner, index) => (
-          <SwiperSlide key={index}>
-            <a href={banner.link}>
+        {banners.map((banner, idx) => (
+          <SwiperSlide key={idx}>
+            <Link to={banner.link} key={idx}>
               <img
-                className="d-block w-100"
                 src={banner.path}
                 alt={banner.title}
-                style={{ maxHeight: "600px", objectFit: "cover" }}
+                className="fullwidth-banner-image"
               />
-            </a>
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* 페이지네이션 */}
-      <div className="spotControls">
-        <div className="swiper-pagination spot-pagination swiper-pagination-custom" />
-        <div className="btnSpotAll">
-          {/* 배너 전체보기 */}
-          <button type="button" onClick={() => setShowModal(true)}>
-            <HiViewList />
-          </button>
+      {/* 페이지 번호 + 전체보기 버튼 */}
+      <div className="banner-bottom-ui">
+        <div className="banner-page-indicator">
+          {currentIndex} / {banners.length}
         </div>
+        <button
+          className="btn-spot-all"
+          onClick={() => setShowModal(true)}
+          aria-label="전체보기"
+        >
+          <HiViewList size={20} />
+        </button>
       </div>
 
-      {/* 썸네일 모달 */}
+      {/* 전체보기 모달 */}
       <Modal
         show={showModal}
         onHide={() => setShowModal(false)}
-        size="lg"
         centered
-        className="thumbnail-modal"
+        size="lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>전체 슬라이드 보기</Modal.Title>
+          <Modal.Title>전체보기</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <div className="d-flex flex-wrap justify-content-center gap-3">
-            {banners.map((banner, idx) => (
+        <Modal.Body className="modal-body-scroll">
+          {banners.map((banner, idx) => (
+            <div
+              key={idx}
+              className="thumbnail-wrapper"
+              onClick={() => handleThumbnailClick(idx)}
+            >
               <img
-                key={idx}
                 src={banner.path}
                 alt={banner.title}
-                className={`thumbnail-image ${
-                  activeIndex === idx ? "active" : ""
-                }`}
-                onClick={() => handleThumbnailClick(idx)}
+                className="thumbnail-img"
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </Modal.Body>
       </Modal>
     </div>
