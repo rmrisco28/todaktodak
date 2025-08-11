@@ -40,6 +40,33 @@ public class MemberController {
                         Map.of("type", "success", "text", "회원가입 되었습니다.")));
     }
 
+    // 이메일 인증 요청
+    @PostMapping("/email/request")
+    public ResponseEntity<?> requestEmailAuth(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        try {
+            memberService.sendEmailAuthCode(email);
+            return ResponseEntity.ok(Map.of("message", "인증번호를 이메일로 발송했습니다."));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(Map.of("message", "이메일 발송 실패"));
+        }
+    }
+
+    // 이메일 인증번호 학인
+    @PostMapping("/email/verify")
+    public ResponseEntity<?> verifyEmailAuth(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+        boolean verified = memberService.verifyEmailAuthCode(email, code);
+
+        if (verified) {
+            return ResponseEntity.ok(Map.of("message", "이메일 인증 완료"));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("message", "인증번호가 틀렸거나 만료되었습니다."));
+        }
+    }
+
     // 아이디 중복 확인
     @GetMapping("/check-id")
     public ResponseEntity<?> checkMemberId(@RequestParam String memberId) {

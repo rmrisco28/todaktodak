@@ -51,3 +51,16 @@ desc member;
 SELECT member_no
 FROM member
 WHERE seq = 1;
+
+
+# 이메일 인증 서비스용 테이블
+CREATE TABLE email_auth
+(
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    email      VARCHAR(100) NOT NULL,
+    code       VARCHAR(6)   NOT NULL,
+    created_at DATETIME     NOT NULL,
+    verified   BOOLEAN      NOT NULL DEFAULT FALSE,
+    INDEX idx_email (email)
+);
+

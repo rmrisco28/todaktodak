@@ -2,12 +2,16 @@ package com.example.backend.member.service;
 
 import com.example.backend.member.dto.*;
 import com.example.backend.member.entity.Auth;
+import com.example.backend.member.entity.EmailAuth;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.AuthRepository;
+import com.example.backend.member.repository.EmailAuthRepository;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -20,10 +24,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -38,9 +39,19 @@ public class MemberService {
     private final JwtEncoder jwtEncoder;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final JavaMailSender mailSender;
+    private final EmailAuthRepository emailAuthRepository;
+
 
     // 회원 가입
     public void signup(MemberSignupForm memberSignupForm) {
+
+        // 이메일 인증 완료 여부 체크
+        EmailAuth latestAuth = emailAuthRepository.findTopByEmailOrderByCreatedAtDesc(memberSignupForm.getEmail())
+                .orElseThrow(() -> new RuntimeException("이메일 인증이 완료되지 않았습니다."));
+        if (!latestAuth.isVerified()) {
+            throw new RuntimeException("이메일 인증이 완료되지 않았습니다.");
+        }
 
         if (this.validate(memberSignupForm)) {
             Member member = new Member();
@@ -67,6 +78,54 @@ public class MemberService {
             // 저장
             memberRepository.save(member);
         }
+    }
+
+    // 인증번호 생성 및 이메일 발송
+    public void sendEmailAuthCode(String email) {
+        String code = createAuthCode();
+
+        EmailAuth emailAuth = new EmailAuth();
+        emailAuth.setEmail(email);
+        emailAuth.setCode(code);
+        emailAuth.setCreatedAt(LocalDateTime.now());
+        emailAuth.setVerified(false);
+        emailAuthRepository.save(emailAuth);
+
+        // 이메일 발송
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("jihun8138@gmail.com");  // 로그인한 네이버 이메일 주소 반드시 넣기
+        message.setTo("whsnoo@naver.com");
+        message.setSubject("회원가입 이메일 인증번호");
+        message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
+        mailSender.send(message);
+    }
+
+    // 인증번호 검증
+    public boolean verifyEmailAuthCode(String email, String code) {
+        Optional<EmailAuth> optionalAuth = emailAuthRepository.findTopByEmailOrderByCreatedAtDesc(email);
+
+        if (optionalAuth.isEmpty()) {
+            return false;
+        }
+
+        EmailAuth emailAuth = optionalAuth.get();
+
+        // 5분 유효시간 체크
+        LocalDateTime expireTime = emailAuth.getCreatedAt().plusMinutes(5);
+
+        if (!emailAuth.isVerified() && emailAuth.getCode().equals(code) && LocalDateTime.now().isBefore(expireTime)) {
+            emailAuth.setVerified(true);
+            emailAuthRepository.save(emailAuth);
+            return true;
+        }
+        return false;
+    }
+
+    // 인증번호 생성
+    private String createAuthCode() {
+        Random random = new Random();
+        int code = 100000 + random.nextInt(900000);
+        return String.valueOf(code);
     }
 
     // 아이디 중복 확인
