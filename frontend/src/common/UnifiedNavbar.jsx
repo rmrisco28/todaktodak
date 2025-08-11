@@ -112,7 +112,7 @@ export function UnifiedNavbar() {
               className="py-2 px-lg-2"
               onToggle={(isOpen) => handleToggle("member-menu", isOpen)}
             >
-              <NavDropdown.Item href="/member/detail">내 정보</NavDropdown.Item>
+              <NavDropdown.Item href="/member/myinfo">내 정보</NavDropdown.Item>
               <NavDropdown.Item href="/order/list">주문내역</NavDropdown.Item>
               <NavDropdown.Item href="/rental/list">대여현황</NavDropdown.Item>
               <NavDropdown.Item href="/want/list">관심상품</NavDropdown.Item>
