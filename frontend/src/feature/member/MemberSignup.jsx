@@ -529,8 +529,7 @@ export function MemberSignup() {
             </div>
           </FormGroup>
           {/* 주소 */}
-          <FormGroup controlId="addrees">
-            <FormLabel></FormLabel>
+          <FormGroup>
             <div className="d-flex mb-3" style={{ gap: "10px" }}>
               <FormControl
                 placeholder="도로명 주소 / 지번"
