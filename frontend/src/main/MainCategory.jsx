@@ -52,6 +52,8 @@ export function MainCategory() {
     arrows: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
+    autoplay: true,
+    autoplaySpeed: 3000,
     responsive: [
       {
         breakpoint: 992, // lg 미만
@@ -63,6 +65,10 @@ export function MainCategory() {
       },
     ],
   };
+
+  if (categoryList.length === 0) {
+    return null; // 데이터 없을 때 렌더링 방지
+  }
 
   return (
     <div className="mt-4">
