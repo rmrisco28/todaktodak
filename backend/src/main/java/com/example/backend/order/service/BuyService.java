@@ -113,7 +113,12 @@ public class BuyService {
         rental.setStartDttm(startDttm);
         rental.setEndDttm(endDttm);
 
+        // 재고 수량 변경
+        product.setStock(product.getStock() - old.getOrderCount());
+
         rentalRepository.save(rental);
+
+
     }
 
 }

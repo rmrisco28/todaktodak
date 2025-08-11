@@ -54,6 +54,7 @@ import { BannerModify } from "./feature/banner/BannerModify.jsx";
 import { OrderAdminList } from "./feature/order/admin/OrderAdminList.jsx";
 import { RentalRenew } from "./feature/rental/RentalRenew.jsx";
 import { RentalReturn } from "./feature/rental/RentalReturn.jsx";
+import { RentalListAdmin } from "./feature/rental/RentalListAdmin.jsx";
 
 function App() {
   return (
@@ -167,6 +168,8 @@ function App() {
             <Route path="rental/renew/:seq" element={<RentalRenew />} />
             {/* 대여 반납 */}
             <Route path="rental/return/:seq" element={<RentalReturn />} />
+            {/* 대여 관리자 */}
+            <Route path="rental/list/admin" element={<RentalListAdmin />} />
 
             {/* 메인 배너 이미지 등록  */}
             <Route path="banner/add" element={<BannerAdd />} />

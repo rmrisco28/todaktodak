@@ -1,10 +1,10 @@
 package com.example.backend.rental.repository;
 
 import com.example.backend.rental.dto.RenewDto;
+import com.example.backend.rental.dto.RentalAdminDto;
 import com.example.backend.rental.dto.RentalDto;
 import com.example.backend.rental.dto.RentalListDto;
 import com.example.backend.rental.entity.Rental;
-import com.example.backend.rental.entity.ReturnOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -69,4 +69,33 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
 
     RenewDto findRenewBySeq(Integer seq);
 
+
+    @Query(value = """
+                    SELECT new com.example.backend.rental.dto.RentalAdminDto(
+                    r.seq,
+                    r.rentalNo,
+                    r.orderNo.orderNo,
+                    r.orderNo.name,
+                    r.orderNo.phone,
+            
+                    r.orderNo.orderCount,
+                    r.productNo.productNo,
+                    r.productNo.name,
+                    r.productNo.price,
+                    r.startDttm,
+            
+                    r.endDttm,
+                    r.state,
+                    r.useYn,
+                    r.delYn
+                    )
+                    FROM Rental r
+                    WHERE (r.useYn = true
+                    AND r.delYn=false)
+                    AND r.productNo.name LIKE %:keyword%
+                    ORDER BY r.seq DESC
+            """)
+    Page<RentalAdminDto> searchRentalAdminList(@Param("keyword") String keyword, Pageable pageable);
+
+    Rental findRentalByrentalNo(String rentalNo);
 }

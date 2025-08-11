@@ -1,9 +1,6 @@
 package com.example.backend.rental.controller;
 
-import com.example.backend.rental.dto.RenewDto;
-import com.example.backend.rental.dto.RentalDto;
-import com.example.backend.rental.dto.ReturnOrderDto;
-import com.example.backend.rental.entity.Rental;
+import com.example.backend.rental.dto.*;
 import com.example.backend.rental.service.RentalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -63,4 +60,22 @@ public class RentalController {
         rentalService.renew(seq, period);
         return ResponseEntity.ok(Map.of("message", "연장 신청이 완료되었습니다."));
     }
+
+    // 관리자 렌탈 현황 조회
+    @GetMapping("list/admin")
+    public Map<String, Object> rentalListAdmin(
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
+    ) {
+        return rentalService.listAdmin(keyword, pageNumber);
+    }
+
+    @PutMapping("list/update/{rentalNo}")
+    public ResponseEntity<?> rentalUpdate(
+            @PathVariable String rentalNo,
+            @RequestBody RentalUpdateDto rud) {
+        ResponseEntity<?> responseEntity = rentalService.rentalUpdate(rentalNo, rud);
+        return responseEntity;
+    }
+
 }

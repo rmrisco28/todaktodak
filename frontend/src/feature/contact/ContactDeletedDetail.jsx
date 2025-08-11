@@ -102,13 +102,13 @@ export function ContactDeletedDetail() {
             </Button>
             <Button
               className="me-2"
-              variant="warning"
+              variant="danger"
               onClick={() => navigate("/contact/deleted/list")}
             >
               삭제 목록
             </Button>
             <Button
-              variant="danger"
+              variant="warning"
               className="me-2"
               onClick={() => setModalShow(true)}
             >

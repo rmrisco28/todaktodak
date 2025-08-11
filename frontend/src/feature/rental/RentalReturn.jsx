@@ -150,6 +150,7 @@ export function RentalReturn() {
     }
   };
 
+  // 반납 버튼
   function handleReturnButtonClick() {
     axios
       .post(`/api/rental/return/finish`, {
@@ -177,6 +178,7 @@ export function RentalReturn() {
       });
   }
 
+  // 반납 취소 버튼
   function handleCancellationOfReturnButton() {
     axios
       .put(`/api/rental/return/cancel/${rentalData.rentalNo}`, {
@@ -194,6 +196,16 @@ export function RentalReturn() {
         console.log(rentalData.rentalNo);
       });
   }
+
+  const formatDate = (dateStr) => {
+    // 'yyMMdd' 형식의 문자열을 Date 객체로 변환
+    const year = `20${dateStr.slice(0, 2)}`; // 'yy' -> '20yy'로 변환
+    const month = dateStr.slice(2, 4); // 'MM'
+    const day = dateStr.slice(4, 6); // 'dd'
+    const formattedDate = new Date(`${year}-${month}-${day}`);
+
+    return `${formattedDate.getFullYear().toString().slice(2)}-${(formattedDate.getMonth() + 1).toString().padStart(2, "0")}-${formattedDate.getDate().toString().padStart(2, "0")}`;
+  };
 
   return (
     <>
@@ -237,7 +249,7 @@ export function RentalReturn() {
           <div>
             <FormGroup className="mb-3">
               <FormLabel>남은 대여 기간</FormLabel>
-              <FormControl value={rentalData.endDttm} disabled />
+              <FormControl value={formatDate(rentalData.endDttm)} disabled />
             </FormGroup>
           </div>
           <div>
@@ -316,11 +328,12 @@ export function RentalReturn() {
             </FormGroup>
           </div>
 
+          {/* 반납 버튼 */}
           <div className="d-flex justify-content-center gap-4 mb-3">
             {state === "대여중" && (
               <Button
                 variant="primary"
-                style={{ width: "150px", margin: "10px" }}
+                style={{ width: "150px" }}
                 disabled={!validate}
                 onClick={handleReturnButtonClick}
               >
@@ -329,7 +342,7 @@ export function RentalReturn() {
             )}
             <Button
               variant="warning"
-              style={{ width: "100px" }}
+              style={{ width: "150px" }}
               onClick={() => {
                 setCancelModalShow(true);
               }}
@@ -337,10 +350,11 @@ export function RentalReturn() {
               취소
             </Button>
 
+            {/* 반납 취소 버튼 */}
             {state === "반납 확인중" && (
               <Button
                 variant="info"
-                style={{ width: "100px" }}
+                style={{ width: "150px" }}
                 onClick={handleCancellationOfReturnButton}
               >
                 반납 취소
