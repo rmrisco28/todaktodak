@@ -9,20 +9,21 @@ import {
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function MemberMyInfo() {
   const [member, setMember] = useState(null);
-  const { memberId } = useParams();
 
   const [modalShow, setModalShow] = useState(false);
 
   const navigate = useNavigate();
 
   const { logout } = useContext(AuthenticationContext);
+
+  const alertShow = useRef(false);
 
   useEffect(() => {
     axios
@@ -32,6 +33,11 @@ export function MemberMyInfo() {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response && err.response.status === 401 && !alertShow.current) {
+          alert("로그인 후 이용 가능합니다.");
+          alertShow.current = true;
+          navigate("/login");
+        }
       })
       .finally(() => {
         console.log("항상 실행");

@@ -95,7 +95,7 @@ public class MemberService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("jihun8138@gmail.com");  // 로그인한 네이버 이메일 주소 반드시 넣기
         message.setTo("whsnoo@naver.com");
-        message.setSubject("회원가입 이메일 인증번호");
+        message.setSubject("토닥토닥 회원가입 이메일 인증번호");
         message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
         mailSender.send(message);
     }
@@ -154,6 +154,10 @@ public class MemberService {
         // 비밀번호 입력 유무
         if (memberSignupForm.getPassword().trim().isBlank()) {
             throw new RuntimeException("비밀번호를 입력해야 합니다.");
+        }
+        // 이름 입력 유무
+        if (memberSignupForm.getName().trim().isBlank()) {
+            throw new RuntimeException("이름을 입력해야 합니다.");
         }
         // 이메일 유효성 검사
         String email = memberSignupForm.getEmail();

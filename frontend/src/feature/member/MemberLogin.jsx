@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import { FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
@@ -33,7 +34,7 @@ export function MemberLogin() {
         const token = res.data.token;
         login(token);
 
-        alert("로그인 되었습니다.");
+        toast.success("로그인 되었습니다.", { position: "top-center" });
         navigate("/");
       })
       .catch((err) => {
