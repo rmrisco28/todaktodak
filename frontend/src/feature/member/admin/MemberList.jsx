@@ -117,7 +117,11 @@ export function MemberList() {
                   <tr
                     key={member.seq}
                     style={{ cursor: "pointer" }}
-                    onClick={() => navigate(`/member?seq=${member.seq}`)}
+                    onClick={() =>
+                      navigate(
+                        `/member?seq=${member.seq}&page=${searchParams.get("page") || "1"}`,
+                      )
+                    }
                   >
                     <td>{member.seq}</td>
                     <td>{member.memberId}</td>
