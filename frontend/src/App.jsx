@@ -55,16 +55,20 @@ import { OrderAdminList } from "./feature/order/admin/OrderAdminList.jsx";
 import { RentalRenew } from "./feature/rental/RentalRenew.jsx";
 import { RentalReturn } from "./feature/rental/RentalReturn.jsx";
 import { RentalListAdmin } from "./feature/rental/RentalListAdmin.jsx";
+import { FullWidthLayout } from "./common/FullWidthLayout.jsx";
 
 function App() {
   return (
     <AuthenticationContextProvider>
       <BrowserRouter>
         <Routes>
+          {/* Route 분리 (배너 영역 Container 제거) */}
+          <Route element={<FullWidthLayout />}>
+            {/* 사용자 메인 화면 (배너 + 카테고리메뉴 + 상품목록 */}
+            <Route index element={<MainView />} />
+          </Route>
           {/* 상단 공통 메뉴 */}
           <Route path="/" element={<MainLayout />}>
-            {/* 사용자 메인 화면 */}
-            <Route index element={<MainView />} />
             {/* 로그인 */}
             <Route path="login" element={<MemberLogin />} />
             {/* 로그아웃 */}

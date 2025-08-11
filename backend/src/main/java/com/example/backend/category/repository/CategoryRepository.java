@@ -32,6 +32,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
                 SELECT new com.example.backend.category.dto.CategoryDto(
                 c.seq,
                 c.name,
+                c.imageName,
                 c.useYn
                 )
                 FROM Category c
@@ -45,6 +46,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
                     SELECT new com.example.backend.category.dto.CategoryDto(
                     c.seq,
                     c.name,
+                    c.imageName,
                     c.useYn
                     )
                     FROM Category c

@@ -22,6 +22,9 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "imageName")
+    private String imageName;
+
     @ColumnDefault("current_timestamp()")
     @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime insertDttm;
