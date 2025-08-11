@@ -27,6 +27,10 @@ export function MainBanner() {
     setShowModal(false);
   };
 
+  if (banners.length === 0) {
+    return null; // 데이터 없을 때 렌더링 방지
+  }
+
   return (
     <div
       className="fullwidth-banner-container"
