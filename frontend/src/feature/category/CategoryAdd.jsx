@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
 export function CategoryAdd() {
+  const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -28,6 +29,7 @@ export function CategoryAdd() {
     axios
       .postForm("/api/category/add", {
         name: name,
+        image: image,
       })
       .then((res) => {
         const message = res.data.message;
@@ -55,6 +57,16 @@ export function CategoryAdd() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             ></FormControl>
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formImage">
+            <FormLabel>카테고리 이미지</FormLabel>
+            <FormControl
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files)}
+            />
           </FormGroup>
         </div>
         <div className="mb-3">

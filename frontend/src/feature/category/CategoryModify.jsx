@@ -4,9 +4,11 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Image,
   Modal,
   Row,
   Spinner,
+  Stack,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,6 +17,8 @@ import { useNavigate, useParams } from "react-router";
 
 export function CategoryModify() {
   const [category, setCategory] = useState(null);
+
+  const [image, setImage] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -49,6 +53,7 @@ export function CategoryModify() {
     axios
       .putForm(`/api/category/modify/${seq}`, {
         name: category.name,
+        image: image,
       })
       .then((res) => {
         const message = res.data.message;
@@ -78,6 +83,25 @@ export function CategoryModify() {
                 setCategory({ ...category, name: e.target.value })
               }
             ></FormControl>
+          </FormGroup>
+        </div>
+
+        <div className="mb-3">
+          {/*  저장된 이미지 */}
+          <Stack direction="horizontal" gap={3}>
+            <div>
+              <Image fluid src={category.path} />
+            </div>
+          </Stack>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formImages">
+            <FormLabel>카테고리 이미지 변경</FormLabel>
+            <FormControl
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files)}
+            />
           </FormGroup>
         </div>
         <div className="mb-3">

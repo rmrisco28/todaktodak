@@ -277,6 +277,7 @@ CREATE TABLE category
 (
     seq         INT AUTO_INCREMENT NOT NULL,
     name        VARCHAR(255)       NOT NULL,
+    image_name  VARCHAR(255),
     insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
     update_dttm DATETIME           NOT NULL DEFAULT NOW(),
     use_yn      BOOLEAN            NOT NULL DEFAULT TRUE,
