@@ -22,33 +22,49 @@ export function ContactAdd() {
 
   let navigate = useNavigate();
 
-  let validate = true;
-  if (title.trim() === "" || content.trim() === "" || name.trim() === "") {
-    validate = false;
+  let validateTitle = true;
+  let validateContent = true;
+  let validateName = true;
+  if (title.trim() === "") {
+    validateTitle = false;
+  } else if (content.trim() === "") {
+    validateContent = false;
+  } else if (name.trim() === "") {
+    validateName = false;
   }
 
   function handleSaveButtonClick() {
-    setIsProcessing(true);
-    axios
-      .post("/api/contact/add", {
-        title: title,
-        content: content,
-        name: name,
-      })
-      .then((res) => {
-        console.log("ok");
-        navigate("/contact/list");
-        alert(res.data.message);
-      })
-      .catch((err) => {
-        console.log("no");
-        console.log("저장실패");
-      })
-      .finally(() => {
-        console.log("finally");
-        setIsProcessing(false);
-      });
+    if (!validateTitle) {
+      alert("제목을 입력해주세요.");
+    } else if (!validateContent) {
+      alert("내용을 입력해주세요.");
+    } else if (!validateName) {
+      alert("이름을 입력해주세요.");
+    } else {
+      setIsProcessing(true);
+      axios
+        .post("/api/contact/add", {
+          title: title,
+          content: content,
+          name: name,
+        })
+        .then((res) => {
+          console.log("ok");
+          navigate("/contact/list");
+          alert(res.data.message);
+        })
+        .catch((err) => {
+          console.log("no");
+          console.log("저장실패");
+        })
+        .finally(() => {
+          console.log("finally");
+          setIsProcessing(false);
+        });
+    }
   }
+
+  console.log();
 
   return (
     // 가운데 정렬
@@ -102,10 +118,7 @@ export function ContactAdd() {
           취소
         </Button>
 
-        <Button
-          onClick={handleSaveButtonClick}
-          disabled={isProcessing || !validate}
-        >
+        <Button onClick={handleSaveButtonClick} disabled={isProcessing}>
           {isProcessing && <Spinner size="sm" />}
           {isProcessing || "저장"}
         </Button>

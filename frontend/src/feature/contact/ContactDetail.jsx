@@ -47,7 +47,7 @@ export function ContactDetail() {
       .then((res) => {
         console.log("ok");
         alert(res.data.message);
-        navigate(`/contact/detail/${seq}?isAdmin=true`, { replace: true });
+        navigate(`/contact/list/?isAdmin=true`, { replace: true });
       })
       .catch((err) => {
         console.log("no");
@@ -104,7 +104,7 @@ export function ContactDetail() {
             variant="secondary"
             className="me-2"
             onClick={() =>
-              navigate(`/contact/list?${isAdmin ? "?isAdmin=true" : ""}`)
+              navigate(`/contact/list${isAdmin ? "?isAdmin=true" : ""}`)
             }
           >
             목록
@@ -140,7 +140,7 @@ export function ContactDetail() {
                 className="mb-3"
                 style={{ color: "#808080", fontSize: "11.5px" }}
               >
-                답변을 변경할 경우, 자동으로 게시판 목록의 답변 완료 상태가
+                답변이 완료될 경우, 자동으로 게시판 목록의 답변 상태가
                 변경됩니다.
               </div>
               <FormControl
@@ -157,6 +157,13 @@ export function ContactDetail() {
 
           {isAdmin && (
             <>
+              <div
+                className="mb-2"
+                style={{ color: "#888888", fontSize: "10px" }}
+              >
+                답변 완료 상태를 변경하기 원하시는 경우, "아직 답변이 없습니다."
+                로 수정 후 저장하시기 바랍니다.
+              </div>
               <Button
                 title="관리자에게만 보이게 할 예정"
                 onClick={handleSaveButtonClick}

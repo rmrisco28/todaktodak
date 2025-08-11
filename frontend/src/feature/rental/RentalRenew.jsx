@@ -61,6 +61,16 @@ export function RentalRenew() {
     }
   }
 
+  const formatDate = (dateStr) => {
+    // 'yyMMdd' 형식의 문자열을 Date 객체로 변환
+    const year = `20${dateStr.slice(0, 2)}`; // 'yy' -> '20yy'로 변환
+    const month = dateStr.slice(2, 4); // 'MM'
+    const day = dateStr.slice(4, 6); // 'dd'
+    const formattedDate = new Date(`${year}-${month}-${day}`);
+
+    return `${formattedDate.getFullYear().toString().slice(2)}-${(formattedDate.getMonth() + 1).toString().padStart(2, "0")}-${formattedDate.getDate().toString().padStart(2, "0")}`;
+  };
+
   return (
     <>
       <Row className="justify-content-center">
@@ -97,7 +107,7 @@ export function RentalRenew() {
           <div>
             <FormGroup className="mb-3">
               <FormLabel>남은 대여 기간</FormLabel>
-              <FormControl value={rentalData.endDttm} disabled />
+              <FormControl value={formatDate(rentalData.endDttm)} disabled />
             </FormGroup>
           </div>
 

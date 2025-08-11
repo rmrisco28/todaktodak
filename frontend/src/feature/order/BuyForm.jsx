@@ -148,7 +148,7 @@ export function BuyForm() {
 
   // 결제 버튼
   function handleSuccessButtonClick() {
-    // window.open("https://payment-demo.kakaopay.com/online", "_blank");
+    window.open("https://payment-demo.kakaopay.com/online", "_blank");
     setIsProcessing(true);
     const totalPrice = sale.salePrice * orderCount + sale.deliveryFee;
     const totProdPrice = sale.salePrice * orderCount;

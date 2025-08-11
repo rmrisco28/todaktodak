@@ -7,11 +7,14 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -28,9 +31,9 @@ public class ContactService {
     public void add(@RequestBody ContactAddForm caf) {
         String code = "CO";
 
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyMMdd");
-        String date = formatter.format(now);
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter_ymd = DateTimeFormatter.ofPattern("yyMMdd");
+        String date = today.format(formatter_ymd);
 
         Integer maxSeq = contactRepository.findMaxSeq();
         int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
@@ -93,6 +96,7 @@ public class ContactService {
         caf.setContent(contact.getContent());
         caf.setName(contact.getName());
         caf.setReply(contact.getReply());
+        caf.setUseYn(contact.getUseYn());
 
 
         return caf;

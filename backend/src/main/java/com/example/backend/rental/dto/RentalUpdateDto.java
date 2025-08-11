@@ -1,6 +1,6 @@
 package com.example.backend.rental.dto;
 
-import com.example.backend.rental.entity.ReturnOrder;
+import com.example.backend.rental.entity.Rental;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,13 +8,16 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * DTO for {@link ReturnOrder}
+ * DTO for {@link Rental}
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReturnCancelDto implements Serializable {
+public class RentalUpdateDto implements Serializable {
     String rentalNo;
+    String orderNo;
+    String orderNoState;
     String state;
-    String rentalState;
+    Integer orderNoOrderCount;
+    String productNo;
 }

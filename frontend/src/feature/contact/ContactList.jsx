@@ -42,7 +42,7 @@ export function ContactList() {
         console.log("ok");
         setContactList(res.data.contactList);
         setPageInfo(res.data.pageInfo);
-        console.log(isAdmin);
+        // console.log(isAdmin);
       })
       .catch((err) => {
         console.log("no");
@@ -129,12 +129,12 @@ export function ContactList() {
                   }}
                 >
                   <td
-                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? " bg-body-secondary" : ""}`}
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? " bg-warning-subtle" : ""}`}
                   >
                     {contact.seq}
                   </td>
                   <td
-                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary " : ""}`}
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-warning-subtle " : ""}`}
                   >
                     {contact.title}
                     {contact.replied === true ? (
@@ -150,17 +150,17 @@ export function ContactList() {
                     )}
                   </td>
                   <td
-                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary" : ""}`}
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-warning-subtle" : ""}`}
                   >
                     {contact.name}
                   </td>
                   <td
-                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary" : ""}`}
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-warning-subtle" : ""}`}
                   >
                     {contact.insertDttm}
                   </td>
                   <td
-                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-body-secondary" : ""}`}
+                    className={`${contact.delYn ? "bg-danger-subtle" : ""} ${contact.useYn === false ? "bg-warning-subtle" : ""}`}
                   >
                     {contact.view}
                   </td>
@@ -198,7 +198,7 @@ export function ContactList() {
               style={{ color: "#808080" }}
             >
               <div style={{ color: "#f17878" }}>빨간색</div>은 삭제, &nbsp;
-              <div style={{ color: "#252525" }}>회색</div>은 숨김처리된
+              <div style={{ color: "#dfcc70" }}>노란색</div>은 숨김처리된
               게시물입니다.
             </div>
           )}

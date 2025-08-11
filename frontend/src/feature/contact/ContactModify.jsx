@@ -41,7 +41,7 @@ export function ContactModify() {
         setTitle(data.title);
         setContent(data.content);
         setName(data.name);
-        setUseYn(data.useYn === "Y" ? true : false);
+        setUseYn(data.useYn);
       })
       .catch((err) => {
         console.log("no");
@@ -51,26 +51,47 @@ export function ContactModify() {
       });
   }, [seq]);
 
+  let validateTitle = true;
+  let validateContent = true;
+  let validateName = true;
+  if (title.trim() === "") {
+    validateTitle = false;
+  } else if (content.trim() === "") {
+    validateContent = false;
+  } else if (name.trim() === "") {
+    validateName = false;
+  }
+
   function handleSaveButtonClick() {
-    axios
-      .put(`/api/contact/modify/${seq}`, {
-        seq,
-        title,
-        content,
-        name,
-        useYn,
-      })
-      .then((res) => {
-        console.log("ok");
-        navigate("/contact/list");
-        alert(res.data.message);
-      })
-      .catch((err) => {
-        console.log("no");
-      })
-      .finally(() => {
-        console.log("finally");
-      });
+    if (!validateTitle) {
+      alert("제목을 입력해주세요.");
+    } else if (!validateContent) {
+      alert("내용을 입력해주세요.");
+    } else if (!validateName) {
+      alert("이름을 입력해주세요.");
+    } else {
+      axios
+        .put(`/api/contact/modify/${seq}`, {
+          seq,
+          title,
+          content,
+          name,
+          useYn,
+        })
+        .then((res) => {
+          console.log("ok");
+          navigate(`/contact/list${isAdmin ? "?isAdmin=true" : ""}`, {
+            replace: true,
+          });
+          alert(res.data.message);
+        })
+        .catch((err) => {
+          console.log("no");
+        })
+        .finally(() => {
+          console.log("finally");
+        });
+    }
   }
 
   return (

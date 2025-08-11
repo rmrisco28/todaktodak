@@ -13,4 +13,5 @@ public interface ReturnOrderRepository extends JpaRepository<ReturnOrder, Intege
     Integer findMaxSeq();
 
     Optional<ReturnOrder> findByRentalNo(Rental rentalNo);
+
 }
