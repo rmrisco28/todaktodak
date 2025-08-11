@@ -1,0 +1,36 @@
+/* 카드 스타일 커스터마이징 */
+.category-card {
+    position: relative;
+    height: 230px;
+    border-radius: 12px;
+    overflow: hidden;
+    color: white;
+}
+
+.category-card .card-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+}
+
+.category-card .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.category-card .card-body {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    z-index: 2;
+}
+
+.category-card h4 {
+    margin: 0;
+}
+
+.slick-prev, .slick-next {
+    z-index: 10;
+}
