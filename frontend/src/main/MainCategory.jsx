@@ -52,19 +52,12 @@ export function MainCategory() {
               onClick={() => navigate("/sale/list?c=" + item.seq)}
               style={{ cursor: "pointer" }}
             >
-              <div
-                className="card-bg"
-                style={{
-                  backgroundImage: `url("../assets/sample/sample.jpg")`,
-                }}
-              ></div>
+              <div className="card-bg">
+                <img src={item.path} alt={item.name}></img>
+              </div>
               <div className="card-overlay"></div>
               <div className="card-body">
-                <p className="mb-1 fw-bold">
-                  {item.collection || "Collection"}
-                </p>
                 <h4 className="fw-bolder">{item.name}</h4>
-                <span className="small">See products &gt;</span>
               </div>
             </div>
           </div>
