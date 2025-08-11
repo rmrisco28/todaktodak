@@ -48,7 +48,7 @@ export function MainBanner() {
           setCurrentIndex(swiper.realIndex + 1);
         }}
         slidesPerView={1}
-        style={{ width: "100%", height: "auto" }}
+        style={{ width: "100%", height: "28vw" }}
       >
         {banners.map((banner, idx) => (
           <SwiperSlide key={idx}>
