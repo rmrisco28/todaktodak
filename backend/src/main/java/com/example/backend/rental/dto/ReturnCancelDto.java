@@ -14,8 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReturnCancelDto implements Serializable {
-    Integer seq;
     String rentalNo;
     String state;
-    String rentalStatus;
+    String rentalState;
 }

@@ -24,7 +24,7 @@ public class RentalDto implements Serializable {
 
     String startDttm;
     String endDttm;
-    String status;
+    String state;
     String orderName;
     String orderPost;
 

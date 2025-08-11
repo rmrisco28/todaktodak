@@ -1,13 +1,17 @@
 package com.example.backend.rental.repository;
 
+import com.example.backend.rental.dto.RenewDto;
 import com.example.backend.rental.dto.RentalDto;
 import com.example.backend.rental.dto.RentalListDto;
 import com.example.backend.rental.entity.Rental;
+import com.example.backend.rental.entity.ReturnOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface RentalRepository extends JpaRepository<Rental, Integer> {
     @Query("SELECT MAX(r.seq) FROM Rental r")
@@ -21,7 +25,7 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
                     r.productNo.price,
                     r.startDttm,
                     r.endDttm,
-                    r.status
+                    r.state
                     )
                     FROM Rental r
                     WHERE (r.useYn = true
@@ -42,7 +46,7 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
             
                         r.startDttm,
                         r.endDttm,
-                        r.status,
+                        r.state,
                         r.orderNo.name,
                         r.orderNo.post,
             
@@ -61,8 +65,8 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
             """)
     RentalDto findRentalBySeq(Integer seq);
 
+    Optional<Rental> findByRentalNo(String rentalNo);
 
-    Rental findStatusByRentalNo(String rentalNo);
+    RenewDto findRenewBySeq(Integer seq);
 
-    Rental findByRentalNo(String rentalNo);
 }

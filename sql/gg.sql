@@ -177,7 +177,7 @@ CREATE TABLE rental
 
     start_dttm VARCHAR(20),
     end_dttm   VARCHAR(20),
-    status     VARCHAR(20) NOT NULL DEFAULT '대여중',
+    state      VARCHAR(10) NOT NULL DEFAULT '대여중',
     use_yn     BOOLEAN     NOT NULL DEFAULT TRUE,
     del_yn     BOOLEAN     NOT NULL DEFAULT FALSE,
 
@@ -185,10 +185,6 @@ CREATE TABLE rental
     FOREIGN KEY (order_no) REFERENCES order_list (order_no),
     FOREIGN KEY (product_no) REFERENCES product (product_no)
 );
-
-INSERT INTO rental
-(seq, rental_no, product_no, order_no, member_no, insert_dttm, update_dttm, use_yn, del_yn)
-VALUES (1, 'R1', 'P1', 'O1', 'M1', NOW(), NOW(), TRUE, FALSE);
 
 # 반납 내역
 CREATE TABLE return_order
@@ -216,3 +212,31 @@ CREATE TABLE return_order
 );
 
 DROP TABLE return_order;
+/* 사용 x
+# 연장 테이블
+CREATE TABLE renew_order
+(
+    seq               INT           NOT NULL AUTO_INCREMENT,
+    renew_no          VARCHAR(20)   NOT NULL UNIQUE,
+    rental_no         VARCHAR(20)   NOT NULL,
+    sale_no           VARCHAR(20)   NOT NULL,
+    product_no        VARCHAR(20)   NOT NULL,
+    order_no          VARCHAR(20)   NOT NULL,
+    period_date       INT           NOT NULL,
+    total_period_date INT           NOT NULL,
+    name              VARCHAR(50)   NOT NULL,
+    phone             VARCHAR(30)   NOT NULL,
+    content           VARCHAR(1000) NOT NULL,
+    renew_count       INT           NOT NULL DEFAULT 1,
+    insert_dttm       DATETIME      NOT NULL DEFAULT NOW(),
+    update_dttm       DATETIME      NOT NULL DEFAULT NOW(),
+    use_yn            BOOLEAN       NOT NULL DEFAULT TRUE,
+    del_yn            BOOLEAN       NOT NULL DEFAULT FALSE,
+    CONSTRAINT pk_renew_order PRIMARY KEY (seq),
+    FOREIGN KEY (rental_no) REFERENCES rental (rental_no),
+    FOREIGN KEY (sale_no) REFERENCES sale (sale_no),
+    FOREIGN KEY (product_no) REFERENCES product (product_no),
+    FOREIGN KEY (order_no) REFERENCES order_list (order_no)
+);
+
+Drop TABLE renew_order;*/

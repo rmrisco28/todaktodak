@@ -88,7 +88,7 @@ export function RentalList() {
                   <td>{rental.productNoPrice.toLocaleString()}</td>
                   <td>{rental.startDttm}</td>
                   <td>{rental.endDttm}</td>
-                  <td>{rental.status}</td>
+                  <td>{rental.state}</td>
                   <td>
                     <Button
                       onClick={() => navigate(`/rental/return/${rental.seq}`)}

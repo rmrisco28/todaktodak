@@ -1,8 +1,9 @@
 package com.example.backend.rental.controller;
 
+import com.example.backend.rental.dto.RenewDto;
 import com.example.backend.rental.dto.RentalDto;
-import com.example.backend.rental.dto.ReturnCancelDto;
 import com.example.backend.rental.dto.ReturnOrderDto;
+import com.example.backend.rental.entity.Rental;
 import com.example.backend.rental.service.RentalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ public class RentalController {
 
     private final RentalService rentalService;
 
+    // 렌탈 리스트
     @GetMapping("list")
     public Map<String, Object> rentalList(
             @RequestParam(value = "q", defaultValue = "") String keyword,
@@ -25,23 +27,40 @@ public class RentalController {
         return rentalService.list(keyword, pageNumber);
     }
 
+    // 렌탈 반납 현황
     @GetMapping("return/{seq}")
     public RentalDto detail(@PathVariable Integer seq) {
         return rentalService.returnDetail(seq);
     }
 
+    // 렌탈 반납 확인버튼
     @PostMapping("return/finish")
     public ResponseEntity<?> returnOrder(@RequestBody ReturnOrderDto rod) {
-        rentalService.returnOrder(rod);
-
+        rentalService.processReturn(rod.getRentalNo(), "반납 신청", rod);
         return ResponseEntity.ok(Map.of("message", "반납 요청 완료되었습니다."));
     }
 
-    @PutMapping("return/cancel/{seq}")
-    public ResponseEntity<?> returnCancel(@PathVariable Integer seq, @RequestBody ReturnCancelDto rcd) {
-        rcd.setSeq(seq);
-        rentalService.returnCancel(rcd);
+    // 렌탈 반납 취소 버튼
+    @PutMapping("return/cancel/{rentalNo}")
+    public ResponseEntity<?> returnCancel(
+            @PathVariable String rentalNo) {
+        rentalService.processReturn(rentalNo, "반납 취소", null);
         return ResponseEntity.ok(Map.of("message", "반납 요청이 취소되었습니다."));
     }
 
+    // 렌탈 연장 현황
+    @GetMapping("renew/{seq}")
+    public RenewDto renew(@PathVariable Integer seq) {
+        return rentalService.renewDetail(seq);
+
+    }
+
+
+    // 렌탈 연장 버튼
+    @GetMapping("renew/finish/{seq}")
+    public ResponseEntity<?> renew(@PathVariable Integer seq,
+                                   @RequestParam int period) {
+        rentalService.renew(seq, period);
+        return ResponseEntity.ok(Map.of("message", "연장 신청이 완료되었습니다."));
+    }
 }

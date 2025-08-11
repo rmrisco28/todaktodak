@@ -4,11 +4,8 @@ import com.example.backend.order.entity.OrderList;
 import com.example.backend.order.repository.OrderListRepositoryMadeByGG;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
-import com.example.backend.rental.dto.RentalDto;
-import com.example.backend.rental.dto.RentalListDto;
-import com.example.backend.rental.dto.ReturnOrderDto;
+import com.example.backend.rental.dto.*;
 import com.example.backend.rental.entity.Rental;
-import com.example.backend.rental.dto.ReturnCancelDto;
 import com.example.backend.rental.entity.ReturnOrder;
 import com.example.backend.rental.repository.RentalRepository;
 import com.example.backend.rental.repository.ReturnOrderRepository;
@@ -23,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +33,7 @@ public class RentalService {
     private final ProductRepository productRepository;
     private final OrderListRepositoryMadeByGG orderListRepositoryMadeByGG;
 
+    // 렌탈 목록
     public Map<String, Object> list(String keyword, Integer pageNumber) {
         Page<RentalListDto> rentalListDtoPage = rentalRepository.searchRentalList(keyword, PageRequest.of(pageNumber - 1, 10));
         int totalPages = rentalListDtoPage.getTotalPages();
@@ -53,66 +51,101 @@ public class RentalService {
         return Map.of("pageInfo", pageInfo, "rentalList", rentalListDtoPage.getContent());
     }
 
+    // 렌탈 반납 현황
     public RentalDto returnDetail(Integer seq) {
         return rentalRepository.findRentalBySeq(seq);
     }
 
+    // 렌탈 반납, 취소버튼
+    public void processReturn(String rentalNo, String action, ReturnOrderDto rod) {
+        Rental rental = rentalRepository.findByRentalNo(rentalNo)
+                .orElseThrow(() -> new RuntimeException("해당 대여를 찾을 수 없습니다."));
 
-    public void returnOrder(ReturnOrderDto rod) {
-        System.out.println("rod = " + rod);
+        Optional<ReturnOrder> optionalReturnOrder = returnOrderRepository.findByRentalNo(rental);
 
-        String code = "RET";
+        if ("반납 신청".equals(action)) {
+            ReturnOrder returnOrder;
+            if (optionalReturnOrder.isPresent()) {
+                // 기존 반납 내역 업데이트
+                returnOrder = optionalReturnOrder.get();
+            } else {
+                // 신규 반납 내역 생성
+                returnOrder = new ReturnOrder();
+                String code = "RET";
 
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter_ymd = DateTimeFormatter.ofPattern("yyMMdd");
-        String date = today.format(formatter_ymd);
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter_ymd = DateTimeFormatter.ofPattern("yyMMdd");
+                String date = today.format(formatter_ymd);
 
-        Integer maxSeq = returnOrderRepository.findMaxSeq();
-        int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
-        String seqStr = String.format("%07d", latestSeq);
+                Integer maxSeq = returnOrderRepository.findMaxSeq();
+                int latestSeq = (maxSeq != null) ? maxSeq + 1 : 1;
+                String seqStr = String.format("%07d", latestSeq);
 
+                String returnNo = code + date + seqStr;
+                returnOrder.setReturnNo(returnNo);
 
-        ReturnOrder returnOrder = new ReturnOrder();
-        String returnNo = code + date + seqStr;
-        returnOrder.setReturnNo(returnNo);
-        returnOrder.setPost(rod.getPost());
-        returnOrder.setAddr(rod.getAddr());
-        returnOrder.setAddrDetail(rod.getAddrDetail());
-        returnOrder.setName(rod.getName());
-        returnOrder.setContent(rod.getContent());
-        returnOrder.setPhone(rod.getPhone());
+                returnOrder.setRentalNo(rental);
+            }
 
+            returnOrder.setState("반납 확인중");
+            returnOrder.setPost(rod.getPost());
+            returnOrder.setAddr(rod.getAddr());
+            returnOrder.setAddrDetail(rod.getAddrDetail());
+            returnOrder.setName(rod.getName());
+            returnOrder.setContent(rod.getContent());
+            returnOrder.setPhone(rod.getPhone());
 
-        Rental rental = rentalRepository.findByRentalNo(rod.getRentalNo());
-        returnOrder.setRentalNo(rental);
-        Sale sale = saleRepository.findBySaleNo(rod.getSaleNo());
-        returnOrder.setSaleNo(sale);
-        Product product = productRepository.findByProductNo(rod.getProductNo());
-        returnOrder.setProductNo(product);
-        OrderList orderList = orderListRepositoryMadeByGG.findByOrderNo(rod.getOrderNo());
-        returnOrder.setOrderNo(orderList);
+            Sale sale = saleRepository.findBySaleNo(rod.getSaleNo());
+            returnOrder.setSaleNo(sale);
+            Product product = productRepository.findByProductNo(rod.getProductNo());
+            returnOrder.setProductNo(product);
+            OrderList orderList = orderListRepositoryMadeByGG.findByOrderNo(rod.getOrderNo());
+            returnOrder.setOrderNo(orderList);
 
-        returnOrderRepository.save(returnOrder);
+            returnOrderRepository.save(returnOrder);
 
-        System.out.println("returnOrder = " + returnOrder);
+            rental.setState("반납 확인중");
+            rentalRepository.save(rental);
 
-        // 렌탈 현황 변경
-        rental.setStatus("반납 확인중");
+        } else if ("반납 취소".equals(action)) {
+            if (optionalReturnOrder.isEmpty()) {
+                throw new RuntimeException("취소할 반납 신청이 존재하지 않습니다.");
+            }
+
+            ReturnOrder returnOrder = optionalReturnOrder.get();
+
+            returnOrder.setState("대여중");
+            rental.setState("대여중");
+
+            returnOrderRepository.save(returnOrder);
+            rentalRepository.save(rental);
+        } else {
+            throw new RuntimeException("잘못된 action 값입니다.");
+        }
+    }
+
+    // 렌탈 연장 조회
+    public RenewDto renewDetail(Integer seq) {
+        return rentalRepository.findRenewBySeq(seq);
 
     }
 
-    public void returnCancel(ReturnCancelDto rcd) {
+    // 렌탈 연장
+    public void renew(Integer seq, int period) {
+        Rental rental = rentalRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("대여 정보 찾을 수 없습니다."));
 
+        // 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+        LocalDate endDate = LocalDate.parse(rental.getEndDttm(), formatter);
 
-        Rental rental = rentalRepository.findStatusByRentalNo(rcd.getRentalNo());
-        rental.setRentalNo(rcd.getRentalNo());
-        ReturnOrder returnOrder = returnOrderRepository.findStateByRentalNo(rental);
+        //연장
+        LocalDate newEndDate = endDate.plusDays(period);
 
-        returnOrder.setState(rcd.getState());
+        // 다시 String으로 변환
+        rental.setEndDttm(newEndDate.format(formatter));
 
-        rental.setStatus(rcd.getRentalStatus());
-
-        returnOrderRepository.save(returnOrder);
         rentalRepository.save(rental);
     }
 }
+
