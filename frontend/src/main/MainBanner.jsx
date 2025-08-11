@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import "../css/MainBanner.css";
+import "../css/main_banner.css";
 
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
