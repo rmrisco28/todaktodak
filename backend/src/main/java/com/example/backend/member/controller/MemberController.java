@@ -76,9 +76,11 @@ public class MemberController {
 
     // 회원 목록 보기(관리자)
     @GetMapping("list")
-    public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber) {
+    public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
+                                    @RequestParam(value = "q", defaultValue = "") String keyword
+    ) {
 
-        return memberService.list(pageNumber);
+        return memberService.list(pageNumber, keyword);
     }
 
     // 회원 정보 상세 보기(관리자)

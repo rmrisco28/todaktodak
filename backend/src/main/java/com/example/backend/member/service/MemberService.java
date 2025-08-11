@@ -173,11 +173,11 @@ public class MemberService {
     }
 
     // 회원 목록(관리자)
-    public Map<String, Object> list(Integer pageNumber) {
-        Page<MemberListInfo> memberListInfoPage
-                = memberRepository.findAllBy(PageRequest.of(pageNumber - 1, 10));
+    public Map<String, Object> list(Integer pageNumber, String keyword) {
+        Page<MemberListDto> memberListDtoPage
+                = memberRepository.findAllBy(PageRequest.of(pageNumber - 1, 10), keyword);
 
-        int totalPages = memberListInfoPage.getTotalPages(); // 마지막 페이지
+        int totalPages = memberListDtoPage.getTotalPages(); // 마지막 페이지
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
         int leftPageNumber = rightPageNumber - 9;
         rightPageNumber = Math.min(rightPageNumber, totalPages);
@@ -189,8 +189,7 @@ public class MemberService {
                 "currentPageNumber", pageNumber);
 
         return Map.of("pageInfo", pageInfo,
-                "memberList", memberListInfoPage.getContent());
-
+                "memberList", memberListDtoPage.getContent());
     }
 
     // 회원 상세보기(관리자)
