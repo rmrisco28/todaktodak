@@ -7,6 +7,26 @@ import { useNavigate } from "react-router";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../css/main_category.css";
+import { FcNext, FcPrevious } from "react-icons/fc";
+
+// 커스텀 좌우 화살표
+function NextArrow(props) {
+  const { onClick } = props;
+  return (
+    <div className="slick-arrow slick-next" onClick={onClick}>
+      <FcNext />
+    </div>
+  );
+}
+
+function PrevArrow(props) {
+  const { onClick } = props;
+  return (
+    <div className="slick-arrow slick-prev" onClick={onClick}>
+      <FcPrevious />
+    </div>
+  );
+}
 
 export function MainCategory() {
   const [categoryList, setCategoryList] = useState([]);
@@ -30,6 +50,8 @@ export function MainCategory() {
     slidesToShow: 4,
     slidesToScroll: 1,
     arrows: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 992, // lg 미만
