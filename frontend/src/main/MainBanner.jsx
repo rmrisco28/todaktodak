@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import "../css/MainBanner.css";
+import "../css/main_banner.css";
 
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-bootstrap";
@@ -27,6 +27,10 @@ export function MainBanner() {
     setShowModal(false);
   };
 
+  if (banners.length === 0) {
+    return null; // 데이터 없을 때 렌더링 방지
+  }
+
   return (
     <div
       className="fullwidth-banner-container"
@@ -48,7 +52,7 @@ export function MainBanner() {
           setCurrentIndex(swiper.realIndex + 1);
         }}
         slidesPerView={1}
-        style={{ width: "100%", height: "auto" }}
+        style={{ width: "100%", height: "28vw" }}
       >
         {banners.map((banner, idx) => (
           <SwiperSlide key={idx}>

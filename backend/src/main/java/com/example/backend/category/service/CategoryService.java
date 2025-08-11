@@ -7,11 +7,19 @@ import com.example.backend.category.dto.CategoryUpdateForm;
 import com.example.backend.category.entity.Category;
 import com.example.backend.category.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +28,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Transactional
 public class CategoryService {
+
+    private final S3Client s3Client;
+
+    @Value("${image.prefix}")
+    private String imagePrefix;
+    @Value("${aws.s3.bucket.name}")
+    private String bucketName;
 
     private final CategoryRepository categoryRepository;
 
@@ -36,6 +51,14 @@ public class CategoryService {
 
         Category category = new Category();
         category.setName(dto.getName());
+
+        MultipartFile image = dto.getImage();
+        category.setImageName(image.getOriginalFilename());
+
+        // AWS s3 파일 업로드
+        String objectKey = "prj4/categoryImage/" + image.getOriginalFilename();
+        uploadFile(image, objectKey);
+
         categoryRepository.save(category);
 
     }
@@ -67,7 +90,9 @@ public class CategoryService {
     }
 
     public CategoryDto getCategoryBySeq(Integer seq) {
-        return categoryRepository.findCategoryBySeq(seq);
+        CategoryDto dto = categoryRepository.findCategoryBySeq(seq);
+        dto.setPath(imagePrefix + "prj4/categoryImage/" + dto.getImageName());
+        return dto;
     }
 
     public boolean validateForUpdate(CategoryUpdateForm dto) {
@@ -87,10 +112,46 @@ public class CategoryService {
         LocalDateTime now = LocalDateTime.now();
         dbData.setUpdateDttm(now);
 
+        // upload image
+        if (dto.getImage() != null && dto.getImage().getSize() > 0) {
+            // 이미지 파일을 등록했으면, 기존의 이미지 파일 삭제
+            if (dbData.getImageName() != null && !dbData.getImageName().trim().isBlank()) {
+                String deleteObjectKey = "prj4/categoryImage/" + dbData.getImageName();
+                deleteFile(deleteObjectKey);
+            }
+
+            // 이미지 파일 s3 저장(업로드)
+            String objectKey = "prj4/categoryImage/" + dto.getImage().getOriginalFilename();
+            uploadFile(dto.getImage(), objectKey);
+            dbData.setImageName(dto.getImage().getOriginalFilename());
+        }
+
         categoryRepository.save(dbData);
     }
 
+    public void uploadFile(MultipartFile file, String objectKey) {
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest
+                    .builder().bucket(bucketName).key(objectKey).acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("파일 전송이 실패하였습니다.");
+        }
+    }
+
+    private void deleteFile(String objectKey) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest
+                .builder().bucket(bucketName).key(objectKey)
+                .build();
+
+        s3Client.deleteObject(deleteObjectRequest);
+    }
+
     public List<CategoryDto> categoryList() {
-        return categoryRepository.findCategoryAll();
+        List<CategoryDto> list = categoryRepository.findCategoryAll();
+        list.forEach(dto -> dto.setPath(imagePrefix + "prj4/categoryImage/" + dto.getImageName()));
+        return list;
     }
 }
