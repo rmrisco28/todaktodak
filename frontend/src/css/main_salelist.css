@@ -1,0 +1,64 @@
+.product-card {
+    position: relative;
+    height: 400px; /* 카드 높이 조정 */
+    border-radius: 12px;
+    overflow: hidden; /* 확대 효과가 카드 밖으로 나가지 않도록 함 */
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px); /* 카드가 살짝 위로 올라오는 효과 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-card-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.4s ease-in-out; /* 이미지 확대 애니메이션 */
+    height: 80%;
+}
+
+/* 마우스 호버 시 이미지 확대 */
+.product-card:hover .product-card-bg {
+    transform: scale(1.1);
+}
+
+.product-card-overlay {
+    position: absolute;
+    inset: 0;
+    /* 30% 지점까지는 완전한 흰색, 70% 지점부터는 완전한 투명으로 부드럽게 변함 */
+    background: linear-gradient(to top, white 30%, rgba(255, 255, 255, 0) 70%);
+}
+
+.product-card-body {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    z-index: 2;
+    color: #212529;
+}
+
+.product-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    /* 텍스트가 길 경우 2줄까지 보이고 나머지는 ... 처리 */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.5rem; /* 제목이 1줄일 때도 레이아웃이 깨지지 않도록 최소 높이 확보 */
+}
+
+.product-card-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
