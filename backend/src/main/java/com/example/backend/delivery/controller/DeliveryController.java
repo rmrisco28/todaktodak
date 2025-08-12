@@ -6,6 +6,7 @@ import com.example.backend.delivery.dto.DeliveryUpdateForm;
 import com.example.backend.delivery.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class DeliveryController {
      * @return
      */
     @PostMapping("add")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> add(DeliveryAddForm dto) {
         // validate
         boolean result = deliveryService.validateForAdd(dto);
@@ -48,6 +50,7 @@ public class DeliveryController {
      * @return
      */
     @GetMapping("list")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public Map<String, Object> getAllDeliveries(
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
@@ -62,6 +65,7 @@ public class DeliveryController {
      * @return
      */
     @PutMapping("{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> deleteDelivery(@PathVariable Integer seq) {
 
         try {
@@ -82,6 +86,7 @@ public class DeliveryController {
      * @return
      */
     @GetMapping("detail/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public DeliveryDto getDeliveryBySeq(@PathVariable Integer seq) {
         return deliveryService.getDeliveryBySeq(seq);
     }
@@ -94,6 +99,7 @@ public class DeliveryController {
      * @return
      */
     @PutMapping("modify/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> updateDelivery(@PathVariable Integer seq, DeliveryUpdateForm dto) {
         boolean result = deliveryService.validateForUpdate(dto);
         try {
