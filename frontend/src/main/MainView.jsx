@@ -2,6 +2,8 @@ import { MainBanner } from "./MainBanner.jsx";
 import { MainCategory } from "./MainCategory.jsx";
 import { MainSaleList } from "./MainSaleList.jsx";
 import { Container } from "react-bootstrap";
+import { MainFooter } from "./MainFooter.jsx";
+import { ScrollToTopButton } from "./ScrollToTopButton.jsx";
 
 export function MainView() {
   return (
@@ -9,9 +11,10 @@ export function MainView() {
       <MainBanner />
       <Container>
         <MainCategory />
-        {/* TODO [@MINKI] 판매상품목록: 스크롤 내렸을 때 추가 조회 */}
         <MainSaleList />
       </Container>
+      <ScrollToTopButton />
+      <MainFooter />
     </div>
   );
 }
