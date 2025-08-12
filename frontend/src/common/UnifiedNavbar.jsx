@@ -114,7 +114,7 @@ export function UnifiedNavbar() {
             )}
 
             <NavDropdown
-              title={getDropdownTitle("_회원명_", "member-menu")}
+              title={getDropdownTitle("mypage", "member-menu")}
               id="member-dropdown"
               align={{ lg: "end" }} // 데스크탑에서 오른쪽 정렬
               className="py-2 px-lg-2"
