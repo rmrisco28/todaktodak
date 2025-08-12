@@ -47,7 +47,7 @@
     overflow-y: auto;
 }
 
-.modal-dialog {
+.modal-banners .modal-dialog {
     max-width: 80vw !important;
 }
 
