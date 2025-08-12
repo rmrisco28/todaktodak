@@ -96,10 +96,10 @@ public class MemberService {
 
         // 이메일 발송
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("jihun8138@gmail.com");  // 로그인한 네이버 이메일 주소 반드시 넣기
-        message.setTo("whsnoo@naver.com");
-        message.setSubject("토닥토닥 회원가입 이메일 인증번호");
-        message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
+        message.setFrom("jihun8138@gmail.com");  // 실제 본인 이메일 설정
+        message.setTo(email);
+        message.setSubject("[토닥토닥] 회원가입 인증번호");
+        message.setText("인증번호는 " + code + " 입니다. 5분 이내로 입력하세요.");
         mailSender.send(message);
     }
 
@@ -153,8 +153,8 @@ public class MemberService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("jihun8138@gmail.com");  // 실제 본인 이메일 설정
         message.setTo(email);
-        message.setSubject("[토닥토닥] 비밀번호찾기 이메일 인증번호");
-        message.setText("비밀번호 찾기 인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
+        message.setSubject("[토닥토닥] 비밀번호찾기 인증번호");
+        message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
         mailSender.send(message);
     }
 
