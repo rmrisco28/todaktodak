@@ -475,11 +475,17 @@ public class MemberService {
             throw new RuntimeException("패스워드가 일치하지 않습니다.");
         }
 
+        // 새 비밀번호가 현재 비밀번호와 같은지 확인
+        if (passwordEncoder.matches(dto.getNewPassword(), dbData.getPassword())) {
+            throw new RuntimeException("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+        }
+
         // 새 비밀번호 유효성 검사
         String newPassword = dto.getNewPassword();
         if (!Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$", newPassword)) {
             throw new RuntimeException("비밀번호 형식이 맞지 않습니다.");
         }
+
         // 변경 및 저장
         dbData.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         memberRepository.save(dbData);
