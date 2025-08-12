@@ -122,6 +122,7 @@ public class MemberController {
 
     // 회원 목록 보기(관리자)
     @GetMapping("list")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
                                     @RequestParam(value = "q", defaultValue = "") String keyword
     ) {
@@ -131,12 +132,14 @@ public class MemberController {
 
     // 회원 정보 상세 보기(관리자)
     @GetMapping(params = "seq")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> getMember(@RequestParam Integer seq) {
         return ResponseEntity.ok().body(memberService.getMember(seq));
     }
 
     // 회원 삭제(관리자)
     @PutMapping("{seq}/delete")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> MemberDelete(@PathVariable Integer seq) {
         try {
             memberService.updateDelYn(seq);
@@ -154,6 +157,7 @@ public class MemberController {
 
     // 회원 정보 수정(관리자)
     @PutMapping("{seq}/modify")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> update(@PathVariable Integer seq,
                                     @RequestBody MemberModifyDto dto) {
         try {
@@ -172,6 +176,7 @@ public class MemberController {
 
     // 회원 등록(관리자)
     @PostMapping("add")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> add(@RequestBody MemberAddForm memberAddForm) {
         try {
             // 서비스로 일 시키기(회원등록 dto 사용)
@@ -194,10 +199,14 @@ public class MemberController {
 
     // 회원 상세 보기(회원)
     @GetMapping("myinfo")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated() or hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> getMyInfo(Authentication authentication) {
         String memberId = authentication.getName();
-        if (authentication.getName().equals(memberId)) {
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("SCOPE_ROLE_ADMIN"));
+
+        if (memberId != null && (memberId.equals(memberId) || isAdmin)) {
             return ResponseEntity.ok().body(memberService.getMyInfo(memberId));
         }
         return ResponseEntity.badRequest().build();
@@ -227,6 +236,12 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> MyInfoModify(@RequestBody MyInfoModifyDto dto, Authentication authentication) {
         String memberId = authentication.getName();
+
+        // 2차 본인 확인: 요청 데이터의 이메일 또는 memberId와 인증된 사용자 ID 비교
+        if (!memberId.equals(dto.getEmail()) && !memberId.equals(dto.getMemberId())) {
+            return ResponseEntity.status(403).build();
+        }
+
         try {
             memberService.MyInfoModify(memberId, dto);
         } catch (Exception e) {
@@ -243,7 +258,14 @@ public class MemberController {
 
     // 비밀번호 변경(회원)
     @PutMapping("myinfo/modify/changePassword")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordForm dto) {
+        String memberId = dto.getMemberId();
+
+        // 2차 본인 확인: 요청 데이터의 이메일 또는 memberId와 인증된 사용자 ID 비교
+        if (!memberId.equals(dto.getMemberId())) {
+            return ResponseEntity.status(403).build();
+        }
 
         try {
             memberService.changePassword(dto);

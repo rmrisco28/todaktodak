@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Navbar,
   Container,
@@ -13,8 +13,12 @@ import { FaClock } from "react-icons/fa"; // Font Awesome
 import { BsChevronDown } from "react-icons/bs"; // Bootstrap Icons
 
 import "../css/navbar.css";
+import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 
 export function UnifiedNavbar() {
+  // 로그인 상태 / 권한
+  const { user, isAdmin } = useContext(AuthenticationContext);
+
   // 드롭다운 메뉴들의 열림 상태 관리
   const [openDropdowns, setOpenDropdowns] = useState({});
   // 모바일 햄버거 메뉴의 열림 상태 관리
@@ -95,15 +99,19 @@ export function UnifiedNavbar() {
 
           {/* 사용자/관리자 메뉴 (오른쪽 정렬) */}
           <Nav className="align-items-lg-center">
-            <Nav.Link href="/login" className="py-2 px-3">
-              로그인
-            </Nav.Link>
+            {user === null && (
+              <Nav.Link href="/login" className="py-2 px-3">
+                로그인/회원가입
+              </Nav.Link>
+            )}
             <Nav.Link href="/order/list" className="py-2 px-3">
               주문내역
             </Nav.Link>
-            <Nav.Link href="/logout" className="py-2 px-3">
-              로그아웃
-            </Nav.Link>
+            {user !== null && (
+              <Nav.Link href="/logout" className="py-2 px-3">
+                로그아웃
+              </Nav.Link>
+            )}
 
             <NavDropdown
               title={getDropdownTitle("_회원명_", "member-menu")}
