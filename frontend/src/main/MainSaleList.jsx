@@ -22,9 +22,9 @@ export function MainSaleList() {
       const res = await axios.get(`/api/sale/list?p=${page}&s=10`);
       const newSales = res.data.saleList;
 
-      setSaleList((prevSales) => [...prevSales, ...newSales]); // 기존 리스트에 새 데이터 추가
+      setSaleList([...saleList, ...newSales]); // 기존 리스트에 새 데이터 추가
       setHasMore(newSales.length > 0); // 새로 불러온 데이터가 없으면 hasMore를 false로 설정
-      setPage((prevPage) => prevPage + 1); // 다음 페이지 번호로 업데이트
+      setPage(page + 1); // 다음 페이지 번호로 업데이트
     } catch (err) {
       console.error("판매상품 목록 조회 오류:", err);
     } finally {
