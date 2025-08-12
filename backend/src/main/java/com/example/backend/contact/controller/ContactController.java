@@ -1,22 +1,17 @@
 package com.example.backend.contact.controller;
 
 import com.example.backend.contact.dto.ContactAddForm;
-import com.example.backend.contact.dto.ContactDto;
 import com.example.backend.contact.dto.ContactModifyForm;
 import com.example.backend.contact.dto.ReplyDto;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.service.ContactService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -59,9 +54,10 @@ public class ContactController {
 
     // 게시글 수정
     @PutMapping("modify/{seq}")
-    public ResponseEntity<?> modify(@PathVariable Integer seq, @RequestBody ContactModifyForm cmf) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> modify(@PathVariable Integer seq, @RequestBody ContactModifyForm cmf, Authentication authentication) {
         cmf.setSeq(seq);
-        contactService.modify(cmf);
+        contactService.modify(cmf, authentication);
         return ResponseEntity.ok(Map.of("message", "수정되었습니다."));
     }
 
@@ -78,7 +74,7 @@ public class ContactController {
         }
     }
 
-    // 게시물 추가
+    // 게시물 추가 // 작성자 아이디 추가
     @PostMapping("add")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Map<String, Object>> add(
@@ -92,28 +88,38 @@ public class ContactController {
         return ResponseEntity.ok(result);
     }
 
-    // 게시물 목록 불러오기 이용자/관리자 통합
     @GetMapping("list")
+    @PreAuthorize("isAuthenticated()")  // 로그인한 사용자만 접근 가능
     public Map<String, Object> list(
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
-            @RequestParam(value = "isAdmin", defaultValue = "false") Boolean isAdmin) {
+            Authentication authentication) {
+
+        // 로그인한 사용자 권한 확인
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("SCOPE_ROLE_ADMIN"));
 
         return contactService.list(keyword, pageNumber, isAdmin);
     }
 
     // 삭제된 게시판 목록 불러오기
     @GetMapping("deleted/list")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public Map<String, Object> deletedList(
             @RequestParam(value = "q", defaultValue = "") String keyword,
-            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
-        return contactService.deletedList(keyword, pageNumber);
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
+            Authentication authentication
+    ) {
+
+        return contactService.deletedList(keyword, pageNumber, authentication);
     }
 
     // 삭제된 게시판 상세 페이지
     @GetMapping("deleted/detail/{seq}")
-    public ResponseEntity<?> deletedDetail(@PathVariable Integer seq) {
-        ContactAddForm caf = contactService.deletedDetail(seq);
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
+    public ResponseEntity<?> deletedDetail(@PathVariable Integer seq,
+                                           Authentication authentication) {
+        ContactAddForm caf = contactService.deletedDetail(seq, authentication);
 
         return ResponseEntity.ok(caf);
     }

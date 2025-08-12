@@ -1,4 +1,4 @@
-#문의 게시판
+#문의 게시판 사용 x
 CREATE TABLE contact
 (
     seq        INT AUTO_INCREMENT NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE contact
 
 DROP TABLE contact;
 
-#임시 문의게시판
+#임시 문의게시판 사용 xxxxxxxxxxx
 CREATE TABLE contact
 (
     seq         INT            NOT NULL,
@@ -22,8 +22,12 @@ CREATE TABLE contact
     update_dttm DATETIME       NOT NULL DEFAULT NOW(),
     use_yn      BOOLEAN        NOT NULL DEFAULT TRUE,
     del_yn      BOOLEAN        NOT NULL DEFAULT FALSE,
-    CONSTRAINT pk_contact PRIMARY KEY (seq)
+    member_no   VARCHAR(20)    NOT NULL,
+    CONSTRAINT pk_contact PRIMARY KEY (seq),
+    FOREIGN KEY (member_no) REFERENCES member (member_no)
 );
+
+
 /*
 # 게시판 트리거 걸기 자동 값 생성
 DELIMITER
@@ -84,7 +88,9 @@ CREATE TABLE contact
     reply_dttm  DATETIME       NOT NULL DEFAULT NOW(),
     use_yn      BOOLEAN        NOT NULL DEFAULT TRUE,
     del_yn      BOOLEAN        NOT NULL DEFAULT FALSE,
-    CONSTRAINT pk_contact PRIMARY KEY (seq)
+    member_no   VARCHAR(20)    NOT NULL,
+    CONSTRAINT pk_contact PRIMARY KEY (seq),
+    FOREIGN KEY (member_no) REFERENCES member (member_no)
 );
 
 DROP TABLE contact;
@@ -100,7 +106,7 @@ SELECT c.seq,
            END AS replied
 FROM contact c;
 
-# 주문 배송 정보
+# 주문 배송 정보 사용xxxxxxxxxxxx
 CREATE TABLE order_info
 (
     seq          INT          NOT NUll AUTO_INCREMENT,
@@ -144,36 +150,16 @@ DROP TABLE order_info;
     FOREIGN KEY (member_no) REFERENCES member (member_no)
 );*/
 
-# 대여 관리
-CREATE TABLE rental
-(
-    seq         INT         NOT NULL AUTO_INCREMENT,
-    rental_no   VARCHAR(20) NOT NULL UNIQUE,
-    product_no  VARCHAR(20) NOT NULL,
-    order_no    VARCHAR(20) NOT NULL,
-    member_no   VARCHAR(20) NOT NULL,
-    insert_dttm DATETIME    NOT NULL DEFAULT NOW(),
-    update_dttm DATETIME    NOT NULL DEFAULT NOW(),
-    use_yn      BOOLEAN     NOT NULL DEFAULT TRUE,
-    del_yn      BOOLEAN     NOT NULL DEFAULT FALSE,
-
-    CONSTRAINT pk_rental PRIMARY KEY (seq),
-    FOREIGN KEY (order_no) REFERENCES order_info (order_no),
-    FOREIGN KEY (product_no) REFERENCES product (product_no),
-    FOREIGN KEY (member_no) REFERENCES member (member_no)
-);
-
 DROP TABLE rental;
 
-# 임시 대여 관리
+#  대여 관리
 CREATE TABLE rental
 (
     seq        INT         NOT NULL AUTO_INCREMENT,
     rental_no  VARCHAR(20) NOT NULL UNIQUE,
-
     order_no   VARCHAR(20) NOT NULL,
     product_no VARCHAR(20) NOT NULL,
-    #member_no  VARCHAR(20) NOT NULL,
+    member_no  VARCHAR(20) NOT NULL,
 
     start_dttm VARCHAR(20),
     end_dttm   VARCHAR(20),
@@ -183,7 +169,8 @@ CREATE TABLE rental
 
     CONSTRAINT pk_rental PRIMARY KEY (seq),
     FOREIGN KEY (order_no) REFERENCES order_list (order_no),
-    FOREIGN KEY (product_no) REFERENCES product (product_no)
+    FOREIGN KEY (product_no) REFERENCES product (product_no),
+    FOREIGN KEY (member_no) REFERENCES member (member_no)
 );
 
 # 반납 내역
@@ -195,6 +182,7 @@ CREATE TABLE return_order
     sale_no     VARCHAR(20)   NOT NULL,
     product_no  VARCHAR(20)   NOT NULL,
     order_no    VARCHAR(20)   NOT NULL,
+    member_no   VARCHAR(20)   NOT NULL,
     post        VARCHAR(10)   NOT NULL,
     addr        VARCHAR(255)  NOT NULL,
     addr_detail VARCHAR(255)  NOT NULL,
@@ -208,7 +196,8 @@ CREATE TABLE return_order
     FOREIGN KEY (rental_no) REFERENCES rental (rental_no),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no),
     FOREIGN KEY (product_no) REFERENCES product (product_no),
-    FOREIGN KEY (order_no) REFERENCES order_list (order_no)
+    FOREIGN KEY (order_no) REFERENCES order_list (order_no),
+    FOREIGN KEY (member_no) REFERENCES member (member_no)
 );
 
 DROP TABLE return_order;
@@ -240,3 +229,40 @@ CREATE TABLE renew_order
 );
 
 Drop TABLE renew_order;*/
+
+# 주문 배송 정보 (ref: 판매상품)
+# seq, 주문번호, 판매상품번호, 주문자 성함, 수령인, 수령인 연락처, 수령인 우편번호, 수령인 주소, 수령인 상세주소
+# 수령인 요청사항, 총 결제금액, 배송비, 전체 상품 금액, 상품금액, 주문수량, 대여기간, 주문상태,
+# 배송업체명, 운송장번호, 주문일시(insertDttm), 수정일시, useYn, delYn
+CREATE TABLE order_list
+(
+    seq              INT          NOT NUll AUTO_INCREMENT,
+    order_no         VARCHAR(20)  NOT NULL UNIQUE,
+    sale_no          VARCHAR(20)  NOT NULL,
+    member_no        VARCHAR(20)  NOT NULL,
+    name             VARCHAR(50)  NOT NULL,
+    recipient        VARCHAR(50)  NOT NULL,
+    phone            VARCHAR(30)  NOT NULL,
+    post             VARCHAR(10)  NOT NULL,
+    addr             VARCHAR(255) NOT NULL,
+    addr_detail      VARCHAR(255) NOT NULL,
+    request          VARCHAR(255),
+    total_price      INT          NOT NULL,
+    delivery_fee     INT          NOT NULL,
+    tot_prod_price   INT          NOT NULL,
+    prod_price       INT          NOT NULL,
+    order_count      INT          NOT NULL,
+    rental_period    INT          NOT NULL,
+    state            VARCHAR(10)  NOT NULL,
+    delivery_company VARCHAR(50),
+    tracking         VARCHAR(100),
+    insert_dttm      DATETIME     NOT NULL DEFAULT NOW(),
+    update_dttm      DATETIME     NOT NULL DEFAULT NOW(),
+    use_yn           BOOLEAN      NOT NULL DEFAULT TRUE,
+    del_yn           BOOLEAN      NOT NULL DEFAULT FALSE,
+    Constraint pk_order PRIMARY KEY (seq),
+    FOREIGN KEY (sale_no) REFERENCES sale (sale_no),
+    FOREIGN KEY (member_no) REFERENCES member (member_no)
+);
+
+DROP TABLE order_list;

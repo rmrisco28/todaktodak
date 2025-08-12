@@ -1,10 +1,7 @@
 package com.example.backend.order.service;
 
-import com.example.backend.order.dto.OrderInfoDto;
 import com.example.backend.order.dto.OrderListDtoMadeByGG;
-import com.example.backend.order.entity.OrderInfo;
 import com.example.backend.order.entity.OrderList;
-import com.example.backend.order.repository.OrderInfoRepository;
 import com.example.backend.order.repository.OrderListRepositoryMadeByGG;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
@@ -13,13 +10,12 @@ import com.example.backend.rental.repository.RentalRepository;
 import com.example.backend.sale.entity.Sale;
 import com.example.backend.sale.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +27,7 @@ public class BuyService {
     private final RentalRepository rentalRepository;
     private final ProductRepository productRepository;
 
-    public void buyAndRentalSave(OrderListDtoMadeByGG old) {
+    public void buyAndRentalSave(OrderListDtoMadeByGG old, Authentication authentication) {
         // 결제 테이블 데이터 저장
         // 결제 코드 여기부터
         // 주문 배송, 결제 정보 order_no
@@ -58,8 +54,10 @@ public class BuyService {
 
         String orderNo = code + date + seqStr;
         orderList.setOrderNo(orderNo);
-        orderList.setSale(sale);
-        orderList.setName(old.getName());
+        orderList.setSaleNo(sale);
+
+
+        orderList.setName(authentication.getName());
         orderList.setRecipient(old.getRecipient());
 
         orderList.setPhone(old.getPhone());

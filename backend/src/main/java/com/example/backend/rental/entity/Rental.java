@@ -1,5 +1,6 @@
 package com.example.backend.rental.entity;
 
+import com.example.backend.member.entity.Member;
 import com.example.backend.order.entity.OrderList;
 import com.example.backend.product.entity.Product;
 import jakarta.persistence.*;
@@ -32,6 +33,10 @@ public class Rental {
     @JoinColumn(name = "product_no", nullable = false, referencedColumnName = "product_no")
     private Product productNo;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "member_no", nullable = false, referencedColumnName = "member_no")
+    private Member memberNo;
+
     @Column(name = "start_dttm")
     private String startDttm;
 
@@ -48,5 +53,5 @@ public class Rental {
     @ColumnDefault("0")
     @Column(name = "del_yn", nullable = false)
     private Boolean delYn = false;
-
+    
 }

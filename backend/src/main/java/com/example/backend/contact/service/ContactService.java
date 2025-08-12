@@ -3,6 +3,8 @@ package com.example.backend.contact.service;
 import com.example.backend.contact.dto.*;
 import com.example.backend.contact.entity.Contact;
 import com.example.backend.contact.repository.ContactRepository;
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Service
@@ -25,10 +25,12 @@ import java.util.Map;
 public class ContactService {
 
     private final ContactRepository contactRepository;
+    private final MemberRepository memberRepository;
 
 
     // 게시물 생성
-    public void add(@RequestBody ContactAddForm caf, Authentication authentication) {
+    public void add(@RequestBody ContactAddForm caf,
+                    Authentication authentication) {
         if (authentication == null) {
             throw new RuntimeException("권한이 없습니다.");
         }
@@ -48,7 +50,13 @@ public class ContactService {
 
         contact.setTitle(caf.getTitle());
         contact.setContent(caf.getContent());
-        contact.setName(caf.getName());
+
+        // 이름 추가
+        Member member = memberRepository.findByMemberId(authentication.getName()).get();
+        contact.setName(member.getName());
+
+        // memberNo 추가
+        contact.setMemberNo(member);
 
         contactRepository.save(contact);
     }
@@ -64,10 +72,13 @@ public class ContactService {
         Page<ContactDto> contactListDtoPage;
 
         if (isAdmin) {
+            // 관리자는 숨김글, 삭제글 포함해서 조회 가능
             contactListDtoPage = contactRepository.findAllByAdmin(keyword, PageRequest.of(pageNumber - 1, 10));
         } else {
+            // 일반 회원은 공개된 글만 조회
             contactListDtoPage = contactRepository.findAllBy(keyword, PageRequest.of(pageNumber - 1, 10));
         }
+
 
         int totalPages = contactListDtoPage.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
@@ -86,7 +97,6 @@ public class ContactService {
                 "contactList", contactListDtoPage.getContent());
     }
 
-
     // 게시물 상세화면 불러오기 서비스
     public ContactAddForm detail(Integer seq, Authentication authentication) {
         if (authentication == null) {
@@ -96,6 +106,7 @@ public class ContactService {
                 .filter(c -> !c.getDelYn())
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
 
+        Member member = memberRepository.findByMemberId(authentication.getName()).get();
 
         ContactAddForm caf = new ContactAddForm();
         caf.setTitle(contact.getTitle());
@@ -104,14 +115,19 @@ public class ContactService {
         caf.setReply(contact.getReply());
         caf.setUseYn(contact.getUseYn());
 
+        caf.setMemberNoMemberId(contact.getMemberNo().getMemberId());
+
         return caf;
     }
 
     // 게시물 수정
     @Transactional
-    public void modify(ContactModifyForm cmf) {
+    public void modify(ContactModifyForm cmf, Authentication authentication) {
         Contact contact = contactRepository.findById(cmf.getSeq())
                 .orElseThrow(() -> new EntityNotFoundException("해당게시물이 존재하지 않습니다."));
+        if (authentication == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
 
         contact.setTitle(cmf.getTitle());
         contact.setContent(cmf.getContent());
@@ -159,8 +175,10 @@ public class ContactService {
     }
 
     // 삭제된 게시판 목록 관리자
-    public Map<String, Object> deletedList(String keyword, Integer pageNumber) {
-
+    public Map<String, Object> deletedList(String keyword, Integer pageNumber, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("접근할 수 없는 페이지 입니다.");
+        }
         Page<ContactDeletedDto> contactDeletedListDtoPage = contactRepository.findAllByDeleted(keyword, PageRequest.of(pageNumber - 1, 10));
 
         int totalPages = contactDeletedListDtoPage.getTotalPages();
@@ -180,7 +198,10 @@ public class ContactService {
     }
 
     // 삭제된 게시판 상세화면 관리자
-    public ContactAddForm deletedDetail(Integer seq) {
+    public ContactAddForm deletedDetail(Integer seq, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("접근할 수 없는 페이지 입니다.");
+        }
         Contact contact = contactRepository.findById(seq)
                 .filter(c -> c.getDelYn())
                 .orElseThrow(() -> new RuntimeException("삭제된 게시글이 존재하지 않습니다."));
@@ -200,4 +221,5 @@ public class ContactService {
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
         contact.setDelYn(false); //
     }
+
 }
