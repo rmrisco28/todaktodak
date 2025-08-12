@@ -6,7 +6,6 @@ import {
   Form,
   FormCheck,
   FormControl,
-  FormGroup,
   InputGroup,
   Pagination,
   Row,
@@ -14,7 +13,6 @@ import {
   Table,
 } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
-import { BiSearchAlt2 } from "react-icons/bi";
 import { IoSearch } from "react-icons/io5";
 
 export function MemberList() {
@@ -108,8 +106,8 @@ export function MemberList() {
                   <th>ID</th>
                   <th>고객명</th>
                   <th>등록일시</th>
-                  <th>사용여부</th>
-                  <th>삭제여부</th>
+                  <th>사용</th>
+                  <th>삭제</th>
                 </tr>
               </thead>
               <tbody>
@@ -129,18 +127,18 @@ export function MemberList() {
                     <td>{member.insertDttm?.replace("T", " ")}</td>
                     <td>
                       <FormCheck
-                        type="switch"
+                        type="checkbox"
                         checked={member.useYn}
                         disabled
-                        label={member.useYn ? "사용" : "미사용"}
+                        label={"사용"}
                       />
                     </td>
                     <td>
                       <FormCheck
-                        type="switch"
+                        type="checkbox"
                         checked={member.delYn}
                         disabled
-                        label={member.delYn ? "삭제" : "미삭제"}
+                        label={"삭제"}
                       />
                     </td>
                   </tr>

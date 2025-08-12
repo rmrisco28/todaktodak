@@ -15,7 +15,7 @@ import { AuthenticationContext } from "../../common/AuthenticationContextProvide
 import { FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-import "../../css/LoginCheckbox.css";
+import "../../css/Checkbox.css";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
