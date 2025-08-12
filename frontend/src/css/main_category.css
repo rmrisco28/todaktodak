@@ -30,7 +30,7 @@
     position: absolute;
     inset: 0;
     /* 이미지와 텍스트의 대비를 주기 위한 반투명 레이어 */
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
 }
 
 .category-card .card-body {
@@ -39,6 +39,10 @@
     left: 15px;
     color: #fff;
     z-index: 2;
+}
+
+.category-card .card-body h4 {
+    color: #fff;
 }
 
 .slick-prev, .slick-next {
