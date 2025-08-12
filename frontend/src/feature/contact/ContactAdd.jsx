@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ContactAdd() {
   const [title, setTitle] = useState("");
@@ -21,6 +22,15 @@ export function ContactAdd() {
   const [modalShow, setModalShow] = useState(false);
 
   let navigate = useNavigate();
+
+  const { hasAccess } = useContext(AuthenticationContext);
+
+  if (!hasAccess("USER")) {
+    // USER는 로그인된 사용자를 의미하는 역할을 가정
+    alert("로그인이 필요합니다.");
+    navigate("/login"); // 로그인 페이지로 리다이렉트
+    return null; // 로그인되지 않은 사용자는 페이지를 렌더링하지 않도록 처리
+  }
 
   let validateTitle = true;
   let validateContent = true;

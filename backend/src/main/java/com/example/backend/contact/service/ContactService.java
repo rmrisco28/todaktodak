@@ -28,7 +28,10 @@ public class ContactService {
 
 
     // 게시물 생성
-    public void add(@RequestBody ContactAddForm caf) {
+    public void add(@RequestBody ContactAddForm caf, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
         String code = "CO";
 
         LocalDate today = LocalDate.now();
@@ -85,7 +88,10 @@ public class ContactService {
 
 
     // 게시물 상세화면 불러오기 서비스
-    public ContactAddForm detail(Integer seq) {
+    public ContactAddForm detail(Integer seq, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
         Contact contact = contactRepository.findById(seq)
                 .filter(c -> !c.getDelYn())
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
@@ -97,7 +103,6 @@ public class ContactService {
         caf.setName(contact.getName());
         caf.setReply(contact.getReply());
         caf.setUseYn(contact.getUseYn());
-
 
         return caf;
     }

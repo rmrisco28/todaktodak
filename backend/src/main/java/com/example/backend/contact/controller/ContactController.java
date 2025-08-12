@@ -67,9 +67,11 @@ public class ContactController {
 
     // 게시물 상세 화면
     @GetMapping("detail/{seq}")
-    public ResponseEntity<?> detail(@PathVariable Integer seq) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> detail(@PathVariable Integer seq,
+                                    Authentication authentication) {
         try {
-            ContactAddForm detail = contactService.detail(seq);
+            ContactAddForm detail = contactService.detail(seq, authentication);
             return ResponseEntity.ok(detail);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
@@ -78,8 +80,11 @@ public class ContactController {
 
     // 게시물 추가
     @PostMapping("add")
-    public ResponseEntity<Map<String, Object>> add(@RequestBody ContactAddForm caf) {
-        contactService.add(caf);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Map<String, Object>> add(
+            @RequestBody ContactAddForm caf,
+            Authentication authentication) {
+        contactService.add(caf, authentication);
 
         Map<String, Object> result = new HashMap<>();
         result.put("result", "success");

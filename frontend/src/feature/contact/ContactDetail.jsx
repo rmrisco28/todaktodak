@@ -9,8 +9,9 @@ import {
   Row,
 } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ContactDetail() {
   const [contact, setContact] = useState(null);
@@ -22,7 +23,14 @@ export function ContactDetail() {
   const isAdmin =
     new URLSearchParams(location.search).get("isAdmin") === "true";
 
+  const { hasAccess } = useContext(AuthenticationContext);
+  
   useEffect(() => {
+    if (!hasAccess("USER")) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
     axios
       .get(`/api/contact/detail/${seq}`, {})
       .then((res) => {
