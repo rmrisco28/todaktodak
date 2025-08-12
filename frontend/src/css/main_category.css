@@ -72,7 +72,7 @@
         transform: translateX(0);
     }
     50% {
-        transform: translateX(-4px);
+        transform: translateX(-8px);
     }
 }
 
@@ -81,14 +81,14 @@
         transform: translateX(0);
     }
     50% {
-        transform: translateX(4px);
+        transform: translateX(8px);
     }
 }
 
 .slick-prev {
-    animation: nudgeLeft 1.5s infinite ease-in-out;
+    animation: nudgeLeft 1.0s infinite ease-in-out;
 }
 
 .slick-next {
-    animation: nudgeRight 1.5s infinite ease-in-out;
+    animation: nudgeRight 1.0s infinite ease-in-out;
 }
