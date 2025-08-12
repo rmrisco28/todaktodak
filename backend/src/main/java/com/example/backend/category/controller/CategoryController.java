@@ -6,6 +6,7 @@ import com.example.backend.category.dto.CategoryUpdateForm;
 import com.example.backend.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class CategoryController {
      * @author minki-jeon
      */
     @PostMapping("add")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> add(CategoryAddForm dto) {
         // validate
         boolean result = categoryService.validateForAdd(dto);
@@ -48,6 +50,7 @@ public class CategoryController {
      * @author minki-jeon
      */
     @GetMapping("list")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public Map<String, Object> getAllCategory(
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
@@ -62,6 +65,7 @@ public class CategoryController {
      * @author minki-jeon
      */
     @PutMapping("{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> deleteCategory(@PathVariable Integer seq) {
 
         try {
@@ -82,6 +86,7 @@ public class CategoryController {
      * @author minki-jeon
      */
     @GetMapping("detail/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public CategoryDto getCategoryBySeq(@PathVariable Integer seq) {
         return categoryService.getCategoryBySeq(seq);
     }
@@ -95,6 +100,7 @@ public class CategoryController {
      * @author minki-jeon
      */
     @PutMapping("modify/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> updateCategory(@PathVariable Integer seq, CategoryUpdateForm dto) {
 
         boolean result = categoryService.validateForUpdate(dto);
@@ -118,7 +124,7 @@ public class CategoryController {
     }
 
     /**
-     * FormSelect 카테고리 목록 조회 (관리자)
+     * FormSelect 카테고리 목록 조회 (관리자/사용자)
      *
      * @return
      */
