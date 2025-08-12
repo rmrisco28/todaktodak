@@ -7,6 +7,7 @@ import com.example.backend.product.dto.ProductUpdateForm;
 import com.example.backend.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
+@PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
 public class ProductController {
 
     private final ProductService productService;
