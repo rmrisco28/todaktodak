@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   Container,
@@ -13,8 +13,12 @@ import { FaClock } from "react-icons/fa"; // Font Awesome
 import { BsChevronDown } from "react-icons/bs"; // Bootstrap Icons
 
 import "../css/navbar.css";
+import { useNavigate, useSearchParams } from "react-router";
 
 export function UnifiedNavbar() {
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
   // 드롭다운 메뉴들의 열림 상태 관리
   const [openDropdowns, setOpenDropdowns] = useState({});
   // 모바일 햄버거 메뉴의 열림 상태 관리
@@ -36,6 +40,17 @@ export function UnifiedNavbar() {
       />
     </>
   );
+
+  useEffect(() => {
+    const q = searchParams.get("q") || "";
+    setKeyword(q);
+  }, []);
+
+  function handleSearchFormSubmit(e) {
+    console.log("submit click");
+    e.preventDefault();
+    navigate("/sale/list?q=" + keyword);
+  }
 
   return (
     <Navbar
@@ -82,13 +97,15 @@ export function UnifiedNavbar() {
           {/* 검색창 (데스크탑에서는 중앙, 모바일에서는 메뉴 하단) */}
           <div className="d-flex align-items-center my-2 my-lg-0 mx-lg-auto">
             <InputGroup>
-              <InputGroup.Text>
+              <InputGroup.Text onClick={handleSearchFormSubmit}>
                 <IoSearch className="opacity-8" />
               </InputGroup.Text>
               <Form.Control
                 type="text"
-                placeholder="Search"
+                placeholder="상품 검색"
                 className="max-width-200"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
               />
             </InputGroup>
           </div>
