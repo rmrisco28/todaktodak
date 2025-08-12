@@ -73,7 +73,7 @@ public class OrderList {
     private Integer rentalPeriod;
 
     @Column(name = "state", nullable = false, length = 10)
-    private String state;
+    private String state = "대여중";
 
     @Column(name = "delivery_company", length = 50)
     private String deliveryCompany;
@@ -82,16 +82,16 @@ public class OrderList {
     private String tracking;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "insert_dttm", nullable = false)
+    @Column(name = "insert_dttm", nullable = false, insertable = false, updatable = false)
     private LocalDateTime insertDttm;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "update_dttm", nullable = false)
+    @Column(name = "update_dttm", nullable = false, insertable = false)
     private LocalDateTime updateDttm;
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = false;
+    private Boolean useYn = true;
 
     @ColumnDefault("0")
     @Column(name = "del_yn", nullable = false)

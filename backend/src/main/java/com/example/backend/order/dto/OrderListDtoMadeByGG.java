@@ -42,6 +42,7 @@ public class OrderListDtoMadeByGG implements Serializable {
 
     String saleProductNoProductNo;
     Integer saleProductNoStock;
+    String memberMemberId;
 
 //    LocalDateTime insertDttm;
 //

@@ -1,5 +1,7 @@
 package com.example.backend.order.service;
 
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.order.dto.OrderListDtoMadeByGG;
 import com.example.backend.order.entity.OrderList;
 import com.example.backend.order.repository.OrderListRepositoryMadeByGG;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class BuyService {
     private final SaleRepository saleRepository;
     private final RentalRepository rentalRepository;
     private final ProductRepository productRepository;
+    private final MemberRepository memberRepository;
 
     public void buyAndRentalSave(OrderListDtoMadeByGG old, Authentication authentication) {
         // 결제 테이블 데이터 저장
@@ -46,6 +50,9 @@ public class BuyService {
         // 여기까지(결제코드)
         Sale sale = saleRepository.findBySaleNo(old.getSaleSaleNo());
 
+        Member member = memberRepository.findByMemberId(old.getMemberMemberId())
+                .orElseThrow(() -> new RuntimeException("회원 없음: " + old.getMemberMemberId()));
+
 
         OrderList orderList = new OrderList();
         System.out.println("old.getTotalPrice() = " + old.getTotalPrice());
@@ -55,6 +62,7 @@ public class BuyService {
         String orderNo = code + date + seqStr;
         orderList.setOrderNo(orderNo);
         orderList.setSaleNo(sale);
+        orderList.setMemberNo(member);
 
 
         orderList.setName(authentication.getName());
@@ -77,8 +85,6 @@ public class BuyService {
         orderList.setDeliveryCompany(old.getDeliveryCompany());
         orderList.setTracking(old.getTracking());
 
-        orderListRepositoryMadeByGG.save(orderList);
-
 
         // 렌탈 테이블
         // 렌탈 코드(여기부터)
@@ -93,6 +99,7 @@ public class BuyService {
         // 렌탈코드 (여기까지)
         Rental rental = new Rental();
         rental.setRentalNo(rentalNo);
+        rental.setMemberNo(member);
 
 //        OrderInfo orderInfoRental = new OrderInfo();
 //        orderInfoRental.setOrderCount(rsd.getOrderNoOrderCount());
@@ -113,6 +120,9 @@ public class BuyService {
 
         // 재고 수량 변경
         product.setStock(product.getStock() - old.getOrderCount());
+
+
+        orderListRepositoryMadeByGG.save(orderList);
 
         rentalRepository.save(rental);
 

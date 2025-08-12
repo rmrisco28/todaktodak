@@ -1,5 +1,7 @@
 package com.example.backend.rental.service;
 
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.order.entity.OrderList;
 import com.example.backend.order.repository.OrderListRepositoryMadeByGG;
 import com.example.backend.product.entity.Product;
@@ -33,6 +35,7 @@ public class RentalService {
     private final SaleRepository saleRepository;
     private final ProductRepository productRepository;
     private final OrderListRepositoryMadeByGG orderListRepositoryMadeByGG;
+    private final MemberRepository memberRepository;
 
     // 렌탈 목록
     public Map<String, Object> list(String keyword, Integer pageNumber) {
@@ -92,6 +95,10 @@ public class RentalService {
             returnOrder.setContent(rod.getContent());
             returnOrder.setPhone(rod.getPhone());
 
+            System.out.println("rod.getMemberNo = " + rod.getMemberNo());
+            Member member = memberRepository.findByMemberNo(rod.getMemberNo());
+            System.out.println("member = " + member);
+            returnOrder.setMemberNo(member);
             Sale sale = saleRepository.findBySaleNo(rod.getSaleNo());
             returnOrder.setSaleNo(sale);
             Product product = productRepository.findByProductNo(rod.getProductNo());
@@ -114,6 +121,9 @@ public class RentalService {
 
             returnOrder.setState("대여중");
             rental.setState("대여중");
+            if (rod != null && rod.getContent() != null) {
+                returnOrder.setContent(rod.getContent());
+            }
 
             returnOrderRepository.save(returnOrder);
             rentalRepository.save(rental);

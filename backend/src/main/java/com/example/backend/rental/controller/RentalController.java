@@ -24,7 +24,7 @@ public class RentalController {
         return rentalService.list(keyword, pageNumber);
     }
 
-    // 렌탈 반납 현황
+    // 렌탈 반납 세부 현황
     @GetMapping("return/{seq}")
     public RentalDto detail(@PathVariable Integer seq) {
         return rentalService.returnDetail(seq);
@@ -40,8 +40,9 @@ public class RentalController {
     // 렌탈 반납 취소 버튼
     @PutMapping("return/cancel/{rentalNo}")
     public ResponseEntity<?> returnCancel(
-            @PathVariable String rentalNo) {
-        rentalService.processReturn(rentalNo, "반납 취소", null);
+            @PathVariable String rentalNo,
+            @RequestBody ReturnOrderDto rod) {
+        rentalService.processReturn(rentalNo, "반납 취소", rod);
         return ResponseEntity.ok(Map.of("message", "반납 요청이 취소되었습니다."));
     }
 

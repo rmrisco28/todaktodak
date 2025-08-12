@@ -30,4 +30,7 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
     Integer findMaxSeq();
 
     boolean existsByMemberId(String memberId);
+
+
+    Member findByMemberNo(String memberNo);
 }
