@@ -11,13 +11,12 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 export function MemberMyInfoModify() {
   const [member, setMember] = useState(null);
-  const { memberId } = useParams();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
@@ -104,10 +103,7 @@ export function MemberMyInfoModify() {
       .then((res) => {
         console.log("성공");
         setMember(res.data);
-        const message = res.data.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
+        alert("변경이 완료되었습니다.");
         navigate(`/member/myinfo`);
       })
       .catch((err) => {

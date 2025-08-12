@@ -197,12 +197,8 @@ export function MemberLogin() {
           </div>
         </Form>
         <div className="text-center">
-          <Link to="/" className="mx-2 text-decoration-none text-secondary">
-            아이디찾기
-          </Link>
-          <span>|</span>
           <Link
-            to="/member/find_password/email_auth"
+            to="/member/password/email_auth"
             className="mx-2 text-decoration-none text-secondary"
           >
             비밀번호찾기

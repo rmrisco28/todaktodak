@@ -40,12 +40,14 @@ public class MemberController {
                         Map.of("type", "success", "text", "회원가입 되었습니다.")));
     }
 
-    // 이메일 인증 요청
+    // 이메일 인증 요청(회원가입)
     @PostMapping("/email/request")
     public ResponseEntity<?> requestEmailAuth(@RequestBody Map<String, String> request) {
+        String memberId = request.get("memberId");
         String email = request.get("email");
+        String purpose = "SIGNUP";
         try {
-            memberService.sendEmailAuthCode(email);
+            memberService.sendEmailAuthCode(memberId, email, purpose);
             return ResponseEntity.ok(Map.of("message", "인증번호를 이메일로 발송했습니다."));
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,7 +55,7 @@ public class MemberController {
         }
     }
 
-    // 이메일 인증번호 학인
+    // 이메일 인증번호 확인(회원가입)
     @PostMapping("/email/verify")
     public ResponseEntity<?> verifyEmailAuth(@RequestBody Map<String, String> request) {
         String email = request.get("email");
@@ -67,11 +69,55 @@ public class MemberController {
         }
     }
 
-    // 아이디 중복 확인
+    // 아이디 중복 확인(회원가입)
     @GetMapping("/check-id")
     public ResponseEntity<?> checkMemberId(@RequestParam String memberId) {
         boolean exists = memberService.existsByMemberId(memberId);
         return ResponseEntity.ok().body(Map.of("exists", exists));
+    }
+
+    // 비밀번호 찾기용 이메일 인증 요청
+    @PostMapping("/findPassword/authRequest")
+    public ResponseEntity<?> requestFindPasswordEmailAuth(@RequestBody Map<String, String> request) {
+        String memberId = request.get("memberId");
+        String email = request.get("email");
+
+        try {
+            memberService.sendFindPasswordEmailAuthCode(memberId, email);
+            return ResponseEntity.ok(Map.of("message", "인증번호를 이메일로 발송했습니다."));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(Map.of("message", "이메일 발송 실패 또는 회원 정보 불일치"));
+        }
+    }
+
+    // 비밀번호 찾기용 이메일 인증번호 검증
+    @PostMapping("/findPassword/verifyAuth")
+    public ResponseEntity<?> verifyFindPasswordEmailAuth(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+
+        boolean verified = memberService.verifyFindPasswordEmailAuthCode(email, code);
+
+        if (verified) {
+            return ResponseEntity.ok(Map.of("message", "이메일 인증 완료"));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("message", "인증번호가 틀렸거나 만료되었습니다."));
+        }
+    }
+
+    // 비밀번호 재설정
+    @PutMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDto dto) {
+        try {
+            memberService.resetPassword(dto);
+            return ResponseEntity.ok(Map.of("message", "비밀번호가 변경되었습니다."));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("message", "서버 오류가 발생했습니다."));
+        }
     }
 
     // 회원 목록 보기(관리자)

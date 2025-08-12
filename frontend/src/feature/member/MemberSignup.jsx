@@ -123,7 +123,11 @@ export function MemberSignup() {
 
     setIsProcessing(true);
     axios
-      .post("/api/member/email/request", { email })
+      .post("/api/member/email/request", {
+        email,
+        memberId,
+        purpose: "SIGNUP",
+      })
       .then(() => {
         toast.success("인증번호가 발송되었습니다.");
         setEmailSent(true);

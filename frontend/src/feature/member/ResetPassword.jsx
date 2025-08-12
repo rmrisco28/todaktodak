@@ -6,15 +6,26 @@ import {
   FormGroup,
   FormLabel,
   FormText,
+  Modal,
   Row,
+  Spinner,
 } from "react-bootstrap";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 
-export function FindPassword() {
+export function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const location = useLocation();
+  const { memberId, email } = location.state || {};
+
+  const [modalShow, setModalShow] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -22,6 +33,41 @@ export function FindPassword() {
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
 
+  function handleResetButtonClick() {
+    const newErrors = {};
+
+    if (!newPassword) {
+      newErrors.newPassword = "비밀번호를 입력해주세요.";
+    }
+    if (newPassword !== newPassword2) {
+      newErrors.newPassword2 = "비밀번호가 일치하지 않습니다.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
+    if (window.confirm("비밀번호를 재설정하시겠습니까?")) {
+      axios
+        .put(`/api/member/resetPassword`, {
+          memberId,
+          email,
+          newPassword,
+        })
+        .then(() => {
+          alert("비밀번호가 변경되었습니다.");
+          navigate("/login");
+        })
+        .catch(() => {
+          toast.error("비밀번호 변경 실패");
+        })
+        .finally(() => {});
+    } else {
+      toast.info("비밀번호 변경이 취소되었습니다.");
+    }
+  }
   return (
     <div>
       <h3 className="mt-5 d-flex justify-content-center">비밀번호 찾기</h3>
@@ -32,22 +78,21 @@ export function FindPassword() {
           margin: "auto",
           padding: "1rem",
           width: "500px",
-          height: "400px",
           marginTop: "5rem",
         }}
       >
         <Row className="d-flex justify-content-center">
           <Col md="auto">
-            <h3 className="mb-4 mt-4 text-center">비밀번호 변경</h3>
+            <h3 className="mb-4 mt-2 text-center">비밀번호 재설정</h3>
             <Form>
               {/* 비밀번호 */}
               <FormGroup controlId="newPassword">
-                <FormLabel className="mt-2">새 비밀번호</FormLabel>
+                <FormLabel className="mt-2">변경할 비밀번호</FormLabel>
                 <FormControl
                   autoComplete="off"
                   type="password"
                   value={newPassword}
-                  style={{ width: "300px" }}
+                  style={{ width: "350px" }}
                   onChange={(e) => {
                     const value = e.target.value;
                     setNewPassword(value);
@@ -72,12 +117,12 @@ export function FindPassword() {
               </FormGroup>
               {/* 비밀번호 확인*/}
               <FormGroup className="mb-5" controlId="newPassword2">
-                <FormLabel className="mt-2">새 비밀번호 확인</FormLabel>
+                <FormLabel className="mt-2"> 비밀번호 확인</FormLabel>
                 <FormControl
                   autoComplete="off"
                   type="password"
                   value={newPassword2}
-                  style={{ width: "300px" }}
+                  style={{ width: "350px" }}
                   onChange={(e) => {
                     setNewPassword2(e.target.value);
                     setErrors((prev) => ({
@@ -99,13 +144,15 @@ export function FindPassword() {
             {/* 취소, 변경 버튼*/}
             <div className="mt-4 d-flex justify-content-center">
               <Button
-                variant="outline-secondary"
+                variant="secondary"
                 className="me-3"
                 onClick={() => navigate("/login")}
               >
                 취소
               </Button>
-              <Button variant="outline-primary">변경</Button>
+              <Button variant="primary" onClick={handleResetButtonClick}>
+                변경
+              </Button>
             </div>
           </Col>
         </Row>
