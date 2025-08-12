@@ -129,15 +129,21 @@ export function UnifiedNavbar() {
               <NavDropdown.Item href="/admin">대시보드</NavDropdown.Item>
               <NavDropdown.Item href="/member/list">회원관리</NavDropdown.Item>
               <NavDropdown.Item href="/product/list">상품관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">판매상품</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">주문관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">대여관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">반납관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">문의관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">통계현황</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">카테고리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">배너관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">배송업체</NavDropdown.Item>
+              <NavDropdown.Item href="/sale/list">판매상품</NavDropdown.Item>
+              <NavDropdown.Item href="/order/admin/list">
+                주문관리
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/rental/list">대여관리</NavDropdown.Item>
+              <NavDropdown.Item href="/receive/list">반납관리</NavDropdown.Item>
+              <NavDropdown.Item href="/contact/list">문의관리</NavDropdown.Item>
+              <NavDropdown.Item href="/chart/list">통계현황</NavDropdown.Item>
+              <NavDropdown.Item href="/category/list">
+                카테고리
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/banner/list">배너관리</NavDropdown.Item>
+              <NavDropdown.Item href="/delivery/list">
+                배송업체
+              </NavDropdown.Item>
             </NavDropdown>
             {/*
             <Nav.Link href="#settings" className="py-2 px-3">
