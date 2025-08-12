@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class MyInfoModifyDto {
+    // 내정보변경폼
     private String memberId;
     private String name;
     private String email;

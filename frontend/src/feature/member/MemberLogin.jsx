@@ -5,25 +5,52 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  FormText,
   Row,
 } from "react-bootstrap";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import { FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
+
+import "../../css/LoginCheckbox.css";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [saveId, setSaveId] = useState(false);
 
   // step2. Use the context (토큰 인증 context 호출)
   const { login } = useContext(AuthenticationContext);
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const savedId = localStorage.getItem("savedMemberId");
+    if (savedId) {
+      setMemberId(savedId);
+      setSaveId(true);
+    }
+  }, []);
+
   function handleLogInButtonClick() {
+    const newErrors = {};
+
+    if (!memberId) {
+      newErrors.memberId = "아이디를 입력해주세요.";
+    }
+    if (!password) {
+      newErrors.password = "비밀번호를 입력해주세요.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
     axios
       .post(`/api/member/login`, {
         memberId: memberId,
@@ -33,11 +60,21 @@ export function MemberLogin() {
         const token = res.data.token;
         login(token);
 
-        alert("로그인 되었습니다.");
+        if (saveId) {
+          localStorage.setItem("savedMemberId", memberId);
+        } else {
+          localStorage.removeItem("savedMemberId");
+        }
+
+        toast.success("로그인 되었습니다.", { position: "top-center" });
         navigate("/");
       })
       .catch((err) => {
         console.log(err);
+
+        setPassword("");
+
+        setErrors({ password: "아이디 또는 비밀번호가 올바르지 않습니다." });
       })
       .finally(() => {
         console.log("always");
@@ -61,7 +98,10 @@ export function MemberLogin() {
               <div style={{ position: "relative" }}>
                 <FormControl
                   value={memberId}
-                  onChange={(e) => setMemberId(e.target.value)}
+                  onChange={(e) => {
+                    setMemberId(e.target.value);
+                    setErrors((prev) => ({ ...prev, memberId: null }));
+                  }}
                   style={{ paddingRight: "36px" }}
                 />
                 {/* ❌ 아이디 초기화 버튼 */}
@@ -74,7 +114,6 @@ export function MemberLogin() {
                       right: "10px",
                       transform: "translateY(-50%)",
                       cursor: "pointer",
-                      color: "black",
                       fontSize: "18px",
                     }}
                   >
@@ -82,6 +121,9 @@ export function MemberLogin() {
                   </span>
                 )}
               </div>
+              {errors.memberId && (
+                <FormText className="text-danger">{errors.memberId}</FormText>
+              )}
             </FormGroup>
           </div>
           {/* 패스워드 */}
@@ -92,7 +134,10 @@ export function MemberLogin() {
                 autoComplete="off"
                 type={showPassword ? "text" : "password"}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors((prev) => ({ ...prev, password: null }));
+                }}
                 style={{ paddingRight: "60px" }}
               />
               {/* 👁 비밀번호 보기 토글 */}
@@ -105,7 +150,6 @@ export function MemberLogin() {
                     right: "36px",
                     transform: "translateY(-50%)",
                     cursor: "pointer",
-                    color: "black",
                     fontSize: "18px",
                   }}
                 >
@@ -122,7 +166,6 @@ export function MemberLogin() {
                     right: "10px",
                     transform: "translateY(-50%)",
                     cursor: "pointer",
-                    color: "black",
                     fontSize: "18px",
                   }}
                 >
@@ -130,7 +173,23 @@ export function MemberLogin() {
                 </span>
               )}
             </div>
+            {errors.password && (
+              <FormText className="text-danger">{errors.password}</FormText>
+            )}
           </FormGroup>
+          {/* 아이디 저장 체크박스 추가 (로그인 버튼 위) */}
+          <div className="mb-2">
+            <label className="custom-checkbox ">
+              <input
+                type="checkbox"
+                checked={saveId}
+                onChange={(e) => setSaveId(e.target.checked)}
+              />
+              <span className="checkmark"></span>
+              아이디 저장
+            </label>
+          </div>
+          {/* 로그인 버튼 / 찾기, 가입 옵션 */}
           <div className="d-flex justify-content-between">
             <Button type="submit" className="w-100 mb-4">
               로그인

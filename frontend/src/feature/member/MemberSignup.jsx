@@ -25,6 +25,7 @@ export function MemberSignup() {
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [postCode, setPostCode] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // 이메일 인증 상태
   const [emailSent, setEmailSent] = useState(false); // 인증번호 발송 여부
@@ -55,7 +56,14 @@ export function MemberSignup() {
 
   // 아이디 중복 확인
   const handleCheckMemberId = () => {
-    if (!memberId) return;
+    if (!memberId) {
+      setErrors((prev) => ({
+        ...prev,
+        memberId: "아이디를 입력해주세요.",
+      }));
+      setValids((prev) => ({ ...prev, memberId: null }));
+      return;
+    }
 
     axios
       .get(`/api/member/check-id?memberId=${memberId}`)
@@ -113,14 +121,18 @@ export function MemberSignup() {
       return;
     }
 
+    setIsProcessing(true);
     axios
       .post("/api/member/email/request", { email })
       .then(() => {
-        toast.success("인증번호가 발송되었습니다. 메일을 확인하세요.");
+        toast.success("인증번호가 발송되었습니다.");
         setEmailSent(true);
       })
       .catch(() => {
         toast.error("이메일 발송에 실패했습니다.");
+      })
+      .finally(() => {
+        setIsProcessing(false);
       });
   };
 
@@ -144,17 +156,19 @@ export function MemberSignup() {
     const newErrors = {};
 
     // 각 항목 유효성 체크
-    if (!memberId) newErrors.memberId = "아이디를 입력하세요.";
-    if (!validatePassword(password))
-      newErrors.password =
-        "비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.";
+    if (!memberId) newErrors.memberId = "아이디를 입력해주세요.";
+    if (!password) {
+      newErrors.password = "비밀번호를 입력해주세요.";
+    }
     if (password !== password2)
       newErrors.password2 = "비밀번호가 일치하지 않습니다.";
-    if (!validateEmail(email))
-      newErrors.email = "이메일 형식이 올바르지 않습니다.";
-    if (!validatePhone(phone))
-      newErrors.phone = "휴대폰 번호 형식이 올바르지 않습니다.";
+    if (!emailVerified) {
+      newErrors.email = "이메일 인증을 완료해주세요.";
+    }
     if (!birthDate) newErrors.birthDate = "생년월일을 선택해주세요.";
+    if (!name) {
+      newErrors.name = "이름을 입력해주세요.";
+    }
 
     setErrors(newErrors);
 
@@ -202,14 +216,21 @@ export function MemberSignup() {
     <Row className="d-flex justify-content-center">
       <Col md="auto">
         <h3 className="mb-4 text-center">회원 가입</h3>
+        <p className="text-end" style={{ fontSize: "12px" }}>
+          <span style={{ color: "red" }}>*</span> 항목은 필수입력 항목입니다.
+        </p>
         {/* 아이디 / 중복확인 */}
         <div>
           <FormGroup className="mb-3" controlId="memberId">
-            <FormLabel>아이디</FormLabel>
+            <FormLabel>
+              아이디 <span style={{ color: "red" }}>*</span>
+            </FormLabel>
+
             <div className="d-flex gap-2">
               <FormControl
+                placeholder="아이디를 입력하세요."
                 autoComplete="off"
-                style={{ width: "300px" }}
+                style={{ width: "290px", height: "40px" }}
                 value={memberId}
                 onChange={(e) => {
                   setMemberId(e.target.value);
@@ -217,7 +238,11 @@ export function MemberSignup() {
                   setValids((prev) => ({ ...prev, memberId: null }));
                 }}
               />
-              <Button variant="outline-secondary" onClick={handleCheckMemberId}>
+              <Button
+                className="mb-0"
+                variant="outline-secondary"
+                onClick={handleCheckMemberId}
+              >
                 중복 확인
               </Button>
             </div>
@@ -233,8 +258,11 @@ export function MemberSignup() {
         <Form>
           <div>
             <FormGroup className="mb-3" controlId="password1">
-              <FormLabel>비밀번호</FormLabel>
+              <FormLabel>
+                비밀번호 <span style={{ color: "red" }}>*</span>
+              </FormLabel>
               <FormControl
+                placeholder="비밀번호를 입력하세요."
                 autoComplete="off"
                 type="password"
                 value={password}
@@ -288,31 +316,51 @@ export function MemberSignup() {
         </Form>
         {/* 이름 */}
         <div>
-          <FormGroup className="mb-3" controlId="name">
-            <FormLabel>이름</FormLabel>
+          <FormGroup controlId="name">
+            <FormLabel>
+              이름 <span style={{ color: "red" }}>*</span>
+            </FormLabel>
             <FormControl
+              placeholder="이름을 입력하세요."
               style={{ width: "400px" }}
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setErrors((prev) => ({ ...prev, name: null }));
+              }}
             />
           </FormGroup>
+          {errors.name && (
+            <FormText className="text-danger">{errors.name}</FormText>
+          )}
         </div>
         {/* 연락처 */}
         <div>
-          <FormGroup className="mb-3" controlId="phone">
+          <FormGroup className="mb-3 mt-3" controlId="phone">
             <FormLabel>연락처</FormLabel>
             <FormControl
+              placeholder="010-1234-5678"
               style={{ width: "400px" }}
               value={phone}
               onChange={(e) => {
-                const value = e.target.value;
+                let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+
+                // 하이픈 자동 삽입
+                if (value.length < 4) {
+                  // 010
+                } else if (value.length < 8) {
+                  value = value.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+                } else {
+                  value = value.replace(/(\d{3})(\d{4})(\d{1,4})/, "$1-$2-$3");
+                }
+
                 setPhone(value);
                 if (value.trim() === "") {
                   setErrors((prev) => ({ ...prev, phone: null }));
                 } else if (!validatePhone(value)) {
                   setErrors((prev) => ({
                     ...prev,
-                    phone: "번호 형식이 올바르지 않습니다.",
+                    phone: "핸드폰 번호 형식이 올바르지 않습니다.",
                   }));
                 } else {
                   setErrors((prev) => ({ ...prev, phone: null }));
@@ -327,7 +375,9 @@ export function MemberSignup() {
         {/* 생년월일 */}
         <div>
           <FormGroup className="mb-3" controlId="birthDate">
-            <FormLabel>생년월일</FormLabel>
+            <FormLabel>
+              생년월일 <span style={{ color: "red" }}>*</span>
+            </FormLabel>
             <div className="d-flex" style={{ gap: "10px" }}>
               <Form.Select
                 style={{ width: "130px" }}
@@ -393,12 +443,16 @@ export function MemberSignup() {
         {/* 이메일 */}
         <div>
           <FormGroup className="mb-3" controlId="email">
-            <FormLabel>이메일</FormLabel>
+            <FormLabel>
+              이메일 <span style={{ color: "red" }}>*</span>
+            </FormLabel>
+
             <div className="d-flex gap-2">
               <FormControl
+                placeholder="example@example.com"
                 autoComplete="off"
                 type="email"
-                style={{ width: "400px" }}
+                style={{ width: "290px", height: "40px" }}
                 value={email}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -418,10 +472,12 @@ export function MemberSignup() {
               />
               {!emailVerified && (
                 <Button
+                  className="mb-0"
                   variant="outline-secondary"
                   onClick={handleSendEmailCode}
+                  disabled={isProcessing}
                 >
-                  인증번호 발송
+                  인증 요청
                 </Button>
               )}
             </div>
@@ -440,7 +496,7 @@ export function MemberSignup() {
                 <FormControl
                   autoComplete="off"
                   placeholder="인증번호 입력"
-                  style={{ width: "200px" }}
+                  style={{ width: "200px", height: "40px" }}
                   value={emailCode}
                   onChange={(e) => setEmailCode(e.target.value)}
                 />
@@ -463,7 +519,7 @@ export function MemberSignup() {
                 placeholder="우편번호"
                 value={postCode}
                 onChange={(e) => setPostCode(e.target.value)}
-                style={{ width: "150px" }}
+                style={{ width: "150px", height: "40px" }}
                 readOnly
               />
               {/* 주소 검색 버튼 */}
@@ -472,9 +528,8 @@ export function MemberSignup() {
               </Button>
             </div>
           </FormGroup>
-          {/* 주소 검색 */}
-          <FormGroup controlId="addrees">
-            <FormLabel></FormLabel>
+          {/* 주소 */}
+          <FormGroup>
             <div className="d-flex mb-3" style={{ gap: "10px" }}>
               <FormControl
                 placeholder="도로명 주소 / 지번"

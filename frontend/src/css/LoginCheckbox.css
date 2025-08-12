@@ -1,0 +1,43 @@
+/* 숨긴 기본 체크박스 */
+.custom-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* 커스텀 체크박스 박스 */
+.custom-checkbox .checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    border: 1px solid #ccc;
+}
+
+/* 체크 상태일 때 배경과 체크 아이콘 보여주기 */
+.custom-checkbox input[type="checkbox"]:checked ~ .checkmark {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* 체크 표시 아이콘 (예: ✔️) */
+.custom-checkbox .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox input[type="checkbox"]:checked ~ .checkmark::after {
+    display: block;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
