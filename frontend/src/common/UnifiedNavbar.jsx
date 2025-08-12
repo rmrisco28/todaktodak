@@ -47,9 +47,10 @@ export function UnifiedNavbar() {
   }, []);
 
   function handleSearchFormSubmit(e) {
-    console.log("submit click");
-    e.preventDefault();
-    navigate("/sale/list?q=" + keyword);
+    if (keyword.trim() !== "") {
+      e.preventDefault();
+      navigate("/sale/list?q=" + keyword);
+    }
   }
 
   return (
@@ -96,18 +97,20 @@ export function UnifiedNavbar() {
 
           {/* 검색창 (데스크탑에서는 중앙, 모바일에서는 메뉴 하단) */}
           <div className="d-flex align-items-center my-2 my-lg-0 mx-lg-auto">
-            <InputGroup>
-              <InputGroup.Text onClick={handleSearchFormSubmit}>
-                <IoSearch className="opacity-8" />
-              </InputGroup.Text>
-              <Form.Control
-                type="text"
-                placeholder="상품 검색"
-                className="max-width-200"
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-              />
-            </InputGroup>
+            <Form onSubmit={handleSearchFormSubmit}>
+              <InputGroup>
+                <InputGroup.Text type="submit">
+                  <IoSearch className="opacity-8" />
+                </InputGroup.Text>
+                <Form.Control
+                  type="text"
+                  placeholder="상품 검색"
+                  className="max-width-200"
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                />
+              </InputGroup>
+            </Form>
           </div>
 
           {/* 사용자/관리자 메뉴 (오른쪽 정렬) */}

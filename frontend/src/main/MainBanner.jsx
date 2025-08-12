@@ -83,6 +83,7 @@ export function MainBanner() {
 
       {/* 전체보기 모달 */}
       <Modal
+        className="modal-banners"
         show={showModal}
         onHide={() => setShowModal(false)}
         centered

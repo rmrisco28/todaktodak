@@ -8,6 +8,7 @@ import com.example.backend.product.dto.ProductUpdateForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -68,6 +69,7 @@ public class OrderController {
      * @return
      */
     @GetMapping("admin/list")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public Map<String, Object> getAllOrders(
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
@@ -82,19 +84,21 @@ public class OrderController {
      * @return
      */
     @GetMapping("detail/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public OrderDto getOrderBySeq(@PathVariable Integer seq) {
         return orderService.getOrderBySeq(seq);
     }
 
 
     /**
-     * 상품 수정
+     * 주문 상태 수정
      *
      * @param seq
      * @param dto
      * @return
      */
     @PutMapping("modify/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> updateOrderState(@PathVariable Integer seq, OrderStateUpdateForm dto) {
         dto.setSeq(seq);
         boolean result = orderService.validateForStateUpdate(dto);
