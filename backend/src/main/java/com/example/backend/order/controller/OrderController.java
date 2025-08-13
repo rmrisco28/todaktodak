@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -62,6 +64,21 @@ public class OrderController {
 */
 
     /**
+     * 주문관리 목록 조회 (사용자)
+     *
+     * @param memberId
+     * @return
+     */
+    @GetMapping("list/{memberId}")
+    @PreAuthorize("isAuthenticated()")
+    public Map<String, Object> getOrders(@PathVariable String memberId,
+                                         Authentication authentication,
+                                         @RequestParam(value = "q", defaultValue = "") String keyword,
+                                         @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
+        return orderService.list(memberId, authentication, keyword, pageNumber);
+    }
+
+    /**
      * 주문관리 목록 조회 (관리자)
      *
      * @param keyword
@@ -84,9 +101,20 @@ public class OrderController {
      * @return
      */
     @GetMapping("detail/{seq}")
-    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
-    public OrderDto getOrderBySeq(@PathVariable Integer seq) {
-        return orderService.getOrderBySeq(seq);
+    @PreAuthorize("isAuthenticated() or hasAuthority('SCOPE_ROLE_ADMIN')")
+    public ResponseEntity<?> getOrderBySeq(@PathVariable Integer seq, Authentication authentication) {
+        Boolean hasAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("SCOPE_ROLE_ADMIN"));
+        String memberId = "";
+        if (authentication.isAuthenticated() &&
+                !hasAdmin) {
+            memberId = orderService.findMemberByOrder(seq);
+        }
+
+        if (authentication.getName().equals(memberId) || hasAdmin) {
+            return ResponseEntity.ok().body(orderService.getOrderBySeq(seq));
+        } else {
+            return ResponseEntity.status(403).build();
+        }
     }
 
 
