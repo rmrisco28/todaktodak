@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   Button,
@@ -15,8 +15,10 @@ import {
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function SaleList() {
+  const { isAdmin } = useContext(AuthenticationContext);
   const [keyword, setKeyword] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [saleList, setSaleList] = useState(null);
@@ -88,10 +90,11 @@ export function SaleList() {
         <Col>
           <h2 className="mb-4">판매 상품 목록</h2>
           {/* 판매상품 등록 */}
-          <Button variant="primary" onClick={() => navigate(`/sale/add`)}>
-            판매상품 등록
-          </Button>
-
+          {isAdmin() && (
+            <Button variant="primary" onClick={() => navigate(`/sale/add`)}>
+              판매상품 등록
+            </Button>
+          )}
           {/* 카테고리 버튼 */}
           <div className="mb-4">
             <div className="d-flex flex-wrap gap-2">
