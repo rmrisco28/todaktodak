@@ -1,9 +1,12 @@
 import {
   Button,
   Col,
+  Container,
+  Form,
   FormControl,
   FormGroup,
   FormLabel,
+  ListGroup,
   Modal,
   Row,
   Spinner,
@@ -72,111 +75,126 @@ export function MemberMyInfo() {
   }
 
   return (
-    <Row className="justify-content-center">
-      <Col lg={4}>
-        <h2 className="mb-4">내 정보</h2>
-        <div>
-          <FormGroup as={Row} controlId="memberId" className="mb-4">
-            <FormLabel column lg={3}>
-              아이디
-            </FormLabel>
-            <Col lg={7}>
-              <FormControl value={member.memberId} readOnly={true} />
-            </Col>
-          </FormGroup>
+    <Row className="d-flex justify-content-center">
+      {/* 왼쪽 사이드바 */}
+      <Col xs={0} sm={0} md={3} className="border-end my-6 d-none d-md-block ">
+        <div className="text-center mb-4">
+          <h3 className="mt-3">{member.memberId}</h3>
+          <div className="text-muted fs-6">{member.email}</div>
+          <br />
+          <hr />
         </div>
-        {/* 이름 */}
-        <div>
-          <FormGroup as={Row} controlId="name" className="mb-4">
-            <FormLabel column sm={3}>
-              이름
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.name} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 이메일 */}
-        <div>
-          <FormGroup as={Row} controlId="email" className="mb-4">
-            <FormLabel column sm={3}>
-              이메일
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.email} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 생년월일 */}
-        <div>
-          <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column sm={3}>
-              생년월일
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.birthDate} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 연락처 */}
-        <div>
-          <FormGroup as={Row} controlId="phone" className="mb-4">
-            <FormLabel column sm={3}>
-              연락처
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.phone} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 우편번호 */}
-        <div>
-          <FormGroup as={Row} controlId="postCode" className="mb-4">
-            <FormLabel column sm={3}>
-              우편번호
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.postCode} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 주소 */}
-        <div>
-          <FormGroup controlId="address" className="mb-2">
-            <FormLabel>주소</FormLabel>
-            <Col lg={10}>
-              <FormControl value={member.addr} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 상세주소 */}
-        <div>
-          <FormGroup controlId="addressDetail" className="mb-3">
-            <Col sm={10}>
-              <FormControl value={member.addrDetail} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
+        <ListGroup variant="flush">
+          <ListGroup.Item action className="fs-5" style={{ border: "none" }}>
+            내 정보
+          </ListGroup.Item>
 
-        {/* 변경, 탈퇴 버튼*/}
-        <div>
-          <Button
-            className="mb-4 mt-3"
-            variant="outline-primary"
+          <ListGroup.Item
+            action
             onClick={() => navigate(`/member/myinfo/modify`)}
+            style={{ border: "none" }}
+            className="fs-5"
           >
             정보 변경
-          </Button>
-        </div>
-        <div>
-          <Button
-            className="mb-2"
-            variant="outline-danger"
+          </ListGroup.Item>
+          <ListGroup.Item
+            action
             onClick={() => setModalShow(true)}
+            style={{ border: "none" }}
+            className="fs-5"
           >
             회원 탈퇴
-          </Button>
-        </div>
+          </ListGroup.Item>
+        </ListGroup>
+      </Col>
+
+      {/* 오른쪽 상세 정보 */}
+      <Col xs={12} sm={12} md={7} className="p-2 mx-5">
+        <h2 className="mb-4">내 정보</h2>
+        <section
+          className="px-4 py-4"
+          style={{ border: "4px solid #F0F3F6", borderRadius: "10px" }}
+        >
+          <Form style={{ width: "100%" }}>
+            {/* 아이디 */}
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={2}>
+                아이디
+              </FormLabel>
+              <Col sm={6}>
+                <FormControl value={member.memberId} readOnly />
+              </Col>
+            </FormGroup>
+
+            {/* 이름 */}
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={2}>
+                이름
+              </FormLabel>
+              <Col sm={6}>
+                <FormControl value={member.name} readOnly />
+              </Col>
+            </FormGroup>
+
+            {/* 이메일 */}
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={2}>
+                이메일
+              </FormLabel>
+              <Col sm={6}>
+                <FormControl value={member.email} readOnly />
+              </Col>
+            </FormGroup>
+
+            {/* 생년월일 */}
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={2}>
+                생년월일
+              </FormLabel>
+              <Col sm={6}>
+                <FormControl value={member.birthDate} readOnly />
+              </Col>
+            </FormGroup>
+
+            {/* 연락처 */}
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={2}>
+                연락처
+              </FormLabel>
+              <Col sm={6}>
+                <FormControl value={member.phone} readOnly />
+              </Col>
+            </FormGroup>
+
+            {/* 우편번호 */}
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={2}>
+                우편번호
+              </FormLabel>
+              <Col xs={3} sm={3} md={3} lg={2}>
+                <FormControl value={member.postCode} readOnly />
+              </Col>
+            </FormGroup>
+
+            {/* 주소 */}
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={2}>
+                주소
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.addr} readOnly />
+              </Col>
+            </FormGroup>
+
+            {/* 상세 주소 */}
+            <FormGroup as={Row}>
+              <FormLabel column sm={2}></FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.addrDetail || ""} readOnly />
+              </Col>
+            </FormGroup>
+          </Form>
+        </section>
       </Col>
 
       {/*  탈퇴 확인 모달*/}

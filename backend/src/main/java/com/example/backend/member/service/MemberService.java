@@ -81,6 +81,51 @@ public class MemberService {
         }
     }
 
+
+    // 아이디 중복 확인
+    public boolean existsByMemberId(String memberId) {
+        return memberRepository.existsByMemberId(memberId);
+    }
+
+    // 회원가입 유효성 검사
+    public boolean validate(MemberSignupForm memberSignupForm) {
+        // memberId 중복 여부
+        Optional<Member> dbData = memberRepository.findByMemberId(memberSignupForm.getMemberId());
+        if (dbData.isPresent()) {
+            throw new RuntimeException("이미 존재하는 아이디입니다.");
+        }
+
+
+        // 아이디 입력 유무
+        if (memberSignupForm.getMemberId().trim().isBlank()) {
+            throw new RuntimeException("아이디를 입력해야 합니다.");
+        }
+        // 비밀번호 유효성 검사
+        String password = memberSignupForm.getPassword();
+        if (!Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$", password)) {
+            throw new RuntimeException("패스워드 형식에 맞지 않습니다.");
+        }
+        // 비밀번호 입력 유무
+        if (memberSignupForm.getPassword().trim().isBlank()) {
+            throw new RuntimeException("비밀번호를 입력해야 합니다.");
+        }
+        // 이름 입력 유무
+        if (memberSignupForm.getName().trim().isBlank()) {
+            throw new RuntimeException("이름을 입력해야 합니다.");
+        }
+        // 이메일 유효성 검사
+        String email = memberSignupForm.getEmail();
+        if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
+            throw new RuntimeException("이메일 형싣에 맞지 않습니다.");
+        }
+        // 이메일 입력 유무
+        if (memberSignupForm.getEmail().trim().isBlank()) {
+            throw new RuntimeException("이메일을 입력해야 합니다.");
+        }
+
+        return true;
+    }
+
     // 인증번호 생성 및 이메일 발송(회원가입)
     public void sendEmailAuthCode(String memberId, String email, String purpose) {
         String code = createAuthCode();
@@ -103,8 +148,7 @@ public class MemberService {
         mailSender.send(message);
     }
 
-
-    // 인증번호 검증
+    // 인증번호 검증(회원가입)
     public boolean verifyEmailAuthCode(String email, String code) {
         String purpose = "SIGNUP";
         Optional<EmailAuth> optionalAuth = emailAuthRepository
@@ -210,50 +254,6 @@ public class MemberService {
         // 비밀번호 변경 및 저장
         member.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         memberRepository.save(member);
-    }
-
-    // 아이디 중복 확인
-    public boolean existsByMemberId(String memberId) {
-        return memberRepository.existsByMemberId(memberId);
-    }
-
-    // 회원가입 유효성 검사
-    public boolean validate(MemberSignupForm memberSignupForm) {
-        // memberId 중복 여부
-        Optional<Member> dbData = memberRepository.findByMemberId(memberSignupForm.getMemberId());
-        if (dbData.isPresent()) {
-            throw new RuntimeException("이미 존재하는 아이디입니다.");
-        }
-
-
-        // 아이디 입력 유무
-        if (memberSignupForm.getMemberId().trim().isBlank()) {
-            throw new RuntimeException("아이디를 입력해야 합니다.");
-        }
-        // 비밀번호 유효성 검사
-        String password = memberSignupForm.getPassword();
-        if (!Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$", password)) {
-            throw new RuntimeException("패스워드 형식에 맞지 않습니다.");
-        }
-        // 비밀번호 입력 유무
-        if (memberSignupForm.getPassword().trim().isBlank()) {
-            throw new RuntimeException("비밀번호를 입력해야 합니다.");
-        }
-        // 이름 입력 유무
-        if (memberSignupForm.getName().trim().isBlank()) {
-            throw new RuntimeException("이름을 입력해야 합니다.");
-        }
-        // 이메일 유효성 검사
-        String email = memberSignupForm.getEmail();
-        if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
-            throw new RuntimeException("이메일 형싣에 맞지 않습니다.");
-        }
-        // 이메일 입력 유무
-        if (memberSignupForm.getEmail().trim().isBlank()) {
-            throw new RuntimeException("이메일을 입력해야 합니다.");
-        }
-
-        return true;
     }
 
     // 회원 목록(관리자)

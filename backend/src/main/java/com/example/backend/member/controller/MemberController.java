@@ -152,7 +152,7 @@ public class MemberController {
         }
         return ResponseEntity.ok().body(Map.of("message",
                 Map.of("type", "success",
-                        "text", seq + "회원 정보가 삭제되었습니다.")));
+                        "text", seq + "번 회원이 삭제되었습니다.")));
     }
 
     // 회원 정보 수정(관리자)

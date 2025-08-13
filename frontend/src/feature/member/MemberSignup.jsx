@@ -129,11 +129,12 @@ export function MemberSignup() {
         purpose: "SIGNUP",
       })
       .then(() => {
-        toast.success("인증번호가 발송되었습니다.");
+        toast.success("인증번호가 발송되었습니다.", { position: "top-center" });
+
         setEmailSent(true);
       })
       .catch(() => {
-        toast.error("이메일 발송에 실패했습니다.");
+        toast.error("이메일 발송에 실패했습니다.", { position: "top-center" });
       })
       .finally(() => {
         setIsProcessing(false);
@@ -145,13 +146,18 @@ export function MemberSignup() {
     axios
       .post("/api/member/email/verify", { email, code: emailCode })
       .then(() => {
-        toast.success("이메일 인증이 완료되었습니다.");
+        toast.success("이메일 인증이 완료되었습니다.", {
+          position: "top-center",
+        });
+
         setEmailVerified(true);
         setValids((prev) => ({ ...prev, email: "이메일 인증 완료" }));
         setErrors((prev) => ({ ...prev, email: null }));
       })
       .catch(() => {
-        toast.error("인증번호가 틀렸거나 만료되었습니다.");
+        toast.error("인증번호가 틀렸거나 만료되었습니다.", {
+          position: "top-center",
+        });
       });
   };
 
@@ -217,13 +223,13 @@ export function MemberSignup() {
 
   // 화면 렌더링
   return (
-    <Row className="d-flex justify-content-center">
+    <Row className="d-flex justify-content-center align-items-center">
       <Col sm="auto">
         <h3 className="mb-4 text-center">회원 가입</h3>
         <p className="text-end" style={{ fontSize: "12px" }}>
           <span style={{ color: "red" }}>*</span> 항목은 필수입력 항목입니다.
         </p>
-        <section className="bg-gray-200 px-3 px-5 py-4 rounded mb-3">
+        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded mb-3">
           {/* 아이디 / 중복확인 */}
           <div>
             <FormGroup className="mb-3" controlId="memberId">
@@ -242,6 +248,14 @@ export function MemberSignup() {
                       setErrors((prev) => ({ ...prev, memberId: null }));
                       setValids((prev) => ({ ...prev, memberId: null }));
                     }}
+                    className={
+                      errors.memberId
+                        ? "is-invalid"
+                        : valids.memberId
+                          ? "is-valid"
+                          : ""
+                    }
+                    aria-describedby="memberIdFeedback"
                   />
                 </Col>
                 <Col xs={12} sm={4}>
@@ -254,11 +268,16 @@ export function MemberSignup() {
                   </Button>
                 </Col>
               </Row>
-              {errors.memberId && (
-                <FormText className="text-danger">{errors.memberId}</FormText>
-              )}
-              {valids.memberId && (
-                <FormText className="text-success">{valids.memberId}</FormText>
+              {(errors.memberId || valids.memberId) && (
+                <div
+                  id="memberIdFeedback"
+                  className={
+                    errors.memberId ? "text-danger mt-1" : "text-success mt-1"
+                  }
+                  style={{ fontSize: "0.875em" }}
+                >
+                  {errors.memberId || valids.memberId}
+                </div>
               )}
             </FormGroup>
           </div>
@@ -289,9 +308,7 @@ export function MemberSignup() {
                       setErrors((prev) => ({ ...prev, password: null }));
                     }
                   }}
-                  className={
-                    errors.password ? "is-invalid" : password ? "is-valid" : ""
-                  }
+                  className={errors.password ? "is-invalid" : ""}
                 />
                 {errors.password && (
                   <div className="invalid-feedback">{errors.password}</div>
@@ -316,11 +333,10 @@ export function MemberSignup() {
                           : null,
                     }));
                   }}
+                  className={errors.password2 ? "is-invalid" : ""}
                 />
                 {errors.password2 && (
-                  <FormText className="text-danger">
-                    {errors.password2}
-                  </FormText>
+                  <div className="invalid-feedback">{errors.password2}</div>
                 )}
               </FormGroup>
             </div>
@@ -338,11 +354,12 @@ export function MemberSignup() {
                   setName(e.target.value);
                   setErrors((prev) => ({ ...prev, name: null }));
                 }}
+                className={errors.name ? "is-invalid" : ""}
               />
+              {errors.name && (
+                <div className="invalid-feedback">{errors.name}</div>
+              )}
             </FormGroup>
-            {errors.name && (
-              <FormText className="text-danger">{errors.name}</FormText>
-            )}
           </div>
           {/* 연락처 */}
           <div>
@@ -391,6 +408,7 @@ export function MemberSignup() {
                 생년월일 <span style={{ color: "red" }}>*</span>
               </FormLabel>
               <div className="d-flex" style={{ gap: "10px" }}>
+                {/* 년도 */}
                 <Form.Select
                   style={{ width: "140px" }}
                   value={birthYear}
@@ -398,6 +416,7 @@ export function MemberSignup() {
                     setBirthYear(e.target.value);
                     updateBirthDate(e.target.value, birthMonth, birthDay);
                   }}
+                  className={errors.birthDate ? "is-invalid" : ""}
                 >
                   <option value="">년도</option>
                   {Array.from({ length: 100 }, (_, i) => {
@@ -410,6 +429,7 @@ export function MemberSignup() {
                   })}
                 </Form.Select>
 
+                {/* 월 */}
                 <Form.Select
                   style={{ width: "120px" }}
                   value={birthMonth}
@@ -426,6 +446,7 @@ export function MemberSignup() {
                   ))}
                 </Form.Select>
 
+                {/* 일 */}
                 <Form.Select
                   style={{ width: "120px" }}
                   value={birthDay}
@@ -483,7 +504,14 @@ export function MemberSignup() {
                         setErrors((prev) => ({ ...prev, email: null }));
                       }
                     }}
-                    disabled={emailVerified} // 인증 완료되면 수정 불가
+                    readOnly={emailVerified} // 인증 완료되면 수정 불가
+                    className={
+                      errors.email
+                        ? "is-invalid"
+                        : valids.email
+                          ? "is-valid"
+                          : ""
+                    }
                   />
                 </Col>
 
@@ -521,10 +549,10 @@ export function MemberSignup() {
                       style={{ height: "40px" }}
                     />
                   </Col>
-                  <Col xs={4} sm={6} md={2}>
+                  <Col xs={12} sm={4}>
                     <Button
                       variant="outline-success"
-                      className="w-100"
+                      className="w-100 mb-0"
                       onClick={handleVerifyEmailCode}
                     >
                       인증 확인
@@ -583,7 +611,9 @@ export function MemberSignup() {
         </section>
         {/* 회원가입 버튼 */}
         <div className=" d-flex justify-content-center mb-4">
-          <Button onClick={handleSaveButtonClick}>회원 가입</Button>
+          <Button className="w-100" onClick={handleSaveButtonClick}>
+            회원 가입
+          </Button>
         </div>
       </Col>
     </Row>

@@ -58,13 +58,16 @@ export function PasswordEmailAuth() {
     axios
       .post("/api/member/findPassword/verifyAuth", { email, code: emailCode })
       .then(() => {
-        toast.success("이메일 인증이 완료되었습니다.");
+        toast.success("이메일 인증이 완료되었습니다.", {
+          position: "top-center",
+        });
+
         setEmailVerified(true);
         setValids((prev) => ({ ...prev, email: "이메일 인증 완료" }));
         setErrors((prev) => ({ ...prev, email: null }));
       })
       .catch(() => {
-        toast.error("이메일 인증 요청을 해주세요.");
+        toast.error("이메일 인증 요청을 해주세요.", { position: "top-center" });
       })
       .finally(() => {});
   }
@@ -90,49 +93,46 @@ export function PasswordEmailAuth() {
 
   return (
     <div>
-      <h3 className="mt-5 d-flex justify-content-center">비밀번호 찾기</h3>
-      <div
-        style={{
-          border: "solid #ccc",
-          borderRadius: "10px",
-          margin: "auto",
-          padding: "1rem",
-          width: "500px",
-          marginTop: "5rem",
-        }}
+      <h2
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "10vh" }}
       >
-        <Row className="d-flex justify-content-center ">
-          <Col md="auto">
-            <h3 className="mb-2 mt-2 text-center">이메일 인증</h3>
+        비밀번호 찾기
+      </h2>
+      <Row
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "60vh" }}
+      >
+        <Col xs={12} sm="auto" style={{ width: "550px" }}>
+          <section className="bg-gray-200 px-3 px-5 py-4 rounded mb-3">
+            <h3 className="mb-4 mt-2 text-center">이메일 인증</h3>
             {/* 아이디 */}
-            <div>
-              <FormGroup className="mt-3">
-                <FormLabel>아이디</FormLabel>
-                <FormControl
-                  placeholder="아이디를 입력하세요."
-                  value={memberId}
-                  onChange={(e) => {
-                    setMemberId(e.target.value);
-                    setErrors((prev) => ({ ...prev, memberId: null }));
-                  }}
-                  readOnly={emailVerified}
-                />
-              </FormGroup>
-            </div>
-            {errors.memberId && (
-              <FormText className="text-danger">{errors.memberId}</FormText>
-            )}
+            <FormGroup className="mt-3">
+              <FormLabel>아이디</FormLabel>
+              <FormControl
+                placeholder="아이디를 입력하세요."
+                value={memberId}
+                onChange={(e) => {
+                  setMemberId(e.target.value);
+                  setErrors((prev) => ({ ...prev, memberId: null }));
+                }}
+                readOnly={emailVerified}
+                className={errors.memberId ? "is-invalid" : ""}
+              />
+              {errors.memberId && (
+                <FormText className="text-danger">{errors.memberId}</FormText>
+              )}
+            </FormGroup>
 
-            {/* 이메일 */}
-            <div>
-              <FormGroup className="mb-3 mt-2" controlId="email">
-                <FormLabel>이메일</FormLabel>
-                <div className="d-flex gap-2">
+            {/* 이메일 / 인증 요청 */}
+            <FormGroup className="mb-3 mt-2" controlId="email">
+              <FormLabel>이메일</FormLabel>
+              <Row className="g-2 align-items-center">
+                <Col xs={12} sm={8}>
                   <FormControl
                     placeholder="example@example.com"
                     autoComplete="off"
                     type="email"
-                    style={{ width: "240px" }}
                     value={email}
                     onChange={(e) => {
                       const value = e.target.value;
@@ -148,62 +148,70 @@ export function PasswordEmailAuth() {
                         setErrors((prev) => ({ ...prev, email: null }));
                       }
                     }}
-                    readOnly={emailVerified} // 인증 완료되면 수정 불가
+                    readOnly={emailVerified}
+                    className={errors.email ? "is-invalid" : ""}
                   />
-                  {/* 인증 요청 버튼*/}
+                </Col>
+                {/* 인증 요청 버튼 */}
+                <Col xs={12} sm={4}>
                   <Button
-                    className="mb-0"
-                    variant="outline-secondary"
+                    variant="outline-dark"
+                    className="w-100 mb-0"
                     onClick={handleRequestAuth}
                     disabled={isProcessing}
                   >
                     인증번호 요청
                   </Button>
-                </div>
-                {errors.email && (
-                  <FormText className="text-danger">{errors.email}</FormText>
-                )}
-              </FormGroup>
-              {/* 인증번호 입력 */}
-              <FormGroup className="mb-3" controlId="emailCode">
-                <div className="d-flex gap-2">
+                </Col>
+              </Row>
+              {errors.email && (
+                <FormText className="text-danger">{errors.email}</FormText>
+              )}
+            </FormGroup>
+
+            {/* 인증번호 입력 / 확인 */}
+            <FormGroup className="mb-3" controlId="emailCode">
+              <Row className="g-2 align-items-center">
+                <Col xs={12} sm={8}>
                   <FormControl
-                    autoComplete="off"
                     placeholder="인증번호 입력"
-                    style={{ width: "240px" }}
+                    autoComplete="off"
                     value={emailCode}
                     onChange={(e) => setEmailCode(e.target.value)}
                     disabled={emailVerified}
-                    className="me-4"
+                    className={valids.email ? "is-valid" : ""}
                   />
-                  {/* 인증 확인 버튼*/}
+                </Col>
+                {/* 인증 확인 버튼 */}
+                <Col xs={12} sm={4}>
                   <Button
-                    className="mb-0"
                     variant="outline-success"
+                    className="w-100 mb-0"
                     onClick={handleVerifyAuth}
                   >
                     인증 확인
                   </Button>
-                </div>
-                {valids.email && (
-                  <FormText className="text-success">{valids.email}</FormText>
-                )}
-              </FormGroup>
-            </div>
+                </Col>
+              </Row>
+              {valids.email && (
+                <FormText className="text-success">{valids.email}</FormText>
+              )}
+            </FormGroup>
+
+            {/* 비밀번호 재설정 버튼 */}
             <div className="d-flex justify-content-between">
               <Button
                 style={{ height: "60px", fontSize: "20px" }}
-                variant="secondary"
+                variant="primary"
                 className="w-100 mt-3"
                 onClick={handleNextButtonClick}
-                disabled={!emailVerified}
               >
                 비밀번호 재설정
               </Button>
             </div>
-          </Col>
-        </Row>
-      </div>
+          </section>
+        </Col>
+      </Row>
     </div>
   );
 }
