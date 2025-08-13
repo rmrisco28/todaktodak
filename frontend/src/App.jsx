@@ -170,7 +170,6 @@ function App() {
             {/* 대여 현황 */}
             <Route path="rental/list" element={<RentalList />} />
             {/* 대여 연장 */}
-            {/*todo gg 아래 세개 /:seq 추가하기*/}
             <Route path="rental/renew/:seq" element={<RentalRenew />} />
             {/* 대여 반납 */}
             <Route path="rental/return/:seq" element={<RentalReturn />} />
