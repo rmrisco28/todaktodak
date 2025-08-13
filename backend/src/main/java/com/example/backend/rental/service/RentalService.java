@@ -156,11 +156,11 @@ public class RentalService {
     }
 
     public Map<String, Object> listAdmin(String keyword, Integer pageNumber) {
-        Page<RentalAdminDto> rentalAdminDtoPage = rentalRepository.searchRentalAdminList(keyword, PageRequest.of(pageNumber - 1, 10));
+        Page<RentalAdminDto> rentalAdminDtoPage = rentalRepository.searchRentalAdminList(keyword, PageRequest.of(pageNumber - 1, 5));
         int totalPages = rentalAdminDtoPage.getTotalPages();
 
-        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
-        int leftPageNumber = rightPageNumber - 9;
+        int rightPageNumber = ((pageNumber - 1) / 5 + 1) * 5;
+        int leftPageNumber = rightPageNumber - 4;
         rightPageNumber = Math.min(rightPageNumber, totalPages);
         leftPageNumber = Math.max(leftPageNumber, 1);
         var pageInfo = Map.of("totalPages", totalPages, "rightPageNumber", rightPageNumber, "leftPageNumber", leftPageNumber, "currentPageNumber", pageNumber);

@@ -211,9 +211,10 @@ export function RentalReturn() {
 
   return (
     <>
+      {/*
       <Row className="justify-content-center">
         <Col xs={12} md={8}>
-          {/* 대여 상단 제목*/}
+           대여 상단 제목
           <h2
             className="mb-4"
             style={{
@@ -330,7 +331,7 @@ export function RentalReturn() {
             </FormGroup>
           </div>
 
-          {/* 반납 버튼 */}
+           반납 버튼
           <div className="d-flex justify-content-center gap-4 mb-3">
             {state === "대여중" && (
               <Button
@@ -352,7 +353,7 @@ export function RentalReturn() {
               취소
             </Button>
 
-            {/* 반납 취소 버튼 */}
+             반납 취소 버튼
             {state === "반납 확인중" && (
               <Button
                 variant="info"
@@ -365,7 +366,7 @@ export function RentalReturn() {
           </div>
         </Col>
 
-        {/* 취소 모달*/}
+         취소 모달
         <Modal show={cancelModalShow} onHide={() => setCancelModalShow(false)}>
           <Modal.Header closeButton>
             <Modal.Title>반납 취소 여부 확인</Modal.Title>
@@ -393,6 +394,463 @@ export function RentalReturn() {
           </Modal.Footer>
         </Modal>
       </Row>
+
+      <hr />
+      <h3>2차</h3>
+*/}
+      <div
+        className="container-fluid py-4"
+        style={{ backgroundColor: "#f8f9fa" }}
+      >
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-8 col-lg-6">
+            {/* 상단 제목 */}
+            <div className="mb-5">
+              <h2
+                className="fw-bold mb-2"
+                style={{
+                  color: "#2d3748",
+                  fontSize: "2rem",
+                  cursor: "pointer",
+                  width: "fit-content",
+                  transition: "color 0.3s ease",
+                }}
+                onMouseEnter={(e) => (e.target.style.color = "#4299e1")}
+                onMouseLeave={(e) => (e.target.style.color = "#2d3748")}
+                onClick={() => navigate("/rental/list")}
+              >
+                내 렌탈 현황(반납)
+              </h2>
+              <p className="text-muted mb-0">
+                반납할 제품 정보를 확인하고 반납 신청을 진행하세요.
+              </p>
+            </div>
+
+            {/* 메인 카드 */}
+            <div
+              className="card border-0 shadow-sm mb-4"
+              style={{ borderRadius: "16px" }}
+            >
+              <div className="card-body p-4">
+                {/* 제품 정보 섹션 */}
+                <div className="mb-4">
+                  <h5 className="fw-semibold mb-3" style={{ color: "#4a5568" }}>
+                    제품 정보
+                  </h5>
+
+                  <div className="mb-3">
+                    <label
+                      className="form-label fw-medium"
+                      style={{ color: "#2d3748" }}
+                    >
+                      제품명
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control border-0"
+                      style={{
+                        borderRadius: "10px",
+                        padding: "12px 16px",
+                        fontSize: "0.95rem",
+                        backgroundColor: "#f8f9fa",
+                      }}
+                      value={rentalData.productName}
+                      disabled
+                    />
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label
+                        className="form-label fw-medium"
+                        style={{ color: "#2d3748" }}
+                      >
+                        제품 대여 개수
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control border-0"
+                        style={{
+                          borderRadius: "10px",
+                          padding: "12px 16px",
+                          fontSize: "0.95rem",
+                          backgroundColor: "#f8f9fa",
+                        }}
+                        value={rentalData.orderCount}
+                        disabled
+                      />
+                    </div>
+                    <div className="col-md-6 mb-3">
+                      <label
+                        className="form-label fw-medium"
+                        style={{ color: "#2d3748" }}
+                      >
+                        현재 상태
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control border-0"
+                        style={{
+                          borderRadius: "10px",
+                          padding: "12px 16px",
+                          fontSize: "0.95rem",
+                          backgroundColor: "#f8f9fa",
+                        }}
+                        value={state}
+                        disabled
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <label
+                      className="form-label fw-medium"
+                      style={{ color: "#2d3748" }}
+                    >
+                      남은 대여 기간
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control border-0"
+                      style={{
+                        borderRadius: "10px",
+                        padding: "12px 16px",
+                        fontSize: "0.95rem",
+                        backgroundColor: "#f8f9fa",
+                      }}
+                      value={formatDate(rentalData.endDttm)}
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                <hr style={{ opacity: 0.1 }} />
+
+                {/* 반납자 정보 섹션 */}
+                <div className="mb-4">
+                  <h5 className="fw-semibold mb-3" style={{ color: "#4a5568" }}>
+                    반납자 정보
+                  </h5>
+
+                  <div className="mb-3">
+                    <label
+                      className="form-label fw-medium"
+                      style={{ color: "#2d3748" }}
+                    >
+                      주문자 성명
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control bg-white"
+                      style={{
+                        borderRadius: "10px",
+                        padding: "12px 16px",
+                        fontSize: "0.95rem",
+                        border: "2px solid #e2e8f0",
+                        transition: "all 0.3s ease",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = "#4299e1";
+                        e.target.style.boxShadow =
+                          "0 0 0 0.2rem rgba(66, 153, 225, 0.15)";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "#e2e8f0";
+                        e.target.style.boxShadow = "none";
+                      }}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label
+                      className="form-label fw-medium"
+                      style={{ color: "#2d3748" }}
+                    >
+                      연락처
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control bg-white"
+                      style={{
+                        borderRadius: "10px",
+                        padding: "12px 16px",
+                        fontSize: "0.95rem",
+                        border: "2px solid #e2e8f0",
+                        transition: "all 0.3s ease",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = "#4299e1";
+                        e.target.style.boxShadow =
+                          "0 0 0 0.2rem rgba(66, 153, 225, 0.15)";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "#e2e8f0";
+                        e.target.style.boxShadow = "none";
+                      }}
+                      value={phone}
+                      onChange={handlePhoneNumberChange}
+                    />
+                  </div>
+                </div>
+
+                <hr style={{ opacity: 0.1 }} />
+
+                {/* 반납 주소 섹션 */}
+                <div className="mb-4">
+                  <h5 className="fw-semibold mb-3" style={{ color: "#4a5568" }}>
+                    반납 주소지
+                  </h5>
+
+                  <div className="mb-3">
+                    <label
+                      className="form-label fw-medium"
+                      style={{ color: "#2d3748" }}
+                    >
+                      우편번호
+                    </label>
+                    <div className="d-flex gap-2">
+                      <input
+                        type="text"
+                        className="form-control border-0"
+                        style={{
+                          borderRadius: "10px",
+                          padding: "12px 16px",
+                          fontSize: "0.95rem",
+                          backgroundColor: "#f8f9fa",
+                          width: "150px",
+                        }}
+                        value={postalCode}
+                        readOnly
+                        onChange={(e) => setPostalCode(e.target.value)}
+                      />
+                      <button
+                        className="btn px-4"
+                        style={{
+                          backgroundColor: "#2d3748",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "10px",
+                          fontWeight: "500",
+                          fontSize: "0.9rem",
+                        }}
+                        onClick={handleAddressButtonClick}
+                      >
+                        검색
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <input
+                      type="text"
+                      className="form-control border-0"
+                      style={{
+                        borderRadius: "10px",
+                        padding: "12px 16px",
+                        fontSize: "0.95rem",
+                        backgroundColor: "#f8f9fa",
+                      }}
+                      value={address}
+                      placeholder="주소"
+                      readOnly
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <input
+                      type="text"
+                      className="form-control bg-white"
+                      style={{
+                        borderRadius: "10px",
+                        padding: "12px 16px",
+                        fontSize: "0.95rem",
+                        border: "2px solid #e2e8f0",
+                        transition: "all 0.3s ease",
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = "#4299e1";
+                        e.target.style.boxShadow =
+                          "0 0 0 0.2rem rgba(66, 153, 225, 0.15)";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "#e2e8f0";
+                        e.target.style.boxShadow = "none";
+                      }}
+                      value={addressDetail}
+                      placeholder="상세주소"
+                      onChange={(e) => setAddressDetail(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* 메모 섹션 */}
+                <div className="mb-4">
+                  <label
+                    className="form-label fw-medium"
+                    style={{ color: "#2d3748" }}
+                  >
+                    남기실 메모
+                  </label>
+                  <textarea
+                    className="form-control bg-white"
+                    style={{
+                      borderRadius: "10px",
+                      padding: "12px 16px",
+                      fontSize: "0.95rem",
+                      border: "2px solid #e2e8f0",
+                      transition: "all 0.3s ease",
+                      minHeight: "100px",
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "#4299e1";
+                      e.target.style.boxShadow =
+                        "0 0 0 0.2rem rgba(66, 153, 225, 0.15)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e2e8f0";
+                      e.target.style.boxShadow = "none";
+                    }}
+                    rows={3}
+                    placeholder="반납과 관련된 메모를 입력해주세요."
+                    onChange={(e) => setContent(e.target.value)}
+                  />
+                </div>
+
+                {/* 버튼 섹션 */}
+                <div className="d-flex justify-content-center gap-3 mt-5">
+                  {state === "대여중" && (
+                    <button
+                      className="btn px-5 py-3 fw-medium"
+                      style={{
+                        backgroundColor: validate ? "#2d3748" : "#a0aec0",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "12px",
+                        fontSize: "0.95rem",
+                        transition: "all 0.3s ease",
+                      }}
+                      disabled={!validate}
+                      onClick={handleReturnButtonClick}
+                    >
+                      <i className="fas fa-undo"></i>
+                      반납하기
+                    </button>
+                  )}
+
+                  {state === "반납 확인중" && (
+                    <button
+                      className="btn px-5 py-3 fw-medium"
+                      style={{
+                        backgroundColor: "#4299e1",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "12px",
+                        fontSize: "0.95rem",
+                        transition: "all 0.3s ease",
+                      }}
+                      onClick={handleCancellationOfReturnButton}
+                    >
+                      <i className="fas fa-times"></i>
+                      반납 취소
+                    </button>
+                  )}
+
+                  <button
+                    className="btn px-5 py-3 fw-medium"
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "#718096",
+                      border: "2px solid #e2e8f0",
+                      borderRadius: "12px",
+                      fontSize: "0.95rem",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#f7fafc";
+                      e.target.style.borderColor = "#cbd5e0";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "transparent";
+                      e.target.style.borderColor = "#e2e8f0";
+                    }}
+                    onClick={() => setCancelModalShow(true)}
+                  >
+                    <i className="fas fa-arrow-left"></i>
+                    취소
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 취소 모달 */}
+        <div
+          className={`modal fade ${cancelModalShow ? "show d-block" : ""}`}
+          style={{
+            backgroundColor: cancelModalShow
+              ? "rgba(0,0,0,0.5)"
+              : "transparent",
+          }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div
+              className="modal-content"
+              style={{ borderRadius: "16px", border: "none" }}
+            >
+              <div className="modal-header border-0 pb-0">
+                <h5
+                  className="modal-title fw-bold"
+                  style={{ color: "#2d3748" }}
+                >
+                  반납 취소 여부 확인
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setCancelModalShow(false)}
+                ></button>
+              </div>
+              <div className="modal-body pt-0">
+                <p className="mb-0" style={{ color: "#4a5568" }}>
+                  반납 신청하지 않고 이동하시겠습니까?
+                  <br />
+                  작성하신 내용은 삭제됩니다.
+                </p>
+              </div>
+              <div className="modal-footer border-0 pt-0">
+                <button
+                  className="btn px-4 py-2"
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "#718096",
+                    border: "2px solid #e2e8f0",
+                    borderRadius: "10px",
+                  }}
+                  onClick={() => setCancelModalShow(false)}
+                >
+                  뒤로
+                </button>
+                <button
+                  className="btn px-4 py-2"
+                  style={{
+                    backgroundColor: "#f56565",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "10px",
+                  }}
+                  onClick={() => navigate("/rental/list")}
+                >
+                  목록으로
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

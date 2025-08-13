@@ -19,6 +19,7 @@ export function BuyForm() {
   const [sale, setSale] = useState(null);
 
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [address, setAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState(""); // 참고항목
@@ -59,6 +60,20 @@ export function BuyForm() {
   }
 
   // 전화번호 입력을 위한 정규식 (010-XXXX-XXXX)
+
+  const validatePhoneNumber = (value) => {
+    // 숫자만 추출
+    const digits = value.replace(/[^\d]/g, "");
+
+    if (digits.length !== 11) {
+      // 한국 휴대폰 번호는 11자리
+      setPhoneError("휴대폰 번호 형식이 올바르지 않습니다.");
+      return false;
+    } else {
+      setPhoneError(""); // 오류 없으면 메시지 제거
+      return true;
+    }
+  };
 
   const handlePhoneNumberChange = (e) => {
     let value = e.target.value;
@@ -489,11 +504,20 @@ export function BuyForm() {
                           onBlur={(e) => {
                             e.target.style.borderColor = "#dee2e6";
                             e.target.style.boxShadow = "none";
+                            validatePhoneNumber(e.target.value); // 입력 끝났을 때 체크
                           }}
                           placeholder="번호를 입력해주세요."
                           value={phoneNumber}
                           onChange={handlePhoneNumberChange}
                         />
+                        {phoneError && (
+                          <div
+                            className="text-danger mt-1"
+                            style={{ fontSize: "0.85rem" }}
+                          >
+                            {phoneError}
+                          </div>
+                        )}
                       </div>
                     </div>
 
