@@ -56,7 +56,8 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
                         r.orderNo.orderNo,
                         r.productNo.productNo,
             
-                        r.orderNo.sale.saleNo
+                        r.orderNo.saleNo.saleNo,
+                        r.memberNo.memberNo
                         )
                     FROM Rental r
                     WHERE r.seq = :seq

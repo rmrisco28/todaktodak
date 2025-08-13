@@ -1,10 +1,9 @@
 package com.example.backend.order.service;
 
-import com.example.backend.order.dto.OrderInfoDto;
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.order.dto.OrderListDtoMadeByGG;
-import com.example.backend.order.entity.OrderInfo;
 import com.example.backend.order.entity.OrderList;
-import com.example.backend.order.repository.OrderInfoRepository;
 import com.example.backend.order.repository.OrderListRepositoryMadeByGG;
 import com.example.backend.product.entity.Product;
 import com.example.backend.product.repository.ProductRepository;
@@ -13,13 +12,13 @@ import com.example.backend.rental.repository.RentalRepository;
 import com.example.backend.sale.entity.Sale;
 import com.example.backend.sale.repository.SaleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +29,9 @@ public class BuyService {
     private final SaleRepository saleRepository;
     private final RentalRepository rentalRepository;
     private final ProductRepository productRepository;
+    private final MemberRepository memberRepository;
 
-    public void buyAndRentalSave(OrderListDtoMadeByGG old) {
+    public void buyAndRentalSave(OrderListDtoMadeByGG old, Authentication authentication) {
         // 결제 테이블 데이터 저장
         // 결제 코드 여기부터
         // 주문 배송, 결제 정보 order_no
@@ -50,6 +50,9 @@ public class BuyService {
         // 여기까지(결제코드)
         Sale sale = saleRepository.findBySaleNo(old.getSaleSaleNo());
 
+        Member member = memberRepository.findByMemberId(old.getMemberMemberId())
+                .orElseThrow(() -> new RuntimeException("회원 없음: " + old.getMemberMemberId()));
+
 
         OrderList orderList = new OrderList();
         System.out.println("old.getTotalPrice() = " + old.getTotalPrice());
@@ -58,8 +61,11 @@ public class BuyService {
 
         String orderNo = code + date + seqStr;
         orderList.setOrderNo(orderNo);
-        orderList.setSale(sale);
-        orderList.setName(old.getName());
+        orderList.setSaleNo(sale);
+        orderList.setMemberNo(member);
+
+
+        orderList.setName(authentication.getName());
         orderList.setRecipient(old.getRecipient());
 
         orderList.setPhone(old.getPhone());
@@ -79,8 +85,6 @@ public class BuyService {
         orderList.setDeliveryCompany(old.getDeliveryCompany());
         orderList.setTracking(old.getTracking());
 
-        orderListRepositoryMadeByGG.save(orderList);
-
 
         // 렌탈 테이블
         // 렌탈 코드(여기부터)
@@ -95,6 +99,7 @@ public class BuyService {
         // 렌탈코드 (여기까지)
         Rental rental = new Rental();
         rental.setRentalNo(rentalNo);
+        rental.setMemberNo(member);
 
 //        OrderInfo orderInfoRental = new OrderInfo();
 //        orderInfoRental.setOrderCount(rsd.getOrderNoOrderCount());
@@ -115,6 +120,9 @@ public class BuyService {
 
         // 재고 수량 변경
         product.setStock(product.getStock() - old.getOrderCount());
+
+
+        orderListRepositoryMadeByGG.save(orderList);
 
         rentalRepository.save(rental);
 

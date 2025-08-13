@@ -5,6 +5,8 @@ import com.example.backend.order.dto.OrderListDtoMadeByGG;
 import com.example.backend.order.service.BuyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +23,10 @@ public class BuyController {
 
     // 주문 배송, 결제 정보
     @PostMapping("buy")
-    public ResponseEntity<?> buy(@RequestBody @Validated OrderListDtoMadeByGG oid) {
-        buyService.buyAndRentalSave(oid);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> buy(@RequestBody @Validated OrderListDtoMadeByGG oid,
+                                 Authentication authentication) {
+        buyService.buyAndRentalSave(oid, authentication);
 
 
         return ResponseEntity.ok(Map.of(

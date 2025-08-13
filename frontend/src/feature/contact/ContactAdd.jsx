@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ContactAdd() {
   const [title, setTitle] = useState("");
@@ -22,15 +23,26 @@ export function ContactAdd() {
 
   let navigate = useNavigate();
 
+  const { user } = useContext(AuthenticationContext);
+
+  useEffect(() => {
+    if (user === null) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+  }, []);
+
   let validateTitle = true;
   let validateContent = true;
-  let validateName = true;
   if (title.trim() === "") {
     validateTitle = false;
   } else if (content.trim() === "") {
     validateContent = false;
-  } else if (name.trim() === "") {
-    validateName = false;
+  }
+
+  if (user === null) {
+    return <Spinner />;
   }
 
   function handleSaveButtonClick() {
@@ -38,15 +50,13 @@ export function ContactAdd() {
       alert("제목을 입력해주세요.");
     } else if (!validateContent) {
       alert("내용을 입력해주세요.");
-    } else if (!validateName) {
-      alert("이름을 입력해주세요.");
     } else {
       setIsProcessing(true);
       axios
         .post("/api/contact/add", {
           title: title,
           content: content,
-          name: name,
+          name: user.name,
         })
         .then((res) => {
           console.log("ok");
@@ -98,16 +108,20 @@ export function ContactAdd() {
         <div className="mb-3">
           <FormGroup>
             <FormLabel>작성자</FormLabel>
-            <FormControl
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
+            <FormControl value={user.name} disabled />
           </FormGroup>
         </div>
 
         {/*버튼*/}
+        <Button
+          onClick={handleSaveButtonClick}
+          disabled={isProcessing}
+          className="me-2"
+        >
+          {isProcessing && <Spinner size="sm" />}
+          {isProcessing || "저장"}
+        </Button>
+
         <Button
           variant="danger"
           className="me-2"
@@ -116,11 +130,6 @@ export function ContactAdd() {
           }}
         >
           취소
-        </Button>
-
-        <Button onClick={handleSaveButtonClick} disabled={isProcessing}>
-          {isProcessing && <Spinner size="sm" />}
-          {isProcessing || "저장"}
         </Button>
       </Col>
 

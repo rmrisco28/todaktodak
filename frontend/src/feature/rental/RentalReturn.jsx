@@ -164,6 +164,7 @@ export function RentalReturn() {
         orderNo: rentalData.orderNo,
         productNo: rentalData.productNo,
         saleNo: rentalData.saleNo,
+        memberNo: rentalData.memberNo,
       })
       .then((res) => {
         console.log(res.data);
@@ -185,6 +186,7 @@ export function RentalReturn() {
         rentalNo: rentalData.rentalNo,
         state: "대여중",
         rentalState: "대여중",
+        content: content,
       })
       .then((res) => {
         console.log(res.data);

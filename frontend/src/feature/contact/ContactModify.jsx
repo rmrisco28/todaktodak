@@ -137,6 +137,7 @@ export function ContactModify() {
             <FormGroup>
               <FormLabel>작성자</FormLabel>
               <FormControl
+                disabled
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />

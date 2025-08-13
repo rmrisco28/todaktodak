@@ -1,5 +1,6 @@
 package com.example.backend.order.entity;
 
+import com.example.backend.member.entity.Member;
 import com.example.backend.sale.entity.Sale;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,12 +21,17 @@ public class OrderList {
     @Column(name = "seq", nullable = false)
     private Integer seq;
 
+
     @Column(name = "order_no", nullable = false, length = 20)
     private String orderNo;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "sale_no", nullable = false, referencedColumnName = "sale_no")
-    private Sale sale;
+    private Sale saleNo;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "member_no", nullable = false, referencedColumnName = "member_no")
+    private Member memberNo;
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
@@ -63,18 +69,16 @@ public class OrderList {
     @Column(name = "order_count", nullable = false)
     private Integer orderCount;
 
-    //    @ColumnDefault("60")
     @Column(name = "rental_period", nullable = false)
     private Integer rentalPeriod;
 
-    @ColumnDefault("대여중")
     @Column(name = "state", nullable = false, length = 10)
     private String state = "대여중";
 
-    @Column(name = "delivery_company", nullable = false, length = 50)
+    @Column(name = "delivery_company", length = 50)
     private String deliveryCompany;
 
-    @Column(name = "tracking", nullable = false, length = 100)
+    @Column(name = "tracking", length = 100)
     private String tracking;
 
     @ColumnDefault("current_timestamp()")
@@ -92,6 +96,5 @@ public class OrderList {
     @ColumnDefault("0")
     @Column(name = "del_yn", nullable = false)
     private Boolean delYn = false;
-
 
 }
