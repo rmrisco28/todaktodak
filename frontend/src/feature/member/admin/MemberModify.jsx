@@ -140,40 +140,26 @@ export function MemberModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={6}>
+      <Col xs={6}>
         <h3 className="mb-4">회원 정보 수정</h3>
         {/* 고객 번호 */}
         <div>
           <FormGroup as={Row} controlId="memberNo" className="mb-4">
-            <FormLabel column lg={3}>
+            <FormLabel column sm={3}>
               고객 번호
             </FormLabel>
-            <Col lg={5}>
+            <Col sm={7}>
               <FormControl value={member.memberNo} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 권한 */}
-        <div>
-          <FormGroup as={Row} controlId="auth" className="mb-4">
-            <FormLabel column lg={3}>
-              권한
-            </FormLabel>
-            <Col lg={5}>
-              <FormControl
-                value={member.auth || ""}
-                onChange={(e) => setMember({ ...member, auth: e.target.value })}
-              />
             </Col>
           </FormGroup>
         </div>
         {/* 아이디 */}
         <div>
           <FormGroup as={Row} controlId="memberId" className="mb-4">
-            <FormLabel column lg={3}>
+            <FormLabel column sm={3}>
               아이디
             </FormLabel>
-            <Col lg={5}>
+            <Col sm={7}>
               <FormControl
                 value={member.memberId}
                 onChange={(e) =>
@@ -187,10 +173,10 @@ export function MemberModify() {
         <Form>
           <div>
             <FormGroup as={Row} controlId="password" className="mb-4">
-              <FormLabel column lg={3}>
+              <FormLabel column sm={3}>
                 비밀번호
               </FormLabel>
-              <Col lg={5} className="text-center">
+              <Col sm={7} className="text-center">
                 <FormControl
                   autoComplete="off"
                   type="password"
@@ -222,10 +208,10 @@ export function MemberModify() {
           {/* 새 비밀번호 확인*/}
           <div>
             <FormGroup as={Row} controlId="password2" className="mb-4">
-              <FormLabel column lg={3}>
+              <FormLabel column sm={3}>
                 비밀번호 확인
               </FormLabel>
-              <Col lg={5} className="text-center">
+              <Col sm={7} className="text-center">
                 <FormControl
                   autoComplete="off"
                   type="password"
@@ -256,7 +242,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               이름
             </FormLabel>
-            <Col sm={5}>
+            <Col sm={7}>
               <FormControl
                 value={member.name}
                 onChange={(e) => setMember({ ...member, name: e.target.value })}
@@ -270,7 +256,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               이메일
             </FormLabel>
-            <Col sm={5}>
+            <Col sm={7}>
               <FormControl
                 value={member.email}
                 onChange={(e) =>
@@ -283,15 +269,15 @@ export function MemberModify() {
         {/* 생년월일 */}
         <div>
           <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column lg={3}>
+            <FormLabel column sm={3}>
               생년월일
             </FormLabel>
-            <Col lg={5} className="d-flex" style={{ gap: "10px" }}>
+            <Col sm={7} className="d-flex" style={{ gap: "10px" }}>
               {/* 년도 */}
               <Form.Select
                 value={birthYear}
                 onChange={(e) => setBirthYear(e.target.value)}
-                style={{ width: "100px" }}
+                style={{ width: "120px", height: "40px" }}
               >
                 <option value="">년도</option>
                 {Array.from({ length: 100 }, (_, i) => {
@@ -307,7 +293,7 @@ export function MemberModify() {
               <Form.Select
                 value={birthMonth}
                 onChange={(e) => setBirthMonth(e.target.value)}
-                style={{ width: "70px" }}
+                style={{ width: "90px", height: "40px" }}
               >
                 <option value="">월</option>
                 {Array.from({ length: 12 }, (_, i) => (
@@ -320,7 +306,7 @@ export function MemberModify() {
               <Form.Select
                 value={birthDay}
                 onChange={(e) => setBirthDay(e.target.value)}
-                style={{ width: "70px" }}
+                style={{ width: "90px", height: "40px" }}
               >
                 <option value="">일</option>
                 {Array.from(
@@ -341,7 +327,7 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               연락처
             </FormLabel>
-            <Col sm={5}>
+            <Col sm={7}>
               <FormControl
                 value={member.phone}
                 onChange={(e) =>
@@ -353,19 +339,21 @@ export function MemberModify() {
         </div>
         {/* 우편번호 */}
         <div>
-          <FormGroup as={Row} controlId="postCode" className="mb-4">
-            <FormLabel column lg={3}>
+          <FormGroup as={Row} controlId="postCode" className="mb-3">
+            <FormLabel column sm={3}>
               우편번호
             </FormLabel>
-            <Col lg={5}>
+            <Col sm={4}>
               <div className="d-flex" style={{ gap: "10px" }}>
                 <FormControl
+                  style={{ textAlign: "center" }}
                   value={member.postCode}
                   readOnly={true}
                   placeholder="우편번호"
                 />
                 {/* 검색버튼 */}
                 <Button
+                  className="mb-0"
                   variant="outline-dark"
                   style={{ whiteSpace: "nowrap" }}
                   onClick={handleSearchButtonClick}
@@ -379,10 +367,10 @@ export function MemberModify() {
         {/* 주소 */}
         <div>
           <FormGroup as={Row} controlId="address" className="mb-2">
-            <FormLabel column lg={3}>
+            <FormLabel column sm={3}>
               주소
             </FormLabel>
-            <Col lg={6}>
+            <Col sm={7}>
               <FormControl value={member.addr} readOnly={true} />
             </Col>
           </FormGroup>
@@ -391,27 +379,11 @@ export function MemberModify() {
         <div>
           <FormGroup as={Row} controlId="addressDetail" className="mb-4">
             <FormLabel column sm={3}></FormLabel>
-            <Col sm={6}>
+            <Col sm={7}>
               <FormControl
                 value={member.addrDetail || ""}
                 onChange={(e) =>
                   setMember({ ...member, addrDetail: e.target.value })
-                }
-              />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 회원상태 */}
-        <div>
-          <FormGroup as={Row} controlId="state" className="mb-3">
-            <FormLabel column sm={3}>
-              회원 상태
-            </FormLabel>
-            <Col sm={5}>
-              <FormControl
-                value={member.state}
-                onChange={(e) =>
-                  setMember({ ...member, state: e.target.value })
                 }
               />
             </Col>
@@ -423,10 +395,10 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               사용여부
             </FormLabel>
-            <Col sm={5}>
+            <Col sm={7}>
               <FormCheck
-                type="switch"
-                id="useYn-switch"
+                type="checkbox"
+                id="useYn"
                 label={member.useYn ? "사용중" : "미사용"}
                 checked={member.useYn}
                 onChange={(e) =>
@@ -442,11 +414,11 @@ export function MemberModify() {
             <FormLabel column sm={3}>
               삭제여부
             </FormLabel>
-            <Col sm={5}>
+            <Col sm={7}>
               <FormCheck
-                type="switch"
-                id="useYn-switch"
-                label={member.delYn ? "삭제" : "미삭제"}
+                type="checkbox"
+                id="useYn"
+                label={"삭제"}
                 checked={member.delYn}
                 onChange={(e) =>
                   setMember({ ...member, delYn: e.target.checked })

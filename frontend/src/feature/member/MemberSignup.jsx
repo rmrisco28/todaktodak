@@ -123,7 +123,11 @@ export function MemberSignup() {
 
     setIsProcessing(true);
     axios
-      .post("/api/member/email/request", { email })
+      .post("/api/member/email/request", {
+        email,
+        memberId,
+        purpose: "SIGNUP",
+      })
       .then(() => {
         toast.success("인증번호가 발송되었습니다.");
         setEmailSent(true);
@@ -380,7 +384,7 @@ export function MemberSignup() {
             </FormLabel>
             <div className="d-flex" style={{ gap: "10px" }}>
               <Form.Select
-                style={{ width: "130px" }}
+                style={{ width: "140px" }}
                 value={birthYear}
                 onChange={(e) => {
                   setBirthYear(e.target.value);
@@ -399,7 +403,7 @@ export function MemberSignup() {
               </Form.Select>
 
               <Form.Select
-                style={{ width: "100px" }}
+                style={{ width: "120px" }}
                 value={birthMonth}
                 onChange={(e) => {
                   setBirthMonth(e.target.value);
@@ -415,7 +419,7 @@ export function MemberSignup() {
               </Form.Select>
 
               <Form.Select
-                style={{ width: "100px" }}
+                style={{ width: "120px" }}
                 value={birthDay}
                 onChange={(e) => {
                   setBirthDay(e.target.value);

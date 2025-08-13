@@ -47,7 +47,8 @@ public class MemberService {
     public void signup(MemberSignupForm memberSignupForm) {
 
         // 이메일 인증 완료 여부 체크
-        EmailAuth latestAuth = emailAuthRepository.findTopByEmailOrderByCreatedAtDesc(memberSignupForm.getEmail())
+        EmailAuth latestAuth = emailAuthRepository
+                .findTopByEmailAndPurposeOrderByCreatedAtDesc(memberSignupForm.getEmail(), "SIGNUP")
                 .orElseThrow(() -> new RuntimeException("이메일 인증이 완료되지 않았습니다."));
         if (!latestAuth.isVerified()) {
             throw new RuntimeException("이메일 인증이 완료되지 않았습니다.");
@@ -80,29 +81,34 @@ public class MemberService {
         }
     }
 
-    // 인증번호 생성 및 이메일 발송
-    public void sendEmailAuthCode(String email) {
+    // 인증번호 생성 및 이메일 발송(회원가입)
+    public void sendEmailAuthCode(String memberId, String email, String purpose) {
         String code = createAuthCode();
 
         EmailAuth emailAuth = new EmailAuth();
+        emailAuth.setMemberId(memberId);
         emailAuth.setEmail(email);
         emailAuth.setCode(code);
         emailAuth.setCreatedAt(LocalDateTime.now());
         emailAuth.setVerified(false);
+        emailAuth.setPurpose(purpose);
         emailAuthRepository.save(emailAuth);
 
         // 이메일 발송
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("jihun8138@gmail.com");  // 로그인한 네이버 이메일 주소 반드시 넣기
-        message.setTo("whsnoo@naver.com");
-        message.setSubject("토닥토닥 회원가입 이메일 인증번호");
-        message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
+        message.setFrom("jihun8138@gmail.com");  // 실제 본인 이메일 설정
+        message.setTo(email);
+        message.setSubject("[토닥토닥] 회원가입 인증번호");
+        message.setText("인증번호는 " + code + " 입니다. 5분 이내로 입력하세요.");
         mailSender.send(message);
     }
 
+
     // 인증번호 검증
     public boolean verifyEmailAuthCode(String email, String code) {
-        Optional<EmailAuth> optionalAuth = emailAuthRepository.findTopByEmailOrderByCreatedAtDesc(email);
+        String purpose = "SIGNUP";
+        Optional<EmailAuth> optionalAuth = emailAuthRepository
+                .findTopByEmailAndPurposeOrderByCreatedAtDesc(email, purpose);
 
         if (optionalAuth.isEmpty()) {
             return false;
@@ -121,11 +127,89 @@ public class MemberService {
         return false;
     }
 
+    // 비밀번호 찾기 이메일 요청
+    public void sendFindPasswordEmailAuthCode(String memberId, String email) {
+        String purpose = "FIND_PASSWORD";
+
+        // 회원 존재 및 이메일 일치 여부 체크 (memberId와 email이 DB에서 일치하는지)
+        Optional<Member> member = memberRepository.findByMemberId(memberId);
+        if (member.isEmpty() || !member.get().getEmail().equals(email)) {
+            throw new RuntimeException("회원 정보 불일치");
+        }
+
+        // 인증번호 생성 및 저장
+        String code = createAuthCode();
+
+        EmailAuth emailAuth = new EmailAuth();
+        emailAuth.setMemberId(memberId);
+        emailAuth.setEmail(email);
+        emailAuth.setCode(code);
+        emailAuth.setCreatedAt(LocalDateTime.now());
+        emailAuth.setVerified(false);
+        emailAuth.setPurpose(purpose);
+        emailAuthRepository.save(emailAuth);
+
+        // 이메일 발송
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("jihun8138@gmail.com");  // 실제 본인 이메일 설정
+        message.setTo(email);
+        message.setSubject("[토닥토닥] 비밀번호찾기 인증번호");
+        message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
+        mailSender.send(message);
+    }
+
+    // 비밀번호 찾기 인증번호 검증
+    public boolean verifyFindPasswordEmailAuthCode(String email, String code) {
+        String purpose = "FIND_PASSWORD";
+
+        Optional<EmailAuth> optionalAuth = emailAuthRepository.findTopByEmailAndPurposeOrderByCreatedAtDesc(email, purpose);
+
+        if (optionalAuth.isEmpty()) {
+            return false;
+        }
+
+        EmailAuth emailAuth = optionalAuth.get();
+
+        LocalDateTime expireTime = emailAuth.getCreatedAt().plusMinutes(5);
+
+        if (!emailAuth.isVerified() && emailAuth.getCode().equals(code) && LocalDateTime.now().isBefore(expireTime)) {
+            emailAuth.setVerified(true);
+            emailAuthRepository.save(emailAuth);
+            return true;
+        }
+        return false;
+    }
+
     // 인증번호 생성
     private String createAuthCode() {
         Random random = new Random();
         int code = 100000 + random.nextInt(900000);
         return String.valueOf(code);
+    }
+
+    // 비밀번호 재설정
+    public void resetPassword(ResetPasswordDto dto) {
+        Member member = memberRepository.findByMemberId(dto.getMemberId())
+                .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+
+        // 이메일 일치 확인 (인증 완료 여부는 따로 검증했다고 가정)
+        if (!member.getEmail().trim().equalsIgnoreCase(dto.getEmail().trim())) {
+            throw new RuntimeException("회원 정보가 일치하지 않습니다.");
+        }
+
+        // 새 비밀번호 유효성 검사
+        String newPassword = dto.getNewPassword();
+        if (!Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$", newPassword)) {
+            throw new RuntimeException("비밀번호 형식이 맞지 않습니다.");
+        }
+
+
+        LocalDateTime now = LocalDateTime.now();
+        member.setUpdateDttm(now);
+
+        // 비밀번호 변경 및 저장
+        member.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        memberRepository.save(member);
     }
 
     // 아이디 중복 확인
@@ -391,11 +475,17 @@ public class MemberService {
             throw new RuntimeException("패스워드가 일치하지 않습니다.");
         }
 
+        // 새 비밀번호가 현재 비밀번호와 같은지 확인
+        if (passwordEncoder.matches(dto.getNewPassword(), dbData.getPassword())) {
+            throw new RuntimeException("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+        }
+
         // 새 비밀번호 유효성 검사
         String newPassword = dto.getNewPassword();
         if (!Pattern.matches("^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$", newPassword)) {
             throw new RuntimeException("비밀번호 형식이 맞지 않습니다.");
         }
+
         // 변경 및 저장
         dbData.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         memberRepository.save(dbData);

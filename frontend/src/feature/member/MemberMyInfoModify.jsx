@@ -11,13 +11,12 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 export function MemberMyInfoModify() {
   const [member, setMember] = useState(null);
-  const { memberId } = useParams();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
@@ -104,10 +103,7 @@ export function MemberMyInfoModify() {
       .then((res) => {
         console.log("성공");
         setMember(res.data);
-        const message = res.data.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
+        alert("변경이 완료되었습니다.");
         navigate(`/member/myinfo`);
       })
       .catch((err) => {
@@ -172,6 +168,12 @@ export function MemberMyInfoModify() {
       newErrors.newPassword2 = "비밀번호가 일치하지 않습니다.";
     }
 
+    // 현재 비밀번호 = 새 비밀번호 인지 확인
+    if (currentPassword === newPassword) {
+      newErrors.newPassword =
+        "새 비밀번호는 현재 비밀번호와 다르게 입력해주세요.";
+    }
+
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
@@ -191,7 +193,7 @@ export function MemberMyInfoModify() {
       })
       .catch((err) => {
         console.log(err);
-        toast("비밀번호 변경에 실패하였습니다.", { type: "error" });
+        toast("현재 비밀번호가 일치하지않습니다.", { type: "error" });
       })
       .finally(() => {
         setCurrentPassword("");
@@ -251,6 +253,7 @@ export function MemberMyInfoModify() {
             </FormLabel>
             <Col sm={7}>
               <FormControl
+                disabled
                 autoComplete="off"
                 type="email"
                 value={member.email}
@@ -474,6 +477,12 @@ export function MemberMyInfoModify() {
                   setNewPassword(value);
                   if (value.trim() === "") {
                     setErrors((prev) => ({ ...prev, newPassword: null }));
+                  } else if (value === currentPassword) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      newPassword:
+                        "새 비밀번호는 현재 비밀번호와 다르게 입력해주세요.",
+                    }));
                   } else if (!validatePassword(value)) {
                     setErrors((prev) => ({
                       ...prev,

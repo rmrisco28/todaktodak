@@ -56,11 +56,15 @@ WHERE seq = 1;
 # 이메일 인증 서비스용 테이블
 CREATE TABLE email_auth
 (
-    id         INT AUTO_INCREMENT PRIMARY KEY,
-    email      VARCHAR(100) NOT NULL,
-    code       VARCHAR(6)   NOT NULL,
-    created_at DATETIME     NOT NULL,
-    verified   BOOLEAN      NOT NULL DEFAULT FALSE,
-    INDEX idx_email (email)
+    id         BIGINT AUTO_INCREMENT NOT NULL,
+    member_id  VARCHAR(50)           NOT NULL,
+    email      VARCHAR(100)          NOT NULL,
+    code       VARCHAR(6)            NOT NULL,
+    created_at datetime              NOT NULL,
+    verified   BIT(1)                NOT NULL,
+    purpose    VARCHAR(20)           NOT NULL,
+    CONSTRAINT pk_email_auth PRIMARY KEY (id)
 );
+DROP TABLE email_auth;
+
 

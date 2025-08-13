@@ -45,8 +45,8 @@ import { MemberMyInfo } from "./feature/member/MemberMyInfo.jsx";
 import { MemberMyInfoModify } from "./feature/member/MemberMyInfoModify.jsx";
 
 import { AuthenticationContextProvider } from "./common/AuthenticationContextProvider.jsx";
-import { FindPassword } from "./feature/member/FindPassword.jsx";
-import { EmailAuth } from "./feature/member/EmailAuth.jsx";
+import { ResetPassword } from "./feature/member/ResetPassword.jsx";
+import { PasswordEmailAuth } from "./feature/member/PasswordEmailAuth.jsx";
 import { RentalList } from "./feature/rental/RentalList.jsx";
 import { BannerAdd } from "./feature/banner/BannerAdd.jsx";
 import { BannerList } from "./feature/banner/BannerList.jsx";
@@ -90,13 +90,13 @@ function App() {
               path="member/myinfo/modify"
               element={<MemberMyInfoModify />}
             />
-            {/* 비밀번호 찾기*/}
-            <Route path="member/find_password" element={<FindPassword />} />
             {/* 비밀번호 찾기-이메일인증 */}
             <Route
-              path="member/find_password/email_auth"
-              element={<EmailAuth />}
+              path="member/password/email_auth"
+              element={<PasswordEmailAuth />}
             />
+            {/* 비밀번호 재설정*/}
+            <Route path="member/resetPassword" element={<ResetPassword />} />
             {/* 상품 등록 */}
             <Route path="product/add" element={<ProductAdd />} />
             {/* 상품조회 목록 */}
