@@ -165,21 +165,29 @@ export function OrderDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formState">
             <FormLabel>주문상태</FormLabel>
-            <FormSelect
-              className="mb-3"
-              onChange={(e) => setOrder({ ...order, state: e.target.value })}
-            >
-              {/* TODO [@MINKI] 기존 상태값에 따라 선택가능한 상태값만 보여줄 것 */}
-              {stateList.map((item) => (
-                <option
-                  value={item.code}
-                  key={item.id}
-                  selected={item.code == order.state}
-                >
-                  {item.kor}
-                </option>
-              ))}
-            </FormSelect>
+            {isAdmin() && (
+              <FormSelect
+                className="mb-3"
+                onChange={(e) => setOrder({ ...order, state: e.target.value })}
+              >
+                {stateList.map((item) => (
+                  <option
+                    value={item.code}
+                    key={item.id}
+                    selected={item.code === order.state}
+                  >
+                    {item.kor}
+                  </option>
+                ))}
+              </FormSelect>
+            )}
+            {!isAdmin() &&
+              stateList.map(
+                (item) =>
+                  item.code === order.state && (
+                    <FormControl value={item.kor} readOnly={true} />
+                  ),
+              )}
           </FormGroup>
         </div>
         {isAdmin() && (
@@ -229,43 +237,62 @@ export function OrderDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formRequest">
             <FormLabel>배송요청사항</FormLabel>
-            <FormControl
-              value={order.request}
-              placeholder={request}
-              onChange={(e) => setOrder({ ...order, request: e.target.value })}
-            />
+            {isAdmin() && (
+              <FormControl
+                value={order.request}
+                placeholder={request}
+                onChange={(e) =>
+                  setOrder({ ...order, request: e.target.value })
+                }
+              />
+            )}
+            {!isAdmin() && (
+              <FormControl value={order.request} readOnly={true} />
+            )}
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formDeliveryCompany">
             <FormLabel>배송업체명</FormLabel>
-            <FormSelect
-              className="mb-3"
-              onChange={(e) =>
-                setOrder({ ...order, deliveryCompany: e.target.value })
-              }
-            >
-              <option>배송업체 선택</option>
-              {deliveryList.map((item) => (
-                <option
-                  value={item.name}
-                  key={item.seq}
-                  selected={item.name == order.deliveryCompany}
-                >
-                  {item.name}
-                </option>
-              ))}
-            </FormSelect>
+            {isAdmin() && (
+              <FormSelect
+                className="mb-3"
+                onChange={(e) =>
+                  setOrder({ ...order, deliveryCompany: e.target.value })
+                }
+              >
+                <option>배송업체 선택</option>
+                {deliveryList.map((item) => (
+                  <option
+                    value={item.name}
+                    key={item.seq}
+                    selected={item.name == order.deliveryCompany}
+                  >
+                    {item.name}
+                  </option>
+                ))}
+              </FormSelect>
+            )}
+            {!isAdmin() && (
+              <FormControl value={order.deliveryCompany} readOnly={true} />
+            )}
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formTracking">
             <FormLabel>운송장번호</FormLabel>
-            <FormControl
-              value={order.tracking}
-              placeholder={tracking}
-              onChange={(e) => setOrder({ ...order, tracking: e.target.value })}
-            />
+            {isAdmin() && (
+              <FormControl
+                value={order.tracking}
+                placeholder={tracking}
+                onChange={(e) =>
+                  setOrder({ ...order, tracking: e.target.value })
+                }
+              />
+            )}
+            {!isAdmin() && (
+              <FormControl value={order.tracking} readOnly={true} />
+            )}
           </FormGroup>
         </div>
 
