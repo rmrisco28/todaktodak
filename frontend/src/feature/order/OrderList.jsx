@@ -17,6 +17,7 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import data from "../../json/stateOrder.json";
+import { toast } from "react-toastify";
 
 // 주문 상태값 목록
 const stateList = [];
@@ -29,11 +30,12 @@ export function OrderList() {
   const [keyword, setKeyword] = useState("");
   const [orderList, setOrderList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!user || isProcessing === true) {
       return;
     }
 
@@ -56,7 +58,7 @@ export function OrderList() {
       .finally(() => {
         console.log("항상 실행");
       });
-  }, [user, searchParams]);
+  }, [user, searchParams, isProcessing]);
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
@@ -84,24 +86,41 @@ export function OrderList() {
     setSearchParams(nextSearchParams);
   }
 
-  function handleCancelButtonClick() {
-    // 취소요청
+  function handleProcButtonClick(e, proc, seq) {
+    e.stopPropagation(); //  버블링/캡처링 중단
+    setIsProcessing(true);
+    axios
+      .putForm("/api/order/state/update", {
+        seq: seq,
+        process: proc,
+      })
+      .then((res) => {
+        const message = res.data.message;
+        toast(message.text, { type: message.type });
+      })
+      .catch((err) => {
+        const message = err.response.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        } else {
+          toast("오류가 발생하였습니다.", { type: "danger" });
+        }
+      })
+      .finally(() => {
+        setIsProcessing(false);
+      });
   }
 
-  function handleReceiveButtonClick() {
-    // 수령완료
-  }
-
-  function handleReturnButtonClick() {
-    // 반송요청
-  }
-
-  const setButtonByState = (state) => {
+  const setButtonByState = (state, seq) => {
     switch (state) {
       case "P.RDY":
       case "P.CPLT":
         return (
-          <Button variant="warning" onClick={handleCancelButtonClick}>
+          <Button
+            size="sm"
+            variant="warning"
+            onClick={(e) => handleProcButtonClick(e, `C.REQ`, seq)}
+          >
             취소요청
           </Button>
         );
@@ -109,10 +128,18 @@ export function OrderList() {
       case "D.CPLT":
         return (
           <>
-            <Button variant="primary" onClick={handleReceiveButtonClick}>
+            <Button
+              size="sm"
+              variant="primary"
+              onClick={(e) => handleProcButtonClick(e, `RV.CPLT`, seq)}
+            >
               수령완료
             </Button>
-            <Button variant="danger" onClick={handleReturnButtonClick}>
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={(e) => handleProcButtonClick(e, `RT.REQ`, seq)}
+            >
               반송요청
             </Button>
           </>
@@ -221,7 +248,7 @@ export function OrderList() {
                       {order.insertDttm}
                     </td>
                     <td className="d-none d-lg-table-cell">
-                      {setButtonByState(order.state)}
+                      {setButtonByState(order.state, order.seq)}
                     </td>
                   </tr>
                 ))}

@@ -312,4 +312,10 @@ public class OrderService {
     public String findMemberByOrder(Integer seq) {
         return orderListRepository.findBySeq(seq).getName();
     }
+
+    public void updateStateByUser(OrderStateUserUpdateForm dto) {
+        OrderList dbData = orderListRepository.findBySeq(dto.getSeq());
+        dbData.setState(dto.getProcess());
+        orderListRepository.save(dbData);
+    }
 }

@@ -1,20 +1,15 @@
 package com.example.backend.order.controller;
 
-import com.example.backend.order.dto.OrderDto;
-import com.example.backend.order.dto.OrderManageDto;
 import com.example.backend.order.dto.OrderStateUpdateForm;
+import com.example.backend.order.dto.OrderStateUserUpdateForm;
 import com.example.backend.order.service.OrderService;
-import com.example.backend.product.dto.ProductUpdateForm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 @RestController // ✅ REST API 컨트롤러로 동작하도록 지정 (View 반환 X, JSON 반환 O)
@@ -148,5 +143,30 @@ public class OrderController {
         }
 
     }
+
+    @PutMapping("state/update")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> updateOrderStateUser(OrderStateUserUpdateForm dto, Authentication authentication) {
+        Integer seq = dto.getSeq();
+        String memberId = "";
+        if (authentication.isAuthenticated()) {
+            memberId = orderService.findMemberByOrder(seq);
+        }
+
+        try {
+            if (authentication.getName().equals(memberId)) {
+                orderService.updateStateByUser(dto);
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", "처리되었습니다.")));
+            } else {
+                return ResponseEntity.ok().body(Map.of("message",
+                        Map.of("type", "success", "text", "사용자 정보가 일치하지 않습니다.")));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(Map.of("message",
+                    Map.of("type", "error", "text", e.getMessage())));
+        }
+    }
+
 
 }
