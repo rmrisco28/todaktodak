@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -286,5 +287,29 @@ public class OrderService {
 
 
         }
+    }
+
+    public Map<String, Object> list(String memberId, Authentication authentication, String keyword, Integer pageNumber) {
+        if (authentication == null) {
+            throw new RuntimeException("권한이 없습니다.");
+        }
+
+        Page<OrderListAllDto> orderListDtoPage = orderListRepository.searchOrderListUser(memberId, keyword, PageRequest.of(pageNumber - 1, 10));
+        int totalPages = orderListDtoPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+        var pageInfo = Map.of("totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber);
+
+        return Map.of("pageInfo", pageInfo, "orderList", orderListDtoPage.getContent());
+
+    }
+
+    public String findMemberByOrder(Integer seq) {
+        return orderListRepository.findBySeq(seq).getName();
     }
 }
