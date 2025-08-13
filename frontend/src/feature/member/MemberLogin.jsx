@@ -5,17 +5,17 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  FormText,
   Row,
 } from "react-bootstrap";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
-import { FaEye, FaEyeSlash, FaTimes } from "react-icons/fa";
+import { FaRegTimesCircle, FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import "../../css/Checkbox.css";
+import { IoIosEye, IoMdEyeOff } from "react-icons/io";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
@@ -87,127 +87,134 @@ export function MemberLogin() {
   }
 
   return (
-    <Row className="d-flex justify-content-center">
-      <Col md="auto">
-        <h3 className="d-flex justify-content-center mb-4">Login</h3>
-        {/* 아이디 */}
-        <Form onSubmit={handleFormSubmit}>
-          <div>
-            <FormGroup className="mb-3" controlId="memberId">
-              <FormLabel>아이디</FormLabel>
+    <Row
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "70vh" }}
+    >
+      <Col xs={12} sm="auto" style={{ width: "500px" }}>
+        <h2 className="d-flex justify-content-center mb-4">Login</h2>
+        <section className="bg-gray-200 px-3 px-5 py-4 rounded mb-3">
+          {/* 아이디 */}
+          <Form onSubmit={handleFormSubmit}>
+            <div>
+              <FormGroup className="mb-3" controlId="memberId">
+                <FormLabel>아이디</FormLabel>
+                <div style={{ position: "relative" }}>
+                  <FormControl
+                    value={memberId}
+                    onChange={(e) => {
+                      setMemberId(e.target.value);
+                      setErrors((prev) => ({ ...prev, memberId: null }));
+                    }}
+                    style={{
+                      width: "100%",
+                    }}
+                    className={errors.memberId ? "is-invalid" : ""}
+                  />
+                  {errors.memberId && (
+                    <div className="invalid-feedback">{errors.memberId}</div>
+                  )}
+                  {/* 아이디 초기화 (입력값 있을 때만) */}
+                  {memberId && (
+                    <span
+                      onClick={() => setMemberId("")}
+                      style={{
+                        position: "absolute",
+                        top: "45%",
+                        right: "10px",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                        fontSize: "15px",
+                      }}
+                    >
+                      <FaRegTimesCircle />
+                    </span>
+                  )}
+                </div>
+              </FormGroup>
+            </div>
+            {/* 패스워드 */}
+            <FormGroup className="mb-3" controlId="password">
+              <FormLabel>비밀번호</FormLabel>
               <div style={{ position: "relative" }}>
                 <FormControl
-                  value={memberId}
+                  autoComplete="off"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
                   onChange={(e) => {
-                    setMemberId(e.target.value);
-                    setErrors((prev) => ({ ...prev, memberId: null }));
+                    setPassword(e.target.value);
+                    setErrors((prev) => ({ ...prev, password: null }));
                   }}
-                  style={{ paddingRight: "36px" }}
+                  style={{ paddingRight: "60px" }}
+                  className={errors.password ? "is-invalid" : ""}
                 />
-                {/* ❌ 아이디 초기화 버튼 */}
-                {memberId && (
+                {errors.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
+
+                {/* 👁 비밀번호 보기 토글 */}
+                {password && (
                   <span
-                    onClick={() => setMemberId("")}
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    style={{
+                      position: "absolute",
+                      top: "45%",
+                      right: "30px",
+                      transform: "translateY(-50%)",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                    }}
+                  >
+                    {showPassword ? <IoIosEye /> : <IoMdEyeOff />}
+                  </span>
+                )}
+                {/* 비밀번호 초기화 (입력값 있을 때만) */}
+                {password && (
+                  <span
+                    onClick={() => setPassword("")}
                     style={{
                       position: "absolute",
                       top: "45%",
                       right: "10px",
                       transform: "translateY(-50%)",
                       cursor: "pointer",
-                      fontSize: "18px",
+                      fontSize: "15px",
                     }}
                   >
-                    <FaTimes />
+                    <FaRegTimesCircle />
                   </span>
                 )}
               </div>
-              {errors.memberId && (
-                <FormText className="text-danger">{errors.memberId}</FormText>
-              )}
             </FormGroup>
-          </div>
-          {/* 패스워드 */}
-          <FormGroup className="mb-3" controlId="password">
-            <FormLabel>비밀번호</FormLabel>
-            <div style={{ position: "relative" }}>
-              <FormControl
-                autoComplete="off"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setErrors((prev) => ({ ...prev, password: null }));
-                }}
-                style={{ paddingRight: "60px" }}
-              />
-              {/* 👁 비밀번호 보기 토글 */}
-              {password && (
-                <span
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  style={{
-                    position: "absolute",
-                    top: "45%",
-                    right: "36px",
-                    transform: "translateY(-50%)",
-                    cursor: "pointer",
-                    fontSize: "18px",
-                  }}
-                >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </span>
-              )}
-              {/* ❌ 비밀번호 초기화 (입력값 있을 때만) */}
-              {password && (
-                <span
-                  onClick={() => setPassword("")}
-                  style={{
-                    position: "absolute",
-                    top: "45%",
-                    right: "10px",
-                    transform: "translateY(-50%)",
-                    cursor: "pointer",
-                    fontSize: "18px",
-                  }}
-                >
-                  <FaTimes />
-                </span>
-              )}
+            {/* 아이디 저장 체크박스 추가 (로그인 버튼 위) */}
+            <div className="mb-2">
+              <label className="custom-checkbox">
+                <input
+                  type="checkbox"
+                  checked={saveId}
+                  onChange={(e) => setSaveId(e.target.checked)}
+                />
+                <span className="checkmark mb-1"></span>
+                아이디 저장
+              </label>
             </div>
-            {errors.password && (
-              <FormText className="text-danger">{errors.password}</FormText>
-            )}
-          </FormGroup>
-          {/* 아이디 저장 체크박스 추가 (로그인 버튼 위) */}
-          <div className="mb-2">
-            <label className="custom-checkbox ">
-              <input
-                type="checkbox"
-                checked={saveId}
-                onChange={(e) => setSaveId(e.target.checked)}
-              />
-              <span className="checkmark"></span>
-              아이디 저장
-            </label>
-          </div>
-          {/* 로그인 버튼 / 찾기, 가입 옵션 */}
-          <div className="d-flex justify-content-between">
-            <Button type="submit" className="w-100 mb-4">
-              로그인
-            </Button>
-          </div>
-        </Form>
+            {/* 로그인 버튼 / 찾기, 가입 옵션 */}
+            <div className="d-flex justify-content-between">
+              <Button type="submit" className="w-100 mb-4">
+                로그인
+              </Button>
+            </div>
+          </Form>
+        </section>
         <div className="text-center">
           <Link
             to="/member/password/email_auth"
-            className="mx-2 text-decoration-none text-secondary"
+            className="mx-2 text-decoration-none"
           >
             비밀번호찾기
           </Link>
           <span>|</span>
-          <Link
-            to="/signup"
-            className="mx-2 text-decoration-none text-secondary"
-          >
+          <Link to="/signup" className="mx-2 text-decoration-none">
             회원가입
           </Link>
         </div>
