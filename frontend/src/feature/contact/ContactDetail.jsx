@@ -9,8 +9,9 @@ import {
   Row,
 } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ContactDetail() {
   const [contact, setContact] = useState(null);
@@ -19,10 +20,17 @@ export function ContactDetail() {
   const { seq } = useParams();
 
   let navigate = useNavigate();
-  const isAdmin =
-    new URLSearchParams(location.search).get("isAdmin") === "true";
+  // const isAdmin =
+  //   new URLSearchParams(location.search).get("isAdmin") === "true";
+
+  const { user, hasAccess, isAdmin } = useContext(AuthenticationContext);
 
   useEffect(() => {
+    if (user === null) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
     axios
       .get(`/api/contact/detail/${seq}`, {})
       .then((res) => {
@@ -30,6 +38,18 @@ export function ContactDetail() {
         const data = res.data;
         setReply(data.reply);
         setContact(data);
+        console.log("user.memberId:", user.memberId, typeof user.memberId);
+        console.log(
+          "res.data.memberId:",
+          res.data.memberNoMemberId,
+          typeof res.data.memberNoMemberId,
+        );
+
+        if (!hasAccess(res.data.memberNoMemberId) && !isAdmin()) {
+          alert("본인의 게시물에만 접근 할 수 있습니다.");
+          navigate("/contact/list");
+          return;
+        }
       })
       .catch((err) => {
         console.log("no");
@@ -104,7 +124,7 @@ export function ContactDetail() {
             variant="secondary"
             className="me-2"
             onClick={() =>
-              navigate(`/contact/list${isAdmin ? "?isAdmin=true" : ""}`)
+              navigate(`/contact/list${isAdmin() ? "?isAdmin=true" : ""}`)
             }
           >
             목록
@@ -123,7 +143,7 @@ export function ContactDetail() {
             className="me-2"
             onClick={() =>
               navigate(
-                `/contact/modify/${seq}${isAdmin ? "?isAdmin=true" : ""}`,
+                `/contact/modify/${seq}${isAdmin() ? "?isAdmin=true" : ""}`,
               )
             }
           >
@@ -147,7 +167,7 @@ export function ContactDetail() {
                 as="textarea"
                 rows={6}
                 value={reply}
-                readOnly={!isAdmin}
+                readOnly={!isAdmin()}
                 onChange={(e) => {
                   setReply(e.target.value);
                 }}
@@ -155,7 +175,7 @@ export function ContactDetail() {
             </FormGroup>
           </div>
 
-          {isAdmin && (
+          {isAdmin() && (
             <>
               <div
                 className="mb-2"

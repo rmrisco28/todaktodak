@@ -1,0 +1,32 @@
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 30%;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+@keyframes nudgeTop {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.scroll-to-top:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+    animation: nudgeTop 0.4s ease-in-out infinite; /* 무한 반복 */
+}

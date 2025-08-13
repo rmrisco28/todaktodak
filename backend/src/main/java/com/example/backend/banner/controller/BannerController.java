@@ -7,6 +7,7 @@ import com.example.backend.banner.dto.BannerUpdateForm;
 import com.example.backend.banner.service.BannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class BannerController {
      * @author minki-jeon
      */
     @PostMapping("add")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> add(BannerAddForm dto) {
         // validate
         boolean result = bannerService.validateForAdd(dto);
@@ -50,6 +52,7 @@ public class BannerController {
      * @author minki-jeon
      */
     @GetMapping("list")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public Map<String, Object> getAllBanner(
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
@@ -64,6 +67,7 @@ public class BannerController {
      * @author minki-jeon
      */
     @PutMapping("{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> deleteBanner(@PathVariable Integer seq) {
 
         try {
@@ -84,6 +88,7 @@ public class BannerController {
      * @author minki-jeon
      */
     @GetMapping("detail/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public BannerDto getDetailBySeq(@PathVariable Integer seq) {
         return bannerService.getBannerBySeq(seq);
     }
@@ -97,6 +102,7 @@ public class BannerController {
      * @author minki-jeon
      */
     @PutMapping("modify/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> updateBanner(@PathVariable Integer seq, BannerUpdateForm dto) {
 
         boolean result = bannerService.validateForUpdate(dto);
@@ -121,7 +127,7 @@ public class BannerController {
 
     /**
      * @return
-     * @brief View banner List (permission: Administrator)
+     * @brief View banner List
      * @author minki-jeon
      */
     @GetMapping("slide")

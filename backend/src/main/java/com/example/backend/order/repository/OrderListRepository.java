@@ -15,7 +15,7 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 (
                 ol.seq,
                 ol.orderNo,
-                ol.sale.saleNo,
+                ol.saleNo.saleNo,
                 s.title saleTitle,
                 ol.name,
                 ol.totalPrice,
@@ -24,11 +24,11 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 ol.updateDttm
                 ) FROM OrderList ol
                 LEFT JOIN Sale s
-                      ON s.saleNo = ol.sale.saleNo
+                      ON s.saleNo = ol.saleNo.saleNo
                 WHERE (ol.useYn = true
                 AND ol.delYn = false)
                 AND (ol.orderNo LIKE %:keyword%
-                OR ol.sale.saleNo LIKE %:keyword%
+                OR ol.saleNo.saleNo LIKE %:keyword%
                 OR ol.name LIKE %:keyword%
                 OR ol.state LIKE %:keyword%)
             """)
@@ -59,7 +59,7 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                         ol.totProdPrice
                         ) FROM OrderList ol
                         LEFT JOIN Sale s
-                               ON s.saleNo = ol.sale.saleNo
+                               ON s.saleNo = ol.saleNo.saleNo
                         WHERE ol.seq = :seq
                             AND (ol.useYn = true
                             AND ol.delYn = false)

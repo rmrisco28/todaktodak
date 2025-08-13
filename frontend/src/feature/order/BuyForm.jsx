@@ -8,10 +8,11 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function BuyForm() {
   const { seq } = useParams();
@@ -24,7 +25,6 @@ export function BuyForm() {
   const [request, setRequest] = useState("집 앞에 놔주세요.");
   const [isCustom, setIsCustom] = useState(false);
   const [isProcessing, setIsProcessing] = useState();
-  const [mainThumbnail, setMainThumbnail] = useState([]);
   const [orderCount, setOrderCount] = useState(1);
   const [recipient, setRecipient] = useState("");
 
@@ -32,9 +32,9 @@ export function BuyForm() {
 
   const [searchParams] = useSearchParams();
 
-  const handleThumbnailClick = (path) => setMainThumbnail(path);
-
   let navigate = useNavigate();
+
+  const { user } = useContext(AuthenticationContext);
 
   useEffect(() => {
     setOrderCount(searchParams.get("orderCount") || 1);
@@ -137,8 +137,7 @@ export function BuyForm() {
   // 결제 버튼 클릭시 공란 여부 확인
   let validate = true;
   if (
-    name.trim() === "" ||
-    phoneNumber.trim() === "" ||
+    phoneNumber.trim() === "" || // todo gg 토큰으로 번호받기3 토큰으로 전화 받으면 나중에 삭제
     postalCode.trim() === "" ||
     address.trim() === "" ||
     request.trim() === ""
@@ -148,7 +147,7 @@ export function BuyForm() {
 
   // 결제 버튼
   function handleSuccessButtonClick() {
-    window.open("https://payment-demo.kakaopay.com/online", "_blank");
+    // window.open("https://payment-demo.kakaopay.com/online", "_blank");
     setIsProcessing(true);
     const totalPrice = sale.salePrice * orderCount + sale.deliveryFee;
     const totProdPrice = sale.salePrice * orderCount;
@@ -158,7 +157,7 @@ export function BuyForm() {
         saleSaleNo: sale.saleNo,
         name: name,
         recipient: recipient,
-
+        // todo gg 토큰으로 번호받기1
         phone: phoneNumber,
         post: postalCode,
         addr: address,
@@ -178,6 +177,7 @@ export function BuyForm() {
         tracking: "trk123456789",
 
         productNo: sale.productNo,
+        memberMemberId: user.memberId,
       })
       .then((res) => {
         axios.put("/api/rental/save", {});
@@ -187,6 +187,7 @@ export function BuyForm() {
       })
       .catch((err) => {
         console.log("no");
+        console.log(user.memberId);
       })
       .finally(() => {
         console.log("finally");
@@ -255,10 +256,8 @@ export function BuyForm() {
 
               <FormControl
                 placeholder="주문하시는 분의 성함을 입력해주세요."
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
+                value={user.name}
+                disabled
               />
             </FormGroup>
           </div>
@@ -280,6 +279,7 @@ export function BuyForm() {
               <FormLabel>휴대폰 번호</FormLabel>
               <FormControl
                 placeholder="번호를 입력해주세요."
+                // todo gg 토큰으로 번호받기2
                 value={phoneNumber}
                 onChange={handlePhoneNumberChange}
               />

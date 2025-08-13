@@ -11,7 +11,8 @@ import {
 } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ContactDeleted() {
   const [contactDeletedList, setContactDeletedList] = useState(null);
@@ -21,6 +22,8 @@ export function ContactDeleted() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
+
+  const { user, hasAccess, isAdmin } = useContext(AuthenticationContext);
 
   useEffect(() => {
     const q = searchParams.get("q");

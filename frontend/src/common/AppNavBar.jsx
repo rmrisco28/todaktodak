@@ -1,7 +1,11 @@
 import { Link, NavLink } from "react-router";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { useContext } from "react";
+import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 
 export function AppNavBar() {
+  const { isAdmin } = useContext(AuthenticationContext);
+
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -27,10 +31,18 @@ export function AppNavBar() {
                 {/* 주문배송조회 목록 */}
                 주문배송조회
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/contact/list">
-                {/* 문의게시판 목록 */}
-                문의게시판
-              </Nav.Link>
+              {!isAdmin() && (
+                <Nav.Link as={NavLink} to="/contact/list">
+                  {/* 문의게시판 목록 */}
+                  문의게시판
+                </Nav.Link>
+              )}
+              {isAdmin() && (
+                <Nav.Link as={NavLink} to="/contact/list?isAdmin=true">
+                  {/* 문의게시판 목록 */}
+                  문의게시판
+                </Nav.Link>
+              )}
             </Nav>
 
             <Nav className="order-lg-3">

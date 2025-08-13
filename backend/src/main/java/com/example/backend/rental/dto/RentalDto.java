@@ -35,4 +35,5 @@ public class RentalDto implements Serializable {
     String productNo;
 
     String SaleNo;
+    String memberNo;
 }

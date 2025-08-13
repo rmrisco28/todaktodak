@@ -32,4 +32,6 @@ public class ReturnOrderDto implements Serializable {
     String content;
     LocalDateTime insertDttm;
     LocalDateTime updateDttm;
+    String memberNo;
+
 }

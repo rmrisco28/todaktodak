@@ -1,5 +1,6 @@
 package com.example.backend.rental.entity;
 
+import com.example.backend.member.entity.Member;
 import com.example.backend.order.entity.OrderList;
 import com.example.backend.product.entity.Product;
 import com.example.backend.sale.entity.Sale;
@@ -41,6 +42,10 @@ public class ReturnOrder {
     @JoinColumn(name = "order_no", nullable = false, referencedColumnName = "order_no")
     private OrderList orderNo;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "member_no", nullable = false, referencedColumnName = "member_no")
+    private Member memberNo;
+
     @Column(name = "post", nullable = false, length = 10)
     private String post;
 
@@ -70,5 +75,6 @@ public class ReturnOrder {
     @ColumnDefault("current_timestamp()")
     @Column(name = "update_dttm", nullable = false, insertable = false)
     private LocalDateTime updateDttm;
+
 
 }

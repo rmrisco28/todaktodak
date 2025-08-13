@@ -6,6 +6,7 @@ import com.example.backend.sale.dto.SaleUpdateForm;
 import com.example.backend.sale.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -25,6 +26,7 @@ public class SaleController {
      * @return
      */
     @PostMapping("add")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> add(SaleAddForm dto) {
         // validate
         boolean result = saleService.validateForAdd(dto);
@@ -76,6 +78,7 @@ public class SaleController {
      * @return
      */
     @PutMapping("{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> deleteSale(@PathVariable Integer seq) {
         try {
             saleService.updateDelYn(seq);
@@ -95,6 +98,7 @@ public class SaleController {
      * @return
      */
     @PutMapping("modify/{seq}")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     public ResponseEntity<?> updateSale(@PathVariable Integer seq, SaleUpdateForm dto) {
 
         boolean result = saleService.validateForUpdate(dto);
@@ -128,6 +132,4 @@ public class SaleController {
                     Map.of("type", "error", "text", e.getMessage())));
         }
     }
-
-
 }

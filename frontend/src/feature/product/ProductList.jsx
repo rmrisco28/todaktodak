@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   Button,
@@ -16,8 +16,11 @@ import { FaThumbsUp } from "react-icons/fa6";
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import { toast } from "react-toastify";
 
 export function ProductList() {
+  const { user, isAdmin } = useContext(AuthenticationContext);
   const [keyword, setKeyword] = useState("");
   const [productList, setProductList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
@@ -51,6 +54,12 @@ export function ProductList() {
     navigate("/product/list?q=" + keyword);
   }
 
+  // if (!user) {
+  //   alert("로그인이 필요합니다.");
+  // }
+  // if (user && !user.scope.includes("ROLE_ADMIN")) {
+  //   alert("권한이 없습니다.");
+  // }
   if (!productList) {
     return <Spinner />;
   }

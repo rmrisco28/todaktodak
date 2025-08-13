@@ -8,8 +8,9 @@ import {
   Row,
 } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ContactDeletedDetail() {
   const [contact, setContact] = useState(null);
@@ -18,8 +19,14 @@ export function ContactDeletedDetail() {
 
   const navigate = useNavigate();
   const { seq } = useParams();
+  const { user, hasAccess, isAdmin } = useContext(AuthenticationContext);
 
   useEffect(() => {
+    if (!isAdmin()) {
+      alert("잘못된 접근입니다.");
+      navigate("/login");
+      return;
+    }
     axios
       .get(`/api/contact/deleted/detail/${seq}`, {})
       .then((res) => {

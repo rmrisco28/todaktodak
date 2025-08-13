@@ -125,6 +125,8 @@ function App() {
             <Route path="contact/add" element={<ContactAdd />} />
             {/* 문의게시판 목록 */}
             <Route path="contact/list" element={<ContactList />} />
+            {/* 문의게시판 관리자 목록 */}
+            <Route path="contact/list/isAdmin" element={<ContactList />} />
             {/* 문의게시판 상세 */}
             <Route path="contact/detail/:seq" element={<ContactDetail />} />
             {/* 문의게시판 수정 */}

@@ -71,6 +71,7 @@ public class SaleService {
         sale.setSalePrice(dto.getSalePrice());
         sale.setDeliveryFee(dto.getDeliveryFee());
         sale.setContent(dto.getContent());
+        sale.setView(0);
 
         saleRepository.save(sale);
 
@@ -195,6 +196,7 @@ public class SaleService {
             contentImgs.add(contentDto);
         }
         dto.setContentImages(contentImgs);
+
 
         return dto;
     }

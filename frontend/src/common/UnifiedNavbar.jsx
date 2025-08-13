@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+
+import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
   Container,
@@ -14,11 +15,14 @@ import { BsChevronDown } from "react-icons/bs"; // Bootstrap Icons
 
 import "../css/navbar.css";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
+import { useNavigate, useSearchParams } from "react-router";
 
 export function UnifiedNavbar() {
   // 로그인 상태 / 권한
   const { user, isAdmin } = useContext(AuthenticationContext);
-
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
   // 드롭다운 메뉴들의 열림 상태 관리
   const [openDropdowns, setOpenDropdowns] = useState({});
   // 모바일 햄버거 메뉴의 열림 상태 관리
@@ -40,6 +44,18 @@ export function UnifiedNavbar() {
       />
     </>
   );
+
+  useEffect(() => {
+    const q = searchParams.get("q") || "";
+    setKeyword(q);
+  }, []);
+
+  function handleSearchFormSubmit(e) {
+    if (keyword.trim() !== "") {
+      e.preventDefault();
+      navigate("/sale/list?q=" + keyword);
+    }
+  }
 
   return (
     <Navbar
@@ -85,16 +101,20 @@ export function UnifiedNavbar() {
 
           {/* 검색창 (데스크탑에서는 중앙, 모바일에서는 메뉴 하단) */}
           <div className="d-flex align-items-center my-2 my-lg-0 mx-lg-auto">
-            <InputGroup>
-              <InputGroup.Text>
-                <IoSearch className="opacity-8" />
-              </InputGroup.Text>
-              <Form.Control
-                type="text"
-                placeholder="Search"
-                className="max-width-200"
-              />
-            </InputGroup>
+            <Form onSubmit={handleSearchFormSubmit}>
+              <InputGroup>
+                <InputGroup.Text type="submit">
+                  <IoSearch className="opacity-8" />
+                </InputGroup.Text>
+                <Form.Control
+                  type="text"
+                  placeholder="상품 검색"
+                  className="max-width-200"
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
+                />
+              </InputGroup>
+            </Form>
           </div>
 
           {/* 사용자/관리자 메뉴 (오른쪽 정렬) */}
@@ -137,15 +157,21 @@ export function UnifiedNavbar() {
               <NavDropdown.Item href="/admin">대시보드</NavDropdown.Item>
               <NavDropdown.Item href="/member/list">회원관리</NavDropdown.Item>
               <NavDropdown.Item href="/product/list">상품관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">판매상품</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">주문관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">대여관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">반납관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">문의관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">통계현황</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">카테고리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">배너관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">배송업체</NavDropdown.Item>
+              <NavDropdown.Item href="/sale/list">판매상품</NavDropdown.Item>
+              <NavDropdown.Item href="/order/admin/list">
+                주문관리
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/rental/list">대여관리</NavDropdown.Item>
+              <NavDropdown.Item href="/receive/list">반납관리</NavDropdown.Item>
+              <NavDropdown.Item href="/contact/list">문의관리</NavDropdown.Item>
+              <NavDropdown.Item href="/chart/list">통계현황</NavDropdown.Item>
+              <NavDropdown.Item href="/category/list">
+                카테고리
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/banner/list">배너관리</NavDropdown.Item>
+              <NavDropdown.Item href="/delivery/list">
+                배송업체
+              </NavDropdown.Item>
             </NavDropdown>
             {/*
             <Nav.Link href="#settings" className="py-2 px-3">

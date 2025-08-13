@@ -9,26 +9,22 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { BsFillReplyFill, BsReply } from "react-icons/bs";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function ContactList() {
   const [contactList, setContactList] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [keyword, setKeyword] = useState("");
-  // const [isAdmin, setIsAdmin] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   let navigate = useNavigate();
 
-  /* todo gg 추후 세션 관리자 여부 판단하는 코드
-    const handleLogin = (user) => {
-      setIsAdmin(user.role === "admin");
-    };*/
-  const isAdmin =
-    new URLSearchParams(location.search).get("isAdmin") === "true";
+  const { isAdmin } = useContext(AuthenticationContext);
+
   useEffect(() => {
     const q = searchParams.get("q");
     if (q) {
@@ -42,15 +38,18 @@ export function ContactList() {
         console.log("ok");
         setContactList(res.data.contactList);
         setPageInfo(res.data.pageInfo);
-        // console.log(isAdmin);
       })
       .catch((err) => {
+        if (err.response.status === 403) {
+          alert("접근권한이 없습니다.");
+          navigate("/contact/list");
+        }
         console.log("no");
       })
       .finally(() => {
         console.log("finally");
       });
-  }, [searchParams]);
+  }, [searchParams, isAdmin]);
 
   if (!contactList) {
     return <Spinner />;
@@ -69,7 +68,7 @@ export function ContactList() {
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
-    if (isAdmin) {
+    if (isAdmin()) {
       navigate(`/contact/list?isAdmin=true&q=${keyword}`);
     } else {
       navigate(`/contact/list?q=${keyword}`);
@@ -115,7 +114,7 @@ export function ContactList() {
                       .then(() => {
                         if (contact.delYn === true) {
                           navigate(`/contact/deleted/detail/${contact.seq}`);
-                        } else if (isAdmin === true) {
+                        } else if (isAdmin() === true) {
                           navigate(
                             `/contact/detail/${contact.seq}?isAdmin=true`,
                           );
@@ -192,7 +191,7 @@ export function ContactList() {
             </Form>
           </div>
           <hr />
-          {isAdmin && (
+          {isAdmin() && (
             <div
               className="d-flex justify-content-center align-items-center mb-3"
               style={{ color: "#808080" }}

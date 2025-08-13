@@ -52,7 +52,7 @@ export function MainBanner() {
           setCurrentIndex(swiper.realIndex + 1);
         }}
         slidesPerView={1}
-        style={{ width: "100%", height: "28vw" }}
+        style={{ width: "100%" }}
       >
         {banners.map((banner, idx) => (
           <SwiperSlide key={idx}>
@@ -83,6 +83,7 @@ export function MainBanner() {
 
       {/* 전체보기 모달 */}
       <Modal
+        className="modal-banners"
         show={showModal}
         onHide={() => setShowModal(false)}
         centered
