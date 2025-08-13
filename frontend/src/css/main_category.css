@@ -41,7 +41,7 @@
     z-index: 2;
 }
 
-.category-card .card-body h4 {
+.category-card .card-body .fw-bolder {
     color: #fff;
 }
 
