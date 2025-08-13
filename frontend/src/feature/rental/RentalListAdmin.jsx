@@ -122,7 +122,7 @@ export function RentalListAdmin() {
               <tr>
                 <th>번호</th>
                 <th>이용자</th>
-                <th>이용자번호</th>
+                <th>이용자 전화번호</th>
                 <th>제품명</th>
                 <th>개수</th>
                 <th>가격</th>
