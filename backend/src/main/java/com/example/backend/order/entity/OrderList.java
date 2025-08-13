@@ -73,7 +73,7 @@ public class OrderList {
     private Integer rentalPeriod;
 
     @Column(name = "state", nullable = false, length = 10)
-    private String state = "대여중";
+    private String state;
 
     @Column(name = "delivery_company", length = 50)
     private String deliveryCompany;
