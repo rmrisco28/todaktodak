@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -19,6 +19,7 @@ import {
 import { toast } from "react-toastify";
 
 import data from "../../json/stateOrder.json";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 // 주문 상태값 목록
 const stateList = [];
@@ -27,6 +28,7 @@ data.orderStateList.map((i) =>
 );
 
 export function OrderDetail() {
+  const { isAdmin } = useContext(AuthenticationContext);
   const [order, setOrder] = useState(null);
   const { seq } = useParams();
   const navigate = useNavigate();
@@ -180,18 +182,18 @@ export function OrderDetail() {
             </FormSelect>
           </FormGroup>
         </div>
-
-        <div>
-          <Button
-            variant="outline-info"
-            onClick={() => setModalShow(true)}
-            disabled={isProcessing || !validate}
-          >
-            {isProcessing && <Spinner size="sm" />}
-            {isProcessing || "주문 상태 변경"}
-          </Button>
-        </div>
-
+        {isAdmin() && (
+          <div>
+            <Button
+              variant="outline-info"
+              onClick={() => setModalShow(true)}
+              disabled={isProcessing || !validate}
+            >
+              {isProcessing && <Spinner size="sm" />}
+              {isProcessing || "주문 상태 변경"}
+            </Button>
+          </div>
+        )}
         <hr />
 
         <div>
