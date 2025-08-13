@@ -239,6 +239,13 @@ public class OrderService {
             String state = dto.getState();
             // 후처리
             processingByState(orderList, state);
+            String prevState = orderList.getPrevState();
+            if (prevState.isEmpty()) {
+                prevState = orderList.getState();
+            } else {
+                prevState += "," + orderList.getState();
+            }
+            orderList.setPrevState(prevState);
             orderList.setState(state);
         }
         if (!(orderList.getRequest()).equals(dto.getRequest())) {
@@ -315,7 +322,16 @@ public class OrderService {
 
     public void updateStateByUser(OrderStateUserUpdateForm dto) {
         OrderList dbData = orderListRepository.findBySeq(dto.getSeq());
+
+        String prevState = dbData.getPrevState();
+        if (prevState.isEmpty()) {
+            prevState = dbData.getState();
+        } else {
+            prevState += "," + dbData.getState();
+        }
+        dbData.setPrevState(prevState);
         dbData.setState(dto.getProcess());
+        dbData.setUpdateDttm(LocalDateTime.now());
         orderListRepository.save(dbData);
     }
 }

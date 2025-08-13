@@ -72,6 +72,9 @@ public class OrderList {
     @Column(name = "rental_period", nullable = false)
     private Integer rentalPeriod;
 
+    @Column(name = "prev_state", length = 2000)
+    private String prevState;
+
     @Column(name = "state", nullable = false, length = 10)
     private String state;
 
