@@ -47,7 +47,7 @@ export function OrderAdminList() {
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
-    navigate("/order/list?q=" + keyword);
+    navigate("/order/admin/list?q=" + keyword);
   }
 
   if (!orderList) {
