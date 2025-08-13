@@ -349,6 +349,7 @@ CREATE TABLE order_list
     prod_price       INT          NOT NULL,
     order_count      INT          NOT NULL,
     rental_period    INT          NOT NULL,
+    prev_state       VARCHAR(2000),
     state            VARCHAR(10)  NOT NULL,
     delivery_company VARCHAR(50),
     tracking         VARCHAR(100),
@@ -359,4 +360,3 @@ CREATE TABLE order_list
     Constraint pk_order PRIMARY KEY (seq),
     FOREIGN KEY (sale_no) REFERENCES sale (sale_no)
 );
-

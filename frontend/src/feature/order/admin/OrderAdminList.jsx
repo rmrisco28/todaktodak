@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   Button,
@@ -15,6 +15,13 @@ import {
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
+import data from "../../../json/stateOrder.json";
+
+// 주문 상태값 목록
+const stateList = [];
+data.orderStateList.map((i) =>
+  stateList.push({ id: i.id, code: i.code, kor: i.kor }),
+);
 
 export function OrderAdminList() {
   const [keyword, setKeyword] = useState("");
@@ -47,7 +54,7 @@ export function OrderAdminList() {
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
-    navigate("/order/list?q=" + keyword);
+    navigate("/order/admin/list?q=" + keyword);
   }
 
   if (!orderList) {
@@ -162,7 +169,11 @@ export function OrderAdminList() {
                     </td>
                     <td>
                       <div className="d-flex gap-2">
-                        <span>{order.state}</span>
+                        <span>
+                          {stateList.map(
+                            (item) => item.code === order.state && item.kor,
+                          )}
+                        </span>
                       </div>
                     </td>
                     <td className="d-none d-lg-table-cell">{order.timesAgo}</td>

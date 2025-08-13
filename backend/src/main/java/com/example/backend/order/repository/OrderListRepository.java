@@ -68,4 +68,30 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
     OrderDto findOrderDetailBySeq(Integer seq);
 
     OrderList findBySeq(Integer seq);
+
+    @Query("""
+                SELECT new com.example.backend.order.dto.OrderListAllDto
+                (
+                ol.seq,
+                ol.orderNo,
+                ol.saleNo.saleNo,
+                s.title saleTitle,
+                ol.name,
+                ol.totalPrice,
+                ol.state,
+                ol.insertDttm,
+                ol.updateDttm
+                ) FROM OrderList ol
+                LEFT JOIN Sale s
+                      ON s.saleNo = ol.saleNo.saleNo
+                WHERE (ol.useYn = true
+                AND ol.delYn = false)
+                AND (ol.orderNo LIKE %:keyword%
+                OR ol.saleNo.saleNo LIKE %:keyword%
+                OR ol.name LIKE %:keyword%
+                OR ol.state LIKE %:keyword%)
+                AND ol.name = :memberId
+            """)
+    Page<OrderListAllDto> searchOrderListUser(String memberId, @Param("keyword") String keyword, Pageable pageable);
+
 }

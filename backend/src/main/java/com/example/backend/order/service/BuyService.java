@@ -1,5 +1,6 @@
 package com.example.backend.order.service;
 
+import com.example.backend.common.Constant;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.order.dto.OrderListDtoMadeByGG;
@@ -82,6 +83,7 @@ public class BuyService {
 
         orderList.setRentalPeriod(old.getRentalPeriod());
 //        orderList.setState(old.getState()); 기본값 대여중
+        orderList.setState(Constant.ORDER_STATE_PAYMENT_COMPLETED); // 결제완료
         orderList.setDeliveryCompany(old.getDeliveryCompany());
         orderList.setTracking(old.getTracking());
 
