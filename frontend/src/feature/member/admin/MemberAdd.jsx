@@ -101,14 +101,12 @@ export function MemberAdd() {
       })
       .then((res) => {
         console.log(res.data);
-        const message = res.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
+        alert("회원 등록이 완료되었습니다.");
         navigate("/member/list");
       })
       .catch((err) => {
         console.log(err);
+        alert("회원 등록에 실패하였습니다.");
       })
       .finally(() => {});
   }
