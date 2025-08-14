@@ -41,6 +41,10 @@ CREATE TABLE member
 );
 
 ALTER TABLE member
+    MODIFY birth_date DATE NULL;
+
+
+ALTER TABLE member
     MODIFY state VARCHAR(10);
 
 ALTER TABLE member
