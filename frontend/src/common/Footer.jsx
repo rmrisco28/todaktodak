@@ -3,7 +3,7 @@ import { Container, Row, Col, Nav } from "react-bootstrap";
 import { FaGithub } from "react-icons/fa"; // GitHub 아이콘 임포트
 import { Link } from "react-router-dom"; // react-router-dom의 Link 사용 권장
 
-export function MainFooter() {
+export function Footer() {
   return (
     <div className="border-top">
       <Container className="py-4">
