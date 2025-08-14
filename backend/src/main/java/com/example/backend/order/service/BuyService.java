@@ -37,6 +37,7 @@ public class BuyService {
         // 결제 코드 여기부터
         // 주문 배송, 결제 정보 order_no
         // 조합번호 생성 (코드 + 현재일자 + 시퀀스)
+        System.out.println("old = " + old);
 
         String code = "OR";
 
@@ -122,7 +123,6 @@ public class BuyService {
 
         // 재고 수량 변경
         product.setStock(product.getStock() - old.getOrderCount());
-
 
         orderListRepositoryMadeByGG.save(orderList);
 

@@ -146,6 +146,14 @@ export function ContactModify() {
 
           {/*버튼*/}
           <Button
+            onClick={handleSaveButtonClick}
+            disabled={isProcessing || !validate}
+            className="me-2"
+          >
+            {isProcessing && <Spinner size="sm" />}
+            {isProcessing || "저장"}
+          </Button>
+          <Button
             variant="danger"
             className="me-2"
             onClick={() => {
@@ -153,13 +161,6 @@ export function ContactModify() {
             }}
           >
             취소
-          </Button>
-          <Button
-            onClick={handleSaveButtonClick}
-            disabled={isProcessing || !validate}
-          >
-            {isProcessing && <Spinner size="sm" />}
-            {isProcessing || "저장"}
           </Button>
         </Col>
 

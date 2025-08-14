@@ -17,11 +17,12 @@ import { AuthenticationContext } from "../../common/AuthenticationContextProvide
 export function BuyForm() {
   const { seq } = useParams();
   const [sale, setSale] = useState(null);
-  const [name, setName] = useState("");
+
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [address, setAddress] = useState("");
-  const [addressDetail, setAddressDetail] = useState(); // 참고항목
+  const [addressDetail, setAddressDetail] = useState(""); // 참고항목
   const [request, setRequest] = useState("집 앞에 놔주세요.");
   const [isCustom, setIsCustom] = useState(false);
   const [isProcessing, setIsProcessing] = useState();
@@ -44,6 +45,7 @@ export function BuyForm() {
       .get(`/api/sale/detail/${seq}`)
       .then((res) => {
         setSale(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         toast("해당 상품이 존재하지 않습니다.", { type: "warning" });
@@ -58,6 +60,20 @@ export function BuyForm() {
   }
 
   // 전화번호 입력을 위한 정규식 (010-XXXX-XXXX)
+
+  const validatePhoneNumber = (value) => {
+    // 숫자만 추출
+    const digits = value.replace(/[^\d]/g, "");
+
+    if (digits.length !== 11) {
+      // 한국 휴대폰 번호는 11자리
+      setPhoneError("휴대폰 번호 형식이 올바르지 않습니다.");
+      return false;
+    } else {
+      setPhoneError(""); // 오류 없으면 메시지 제거
+      return true;
+    }
+  };
 
   const handlePhoneNumberChange = (e) => {
     let value = e.target.value;
@@ -140,6 +156,7 @@ export function BuyForm() {
     phoneNumber.trim() === "" || // todo gg 토큰으로 번호받기3 토큰으로 전화 받으면 나중에 삭제
     postalCode.trim() === "" ||
     address.trim() === "" ||
+    addressDetail.trim() === "" ||
     request.trim() === ""
   ) {
     validate = false;
@@ -155,7 +172,7 @@ export function BuyForm() {
     axios
       .post("/api/buy", {
         saleSaleNo: sale.saleNo,
-        name: name,
+
         recipient: recipient,
         // todo gg 토큰으로 번호받기1
         phone: phoneNumber,
@@ -197,7 +214,7 @@ export function BuyForm() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      {/*      <Row className="justify-content-center">
         <Col md={2}></Col>
         <Col xs={12} md={8}>
           <h2 className="mb-3">구매할 제품</h2>
@@ -210,31 +227,11 @@ export function BuyForm() {
             rounded
             className="border"
           />
-          {/*<div className="d-flex gap-2 flex-wrap">
-            {sale.thumbnails.map((image) => (
-              <Image
-                key={image.name}
-                src={image.path}
-                thumbnail
-                style={{
-                  width: "80px",
-                  height: "80px",
-                  objectFit: "cover",
-                  cursor: "pointer",
-                  border:
-                    mainThumbnail === image.path
-                      ? "2px solid #007bff"
-                      : "1px solid #dee2e6",
-                }}
-                onClick={() => handleThumbnailClick(image.path)}
-              />
-            ))}
-          </div>*/}
         </Col>
         <Col md={4} lg={4}>
           <h5 className="mb-3">{sale.title}</h5>
           <hr />
-          {/*<p>{sale.saleNo}</p>*/}
+          <p>{sale.saleNo}</p>
           <p>
             가격: {sale.salePrice.toLocaleString()}원
             <br />
@@ -376,7 +373,7 @@ export function BuyForm() {
 
           <div className="mb-3">
             <FormLabel>결제수단</FormLabel>
-            {/*todo [@gg] 결제수단 api?*/}
+            todo [@gg] 결제수단 api?
             <FormControl value={"api?"} disabled />
           </div>
           <hr className="mb-3" />
@@ -394,7 +391,7 @@ export function BuyForm() {
               readOnly
             />
           </div>
-          {/*결제 버튼*/}
+          결제 버튼
           <div className="d-grid gap-2 mx-auto">
             <Button onClick={handleSuccessButtonClick} disabled={!validate}>
               {isProcessing && <Spinner size="sm" />}
@@ -402,7 +399,457 @@ export function BuyForm() {
             </Button>
           </div>
         </Col>
-      </Row>
+      </Row>*/}
+      {/* todo gg 0813 결제화면 프론트엔드 변경*/}
+      <div className="container-fluid py-3" style={{ background: "#f8f9fa" }}>
+        <div className="row justify-content-center">
+          <div className="col-12 col-lg-10 col-xl-8">
+            <div className="row g-4">
+              {/* 왼쪽: 주문 정보 입력 폼 */}
+              <div className="col-12 col-lg-7">
+                <div
+                  className="card border-0 shadow-sm"
+                  style={{ borderRadius: "15px" }}
+                >
+                  <div className="card-body p-4">
+                    <h3 className="fw-bold mb-4" style={{ color: "#212529" }}>
+                      주문 정보
+                    </h3>
+
+                    {/* 주문자 정보 섹션 */}
+                    <div className="mb-4">
+                      <h5
+                        className="fw-semibold mb-3"
+                        style={{ color: "#495057" }}
+                      >
+                        주문자 정보
+                      </h5>
+
+                      <div className="mb-3">
+                        <label
+                          className="form-label fw-medium"
+                          style={{ color: "#343a40" }}
+                        >
+                          주문자명
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control border-0"
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
+                          }}
+                          placeholder="주문하시는 분의 성함을 입력해주세요."
+                          value={user.name}
+                          disabled
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label
+                          className="form-label fw-medium"
+                          style={{ color: "#343a40" }}
+                        >
+                          수령인
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control bg-white"
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            border: "2px solid #dee2e6", // 테두리 두께 증가
+                            transition: "all 0.3s ease",
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = "#495057";
+                            e.target.style.boxShadow =
+                              "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = "#dee2e6";
+                            e.target.style.boxShadow = "none";
+                          }}
+                          placeholder="수령 받을 분의 성함을 입력해주세요."
+                          value={recipient}
+                          onChange={(e) => setRecipient(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label
+                          className="form-label fw-medium"
+                          style={{ color: "#343a40" }}
+                        >
+                          휴대폰 번호
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control bg-white"
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            border: "2px solid #dee2e6", // 테두리 두께 증가
+                            transition: "all 0.3s ease",
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = "#495057";
+                            e.target.style.boxShadow =
+                              "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = "#dee2e6";
+                            e.target.style.boxShadow = "none";
+                            validatePhoneNumber(e.target.value); // 입력 끝났을 때 체크
+                          }}
+                          placeholder="번호를 입력해주세요."
+                          value={phoneNumber}
+                          onChange={handlePhoneNumberChange}
+                        />
+                        {phoneError && (
+                          <div
+                            className="text-danger mt-1"
+                            style={{ fontSize: "0.85rem" }}
+                          >
+                            {phoneError}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 배송 정보 섹션 */}
+                    <div className="mb-4">
+                      <h5
+                        className="fw-semibold mb-3"
+                        style={{ color: "#495057" }}
+                      >
+                        배송 정보
+                      </h5>
+
+                      <div className="mb-3">
+                        <label
+                          className="form-label fw-medium"
+                          style={{ color: "#343a40" }}
+                        >
+                          주소
+                        </label>
+                        <div className="d-flex gap-2">
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              width: "150px",
+                              backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
+                            }}
+                            value={postalCode}
+                            placeholder="우편번호"
+                            readOnly
+                            onChange={(e) => setPostalCode(e.target.value)}
+                            onClick={handleAddressButtonClick}
+                          />
+                          <button
+                            className="btn btn-outline-dark px-4"
+                            style={{
+                              borderRadius: "10px",
+                              fontWeight: "500",
+                              fontSize: "0.9rem",
+                              borderWidth: "2px", // 버튼 테두리도 두껍게
+                            }}
+                            onClick={handleAddressButtonClick}
+                          >
+                            검색
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="mb-3">
+                        <input
+                          type="text"
+                          className="form-control border-0"
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
+                          }}
+                          value={address}
+                          placeholder="주소를 입력해주세요."
+                          readOnly
+                          onChange={(e) => setAddress(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <input
+                          type="text"
+                          className="form-control bg-white"
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            border: "2px solid #dee2e6", // 테두리 두께 증가
+                            transition: "all 0.3s ease",
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = "#495057";
+                            e.target.style.boxShadow =
+                              "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = "#dee2e6";
+                            e.target.style.boxShadow = "none";
+                          }}
+                          value={addressDetail}
+                          placeholder="상세주소를 입력해주세요."
+                          onChange={(e) => setAddressDetail(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="mb-3">
+                        <label
+                          className="form-label fw-medium"
+                          style={{ color: "#343a40" }}
+                        >
+                          배송 요청 사항
+                        </label>
+                        <select
+                          className="form-select bg-white"
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            border: "2px solid #dee2e6", // 테두리 두께 증가
+                            transition: "all 0.3s ease",
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = "#495057";
+                            e.target.style.boxShadow =
+                              "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = "#dee2e6";
+                            e.target.style.boxShadow = "none";
+                          }}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "직접입력") {
+                              setIsCustom(true);
+                              setRequest("");
+                            } else {
+                              setIsCustom(false);
+                              setRequest(value);
+                            }
+                          }}
+                        >
+                          <option value="집 앞에 놔주세요.">
+                            집 앞에 놔주세요.
+                          </option>
+                          <option value="직접 받을게요.">직접 받을게요.</option>
+                          <option value="경비실에 놔주세요.">
+                            경비실에 놔주세요.
+                          </option>
+                          <option value="택배함에 놔주세요.">
+                            택배함에 놔주세요.
+                          </option>
+                          <option value="직접입력">직접입력</option>
+                        </select>
+                      </div>
+
+                      <div className="mb-3">
+                        <input
+                          type="text"
+                          className="form-control bg-white"
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            border: isCustom
+                              ? "2px solid #dee2e6"
+                              : "2px solid #e9ecef",
+                            transition: "all 0.3s ease",
+                            opacity: isCustom ? 1 : 0.6,
+                          }}
+                          onFocus={(e) => {
+                            if (isCustom) {
+                              e.target.style.borderColor = "#495057";
+                              e.target.style.boxShadow =
+                                "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                            }
+                          }}
+                          onBlur={(e) => {
+                            if (isCustom) {
+                              e.target.style.borderColor = "#dee2e6";
+                              e.target.style.boxShadow = "none";
+                            }
+                          }}
+                          value={request}
+                          placeholder={request}
+                          onChange={(e) => setRequest(e.target.value)}
+                          disabled={!isCustom}
+                        />
+                      </div>
+                    </div>
+
+                    {/* 결제 수단 섹션 */}
+                    <div className="mb-4">
+                      <h5
+                        className="fw-semibold mb-3"
+                        style={{ color: "#495057" }}
+                      >
+                        결제 수단
+                      </h5>
+                      <input
+                        type="text"
+                        className="form-control border-0"
+                        style={{
+                          borderRadius: "10px",
+                          padding: "12px 16px",
+                          fontSize: "0.95rem",
+                          backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
+                        }}
+                        value="api?"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 오른쪽: 주문 요약 */}
+              <div className="col-12 col-lg-5">
+                <div
+                  className="card border-0 shadow-sm"
+                  style={{ borderRadius: "15px" }}
+                >
+                  <div className="card-body p-4">
+                    <h4 className="fw-bold mb-4" style={{ color: "#212529" }}>
+                      주문 요약
+                    </h4>
+
+                    {/* 상품 정보 */}
+                    <div
+                      className="d-flex gap-3 mb-4 p-3 bg-light"
+                      style={{ borderRadius: "12px" }}
+                    >
+                      <img
+                        src={sale.thumbnails[0]?.path}
+                        alt={sale.title}
+                        className="rounded"
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <div className="flex-grow-1">
+                        <h6
+                          className="fw-semibold mb-1"
+                          style={{ fontSize: "0.95rem" }}
+                        >
+                          {sale.title}
+                        </h6>
+                        <p
+                          className="text-muted mb-1"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          수량: {orderCount}개
+                        </p>
+                        <p
+                          className="fw-bold mb-0"
+                          style={{ color: "#212529" }}
+                        >
+                          {sale.salePrice.toLocaleString()}원
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 금액 계산 */}
+                    <div className="border-top pt-3">
+                      <div className="d-flex justify-content-between mb-2">
+                        <span style={{ color: "#6c757d" }}>상품 금액</span>
+                        <span>
+                          {(sale.salePrice * orderCount).toLocaleString()}원
+                        </span>
+                      </div>
+
+                      <div className="d-flex justify-content-between mb-3">
+                        <span style={{ color: "#6c757d" }}>배송비</span>
+                        <span>
+                          {sale.deliveryFee > 0
+                            ? `${sale.deliveryFee.toLocaleString()}원`
+                            : "무료배송"}
+                        </span>
+                      </div>
+
+                      <hr className="my-3" />
+
+                      <div className="d-flex justify-content-between mb-4">
+                        <span
+                          className="fw-bold"
+                          style={{ fontSize: "1.1rem", color: "#212529" }}
+                        >
+                          총 결제 금액
+                        </span>
+                        <span
+                          className="fw-bold"
+                          style={{ fontSize: "1.2rem", color: "#212529" }}
+                        >
+                          {(
+                            sale.salePrice * orderCount +
+                            sale.deliveryFee
+                          ).toLocaleString()}
+                          원
+                        </span>
+                      </div>
+
+                      {/* 결제 버튼 */}
+                      <button
+                        className={`btn w-100 fw-bold ${validate ? "btn-dark" : "btn-secondary"}`}
+                        style={{
+                          borderRadius: "12px",
+                          padding: "14px",
+                          fontSize: "1rem",
+                          transition: "all 0.2s ease",
+                        }}
+                        onClick={handleSuccessButtonClick}
+                        disabled={!validate}
+                      >
+                        {isProcessing ? (
+                          <>
+                            <span
+                              className="spinner-border spinner-border-sm me-2"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            처리중...
+                          </>
+                        ) : (
+                          "결제하기"
+                        )}
+                      </button>
+
+                      {/* 결제 보안 정보 */}
+                      <div className="text-center mt-3">
+                        <small className="text-muted">
+                          <i className="fas fa-lock me-1"></i>
+                          안전한 결제가 보장됩니다
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

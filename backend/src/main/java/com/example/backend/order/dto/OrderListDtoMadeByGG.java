@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderListDtoMadeByGG implements Serializable {
-    Integer seq;
     String orderNo;
     String saleSaleNo;
     String name;

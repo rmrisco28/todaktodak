@@ -1,0 +1,76 @@
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: row !important;
+        justify-content: space-around !important;
+    }
+
+    .nav-item {
+        flex: 0 0 auto;
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-item:nth-child(3n) .text-muted {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) {
+    .nav {
+        flex-direction: row !important;
+        justify-content: center !important;
+    }
+}
+
+.nav-link:hover {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+}
+
+.nav-link.active:hover {
+    background-color: #212529 !important;
+    color: #fff !important;
+}
+
+.nav-link:hover {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+}
+
+/* active 상태 색상 */
+.nav-link.active {
+    background-color: #212529 !important; /* 원하는 색상 */
+    color: #fff !important;
+}
+
+/* active 상태에서 hover */
+.nav-link.active:hover {
+    background-color: #212529 !important; /* active hover 시 다른 색 */
+    color: #fff !important;
+}
+
+.nav-equal {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+}
+
+@media (min-width: 1400px) {
+    /* 큰 화면: 한 줄 */
+    .nav-equal {
+        grid-template-columns: repeat(14, 1fr); /* 14개 한 줄 */
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1399px) {
+    /* 중간 화면: 2줄 7개씩 */
+    .nav-equal {
+        grid-template-columns: repeat(7, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    /* 작은 화면: 2줄 5개씩 */
+    .nav-equal {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
