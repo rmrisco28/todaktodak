@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthenticationContext } from "./AuthenticationContextProvider";
 import { Spinner } from "react-bootstrap";
+import { Outlet } from "react-router";
 
 export function ProtectedRoute({ children }) {
   const { user, isAuthChecked } = useContext(AuthenticationContext);
@@ -24,6 +25,6 @@ export function ProtectedRoute({ children }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // 3. user 정보가 있으면 요청한 페이지(children)를 보여줍니다.
-  return children;
+  // 3. user 정보가 있으면 요청한 페이지(children)를 보여줍니다. // Outlet을 통해 자식 라우트들을 렌더링
+  return <Outlet />;
 }
