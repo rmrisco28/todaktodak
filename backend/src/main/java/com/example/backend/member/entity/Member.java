@@ -38,7 +38,7 @@ public class Member {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date", nullable = true)
     private LocalDate birthDate;
 
     @Column(name = "phone", nullable = false, length = 15)

@@ -80,7 +80,15 @@ export function MemberDetail() {
                 고객 번호
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.memberNo} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.memberNo}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
@@ -91,7 +99,15 @@ export function MemberDetail() {
                 아이디
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.memberId} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.memberId}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
