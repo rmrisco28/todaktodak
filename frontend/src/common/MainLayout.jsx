@@ -1,23 +1,20 @@
 import { Container } from "react-bootstrap";
 import { Outlet } from "react-router";
-import { UnifiedNavbar } from "./UnifiedNavbar.jsx";
-import { ComplexNavbar } from "./ComplexNavbar.jsx";
-import { MainFooter } from "../main/MainFooter.jsx";
-import { ScrollToTopButton } from "../main/ScrollToTopButton.jsx";
+import { AppNavbar } from "./AppNavbar.jsx";
+import { Footer } from "./Footer.jsx";
+import { ScrollToTopButton } from "./ScrollToTopButton.jsx";
 
 export function MainLayout() {
   return (
     <div>
       <div className="mb-3 sticky-top">
-        {/*<AppNavBar />*/}
-        {/*<ComplexNavbar />*/}
-        <UnifiedNavbar />
+        <AppNavbar />
       </div>
       <Container>
         <Outlet />
       </Container>
       <ScrollToTopButton />
-      <MainFooter />
+      <Footer />
     </div>
   );
 }

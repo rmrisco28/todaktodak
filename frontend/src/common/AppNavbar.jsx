@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
@@ -17,7 +16,7 @@ import "../css/navbar.css";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 import { useNavigate, useSearchParams } from "react-router";
 
-export function UnifiedNavbar() {
+export function AppNavbar() {
   // 로그인 상태 / 권한
   const { user, isAdmin } = useContext(AuthenticationContext);
   const navigate = useNavigate();
