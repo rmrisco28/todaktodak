@@ -126,14 +126,9 @@ export function AppNavbar() {
             <Nav.Link href="/order/list" className="py-2 px-3">
               주문내역
             </Nav.Link>
-            {user !== null && (
-              <Nav.Link href="/logout" className="py-2 px-3">
-                로그아웃
-              </Nav.Link>
-            )}
 
             <NavDropdown
-              title={getDropdownTitle("mypage", "member-menu")}
+              title={getDropdownTitle("마이페이지", "member-menu")}
               id="member-dropdown"
               align={{ lg: "end" }} // 데스크탑에서 오른쪽 정렬
               className="py-2 px-lg-2"
@@ -146,32 +141,53 @@ export function AppNavbar() {
               <NavDropdown.Item href="/cart/list">장바구니</NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown
-              title={getDropdownTitle("관리자", "admin-menu")}
-              id="admin-dropdown"
-              align={{ lg: "end" }}
-              className="py-2 px-lg-2"
-              onToggle={(isOpen) => handleToggle("admin-menu", isOpen)}
-            >
-              <NavDropdown.Item href="/admin">대시보드</NavDropdown.Item>
-              <NavDropdown.Item href="/member/list">회원관리</NavDropdown.Item>
-              <NavDropdown.Item href="/product/list">상품관리</NavDropdown.Item>
-              <NavDropdown.Item href="/sale/list">판매상품</NavDropdown.Item>
-              <NavDropdown.Item href="/order/admin/list">
-                주문관리
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/rental/list">대여관리</NavDropdown.Item>
-              <NavDropdown.Item href="/receive/list">반납관리</NavDropdown.Item>
-              <NavDropdown.Item href="/contact/list">문의관리</NavDropdown.Item>
-              <NavDropdown.Item href="/chart/list">통계현황</NavDropdown.Item>
-              <NavDropdown.Item href="/category/list">
-                카테고리
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/banner/list">배너관리</NavDropdown.Item>
-              <NavDropdown.Item href="/delivery/list">
-                배송업체
-              </NavDropdown.Item>
-            </NavDropdown>
+            {isAdmin() && (
+              <NavDropdown
+                title={getDropdownTitle("관리자", "admin-menu")}
+                id="admin-dropdown"
+                align={{ lg: "end" }}
+                className="py-2 px-lg-2"
+                onToggle={(isOpen) => handleToggle("admin-menu", isOpen)}
+              >
+                <NavDropdown.Item href="/admin">대시보드</NavDropdown.Item>
+                <NavDropdown.Item href="/member/list">
+                  회원관리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/product/list">
+                  상품관리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/sale/list">판매상품</NavDropdown.Item>
+                <NavDropdown.Item href="/order/admin/list">
+                  주문관리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/rental/list">
+                  대여관리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/receive/list">
+                  반납관리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/contact/list">
+                  문의관리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/chart/list">통계현황</NavDropdown.Item>
+                <NavDropdown.Item href="/category/list">
+                  카테고리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/banner/list">
+                  배너관리
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/delivery/list">
+                  배송업체
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
+
+            {user !== null && (
+              <Nav.Link href="/logout" className="py-2 px-3">
+                로그아웃
+              </Nav.Link>
+            )}
+
             {/*
             <Nav.Link href="#settings" className="py-2 px-3">
               <IoSettingsSharp size={16} />
