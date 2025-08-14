@@ -3,7 +3,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { useContext } from "react";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 
-export function AppNavBar() {
+export function AppNavBarOld() {
   const { isAdmin } = useContext(AuthenticationContext);
 
   return (
