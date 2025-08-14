@@ -175,7 +175,6 @@ export function MemberSignup() {
     if (!emailVerified) {
       newErrors.email = "이메일 인증을 완료해주세요.";
     }
-    if (!birthDate) newErrors.birthDate = "생년월일을 선택해주세요.";
     if (!name) {
       newErrors.name = "이름을 입력해주세요.";
     }
@@ -416,7 +415,6 @@ export function MemberSignup() {
                     setBirthYear(e.target.value);
                     updateBirthDate(e.target.value, birthMonth, birthDay);
                   }}
-                  className={errors.birthDate ? "is-invalid" : ""}
                 >
                   <option value="">년도</option>
                   {Array.from({ length: 100 }, (_, i) => {
@@ -470,9 +468,6 @@ export function MemberSignup() {
                   )}
                 </Form.Select>
               </div>
-              {errors.birthDate && (
-                <FormText className="text-danger">{errors.birthDate}</FormText>
-              )}
             </FormGroup>
           </div>
 
