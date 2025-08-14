@@ -496,6 +496,10 @@ public class MemberService {
         // id 조회
         Optional<Member> dbData = memberRepository.findByMemberId(dto.getMemberId());
         if (dbData.isPresent()) {
+            // 탈퇴 여부 확인
+            if (Boolean.TRUE.equals(dbData.get().getDelYn())) {
+                throw new RuntimeException("탈퇴한 회원입니다.");
+            }
             // 입력 password 비교
             String inputPassword = dto.getPassword();
             String dbPassword = dbData.get().getPassword();

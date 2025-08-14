@@ -359,10 +359,38 @@ export function MemberMyInfoModify() {
             <Col xs={12} sm={7}>
               <FormControl
                 value={member.phone}
-                onChange={(e) =>
-                  setMember({ ...member, phone: e.target.value })
-                }
+                onChange={(e) => {
+                  let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+
+                  // 하이픈 자동 삽입
+                  if (value.length < 4) {
+                    // 010
+                  } else if (value.length < 8) {
+                    value = value.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+                  } else {
+                    value = value.replace(
+                      /(\d{3})(\d{4})(\d{1,4})/,
+                      "$1-$2-$3",
+                    );
+                  }
+
+                  // 상태 업데이트
+                  setMember({ ...member, phone: value });
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, phone: null }));
+                  } else if (!validatePhone(value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      phone: "핸드폰 번호 형식이 올바르지 않습니다.",
+                    }));
+                  } else {
+                    setErrors((prev) => ({ ...prev, phone: null }));
+                  }
+                }}
               />
+              {errors.phone && (
+                <FormText className="text-danger">{errors.phone}</FormText>
+              )}
             </Col>
           </FormGroup>
 
