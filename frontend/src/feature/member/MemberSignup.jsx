@@ -129,11 +129,12 @@ export function MemberSignup() {
         purpose: "SIGNUP",
       })
       .then(() => {
-        toast.success("인증번호가 발송되었습니다.");
+        toast.success("인증번호가 발송되었습니다.", { position: "top-center" });
+
         setEmailSent(true);
       })
       .catch(() => {
-        toast.error("이메일 발송에 실패했습니다.");
+        toast.error("이메일 발송에 실패했습니다.", { position: "top-center" });
       })
       .finally(() => {
         setIsProcessing(false);
@@ -145,13 +146,18 @@ export function MemberSignup() {
     axios
       .post("/api/member/email/verify", { email, code: emailCode })
       .then(() => {
-        toast.success("이메일 인증이 완료되었습니다.");
+        toast.success("이메일 인증이 완료되었습니다.", {
+          position: "top-center",
+        });
+
         setEmailVerified(true);
         setValids((prev) => ({ ...prev, email: "이메일 인증 완료" }));
         setErrors((prev) => ({ ...prev, email: null }));
       })
       .catch(() => {
-        toast.error("인증번호가 틀렸거나 만료되었습니다.");
+        toast.error("인증번호가 틀렸거나 만료되었습니다.", {
+          position: "top-center",
+        });
       });
   };
 
@@ -217,348 +223,397 @@ export function MemberSignup() {
 
   // 화면 렌더링
   return (
-    <Row className="d-flex justify-content-center">
-      <Col md="auto">
+    <Row className="d-flex justify-content-center align-items-center">
+      <Col sm="auto">
         <h3 className="mb-4 text-center">회원 가입</h3>
         <p className="text-end" style={{ fontSize: "12px" }}>
           <span style={{ color: "red" }}>*</span> 항목은 필수입력 항목입니다.
         </p>
-        {/* 아이디 / 중복확인 */}
-        <div>
-          <FormGroup className="mb-3" controlId="memberId">
-            <FormLabel>
-              아이디 <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-
-            <div className="d-flex gap-2">
-              <FormControl
-                placeholder="아이디를 입력하세요."
-                autoComplete="off"
-                style={{ width: "290px", height: "40px" }}
-                value={memberId}
-                onChange={(e) => {
-                  setMemberId(e.target.value);
-                  setErrors((prev) => ({ ...prev, memberId: null }));
-                  setValids((prev) => ({ ...prev, memberId: null }));
-                }}
-              />
-              <Button
-                className="mb-0"
-                variant="outline-secondary"
-                onClick={handleCheckMemberId}
-              >
-                중복 확인
-              </Button>
-            </div>
-            {errors.memberId && (
-              <FormText className="text-danger">{errors.memberId}</FormText>
-            )}
-            {valids.memberId && (
-              <FormText className="text-success">{valids.memberId}</FormText>
-            )}
-          </FormGroup>
-        </div>
-        {/* 비밀번호 */}
-        <Form>
+        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded mb-3">
+          {/* 아이디 / 중복확인 */}
           <div>
-            <FormGroup className="mb-3" controlId="password1">
+            <FormGroup className="mb-3" controlId="memberId">
               <FormLabel>
-                비밀번호 <span style={{ color: "red" }}>*</span>
+                아이디 <span style={{ color: "red" }}>*</span>
               </FormLabel>
-              <FormControl
-                placeholder="비밀번호를 입력하세요."
-                autoComplete="off"
-                type="password"
-                value={password}
-                style={{ width: "400px" }}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setPassword(value);
-                  if (value.trim() === "") {
-                    setErrors((prev) => ({ ...prev, password: null }));
-                  } else if (!validatePassword(e.target.value)) {
+
+              <Row className="g-2 align-items-center">
+                <Col xs={12} sm={8}>
+                  <FormControl
+                    placeholder="아이디"
+                    autoComplete="off"
+                    value={memberId}
+                    onChange={(e) => {
+                      setMemberId(e.target.value);
+                      setErrors((prev) => ({ ...prev, memberId: null }));
+                      setValids((prev) => ({ ...prev, memberId: null }));
+                    }}
+                    className={
+                      errors.memberId
+                        ? "is-invalid"
+                        : valids.memberId
+                          ? "is-valid"
+                          : ""
+                    }
+                    aria-describedby="memberIdFeedback"
+                  />
+                </Col>
+                <Col xs={12} sm={4}>
+                  <Button
+                    variant="outline-dark"
+                    className="w-100 mb-0"
+                    onClick={handleCheckMemberId}
+                  >
+                    중복 확인
+                  </Button>
+                </Col>
+              </Row>
+              {(errors.memberId || valids.memberId) && (
+                <div
+                  id="memberIdFeedback"
+                  className={
+                    errors.memberId ? "text-danger mt-1" : "text-success mt-1"
+                  }
+                  style={{ fontSize: "0.875em" }}
+                >
+                  {errors.memberId || valids.memberId}
+                </div>
+              )}
+            </FormGroup>
+          </div>
+          {/* 비밀번호 */}
+          <Form>
+            <div>
+              <FormGroup className="mb-3" controlId="password1">
+                <FormLabel>
+                  비밀번호 <span style={{ color: "red" }}>*</span>
+                </FormLabel>
+                <FormControl
+                  placeholder="비밀번호"
+                  autoComplete="off"
+                  type="password"
+                  value={password}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setPassword(value);
+                    if (value.trim() === "") {
+                      setErrors((prev) => ({ ...prev, password: null }));
+                    } else if (!validatePassword(e.target.value)) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        password:
+                          "비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                      }));
+                    } else {
+                      setErrors((prev) => ({ ...prev, password: null }));
+                    }
+                  }}
+                  className={errors.password ? "is-invalid" : ""}
+                />
+                {errors.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
+              </FormGroup>
+            </div>
+            {/* 비밀번호 확인 */}
+            <div>
+              <FormGroup className="mb-3" controlId="password2">
+                <FormLabel>비밀번호 확인</FormLabel>
+                <FormControl
+                  autoComplete="off"
+                  type="password"
+                  value={password2}
+                  onChange={(e) => {
+                    setPassword2(e.target.value);
                     setErrors((prev) => ({
                       ...prev,
-                      password:
-                        "비밀번호는 8자 이상, 숫자/특수문자를 포함해야 합니다.",
+                      password2:
+                        e.target.value !== password
+                          ? "비밀번호가 일치하지 않습니다."
+                          : null,
+                    }));
+                  }}
+                  className={errors.password2 ? "is-invalid" : ""}
+                />
+                {errors.password2 && (
+                  <div className="invalid-feedback">{errors.password2}</div>
+                )}
+              </FormGroup>
+            </div>
+          </Form>
+          {/* 이름 */}
+          <div>
+            <FormGroup controlId="name">
+              <FormLabel>
+                이름 <span style={{ color: "red" }}>*</span>
+              </FormLabel>
+              <FormControl
+                placeholder="이름"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setErrors((prev) => ({ ...prev, name: null }));
+                }}
+                className={errors.name ? "is-invalid" : ""}
+              />
+              {errors.name && (
+                <div className="invalid-feedback">{errors.name}</div>
+              )}
+            </FormGroup>
+          </div>
+          {/* 연락처 */}
+          <div>
+            <FormGroup className="mb-3 mt-3" controlId="phone">
+              <FormLabel>연락처</FormLabel>
+              <FormControl
+                placeholder="010-1234-5678"
+                value={phone}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+
+                  // 하이픈 자동 삽입
+                  if (value.length < 4) {
+                    // 010
+                  } else if (value.length < 8) {
+                    value = value.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+                  } else {
+                    value = value.replace(
+                      /(\d{3})(\d{4})(\d{1,4})/,
+                      "$1-$2-$3",
+                    );
+                  }
+
+                  setPhone(value);
+                  if (value.trim() === "") {
+                    setErrors((prev) => ({ ...prev, phone: null }));
+                  } else if (!validatePhone(value)) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      phone: "핸드폰 번호 형식이 올바르지 않습니다.",
                     }));
                   } else {
-                    setErrors((prev) => ({ ...prev, password: null }));
+                    setErrors((prev) => ({ ...prev, phone: null }));
                   }
                 }}
               />
-              {errors.password && (
-                <FormText className="text-danger">{errors.password}</FormText>
+              {errors.phone && (
+                <FormText className="text-danger">{errors.phone}</FormText>
               )}
             </FormGroup>
           </div>
-          {/* 비밀번호 확인 */}
+          {/* 생년월일 */}
           <div>
-            <FormGroup className="mb-3" controlId="password2">
-              <FormLabel>비밀번호 확인</FormLabel>
-              <FormControl
-                autoComplete="off"
-                type="password"
-                style={{ width: "400px" }}
-                value={password2}
-                onChange={(e) => {
-                  setPassword2(e.target.value);
-                  setErrors((prev) => ({
-                    ...prev,
-                    password2:
-                      e.target.value !== password
-                        ? "비밀번호가 일치하지 않습니다."
-                        : null,
-                  }));
-                }}
-              />
-              {errors.password2 && (
-                <FormText className="text-danger">{errors.password2}</FormText>
-              )}
-            </FormGroup>
-          </div>
-        </Form>
-        {/* 이름 */}
-        <div>
-          <FormGroup controlId="name">
-            <FormLabel>
-              이름 <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <FormControl
-              placeholder="이름을 입력하세요."
-              style={{ width: "400px" }}
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setErrors((prev) => ({ ...prev, name: null }));
-              }}
-            />
-          </FormGroup>
-          {errors.name && (
-            <FormText className="text-danger">{errors.name}</FormText>
-          )}
-        </div>
-        {/* 연락처 */}
-        <div>
-          <FormGroup className="mb-3 mt-3" controlId="phone">
-            <FormLabel>연락처</FormLabel>
-            <FormControl
-              placeholder="010-1234-5678"
-              style={{ width: "400px" }}
-              value={phone}
-              onChange={(e) => {
-                let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+            <FormGroup className="mb-3" controlId="birthDate">
+              <FormLabel>
+                생년월일 <span style={{ color: "red" }}>*</span>
+              </FormLabel>
+              <div className="d-flex" style={{ gap: "10px" }}>
+                {/* 년도 */}
+                <Form.Select
+                  style={{ width: "140px" }}
+                  value={birthYear}
+                  onChange={(e) => {
+                    setBirthYear(e.target.value);
+                    updateBirthDate(e.target.value, birthMonth, birthDay);
+                  }}
+                  className={errors.birthDate ? "is-invalid" : ""}
+                >
+                  <option value="">년도</option>
+                  {Array.from({ length: 100 }, (_, i) => {
+                    const y = new Date().getFullYear() - i;
+                    return (
+                      <option key={y} value={y}>
+                        {y}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
 
-                // 하이픈 자동 삽입
-                if (value.length < 4) {
-                  // 010
-                } else if (value.length < 8) {
-                  value = value.replace(/(\d{3})(\d{1,4})/, "$1-$2");
-                } else {
-                  value = value.replace(/(\d{3})(\d{4})(\d{1,4})/, "$1-$2-$3");
-                }
-
-                setPhone(value);
-                if (value.trim() === "") {
-                  setErrors((prev) => ({ ...prev, phone: null }));
-                } else if (!validatePhone(value)) {
-                  setErrors((prev) => ({
-                    ...prev,
-                    phone: "핸드폰 번호 형식이 올바르지 않습니다.",
-                  }));
-                } else {
-                  setErrors((prev) => ({ ...prev, phone: null }));
-                }
-              }}
-            />
-            {errors.phone && (
-              <FormText className="text-danger">{errors.phone}</FormText>
-            )}
-          </FormGroup>
-        </div>
-        {/* 생년월일 */}
-        <div>
-          <FormGroup className="mb-3" controlId="birthDate">
-            <FormLabel>
-              생년월일 <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-            <div className="d-flex" style={{ gap: "10px" }}>
-              <Form.Select
-                style={{ width: "140px" }}
-                value={birthYear}
-                onChange={(e) => {
-                  setBirthYear(e.target.value);
-                  updateBirthDate(e.target.value, birthMonth, birthDay);
-                }}
-              >
-                <option value="">년도</option>
-                {Array.from({ length: 100 }, (_, i) => {
-                  const y = new Date().getFullYear() - i;
-                  return (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-
-              <Form.Select
-                style={{ width: "120px" }}
-                value={birthMonth}
-                onChange={(e) => {
-                  setBirthMonth(e.target.value);
-                  updateBirthDate(birthYear, e.target.value, birthDay);
-                }}
-              >
-                <option value="">월</option>
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
-                    {i + 1}
-                  </option>
-                ))}
-              </Form.Select>
-
-              <Form.Select
-                style={{ width: "120px" }}
-                value={birthDay}
-                onChange={(e) => {
-                  setBirthDay(e.target.value);
-                  updateBirthDate(birthYear, birthMonth, e.target.value);
-                }}
-              >
-                <option value="">일</option>
-                {Array.from(
-                  { length: getDaysInMonth(birthYear, birthMonth) || 31 },
-
-                  (_, i) => (
+                {/* 월 */}
+                <Form.Select
+                  style={{ width: "120px" }}
+                  value={birthMonth}
+                  onChange={(e) => {
+                    setBirthMonth(e.target.value);
+                    updateBirthDate(birthYear, e.target.value, birthDay);
+                  }}
+                >
+                  <option value="">월</option>
+                  {Array.from({ length: 12 }, (_, i) => (
                     <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
                       {i + 1}
                     </option>
-                  ),
-                )}
-              </Form.Select>
-            </div>
-            {errors.birthDate && (
-              <FormText className="text-danger">{errors.birthDate}</FormText>
-            )}
-          </FormGroup>
-        </div>
+                  ))}
+                </Form.Select>
 
-        {/* 이메일 */}
-        <div>
-          <FormGroup className="mb-3" controlId="email">
-            <FormLabel>
-              이메일 <span style={{ color: "red" }}>*</span>
-            </FormLabel>
-
-            <div className="d-flex gap-2">
-              <FormControl
-                placeholder="example@example.com"
-                autoComplete="off"
-                type="email"
-                style={{ width: "290px", height: "40px" }}
-                value={email}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setEmail(value);
-                  if (value.trim() === "") {
-                    setErrors((prev) => ({ ...prev, email: null }));
-                  } else if (!validateEmail(value)) {
-                    setErrors((prev) => ({
-                      ...prev,
-                      email: "이메일 형식이 올바르지 않습니다.",
-                    }));
-                  } else {
-                    setErrors((prev) => ({ ...prev, email: null }));
-                  }
-                }}
-                disabled={emailVerified} // 인증 완료되면 수정 불가
-              />
-              {!emailVerified && (
-                <Button
-                  className="mb-0"
-                  variant="outline-secondary"
-                  onClick={handleSendEmailCode}
-                  disabled={isProcessing}
+                {/* 일 */}
+                <Form.Select
+                  style={{ width: "120px" }}
+                  value={birthDay}
+                  onChange={(e) => {
+                    setBirthDay(e.target.value);
+                    updateBirthDate(birthYear, birthMonth, e.target.value);
+                  }}
                 >
-                  인증 요청
-                </Button>
+                  <option value="">일</option>
+                  {Array.from(
+                    { length: getDaysInMonth(birthYear, birthMonth) || 31 },
+
+                    (_, i) => (
+                      <option
+                        key={i + 1}
+                        value={String(i + 1).padStart(2, "0")}
+                      >
+                        {i + 1}
+                      </option>
+                    ),
+                  )}
+                </Form.Select>
+              </div>
+              {errors.birthDate && (
+                <FormText className="text-danger">{errors.birthDate}</FormText>
               )}
-            </div>
-            {errors.email && (
-              <FormText className="text-danger">{errors.email}</FormText>
+            </FormGroup>
+          </div>
+
+          {/* 이메일 */}
+          <div>
+            <FormGroup className="mb-3" controlId="email">
+              <FormLabel>
+                이메일 <span style={{ color: "red" }}>*</span>
+              </FormLabel>
+
+              <Row className="g-2 align-items-center">
+                <Col xs={12} sm={8}>
+                  <FormControl
+                    placeholder="example@example.com"
+                    autoComplete="off"
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setEmail(value);
+                      if (value.trim() === "") {
+                        setErrors((prev) => ({ ...prev, email: null }));
+                      } else if (!validateEmail(value)) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          email: "이메일 형식이 올바르지 않습니다.",
+                        }));
+                      } else {
+                        setErrors((prev) => ({ ...prev, email: null }));
+                      }
+                    }}
+                    readOnly={emailVerified} // 인증 완료되면 수정 불가
+                    className={
+                      errors.email
+                        ? "is-invalid"
+                        : valids.email
+                          ? "is-valid"
+                          : ""
+                    }
+                  />
+                </Col>
+
+                {!emailVerified && (
+                  <Col xs={12} sm={4}>
+                    <Button
+                      variant="outline-dark"
+                      className="w-100 mb-0"
+                      onClick={handleSendEmailCode}
+                      disabled={isProcessing}
+                    >
+                      인증 요청
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+              {errors.email && (
+                <FormText className="text-danger">{errors.email}</FormText>
+              )}
+              {valids.email && (
+                <FormText className="text-success">{valids.email}</FormText>
+              )}
+            </FormGroup>
+            {/* 인증번호 입력 */}
+            {emailSent && !emailVerified && (
+              <FormGroup className="mb-3" controlId="emailCode">
+                <FormLabel>인증번호</FormLabel>
+                <Row className="g-2 align-items-center">
+                  <Col xs={8} sm={6} md={4}>
+                    <FormControl
+                      autoComplete="off"
+                      placeholder="인증번호 입력"
+                      value={emailCode}
+                      onChange={(e) => setEmailCode(e.target.value)}
+                      style={{ height: "40px" }}
+                    />
+                  </Col>
+                  <Col xs={12} sm={4}>
+                    <Button
+                      variant="outline-success"
+                      className="w-100 mb-0"
+                      onClick={handleVerifyEmailCode}
+                    >
+                      인증 확인
+                    </Button>
+                  </Col>
+                </Row>
+              </FormGroup>
             )}
-            {valids.email && (
-              <FormText className="text-success">{valids.email}</FormText>
-            )}
-          </FormGroup>
-          {/* 인증번호 입력 */}
-          {emailSent && !emailVerified && (
-            <FormGroup className="mb-3" controlId="emailCode">
-              <FormLabel>인증번호</FormLabel>
-              <div className="d-flex gap-2">
+          </div>
+          {/* 우편번호 */}
+          <div>
+            <FormGroup controlId="postCode" className="mb-3">
+              <FormLabel>주소</FormLabel>
+              <Row className="g-2 align-items-center">
+                <Col xs={8} sm={3}>
+                  <FormControl
+                    placeholder="우편번호"
+                    value={postCode}
+                    onChange={(e) => setPostCode(e.target.value)}
+                    readOnly
+                  />
+                </Col>
+                <Col xs={4} sm={3}>
+                  <Button
+                    variant="outline-dark"
+                    className="w-100 mb-0"
+                    onClick={handleSearchButtonClick}
+                  >
+                    검색
+                  </Button>
+                </Col>
+              </Row>
+            </FormGroup>
+            {/* 주소 */}
+            <FormGroup>
+              <div className="d-flex mb-3" style={{ gap: "10px" }}>
                 <FormControl
-                  autoComplete="off"
-                  placeholder="인증번호 입력"
-                  style={{ width: "200px", height: "40px" }}
-                  value={emailCode}
-                  onChange={(e) => setEmailCode(e.target.value)}
+                  placeholder="도로명 주소 / 지번"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  readOnly
                 />
-                <Button
-                  variant="outline-success"
-                  onClick={handleVerifyEmailCode}
-                >
-                  인증 확인
-                </Button>
               </div>
             </FormGroup>
-          )}
-        </div>
-        {/* 우편번호 */}
-        <div>
-          <FormGroup controlId="postCode">
-            <FormLabel>주소</FormLabel>
-            <div className="d-flex" style={{ gap: "10px" }}>
-              <FormControl
-                placeholder="우편번호"
-                value={postCode}
-                onChange={(e) => setPostCode(e.target.value)}
-                style={{ width: "150px", height: "40px" }}
-                readOnly
-              />
-              {/* 주소 검색 버튼 */}
-              <Button variant="outline-dark" onClick={handleSearchButtonClick}>
-                검색
-              </Button>
-            </div>
-          </FormGroup>
-          {/* 주소 */}
-          <FormGroup>
-            <div className="d-flex mb-3" style={{ gap: "10px" }}>
-              <FormControl
-                placeholder="도로명 주소 / 지번"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                style={{ width: "400px" }}
-                readOnly
-              />
-            </div>
-          </FormGroup>
-          {/* 상세주소 */}
-          <FormGroup className="mb-3" controlId="addressDetail">
-            <div className="mb-3">
-              <FormControl
-                placeholder="상세주소"
-                style={{ width: "400px" }}
-                value={addressDetail}
-                onChange={(e) => setAddressDetail(e.target.value)}
-              />
-            </div>
-          </FormGroup>
-        </div>
+            {/* 상세주소 */}
+            <FormGroup className="mb-3" controlId="addressDetail">
+              <div className="mb-3">
+                <FormControl
+                  placeholder="상세주소"
+                  value={addressDetail}
+                  onChange={(e) => setAddressDetail(e.target.value)}
+                />
+              </div>
+            </FormGroup>
+          </div>
+        </section>
         {/* 회원가입 버튼 */}
         <div className=" d-flex justify-content-center mb-4">
-          <Button onClick={handleSaveButtonClick}>회원 가입</Button>
+          <Button className="w-100" onClick={handleSaveButtonClick}>
+            회원 가입
+          </Button>
         </div>
       </Col>
     </Row>

@@ -70,93 +70,96 @@ export function ResetPassword() {
   }
   return (
     <div>
-      <h3 className="mt-5 d-flex justify-content-center">비밀번호 찾기</h3>
-      <div
-        style={{
-          border: "solid #ccc",
-          borderRadius: "10px",
-          margin: "auto",
-          padding: "1rem",
-          width: "500px",
-          marginTop: "5rem",
-        }}
+      <h2
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "10vh" }}
       >
-        <Row className="d-flex justify-content-center">
-          <Col md="auto">
+        비밀번호 찾기
+      </h2>
+      <Row
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "60vh" }}
+      >
+        <Col xs={12} sm="auto" style={{ width: "500px" }}>
+          <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded mb-3">
             <h3 className="mb-4 mt-2 text-center">비밀번호 재설정</h3>
             <Form>
-              {/* 비밀번호 */}
-              <FormGroup controlId="newPassword">
-                <FormLabel className="mt-2">변경할 비밀번호</FormLabel>
-                <FormControl
-                  autoComplete="off"
-                  type="password"
-                  value={newPassword}
-                  style={{ width: "350px" }}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setNewPassword(value);
-                    if (value.trim() === "") {
-                      setErrors((prev) => ({ ...prev, newPassword: null }));
-                    } else if (!validatePassword(value)) {
+              {/* 비밀번호 입력 + 비밀번호 확인 입력을 가로로 정렬 */}
+              <div className="d-flex flex-column" style={{ gap: "15px" }}>
+                {/* 비밀번호 */}
+                <div className="d-flex flex-column" style={{ gap: "5px" }}>
+                  <FormLabel>변경할 비밀번호</FormLabel>
+                  <FormControl
+                    autoComplete="off"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setNewPassword(value);
+                      if (value.trim() === "") {
+                        setErrors((prev) => ({ ...prev, newPassword: null }));
+                      } else if (!validatePassword(value)) {
+                        setErrors((prev) => ({
+                          ...prev,
+                          newPassword:
+                            "비밀번호는 8자 이상, 숫자/특수문자를 포함해야합니다.",
+                        }));
+                      } else {
+                        setErrors((prev) => ({ ...prev, newPassword: null }));
+                      }
+                    }}
+                    className={errors.newPassword ? "is-invalid" : ""}
+                  />
+                  {errors.newPassword && (
+                    <FormText className="text-danger">
+                      {errors.newPassword}
+                    </FormText>
+                  )}
+                </div>
+
+                {/* 비밀번호 확인 */}
+                <div className="d-flex flex-column" style={{ gap: "5px" }}>
+                  <FormLabel>비밀번호 확인</FormLabel>
+                  <FormControl
+                    autoComplete="off"
+                    type="password"
+                    value={newPassword2}
+                    onChange={(e) => {
+                      setNewPassword2(e.target.value);
                       setErrors((prev) => ({
                         ...prev,
-                        newPassword:
-                          "비밀번호는 8자 이상, 숫자/특수문자를 포함해야합니다.",
+                        newPassword2:
+                          e.target.value !== newPassword
+                            ? "비밀번호가 일치하지 않습니다."
+                            : null,
                       }));
-                    } else {
-                      setErrors((prev) => ({ ...prev, newPassword: null }));
-                    }
-                  }}
-                />
-                {errors.newPassword && (
-                  <FormText className="text-danger">
-                    {errors.newPassword}
-                  </FormText>
-                )}
-              </FormGroup>
-              {/* 비밀번호 확인*/}
-              <FormGroup className="mb-5" controlId="newPassword2">
-                <FormLabel className="mt-2"> 비밀번호 확인</FormLabel>
-                <FormControl
-                  autoComplete="off"
-                  type="password"
-                  value={newPassword2}
-                  style={{ width: "350px" }}
-                  onChange={(e) => {
-                    setNewPassword2(e.target.value);
-                    setErrors((prev) => ({
-                      ...prev,
-                      newPassword2:
-                        e.target.value !== newPassword
-                          ? "비밀번호가 일치하지 않습니다."
-                          : null,
-                    }));
-                  }}
-                />
-                {errors.newPassword2 && (
-                  <FormText className="text-danger">
-                    {errors.newPassword2}
-                  </FormText>
-                )}
-              </FormGroup>
+                    }}
+                    className={errors.newPassword2 ? "is-invalid" : ""}
+                  />
+                  {errors.newPassword2 && (
+                    <FormText className="text-danger">
+                      {errors.newPassword2}
+                    </FormText>
+                  )}
+                </div>
+              </div>
             </Form>
-            {/* 취소, 변경 버튼*/}
-            <div className="mt-4 d-flex justify-content-center">
-              <Button
-                variant="secondary"
-                className="me-3"
-                onClick={() => navigate("/login")}
-              >
+
+            {/* 취소, 변경 버튼 가로 정렬 */}
+            <div
+              className="d-flex mt-4"
+              style={{ gap: "10px", justifyContent: "center" }}
+            >
+              <Button variant="secondary" onClick={() => navigate("/login")}>
                 취소
               </Button>
               <Button variant="primary" onClick={handleResetButtonClick}>
                 변경
               </Button>
             </div>
-          </Col>
-        </Row>
-      </div>
+          </section>
+        </Col>
+      </Row>
     </div>
   );
 }

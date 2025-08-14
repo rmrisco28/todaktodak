@@ -49,7 +49,7 @@ export function MemberDetail() {
         console.log("실행완료");
         const message = res.data.message;
         if (message) {
-          toast(message.text, { type: message.type });
+          toast(message.text, { type: message.type, position: "top-center" });
         }
         navigate("list");
       })
@@ -70,175 +70,177 @@ export function MemberDetail() {
 
   return (
     <Row className="justify-content-center">
-      <Col xs={6}>
+      <Col xs={10} md={10} lg={6}>
         <h3 className="mb-4">회원 정보 관리</h3>
-        {/* 고객 번호 */}
-        <div>
-          <FormGroup as={Row} controlId="memberNo" className="mb-4">
-            <FormLabel column sm={3}>
-              고객 번호
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.memberNo} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 아이디 */}
-        <div>
-          <FormGroup as={Row} controlId="memberId" className="mb-4">
-            <FormLabel column sm={3}>
-              아이디
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.memberId} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 이름 */}
-        <div>
-          <FormGroup as={Row} controlId="name" className="mb-4">
-            <FormLabel column sm={3}>
-              이름
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.name} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 이메일 */}
-        <div>
-          <FormGroup as={Row} controlId="email" className="mb-4">
-            <FormLabel column sm={3}>
-              이메일
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.email} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 생년월일 */}
-        <div>
-          <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column sm={3}>
-              생년월일
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.birthDate} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 연락처 */}
-        <div>
-          <FormGroup as={Row} controlId="phone" className="mb-4">
-            <FormLabel column sm={3}>
-              연락처
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.phone} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 우편번호 */}
-        <div>
-          <FormGroup as={Row} controlId="postCode" className="mb-2">
-            <FormLabel column sm={3}>
-              우편번호
-            </FormLabel>
-            <Col sm={2}>
-              <FormControl
-                style={{ textAlign: "center" }}
-                value={member.postCode}
-                readOnly={true}
-              />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 주소 */}
-        <div>
-          <FormGroup as={Row} controlId="address" className="mb-2">
-            <FormLabel column sm={3}>
-              주소
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.addr} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 상세주소 */}
-        <div>
-          <FormGroup as={Row} className="mb-3">
-            <FormLabel column sm={3}></FormLabel>
-            <Col sm={7}>
-              <FormControl value={member.addrDetail} readOnly={true} />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 등록일시 */}
-        <div>
-          <FormGroup as={Row} controlId="insertDttm" className="mb-3">
-            <FormLabel column sm={3}>
-              등록일시
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl
-                value={member.insertDttm?.replace("T", "  ")}
-                readOnly={true}
-              />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 수정일시 */}
-        <div>
-          <FormGroup as={Row} controlId="updatetDttm" className="mb-3">
-            <FormLabel column sm={3}>
-              수정일시
-            </FormLabel>
-            <Col sm={7}>
-              <FormControl
-                value={member.updateDttm?.replace("T", "  ")}
-                readOnly={true}
-              />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 사용여부 */}
-        <div>
-          <FormGroup as={Row} controlId="useYn" className="mb-4">
-            <FormLabel column sm={3}>
-              사용
-            </FormLabel>
-            <Col sm={7}>
-              <FormCheck
-                type="checkbox"
-                id="useYn"
-                label={"사용"}
-                checked={member.useYn}
-                readOnly
-                disabled
-              />
-            </Col>
-          </FormGroup>
-        </div>
-        {/* 삭제여부 */}
-        <div>
-          <FormGroup as={Row} controlId="delYn" className="mb-4">
-            <FormLabel column sm={3}>
-              삭제
-            </FormLabel>
-            <Col sm={7}>
-              <FormCheck
-                type="checkbox"
-                id="delYn"
-                label={"삭제"}
-                checked={member.delYn}
-                readOnly
-                disabled
-              />
-            </Col>
-          </FormGroup>
-        </div>
+        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded-4">
+          {/* 고객 번호 */}
+          <div>
+            <FormGroup as={Row} controlId="memberNo" className="mb-4">
+              <FormLabel column sm={3}>
+                고객 번호
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.memberNo} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 아이디 */}
+          <div>
+            <FormGroup as={Row} controlId="memberId" className="mb-4">
+              <FormLabel column sm={3}>
+                아이디
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.memberId} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 이름 */}
+          <div>
+            <FormGroup as={Row} controlId="name" className="mb-4">
+              <FormLabel column sm={3}>
+                이름
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.name} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 이메일 */}
+          <div>
+            <FormGroup as={Row} controlId="email" className="mb-4">
+              <FormLabel column sm={3}>
+                이메일
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.email} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 생년월일 */}
+          <div>
+            <FormGroup as={Row} controlId="birthDate" className="mb-4">
+              <FormLabel column sm={3}>
+                생년월일
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.birthDate} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 연락처 */}
+          <div>
+            <FormGroup as={Row} controlId="phone" className="mb-4">
+              <FormLabel column sm={3}>
+                연락처
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.phone} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 우편번호 */}
+          <div>
+            <FormGroup as={Row} controlId="postCode" className="mb-2">
+              <FormLabel column sm={3}>
+                우편번호
+              </FormLabel>
+              <Col xs={3} sm={3} md={2}>
+                <FormControl
+                  style={{ textAlign: "center" }}
+                  value={member.postCode}
+                  readOnly={true}
+                />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 주소 */}
+          <div>
+            <FormGroup as={Row} controlId="address" className="mb-2">
+              <FormLabel column sm={3}>
+                주소
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.addr} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 상세주소 */}
+          <div>
+            <FormGroup as={Row} className="mb-3">
+              <FormLabel column sm={3}></FormLabel>
+              <Col sm={7}>
+                <FormControl value={member.addrDetail} readOnly={true} />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 등록일시 */}
+          <div>
+            <FormGroup as={Row} controlId="insertDttm" className="mb-3">
+              <FormLabel column sm={3}>
+                등록일시
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl
+                  value={member.insertDttm?.replace("T", "  ")}
+                  readOnly={true}
+                />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 수정일시 */}
+          <div>
+            <FormGroup as={Row} controlId="updatetDttm" className="mb-3">
+              <FormLabel column sm={3}>
+                수정일시
+              </FormLabel>
+              <Col sm={7}>
+                <FormControl
+                  value={member.updateDttm?.replace("T", "  ")}
+                  readOnly={true}
+                />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 사용여부 */}
+          <div>
+            <FormGroup as={Row} controlId="useYn" className="mb-4">
+              <FormLabel column sm={3}>
+                사용
+              </FormLabel>
+              <Col sm={7}>
+                <FormCheck
+                  type="checkbox"
+                  id="useYn"
+                  label={"사용"}
+                  checked={member.useYn}
+                  readOnly
+                  disabled
+                />
+              </Col>
+            </FormGroup>
+          </div>
+          {/* 삭제여부 */}
+          <div>
+            <FormGroup as={Row} controlId="delYn">
+              <FormLabel column sm={3}>
+                삭제
+              </FormLabel>
+              <Col sm={7}>
+                <FormCheck
+                  type="checkbox"
+                  id="delYn"
+                  label={"삭제"}
+                  checked={member.delYn}
+                  readOnly
+                  disabled
+                />
+              </Col>
+            </FormGroup>
+          </div>
+        </section>
         {/* 삭제, 수정 버튼*/}
-        <div className="mb-3 d-flex">
+        <div className="mb-3 mt-4 d-flex">
           <div>
             <Button
               className="me-3"
