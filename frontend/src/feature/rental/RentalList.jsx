@@ -56,7 +56,6 @@ export function RentalList() {
 
   return (
     <>
-      <h3>2차</h3>
       <div
         className="container-fluid py-5"
         style={{ backgroundColor: "#f8f9fa" }}

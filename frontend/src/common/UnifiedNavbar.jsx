@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import {
   Navbar,
@@ -91,8 +90,8 @@ export function UnifiedNavbar() {
             <Nav.Link href="/sale/list" className="py-2 px-3">
               상품
             </Nav.Link>
-            <Nav.Link href="/return" className="py-2 px-3">
-              반납신청
+            <Nav.Link href="/rental/list" className="py-2 px-3">
+              대여 현황
             </Nav.Link>
             <Nav.Link href="/contact/list" className="py-2 px-3">
               문의
