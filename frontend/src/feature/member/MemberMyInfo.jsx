@@ -122,7 +122,16 @@ export function MemberMyInfo() {
                 아이디
               </FormLabel>
               <Col sm={6}>
-                <FormControl value={member.memberId} readOnly />
+                <FormControl
+                  disabled
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.memberId}
+                  readOnly
+                />
               </Col>
             </FormGroup>
 

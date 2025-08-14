@@ -242,6 +242,13 @@ export function MemberSignup() {
                     placeholder="아이디"
                     autoComplete="off"
                     value={memberId}
+                    style={{
+                      border: "none",
+                      boxShadow: "none",
+                      borderRadius: 0,
+                      backgroundColor: "transparent",
+                      borderBottom: "2px solid black",
+                    }}
                     onChange={(e) => {
                       setMemberId(e.target.value);
                       setErrors((prev) => ({ ...prev, memberId: null }));
