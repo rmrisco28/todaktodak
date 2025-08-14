@@ -11,6 +11,7 @@ import {
 import { IoSettingsSharp, IoNotifications, IoSearch } from "react-icons/io5"; // Ionicons 5
 import { FaClock } from "react-icons/fa"; // Font Awesome
 import { BsChevronDown } from "react-icons/bs"; // Bootstrap Icons
+import { Link } from "react-router-dom";
 
 import "../css/navbar.css";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
@@ -66,7 +67,11 @@ export function AppNavbar() {
     >
       <Container fluid className="px-3">
         {/* 1. 브랜드 로고 */}
-        <Navbar.Brand href="/" className="text-dark font-weight-bold me-4">
+        <Navbar.Brand
+          as={Link}
+          to="/"
+          className="text-dark font-weight-bold me-4"
+        >
           토닥토닥
         </Navbar.Brand>
 
@@ -87,13 +92,10 @@ export function AppNavbar() {
         <Navbar.Collapse id="unified-navbar-nav">
           {/* 주요 메뉴 (상품, 반납신청, 문의) */}
           <Nav className="me-auto">
-            <Nav.Link href="/sale/list" className="py-2 px-3">
+            <Nav.Link as={Link} to="/sale/list" className="py-2 px-3">
               상품
             </Nav.Link>
-            <Nav.Link href="/return" className="py-2 px-3">
-              반납신청
-            </Nav.Link>
-            <Nav.Link href="/contact/list" className="py-2 px-3">
+            <Nav.Link as={Link} to="/contact/list" className="py-2 px-3">
               문의
             </Nav.Link>
           </Nav>
@@ -119,11 +121,11 @@ export function AppNavbar() {
           {/* 사용자/관리자 메뉴 (오른쪽 정렬) */}
           <Nav className="align-items-lg-center">
             {user === null && (
-              <Nav.Link href="/login" className="py-2 px-3">
-                로그인/회원가입
+              <Nav.Link as={Link} to="/login" className="py-2 px-3">
+                로그인
               </Nav.Link>
             )}
-            <Nav.Link href="/order/list" className="py-2 px-3">
+            <Nav.Link as={Link} to="/order/list" className="py-2 px-3">
               주문내역
             </Nav.Link>
 
@@ -134,11 +136,21 @@ export function AppNavbar() {
               className="py-2 px-lg-2"
               onToggle={(isOpen) => handleToggle("member-menu", isOpen)}
             >
-              <NavDropdown.Item href="/member/myinfo">내 정보</NavDropdown.Item>
-              <NavDropdown.Item href="/order/list">주문내역</NavDropdown.Item>
-              <NavDropdown.Item href="/rental/list">대여현황</NavDropdown.Item>
-              <NavDropdown.Item href="/want/list">관심상품</NavDropdown.Item>
-              <NavDropdown.Item href="/cart/list">장바구니</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/member/myinfo">
+                내 정보
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/order/list">
+                주문내역
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/rental/list">
+                대여현황
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/want/list">
+                관심상품
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/cart/list">
+                장바구니
+              </NavDropdown.Item>
             </NavDropdown>
 
             {isAdmin() && (
@@ -149,47 +161,53 @@ export function AppNavbar() {
                 className="py-2 px-lg-2"
                 onToggle={(isOpen) => handleToggle("admin-menu", isOpen)}
               >
-                <NavDropdown.Item href="/admin">대시보드</NavDropdown.Item>
-                <NavDropdown.Item href="/member/list">
+                <NavDropdown.Item as={Link} to="/admin">
+                  대시보드
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/member/list">
                   회원관리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/product/list">
+                <NavDropdown.Item as={Link} to="/product/list">
                   상품관리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/sale/list">판매상품</NavDropdown.Item>
-                <NavDropdown.Item href="/order/admin/list">
+                <NavDropdown.Item as={Link} to="/sale/list">
+                  판매상품
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/order/admin/list">
                   주문관리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/rental/list">
+                <NavDropdown.Item as={Link} to="/rental/list">
                   대여관리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/receive/list">
+                <NavDropdown.Item as={Link} to="/receive/list">
                   반납관리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/contact/list">
+                <NavDropdown.Item as={Link} to="/contact/list">
                   문의관리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/chart/list">통계현황</NavDropdown.Item>
-                <NavDropdown.Item href="/category/list">
+                <NavDropdown.Item as={Link} to="/chart/list">
+                  통계현황
+                </NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/category/list">
                   카테고리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/banner/list">
+                <NavDropdown.Item as={Link} to="/banner/list">
                   배너관리
                 </NavDropdown.Item>
-                <NavDropdown.Item href="/delivery/list">
+                <NavDropdown.Item as={Link} to="/delivery/list">
                   배송업체
                 </NavDropdown.Item>
               </NavDropdown>
             )}
 
             {user !== null && (
-              <Nav.Link href="/logout" className="py-2 px-3">
+              <Nav.Link as={Link} to="/logout" className="py-2 px-3">
                 로그아웃
               </Nav.Link>
             )}
 
             {/*
-            <Nav.Link href="#settings" className="py-2 px-3">
+            <Nav.Link as={Link}  to="#settings" className="py-2 px-3">
               <IoSettingsSharp size={16} />
             </Nav.Link>
 
@@ -204,7 +222,7 @@ export function AppNavbar() {
             {/*
             </NavDropdown>
 
-            <Nav.Link href="#profile" className="py-2 ps-2">
+            <Nav.Link as={Link}  to="#profile" className="py-2 ps-2">
               <div className="avatar avatar-sm position-relative">
                 <Image
                   src={`/vite.svg`} // public 폴더의 내용은 / 부터 시작
