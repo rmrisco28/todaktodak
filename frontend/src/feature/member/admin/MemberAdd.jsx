@@ -398,9 +398,14 @@ export function MemberAdd() {
             </FormGroup>
           </div>
         </section>
-        {/* 회원가입 버튼 */}
-        <div className=" d-flex justify-content-center mb-4">
-          <Button onClick={handleSaveButtonClick}>회원 등록</Button>
+        {/* 회원등록 버튼 */}
+        <div className="mb-4 d-flex justify-content-end gap-2">
+          <Button variant="outline-primary" onClick={handleSaveButtonClick}>
+            회원 등록
+          </Button>
+          <Button onClick={() => navigate(-1)} variant="outline-secondary">
+            취소
+          </Button>
         </div>
       </Col>
     </Row>
