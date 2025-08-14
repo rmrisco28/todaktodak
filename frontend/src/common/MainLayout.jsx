@@ -2,6 +2,8 @@ import { Container } from "react-bootstrap";
 import { Outlet } from "react-router";
 import { UnifiedNavbar } from "./UnifiedNavbar.jsx";
 import { ComplexNavbar } from "./ComplexNavbar.jsx";
+import { MainFooter } from "../main/MainFooter.jsx";
+import { ScrollToTopButton } from "../main/ScrollToTopButton.jsx";
 
 export function MainLayout() {
   return (
@@ -14,6 +16,8 @@ export function MainLayout() {
       <Container>
         <Outlet />
       </Container>
+      <ScrollToTopButton />
+      <MainFooter />
     </div>
   );
 }

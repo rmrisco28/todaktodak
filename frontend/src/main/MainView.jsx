@@ -13,8 +13,6 @@ export function MainView() {
         <MainCategory />
         <MainSaleList />
       </Container>
-      <ScrollToTopButton />
-      <MainFooter />
     </div>
   );
 }
