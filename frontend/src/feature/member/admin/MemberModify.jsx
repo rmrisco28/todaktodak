@@ -34,8 +34,12 @@ export function MemberModify() {
   const [birthDay, setBirthDay] = useState("");
 
   const [errors, setErrors] = useState({});
+
+  //비밀번호
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
+  // 연락처
+  const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
 
   useEffect(() => {
     axios
@@ -66,9 +70,25 @@ export function MemberModify() {
 
   // 수정 버튼 클릭
   function handleModifyButtonClick() {
-    // 비밀번호 일치 확인
+    const newErrors = {};
+
+    if (!validatePhone(member.phone)) {
+      newErrors.phone = "전화번호 형식이 올바르지 않습니다.";
+    }
+
+    // 비밀번호 유효성 검사
+    if (newPassword.trim() && !validatePassword(newPassword)) {
+      newErrors.newPassword =
+        "비밀번호는 8자 이상, 숫자/특수문자를 포함해야합니다.";
+    }
+    // 비밀번호 일치 확인 검사
     if (newPassword !== newPassword2) {
-      toast("새 비밀번호가 일치하지 않습니다.", { type: "error" });
+      newErrors.newPassword2 = "비밀번호가 일치하지 않습니다.";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
 
@@ -94,7 +114,8 @@ export function MemberModify() {
         if (message) {
           toast(message.text, { type: message.type, position: "top-center" });
         }
-        navigate(`/member?seq=${params.get("seq")}`); // 상세 페이지 이동
+        const page = params.get("page") || 1; // 추가
+        navigate(`/member?seq=${params.get("seq")}&page=${page}`); // 상세 페이지 이동
       })
       .catch((err) => {
         console.log(err);
@@ -141,7 +162,7 @@ export function MemberModify() {
   return (
     <Row className="justify-content-center">
       <Col xs={10} md={8} lg={6}>
-        <h3 className="mb-4">회원 정보 수정</h3>
+        <h3 className="mb-4 text-center">회원 정보 수정</h3>
         <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded-4 mb-3">
           {/* 고객 번호 */}
           <div>
@@ -177,7 +198,7 @@ export function MemberModify() {
                 <FormLabel column sm={3}>
                   비밀번호
                 </FormLabel>
-                <Col sm={7} className="text-center">
+                <Col sm={7}>
                   <FormControl
                     autoComplete="off"
                     type="password"
@@ -212,7 +233,7 @@ export function MemberModify() {
                 <FormLabel column sm={3}>
                   비밀번호 확인
                 </FormLabel>
-                <Col sm={7} className="text-center">
+                <Col sm={7}>
                   <FormControl
                     autoComplete="off"
                     type="password"
@@ -261,6 +282,7 @@ export function MemberModify() {
               </FormLabel>
               <Col sm={7}>
                 <FormControl
+                  readOnly
                   value={member.email}
                   onChange={(e) =>
                     setMember({ ...member, email: e.target.value })
@@ -336,10 +358,38 @@ export function MemberModify() {
               <Col sm={7}>
                 <FormControl
                   value={member.phone}
-                  onChange={(e) =>
-                    setMember({ ...member, phone: e.target.value })
-                  }
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
+
+                    // 하이픈 자동 삽입
+                    if (value.length < 4) {
+                      // 010
+                    } else if (value.length < 8) {
+                      value = value.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+                    } else {
+                      value = value.replace(
+                        /(\d{3})(\d{4})(\d{1,4})/,
+                        "$1-$2-$3",
+                      );
+                    }
+
+                    // 상태 업데이트
+                    setMember({ ...member, phone: value });
+                    if (value.trim() === "") {
+                      setErrors((prev) => ({ ...prev, phone: null }));
+                    } else if (!validatePhone(value)) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        phone: "핸드폰 번호 형식이 올바르지 않습니다.",
+                      }));
+                    } else {
+                      setErrors((prev) => ({ ...prev, phone: null }));
+                    }
+                  }}
                 />
+                {errors.phone && (
+                  <FormText className="text-danger">{errors.phone}</FormText>
+                )}
               </Col>
             </FormGroup>
           </div>
