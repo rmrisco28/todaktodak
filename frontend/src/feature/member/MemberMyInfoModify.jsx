@@ -103,7 +103,8 @@ export function MemberMyInfoModify() {
       .then((res) => {
         console.log("성공");
         setMember(res.data);
-        alert("변경이 완료되었습니다.");
+        toast.success("변경이 완료되었습니다.", { position: "top-center" });
+
         navigate(`/member/myinfo`);
       })
       .catch((err) => {
@@ -205,181 +206,185 @@ export function MemberMyInfoModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col lg={5}>
-        <h3 className="mb-4">회원 정보 변경</h3>
-        {/* 아이디 */}
-        <div>
-          <FormGroup as={Row} controlId="memberId" className="mb-4">
-            <FormLabel column lg={3}>
+      <Col xs={12} md={10} lg={5} className="p-3" style={{ width: "600px" }}>
+        <h3 className="mb-4 text-center">내 정보 변경</h3>
+        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded-4 mb-3">
+          {/* 아이디 */}
+          <FormGroup
+            as={Row}
+            controlId="memberId"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               아이디
             </FormLabel>
-            <Col lg={7}>
-              <FormControl value={member.memberId} disabled />
+            <Col xs={12} sm={7}>
+              <FormControl
+                value={member.memberId}
+                onChange={(e) =>
+                  setMember({ ...member, memberId: e.target.value })
+                }
+                disabled
+              />
             </Col>
           </FormGroup>
-        </div>
-        {/* 비밀번호 / 비밀번호 변경 */}
-        <div>
-          <FormGroup as={Row} controlId="password" className="mb-4">
-            <FormLabel column lg={3}>
+
+          {/* 비밀번호 변경 버튼 */}
+          <FormGroup
+            as={Row}
+            controlId="password"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               비밀번호
             </FormLabel>
-            <Col lg={7} className="text-center">
-              <Button onClick={() => setPasswordModalShow(true)}>
+            <Col xs={12} sm={7} className="d-flex">
+              <Button
+                className="mb-2 mb-sm-0 w-100 w-sm-auto"
+                onClick={() => setPasswordModalShow(true)}
+              >
                 비밀번호 변경
               </Button>
             </Col>
           </FormGroup>
-        </div>
-        {/* 이름 */}
-        <div>
-          <FormGroup as={Row} controlId="name" className="mb-4">
-            <FormLabel column sm={3}>
+
+          {/* 이름 */}
+          <FormGroup
+            as={Row}
+            controlId="name"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               이름
             </FormLabel>
-            <Col sm={7}>
+            <Col xs={12} sm={7}>
               <FormControl
                 value={member.name}
                 onChange={(e) => setMember({ ...member, name: e.target.value })}
               />
             </Col>
           </FormGroup>
-        </div>
-        {/* 이메일 */}
-        <div>
-          <FormGroup as={Row} controlId="email" className="mb-4">
-            <FormLabel column sm={3}>
+
+          {/* 이메일 */}
+          <FormGroup
+            as={Row}
+            controlId="email"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               이메일
             </FormLabel>
-            <Col sm={7}>
-              <FormControl
-                disabled
-                autoComplete="off"
-                type="email"
-                value={member.email}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setMember({ ...member, email: value });
-                  if (value.trim() === "") {
-                    setErrors((prev) => ({ ...prev, email: null }));
-                  } else if (!validateEmail(value)) {
-                    setErrors((prev) => ({
-                      ...prev,
-                      email: "이메일 형식이 올바르지 않습니다.",
-                    }));
-                  } else {
-                    setErrors((prev) => ({ ...prev, email: null }));
-                  }
-                }}
-              />
-              {errors.email && (
-                <FormText className="text-danger">{errors.email}</FormText>
-              )}
+            <Col xs={12} sm={7}>
+              <FormControl value={member.email} disabled type="email" />
             </Col>
           </FormGroup>
-        </div>
-        {/* 생년월일 */}
-        <div>
-          <FormGroup as={Row} controlId="birthDate" className="mb-4">
-            <FormLabel column lg={3}>
+
+          {/* 생년월일 */}
+          <FormGroup
+            as={Row}
+            controlId="birthDate"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               생년월일
             </FormLabel>
-            <Col lg={9} className="d-flex" style={{ gap: "10px" }}>
-              {/* 년도 */}
-              <Form.Select
-                value={birthYear}
-                onChange={(e) => setBirthYear(e.target.value)}
-                style={{ width: "100px" }}
+            <Col xs={12} sm={7}>
+              <div
+                className="d-flex align-items-center"
+                style={{ gap: "10px" }}
               >
-                <option value="">년도</option>
-                {Array.from({ length: 100 }, (_, i) => {
-                  const y = new Date().getFullYear() - i;
-                  return (
-                    <option key={y} value={y}>
-                      {y}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-              {/* 월 */}
-              <Form.Select
-                value={birthMonth}
-                onChange={(e) => setBirthMonth(e.target.value)}
-                style={{ width: "70px" }}
-              >
-                <option value="">월</option>
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
-                    {i + 1}
-                  </option>
-                ))}
-              </Form.Select>
-              {/* 일*/}
-              <Form.Select
-                value={birthDay}
-                onChange={(e) => setBirthDay(e.target.value)}
-                style={{ width: "70px" }}
-              >
-                <option value="">일</option>
-                {Array.from(
-                  { length: getDaysInMonth(birthYear, birthMonth || 31) },
-                  (_, i) => (
+                {/* 년도 */}
+                <Form.Select
+                  value={birthYear}
+                  onChange={(e) => setBirthYear(e.target.value)}
+                  style={{ width: "120px", height: "40px" }}
+                >
+                  <option value="">년도</option>
+                  {Array.from({ length: 100 }, (_, i) => {
+                    const y = new Date().getFullYear() - i;
+                    return (
+                      <option key={y} value={y}>
+                        {y}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+
+                {/* 월 */}
+                <Form.Select
+                  value={birthMonth}
+                  onChange={(e) => setBirthMonth(e.target.value)}
+                  style={{ width: "90px", height: "40px" }}
+                >
+                  <option value="">월</option>
+                  {Array.from({ length: 12 }, (_, i) => (
                     <option key={i + 1} value={String(i + 1).padStart(2, "0")}>
                       {i + 1}
                     </option>
-                  ),
-                )}
-              </Form.Select>
+                  ))}
+                </Form.Select>
+
+                {/* 일 */}
+                <Form.Select
+                  value={birthDay}
+                  onChange={(e) => setBirthDay(e.target.value)}
+                  style={{ width: "90px", height: "40px" }}
+                >
+                  <option value="">일</option>
+                  {Array.from(
+                    { length: getDaysInMonth(birthYear, birthMonth || 1) },
+                    (_, i) => (
+                      <option
+                        key={i + 1}
+                        value={String(i + 1).padStart(2, "0")}
+                      >
+                        {i + 1}
+                      </option>
+                    ),
+                  )}
+                </Form.Select>
+              </div>
             </Col>
           </FormGroup>
-        </div>
-        {/* 연락처 */}
-        <div>
-          <FormGroup as={Row} controlId="phone" className="mb-4">
-            <FormLabel column sm={3}>
+
+          {/* 연락처 */}
+          <FormGroup
+            as={Row}
+            controlId="phone"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               연락처
             </FormLabel>
-            <Col sm={7}>
+            <Col xs={12} sm={7}>
               <FormControl
                 value={member.phone}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setMember({ ...member, phone: value });
-                  if (value.trim() === "") {
-                    setErrors((prev) => ({ ...prev, phone: null }));
-                  } else if (!validatePhone(value)) {
-                    setErrors((prev) => ({
-                      ...prev,
-                      phone: "번호 형식이 올바르지 않습니다.",
-                    }));
-                  } else {
-                    setErrors((prev) => ({ ...prev, phone: null }));
-                  }
-                }}
+                onChange={(e) =>
+                  setMember({ ...member, phone: e.target.value })
+                }
               />
-              {errors.phone && (
-                <FormText className="text-danger">{errors.phone}</FormText>
-              )}
             </Col>
           </FormGroup>
-        </div>
-        {/* 우편번호 */}
-        <div>
-          <FormGroup as={Row} controlId="postCode" className="mb-4">
-            <FormLabel column sm={3}>
+
+          {/* 우편번호 + 검색 */}
+          <FormGroup
+            as={Row}
+            controlId="postCode"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               우편번호
             </FormLabel>
-            <Col sm={7}>
-              <div className="d-flex" style={{ gap: "10px" }}>
+            <Col xs={12} sm={5}>
+              <div className="d-flex gap-2">
                 <FormControl
                   value={member.postCode}
                   readOnly
                   placeholder="우편번호"
                 />
-                {/* 검색버튼 */}
                 <Button
+                  className="w-100 mb-0"
                   variant="outline-dark"
-                  style={{ whiteSpace: "nowrap" }}
                   onClick={handleSearchButtonClick}
                 >
                   검색
@@ -387,23 +392,29 @@ export function MemberMyInfoModify() {
               </div>
             </Col>
           </FormGroup>
-        </div>
-        {/* 주소 */}
-        <div>
-          <FormGroup as={Row} controlId="address" className="mb-2">
-            <FormLabel column sm={3}>
+
+          {/* 주소 */}
+          <FormGroup
+            as={Row}
+            controlId="address"
+            className="mb-2 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}>
               주소
             </FormLabel>
-            <Col md={9}>
+            <Col xs={12} sm={7}>
               <FormControl value={member.addr} readOnly />
             </Col>
           </FormGroup>
-        </div>
-        {/* 상세 주소 */}
-        <div>
-          <FormGroup as={Row} controlId="addressDetail" className="mb-4">
-            <FormLabel column sm={3}></FormLabel>
-            <Col sm={9}>
+
+          {/* 상세 주소 */}
+          <FormGroup
+            as={Row}
+            controlId="addressDetail"
+            className="mb-4 align-items-center"
+          >
+            <FormLabel column xs={12} sm={3}></FormLabel>
+            <Col xs={12} sm={7}>
               <FormControl
                 value={member.addrDetail}
                 onChange={(e) =>
@@ -412,18 +423,15 @@ export function MemberMyInfoModify() {
               />
             </Col>
           </FormGroup>
-        </div>
-        {/* 취소, 변경 버튼*/}
-        <div>
-          <Button
-            className="me-2"
-            variant="outline-dark"
-            onClick={() => navigate(-1)}
-          >
-            취소
-          </Button>
+        </section>
+
+        {/* 취소, 변경 버튼 */}
+        <div className="d-flex gap-2 justify-content-end">
           <Button variant="outline-primary" onClick={() => setModalShow(true)}>
             변경
+          </Button>
+          <Button variant="outline-dark" onClick={() => navigate(-1)}>
+            취소
           </Button>
         </div>
       </Col>

@@ -85,7 +85,7 @@ export function MainCategory() {
               </div>
               <div className="card-overlay"></div>
               <div className="card-body">
-                <h4 className="fw-bolder">{item.name}</h4>
+                <h3 className="fw-bolder">{item.name}</h3>
               </div>
             </div>
           </div>

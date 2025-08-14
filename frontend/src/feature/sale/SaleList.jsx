@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import {
   Button,
@@ -15,9 +15,11 @@ import {
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from "react-icons/tb";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
+import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import "../../css/sale_list.css";
 
 export function SaleList() {
+  const { isAdmin } = useContext(AuthenticationContext);
   const [keyword, setKeyword] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [saleList, setSaleList] = useState(null);
@@ -90,15 +92,14 @@ export function SaleList() {
           <h2 className="mb-4">판매 상품 목록</h2>
           {/* todo gg 0813 판매상품 버튼 프론트엔드 변경*/}
           {/* 판매상품 등록 */}
-          {/*          <Button variant="primary" onClick={() => navigate(`/sale/add`)}>
-            판매상품 등록
-          </Button>*/}
-          <Button
-            className={`btn ${activeCategory === null ? "btn-info" : "btn-info"} rounded-pill px-4 py-2 fw-medium`}
-            onClick={() => navigate(`/sale/add`)}
-          >
-            판매상품 등록
-          </Button>
+          {isAdmin() && (
+            <Button
+              className={`btn ${activeCategory === null ? "btn-info" : "btn-info"} rounded-pill px-4 py-2 fw-medium`}
+              onClick={() => navigate(`/sale/add`)}
+            >
+              판매상품 등록
+            </Button>
+          )}
           {/* 카테고리 버튼 */}
           {/* todo gg 0813 카테고리버튼 프론트엔드 변경*/}
           {/*          <div className="mb-4">
@@ -128,6 +129,7 @@ export function SaleList() {
                     setActiveCategory(item.seq);
                     const params = new URLSearchParams(searchParams);
                     params.set("c", item.seq);
+                    params.delete("p");
                     setSearchParams(params);
                   }}
                 >
@@ -327,7 +329,8 @@ export function SaleList() {
             </div>
           )}
           <div className="mb-5"></div>
-          {/*          <Form
+          {/*
+          <Form
             inline="true"
             onSubmit={handleSearchFormSubmit}
             className="order-lg-2 mx-lg-auto"
@@ -342,6 +345,7 @@ export function SaleList() {
               </Button>
             </InputGroup>
           </Form>
+          */}
           {saleList.length > 0 ? (
             <Row xs={2} sm={3} md={4} lg={5} className="g-4">
               {saleList.map((sale) => (
