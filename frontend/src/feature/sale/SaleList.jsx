@@ -345,7 +345,6 @@ export function SaleList() {
               </Button>
             </InputGroup>
           </Form>
-          */}
           {saleList.length > 0 ? (
             <Row xs={2} sm={3} md={4} lg={5} className="g-4">
               {saleList.map((sale) => (
@@ -382,7 +381,8 @@ export function SaleList() {
             </Row>
           ) : (
             <p>등록된 판매상품이 존재하지 않습니다.</p>
-          )}*/}
+          )}
+          */}
         </Col>
       </Row>
 
