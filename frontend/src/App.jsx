@@ -56,6 +56,7 @@ import { RentalRenew } from "./feature/rental/RentalRenew.jsx";
 import { RentalReturn } from "./feature/rental/RentalReturn.jsx";
 import { RentalListAdmin } from "./feature/rental/RentalListAdmin.jsx";
 import { FullWidthLayout } from "./common/FullWidthLayout.jsx";
+import { ProtectedRoute } from "./common/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -140,7 +141,14 @@ function App() {
             />
 
             {/* 주문배송조회 목록 */}
-            <Route path="order/list" element={<OrderList />} />
+            <Route
+              path="order/list"
+              element={
+                <ProtectedRoute>
+                  <OrderList />
+                </ProtectedRoute>
+              }
+            />
             {/* 주문배송조회 상세 */}
             <Route path="order/:seq" element={<OrderDetail />} />
 
