@@ -14,7 +14,7 @@ import { BsChevronDown } from "react-icons/bs"; // Bootstrap Icons
 
 import "../css/navbar.css";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
-import { useNavigate, useSearchParams } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 
 export function UnifiedNavbar() {
   // 로그인 상태 / 권한
@@ -90,9 +90,11 @@ export function UnifiedNavbar() {
             <Nav.Link href="/sale/list" className="py-2 px-3">
               상품
             </Nav.Link>
-            <Nav.Link href="/rental/list" className="py-2 px-3">
+
+            <Nav.Link as={Link} to="/rental/list" className="py-2 px-3">
               대여 현황
             </Nav.Link>
+
             <Nav.Link href="/contact/list" className="py-2 px-3">
               문의
             </Nav.Link>
@@ -160,8 +162,9 @@ export function UnifiedNavbar() {
               <NavDropdown.Item href="/order/admin/list">
                 주문관리
               </NavDropdown.Item>
-              <NavDropdown.Item href="/rental/list">대여관리</NavDropdown.Item>
-              <NavDropdown.Item href="/receive/list">반납관리</NavDropdown.Item>
+              <NavDropdown.Item href="/rental/list/admin">
+                대여관리
+              </NavDropdown.Item>
               <NavDropdown.Item href="/contact/list">문의관리</NavDropdown.Item>
               <NavDropdown.Item href="/chart/list">통계현황</NavDropdown.Item>
               <NavDropdown.Item href="/category/list">

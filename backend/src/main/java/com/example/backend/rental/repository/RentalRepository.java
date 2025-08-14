@@ -6,6 +6,7 @@ import com.example.backend.rental.dto.RentalDto;
 import com.example.backend.rental.dto.RentalListDto;
 import com.example.backend.rental.entity.Rental;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,10 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
                     r.productNo.price,
                     r.startDttm,
                     r.endDttm,
-                    r.state
+                    r.state,
+                    r.memberNo.memberNo,
+                    r.memberNo.memberId,
+                    r.memberNo.name
                     )
                     FROM Rental r
                     WHERE (r.useYn = true
@@ -99,4 +103,27 @@ public interface RentalRepository extends JpaRepository<Rental, Integer> {
     Page<RentalAdminDto> searchRentalAdminList(@Param("keyword") String keyword, Pageable pageable);
 
     Rental findRentalByrentalNo(String rentalNo);
+
+
+    @Query(value = """
+                    SELECT new com.example.backend.rental.dto.RentalListDto(
+                    r.seq,
+                    r.productNo.name,
+                    r.orderNo.orderCount,
+                    r.productNo.price,
+                    r.startDttm,
+                    r.endDttm,
+                    r.state,
+                    r.memberNo.memberNo,
+                    r.memberNo.memberId,
+                    r.memberNo.name
+                    )
+                    FROM Rental r
+                    WHERE (r.useYn = true
+                    AND r.delYn=false
+                    AND r.memberNo.memberId  = :userName)
+                    AND r.productNo.name LIKE %:keyword%
+                    ORDER BY r.seq DESC
+            """)
+    Page<RentalListDto> searchRentalListByUser(@Param("keyword") String keyword, @Param("userName") String userName, PageRequest of);
 }

@@ -22,4 +22,7 @@ public class RentalListDto implements Serializable {
     String startDttm;
     String endDttm;
     String state;
+    String memberNo;
+    String memberNoMemberId;
+    String memberNoName;
 }
