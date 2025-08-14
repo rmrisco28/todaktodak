@@ -65,7 +65,7 @@ export function RentalList() {
   return (
     <>
       <div
-        className="container-fluid py-5"
+        className="container-fluid py-5 col-12 "
         style={{ backgroundColor: "#f8f9fa" }}
       >
         <div className="row justify-content-center">
@@ -118,24 +118,20 @@ export function RentalList() {
                       <div className="row align-items-center">
                         <div className="col-md-9">
                           <h5
-                            className="fw-semibold mb-1"
+                            className="fw-semibold mb-2"
                             style={{ color: "#4a5568" }}
                           >
                             {rental.productNoName}
                           </h5>
                           <div className="d-flex align-items-center gap-3">
-                            <h6
-                              className="fw-bold mb-1 me-5"
-                              style={{ color: "#2d3748" }}
-                            >
-                              대여 번호: {rental.seq}
-                            </h6>
+                            <div className="me-5"></div>
                             <span
                               className="text-muted me-5"
                               style={{ fontSize: "1rem" }}
                             >
                               수량: {rental.orderNoOrderCount}개
                             </span>
+                            <div className="me-5"></div>
                             <span style={{ fontSize: "0.875rem" }}>
                               대여 상태:{" "}
                             </span>
@@ -152,7 +148,7 @@ export function RentalList() {
                                         : "#ed8936",
                                 color: "white",
                                 borderRadius: "8px",
-                                fontSize: "0.75rem",
+                                fontSize: "0.8rem",
                               }}
                             >
                               {rental.state}
@@ -403,7 +399,6 @@ export function RentalList() {
           </div>
         </div>
       </div>
-      <hr />
     </>
   );
 }

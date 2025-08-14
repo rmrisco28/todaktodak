@@ -162,7 +162,7 @@ export function OrderList() {
                 onChange={(e) => setKeyword(e.target.value)}
               />
               <Button type="submit">
-                <BiSearchAlt2 />
+                <BiSearchAlt2 style={{ height: "100px" }} />
               </Button>
             </InputGroup>
           </Form>
