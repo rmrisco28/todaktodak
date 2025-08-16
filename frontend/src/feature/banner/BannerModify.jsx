@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
@@ -109,10 +110,12 @@ export function BannerModify() {
         <div>
           <FormGroup className="mb-3" controlId="formUseYn">
             <FormLabel>배너 사용여부</FormLabel>
-            <FormControl
-              type="checkbox"
-              value={banner.useYn}
-              onChange={(e) => setBanner({ ...banner, useYn: e.target.value })}
+            <FormCheck
+              type="switch"
+              name="bnrUseYn"
+              id="bnrUseYn"
+              checked={banner.useYn}
+              onChange={(e) => setBanner({ ...banner, useYn: !banner.useYn })}
             />
           </FormGroup>
         </div>
