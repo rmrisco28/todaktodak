@@ -155,11 +155,7 @@ export function OrderDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formInsertDttm">
             <FormLabel>주문일시</FormLabel>
-            <FormControl
-              value={order.insertDttm}
-              type="datetime-local"
-              readOnly={true}
-            />
+            <FormControl value={order.insertDttm} readOnly={true} />
           </FormGroup>
         </div>
         <div>

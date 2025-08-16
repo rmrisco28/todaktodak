@@ -181,9 +181,11 @@ export function OrderAdminList() {
                         </span>
                       </div>
                     </td>
-                    <td className="d-none d-lg-table-cell">{order.timesAgo}</td>
                     <td className="d-none d-lg-table-cell">
-                      {order.updateTimesAgo}
+                      {order.insertDttm}
+                    </td>
+                    <td className="d-none d-lg-table-cell">
+                      {order.updateDttm}
                     </td>
                   </tr>
                 ))}

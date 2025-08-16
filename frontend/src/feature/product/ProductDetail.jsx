@@ -123,21 +123,13 @@ export function ProductDetail() {
         <div>
           <FormGroup className="mb-3" controlId="formInsertDttm">
             <FormLabel>등록일시</FormLabel>
-            <FormControl
-              value={product.insertDttm}
-              type="datetime-local"
-              readOnly={true}
-            />
+            <FormControl value={product.insertDttm} readOnly={true} />
           </FormGroup>
         </div>
         <div>
           <FormGroup className="mb-3" controlId="formUpdateDttm">
             <FormLabel>수정일시</FormLabel>
-            <FormControl
-              value={product.updateDttm}
-              type="datetime-local"
-              readOnly={true}
-            />
+            <FormControl value={product.updateDttm} readOnly={true} />
           </FormGroup>
         </div>
         <div>

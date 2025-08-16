@@ -1,5 +1,6 @@
 package com.example.backend.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class ProductListDto {
     private Integer seq;
     private String name;
     private String productNo;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDttm;
 
     public String getTimesAgo() {
