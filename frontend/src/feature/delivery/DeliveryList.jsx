@@ -169,10 +169,10 @@ export function DeliveryList() {
                     </td>
                     */}
                     <td className="d-none d-lg-table-cell">
-                      {delivery.timesAgo}
+                      {delivery.insertDttm}
                     </td>
                     <td className="d-none d-lg-table-cell">
-                      {delivery.updateTimesAgo}
+                      {delivery.updateDttm}
                     </td>
                     <td>
                       <Button

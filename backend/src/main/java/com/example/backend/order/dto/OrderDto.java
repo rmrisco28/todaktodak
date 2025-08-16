@@ -1,6 +1,7 @@
 package com.example.backend.order.dto;
 
 import com.example.backend.sale.dto.SaleImageThumbDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class OrderDto {
     private Integer orderCount;
     private Integer rentalPeriod;
     private String state;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDttm;
 
     private SaleImageThumbDto image;

@@ -161,10 +161,10 @@ export function BannerList() {
                       </div>
                     </td>
                     <td className="d-none d-lg-table-cell">
-                      {banner.timesAgo}
+                      {banner.insertDttm}
                     </td>
                     <td className="d-none d-lg-table-cell">
-                      {banner.updateTimesAgo}
+                      {banner.updateDttm}
                     </td>
                     <td>
                       <Button

@@ -52,6 +52,11 @@ export function OrderAdminList() {
       });
   }, [searchParams]);
 
+  // 가격을 콤마 포맷으로 변경하는 함수
+  const formatPrice = (price) => {
+    return price ? `${price.toLocaleString()}원` : "가격 미정";
+  };
+
   function handleSearchFormSubmit(e) {
     e.preventDefault();
     navigate("/order/admin/list?q=" + keyword);
@@ -164,7 +169,7 @@ export function OrderAdminList() {
                     </td>
                     <td>
                       <div className="d-flex gap-2">
-                        <span>{order.totalPrice}</span>
+                        <span>{formatPrice(order.totalPrice)}</span>
                       </div>
                     </td>
                     <td>
@@ -176,9 +181,11 @@ export function OrderAdminList() {
                         </span>
                       </div>
                     </td>
-                    <td className="d-none d-lg-table-cell">{order.timesAgo}</td>
                     <td className="d-none d-lg-table-cell">
-                      {order.updateTimesAgo}
+                      {order.insertDttm}
+                    </td>
+                    <td className="d-none d-lg-table-cell">
+                      {order.updateDttm}
                     </td>
                   </tr>
                 ))}

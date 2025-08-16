@@ -74,6 +74,16 @@ export function SaleAdd() {
     }
   }, [productNo]);
 
+  // 수량을 콤마 포맷으로 변경하는 함수
+  const formatCount = (count) => {
+    return count ? `${count.toLocaleString()}개` : "수량 없음";
+  };
+
+  // 가격을 콤마 포맷으로 변경하는 함수
+  const formatPrice = (price) => {
+    return price ? `${price.toLocaleString()}원` : "가격 미정";
+  };
+
   let validate = true;
   if (
     category.trim() === "" ||
@@ -173,7 +183,7 @@ export function SaleAdd() {
             ></FormControl>
             {product?.stock ? (
               <FormText className="text-danger">
-                상품 재고량: {product.stock}
+                상품 재고량: {formatCount(product.stock)}
               </FormText>
             ) : null}
           </FormGroup>
@@ -189,7 +199,7 @@ export function SaleAdd() {
             ></FormControl>
             {product?.price ? (
               <FormText className="text-danger">
-                상품 가격: {product.price}
+                상품 가격: {formatPrice(product.price)}
               </FormText>
             ) : null}
           </FormGroup>
