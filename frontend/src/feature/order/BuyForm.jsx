@@ -164,7 +164,7 @@ export function BuyForm() {
 
   // 결제 버튼
   function handleSuccessButtonClick() {
-    // window.open("https://payment-demo.kakaopay.com/online", "_blank");
+    window.open("https://payment-demo.kakaopay.com/online", "_blank");
     setIsProcessing(true);
     const totalPrice = sale.salePrice * orderCount + sale.deliveryFee;
     const totProdPrice = sale.salePrice * orderCount;
@@ -199,7 +199,7 @@ export function BuyForm() {
       .then((res) => {
         axios.put("/api/rental/save", {});
         console.log("ok");
-        alert(res.data.message);
+        // alert(res.data.message);
         navigate("/buy/add");
       })
       .catch((err) => {
@@ -214,193 +214,6 @@ export function BuyForm() {
 
   return (
     <>
-      {/*      <Row className="justify-content-center">
-        <Col md={2}></Col>
-        <Col xs={12} md={8}>
-          <h2 className="mb-3">구매할 제품</h2>
-        </Col>
-        <Col md={2}></Col>
-        <Col md={4} lg={4}>
-          <Image
-            src={sale.thumbnails[0]?.path}
-            fluid
-            rounded
-            className="border"
-          />
-        </Col>
-        <Col md={4} lg={4}>
-          <h5 className="mb-3">{sale.title}</h5>
-          <hr />
-          <p>{sale.saleNo}</p>
-          <p>
-            가격: {sale.salePrice.toLocaleString()}원
-            <br />
-            수량: {orderCount} 개
-            <br />
-            배송비:{" "}
-            {sale.deliveryFee > 0
-              ? `${sale.deliveryFee.toLocaleString()}원`
-              : "무료배송"}
-          </p>
-        </Col>
-
-        <Col xs={12} md={8} lg={6}>
-          <hr />
-          <h2 className="mb-3">상품구매 / 결제</h2>
-          <div className="mb-3">
-            <FormGroup>
-              <FormLabel>주문자명</FormLabel>
-
-              <FormControl
-                placeholder="주문하시는 분의 성함을 입력해주세요."
-                value={user.name}
-                disabled
-              />
-            </FormGroup>
-          </div>
-          <div className="mb-3">
-            <FormGroup>
-              <FormLabel>수령인</FormLabel>
-
-              <FormControl
-                placeholder="수령 받을 분의 성함을 입력해주세요."
-                value={recipient}
-                onChange={(e) => {
-                  setRecipient(e.target.value);
-                }}
-              />
-            </FormGroup>
-          </div>
-          <div className="mb-3">
-            <FormGroup>
-              <FormLabel>휴대폰 번호</FormLabel>
-              <FormControl
-                placeholder="번호를 입력해주세요."
-                // todo gg 토큰으로 번호받기2
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
-              />
-            </FormGroup>
-          </div>
-
-          <div className="mb-3">
-            <FormLabel>주소</FormLabel>
-            <FormGroup>
-              <div className="d-flex" style={{ gap: "10px" }}>
-                <FormControl
-                  value={postalCode}
-                  placeholder="우편번호"
-                  readOnly
-                  style={{ width: "150px" }}
-                  onChange={(e) => {
-                    setPostalCode(e.target.value);
-                  }}
-                />
-                <Button
-                  className="mb-1"
-                  variant="outline-dark"
-                  onClick={handleAddressButtonClick}
-                >
-                  검색
-                </Button>
-              </div>
-            </FormGroup>
-          </div>
-
-          <div className="mb-3">
-            <FormGroup>
-              <FormControl
-                value={address}
-                placeholder="주소 입력해주세요."
-                readOnly
-                onChange={(e) => {
-                  setAddress(e.target.value);
-                }}
-              />
-            </FormGroup>
-          </div>
-
-          <div className="mb-3">
-            <FormGroup>
-              <FormControl
-                value={addressDetail}
-                placeholder="상세주소를 입력해주세요."
-                onChange={(e) => {
-                  setAddressDetail(e.target.value);
-                }}
-              />
-            </FormGroup>
-          </div>
-
-          <div className="mb-3">
-            <FormGroup>
-              <FormLabel>배송 요청 사항</FormLabel>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value === "직접입력") {
-                    setIsCustom(true); // 직접입력 활성화
-                    setRequest(""); // 직접입력값 초기화
-                  } else {
-                    setIsCustom(false); // 기본 선택지일 경우
-                    setRequest(value); // 바로 값 설정
-                  }
-                }}
-              >
-                <option value="집 앞에 놔주세요.">집 앞에 놔주세요.</option>
-                <option value="직접 받을게요.">직접 받을게요.</option>
-                <option value="경비실에 놔주세요.">경비실에 놔주세요.</option>
-                <option value="택배함에 놔주세요.">택배함에 놔주세요.</option>
-                <option value="직접입력">직접입력</option>
-              </select>
-            </FormGroup>
-          </div>
-
-          <div className="mb-3">
-            <FormGroup>
-              <FormControl
-                value={request}
-                placeholder={request}
-                onChange={(e) => {
-                  setRequest(e.target.value);
-                }}
-                disabled={!isCustom}
-              />
-            </FormGroup>
-          </div>
-
-          <div className="mb-3">
-            <FormLabel>결제수단</FormLabel>
-            todo [@gg] 결제수단 api?
-            <FormControl value={"api?"} disabled />
-          </div>
-          <hr className="mb-3" />
-
-          <div className="mb-5">
-            <FormLabel style={{ fontSize: "20px" }}>최종 결제 금액</FormLabel>
-            <FormControl
-              style={{ fontSize: "20px" }}
-              value={
-                (
-                  sale.salePrice * orderCount +
-                  sale.deliveryFee
-                ).toLocaleString() + "원"
-              }
-              readOnly
-            />
-          </div>
-          결제 버튼
-          <div className="d-grid gap-2 mx-auto">
-            <Button onClick={handleSuccessButtonClick} disabled={!validate}>
-              {isProcessing && <Spinner size="sm" />}
-              {isProcessing || "결제하기"}
-            </Button>
-          </div>
-        </Col>
-      </Row>*/}
-      {/* todo gg 0813 결제화면 프론트엔드 변경*/}
       <div className="container-fluid py-3" style={{ background: "#f8f9fa" }}>
         <div className="row justify-content-center">
           <div className="col-12 col-lg-10 col-xl-8">

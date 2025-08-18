@@ -73,134 +73,6 @@ export function RentalRenew() {
 
   return (
     <>
-      {/*<>
-      <Row className="justify-content-center">
-        <Col xs={12} md={8}>
-           대여 상단 제목
-          <h2
-            className="mb-4"
-            style={{
-              // textAlign: "center",
-              cursor: "pointer",
-              width: "fit-content",
-              transition: "color 0.2s",
-              color: "#000",
-            }}
-            onMouseEnter={(e) => (e.target.style.color = "#007bff")}
-            onMouseLeave={(e) => (e.target.style.color = "#000")}
-            onClick={() => navigate("/rental/list")}
-          >
-            내 렌탈 현황(연장)
-          </h2>
-
-          <div>
-            <FormGroup className="mb-3">
-              <FormLabel>제품명</FormLabel>
-              <FormControl value={rentalData.productNoName} disabled />
-            </FormGroup>
-          </div>
-          <div>
-            <FormGroup className="mb-3">
-              <FormLabel>제품 대여 개수</FormLabel>
-              <FormControl value={rentalData.orderNoOrderCount} disabled />
-            </FormGroup>
-          </div>
-          <div>
-            <FormGroup className="mb-3">
-              <FormLabel>남은 대여 기간</FormLabel>
-              <FormControl value={formatDate(rentalData.endDttm)} disabled />
-            </FormGroup>
-          </div>
-
-          <FormGroup className="mb-3">
-            <FormLabel>추가 연장 기간</FormLabel>
-            <FormSelect
-              className="mb-3"
-              onChange={(e) => setPeriod(e.target.value)}
-            >
-              <option value={null}>연장기간 선택</option>
-              <option value={10}>10일 연장</option>
-              <option value={30}>30일 연장</option>
-              <option value={90}>90일 연장</option>
-              <option value={180}>180일 연장</option>
-            </FormSelect>
-          </FormGroup>
-
-          <div>
-            <FormGroup className="mb-3">
-              <FormLabel>주문자 성명</FormLabel>
-              <FormControl value={rentalData.orderNoName} disabled />
-            </FormGroup>
-          </div>
-          <div>
-            <FormGroup className="mb-3">
-              <FormLabel>연락처</FormLabel>
-
-              <FormControl value={rentalData.orderNoPhone} disabled />
-            </FormGroup>
-          </div>
-              <div className="mb-3">
-            <FormGroup>
-              <FormLabel>남기실 메모</FormLabel>
-              <FormControl
-                type="textarea"
-                as="textarea"
-                rows={3}
-                onChange={(e) => {
-                  setContent(e.target.value);
-                }}
-              />
-            </FormGroup>
-          </div>
-          <div className="d-flex justify-content-center gap-4">
-            <Button
-              variant="primary"
-              style={{ width: "150px", marginRight: "10px" }}
-              onClick={handleReturnButtonClick}
-            >
-              연장하기
-            </Button>
-            <Button
-              variant="warning"
-              style={{ width: "150px", marginLeft: "10px" }}
-              onClick={() => {
-                setModalShow(true);
-              }}
-            >
-              취소
-            </Button>
-          </div>
-        </Col>
-
-         취소 모달
-        <Modal show={modalShow} onHide={() => setModalShow(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>연장 취소 확인</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            연장 신청하지 않고 이동하시겠습니까?
-            <br />
-            작성하신 내용은 삭제됩니다.
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-              뒤로
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => {
-                navigate("/rental/list");
-              }}
-            >
-              목록으로
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </Row>
-      <hr />
-      <h3>2차</h3>
-      </>*/}
-
       <div
         className="container-fluid py-4"
         style={{ backgroundColor: "#f8f9fa" }}
@@ -423,7 +295,7 @@ export function RentalRenew() {
                     }}
                     onClick={handleReturnButtonClick}
                   >
-                    <i className="fas fa-clock me-2"></i>
+                    <i className="fas fa-clock"></i>
                     연장하기
                   </button>
 
@@ -447,7 +319,7 @@ export function RentalRenew() {
                     }}
                     onClick={() => setModalShow(true)}
                   >
-                    <i className="fas fa-arrow-left me-2"></i>
+                    <i className="fas fa-arrow-left"></i>
                     취소
                   </button>
                 </div>

@@ -89,16 +89,19 @@ public class ContactController {
     }
 
     @GetMapping("list")
-    @PreAuthorize("isAuthenticated()")  // 로그인한 사용자만 접근 가능
     public Map<String, Object> list(
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
             Authentication authentication) {
 
         // 로그인한 사용자 권한 확인
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("SCOPE_ROLE_ADMIN"));
+        boolean isAdmin = false;
 
+        if (authentication != null && authentication.isAuthenticated()) {
+            isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("SCOPE_ROLE_ADMIN"));
+        }
+        
         return contactService.list(keyword, pageNumber, isAdmin);
     }
 

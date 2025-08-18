@@ -90,7 +90,6 @@ export function SaleList() {
       <Row>
         <Col>
           <h2 className="mb-4">판매 상품 목록</h2>
-          {/* todo gg 0813 판매상품 버튼 프론트엔드 변경*/}
           {/* 판매상품 등록 */}
           {isAdmin() && (
             <Button
@@ -101,90 +100,6 @@ export function SaleList() {
             </Button>
           )}
           {/* 카테고리 버튼 */}
-          {/* todo gg 0813 카테고리버튼 프론트엔드 변경*/}
-          {/*          <div className="mb-4">
-            <div className="d-flex flex-wrap gap-2">
-              <Button
-                variant={activeCategory === null ? "dark" : "outline-dark"}
-                size="sm"
-                style={{ minWidth: 100, textAlign: "center" }}
-                onClick={() => {
-                  setActiveCategory(null);
-                  const params = new URLSearchParams(searchParams);
-                  params.delete("c");
-                  setSearchParams(params);
-                }}
-              >
-                전체
-              </Button>
-              {categoryList.map((item) => (
-                <Button
-                  key={item.seq}
-                  variant={
-                    activeCategory === item.seq ? "dark" : "outline-dark"
-                  }
-                  size="sm"
-                  style={{ minWidth: 100, textAlign: "center" }}
-                  onClick={() => {
-                    setActiveCategory(item.seq);
-                    const params = new URLSearchParams(searchParams);
-                    params.set("c", item.seq);
-                    params.delete("p");
-                    setSearchParams(params);
-                  }}
-                >
-                  {item.name}
-                </Button>
-              ))}
-            </div>
-          </div>*/}
-          {/* todo gg 0813 카테고리 목록 프론트엔드 변경*/}
-          {/*          <div className="mb-4">
-            <div className="d-flex flex-wrap gap-3 justify-content-center">
-              <button
-                className={`btn ${activeCategory === null ? "btn-dark" : "btn-outline-secondary"} rounded-pill px-4 py-2 fw-medium`}
-                style={{
-                  minWidth: 120,
-                  textAlign: "center",
-                  border:
-                    activeCategory === null ? "none" : "1px solid #dee2e6",
-                  transition: "all 0.2s ease",
-                }}
-                onClick={() => {
-                  setActiveCategory(null);
-                  const params = new URLSearchParams(searchParams);
-                  params.delete("c");
-                  setSearchParams(params);
-                }}
-              >
-                전체
-              </button>
-              {categoryList.map((item) => (
-                <button
-                  key={item.seq}
-                  className={`btn ${activeCategory === item.seq ? "btn-dark" : "btn-outline-secondary"} rounded-pill px-4 py-2 fw-medium`}
-                  style={{
-                    minWidth: 120,
-                    textAlign: "center",
-                    border:
-                      activeCategory === item.seq
-                        ? "none"
-                        : "1px solid #dee2e6",
-                    transition: "all 0.2s ease",
-                  }}
-                  onClick={() => {
-                    setActiveCategory(item.seq);
-                    const params = new URLSearchParams(searchParams);
-                    params.set("c", item.seq);
-                    setSearchParams(params);
-                  }}
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          </div>
-          <hr />*/}
           <div className="mb-4">
             <ul
               className=" nav nav-pills nav-fill p-1  mx-auto nav-equal"
@@ -234,7 +149,7 @@ export function SaleList() {
             </ul>
           </div>
           <div className="mb-4"></div>
-          {/* todo gg 0813 상품 검색창 프론트엔드 변경*/}
+          {/* 검색창 */}
           <div className="mb-5">
             <div className="row justify-content-center">
               <div className="col-12 col-md-8 col-lg-6">
@@ -267,7 +182,7 @@ export function SaleList() {
             </div>
           </div>
           <div className="mb-5"></div>
-          {/* todo gg 0813 상품 목록 프론트엔드 변경*/}
+          {/*상품 목록*/}
           {saleList.length > 0 ? (
             <div className="row g-3">
               {saleList.map((sale) => (
@@ -329,109 +244,10 @@ export function SaleList() {
             </div>
           )}
           <div className="mb-5"></div>
-          {/*
-          <Form
-            inline="true"
-            onSubmit={handleSearchFormSubmit}
-            className="order-lg-2 mx-lg-auto"
-          >
-            <InputGroup>
-              <FormControl
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-              />
-              <Button type="submit">
-                <BiSearchAlt2 />
-              </Button>
-            </InputGroup>
-          </Form>
-          {saleList.length > 0 ? (
-            <Row xs={2} sm={3} md={4} lg={5} className="g-4">
-              {saleList.map((sale) => (
-                <Col key={sale.seq}>
-                  <Card
-                    style={{ cursor: "pointer", height: "100%" }}
-                    onClick={() => handleTableRowClick(sale.seq)}
-                  >
-                    <Card.Img
-                      variant="top"
-                      src={sale.thumbnailPath || "/placeholder.png"}
-                      style={{
-                        height: "180px",
-                        objectFit: "cover",
-                        borderBottom: "1px solid #eee",
-                      }}
-                    />
-                    <Card.Body className="d-flex flex-column">
-                      <Card.Title
-                        style={{ fontSize: "1rem" }}
-                        className="text-truncate"
-                      >
-                        {sale.title}
-                      </Card.Title>
-                      <Card.Text className="text-muted mb-0">
-                        {sale.salePrice
-                          ? sale.salePrice.toLocaleString() + "원"
-                          : "가격 미정"}
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          ) : (
-            <p>등록된 판매상품이 존재하지 않습니다.</p>
-          )}
-          */}
         </Col>
       </Row>
 
       {/* PageNation */}
-      {/* todo gg 0813 페이지네이션 프론트엔드 변경*/}
-      {/*      <Row className={"my-3"}>
-        <Col>
-          <Pagination className="justify-content-center">
-            <Pagination.First
-              disabled={pageInfo.currentPageNumber === 1}
-              onClick={() => handlePageNumberClick(1)}
-            >
-              <TbPlayerTrackPrev />
-            </Pagination.First>
-            <Pagination.Prev
-              disabled={pageInfo.leftPageNumber <= 1}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.leftPageNumber - 10)
-              }
-            >
-              <GrPrevious />
-            </Pagination.Prev>
-            {pageNumbers.map((pageNumber) => (
-              <Pagination.Item
-                key={pageNumber}
-                onClick={() => handlePageNumberClick(pageNumber)}
-                active={pageInfo.currentPageNumber === pageNumber}
-              >
-                {pageNumber}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              diabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.rightPageNumber + 1)
-              }
-            >
-              <GrNext />
-            </Pagination.Next>
-            <Pagination.Last
-              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
-              onClick={() => handlePageNumberClick(pageInfo.totalPages)}
-            >
-              <TbPlayerTrackNext />
-            </Pagination.Last>
-          </Pagination>
-        </Col>
-      </Row>*/}
-
       <div className="my-5">
         <nav aria-label="Page navigation">
           <div className="d-flex justify-content-center align-items-center gap-1">
