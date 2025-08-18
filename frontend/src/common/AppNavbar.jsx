@@ -70,9 +70,12 @@ export function AppNavbar() {
         <Navbar.Brand
           as={Link}
           to="/"
-          className="text-dark font-weight-bold me-4"
+          className="text-dark font-weight-bold me-4 h5 brand-title"
         >
-          토닥토닥
+          <span className="char">토</span>
+          <span className="char">닥</span>
+          <span className="char">토</span>
+          <span className="char">닥</span>
         </Navbar.Brand>
 
         {/* 2. 모바일용 햄버거 토글 버튼 */}

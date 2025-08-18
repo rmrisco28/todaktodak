@@ -75,3 +75,38 @@
     /* Y축으로 -7.5px 이동 후 -45도 회전 */
     transform: translateY(-7.5px) rotate(-45deg);
 }
+
+/* Navbar Title('토닥토닥') 호버 애니메이션 */
+
+/* 애니메이션 효과 정의 (pat-effect) */
+@keyframes pat-effect {
+    0%, 100% {
+        /* 원래 크기 */
+        transform: scaleY(1);
+        transform-origin: bottom;
+    }
+    50% {
+        /* 세로로 살짝 작아짐 (아래를 기준으로) */
+        transform: scaleY(0.9);
+        transform-origin: bottom;
+    }
+}
+
+/* 각 글자를 감싸는 span 태그 스타일 */
+.brand-title .char {
+    display: inline-block; /* transform 속성을 적용하기 위함 */
+    transition: transform 0.2s ease;
+}
+
+/* brand-title에 마우스를 올렸을 때 애니메이션 적용 */
+.brand-title:hover .char {
+    animation-name: pat-effect;
+    animation-duration: 0.6s; /* 애니메이션 속도 */
+    animation-iteration-count: infinite; /* 호버하는 동안 계속 반복 */
+    animation-timing-function: ease-in-out;
+}
+
+/* 짝수 번째 글자('닥')에 딜레이를 주어 번갈아 움직이게 함 */
+.brand-title:hover .char:nth-child(even) {
+    animation-delay: 0.3s; /* 전체 애니메이션 시간의 절반 */
+}
