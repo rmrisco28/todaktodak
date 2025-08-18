@@ -163,10 +163,10 @@ export function CategoryList() {
                     </td>
                     */}
                     <td className="d-none d-lg-table-cell">
-                      {category.timesAgo}
+                      {category.insertDttm}
                     </td>
                     <td className="d-none d-lg-table-cell">
-                      {category.updateTimesAgo}
+                      {category.updateDttm}
                     </td>
                     <td>
                       <Button

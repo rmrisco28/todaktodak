@@ -1,6 +1,5 @@
 package com.example.backend.order.controller;
 
-import com.example.backend.order.dto.OrderInfoDto;
 import com.example.backend.order.dto.OrderListDtoMadeByGG;
 import com.example.backend.order.service.BuyService;
 import lombok.RequiredArgsConstructor;

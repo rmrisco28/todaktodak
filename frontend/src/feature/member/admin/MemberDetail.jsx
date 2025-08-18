@@ -71,7 +71,7 @@ export function MemberDetail() {
   return (
     <Row className="justify-content-center">
       <Col xs={10} md={10} lg={6}>
-        <h3 className="mb-4">회원 정보 관리</h3>
+        <h3 className="mb-4 text-center">회원 정보 관리</h3>
         <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded-4">
           {/* 고객 번호 */}
           <div>
@@ -80,7 +80,15 @@ export function MemberDetail() {
                 고객 번호
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.memberNo} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.memberNo}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
@@ -91,7 +99,15 @@ export function MemberDetail() {
                 아이디
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.memberId} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.memberId}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
@@ -253,7 +269,9 @@ export function MemberDetail() {
               className="me-5"
               variant="outline-primary"
               onClick={() =>
-                navigate(`/member/modify?seq=${params.get("seq")}`)
+                navigate(
+                  `/member/modify?seq=${params.get("seq")}&page=${params.get("page")}`,
+                )
               }
             >
               수정

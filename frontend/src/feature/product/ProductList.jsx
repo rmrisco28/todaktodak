@@ -144,7 +144,7 @@ export function ProductList() {
                       </div>
                     </td>
                     <td className="d-none d-lg-table-cell">
-                      {product.timesAgo}
+                      {product.insertDttm}
                     </td>
                   </tr>
                 ))}

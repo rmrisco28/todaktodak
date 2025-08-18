@@ -60,6 +60,11 @@ export function OrderList() {
       });
   }, [user, searchParams, isProcessing]);
 
+  // 가격을 콤마 포맷으로 변경하는 함수
+  const formatPrice = (price) => {
+    return price ? `${price.toLocaleString()}원` : "가격 미정";
+  };
+
   function handleSearchFormSubmit(e) {
     e.preventDefault();
     navigate(`/order/list/${user.memberId}?q=` + keyword);
@@ -232,7 +237,7 @@ export function OrderList() {
                     </td>
                     <td>
                       <div className="d-flex gap-2">
-                        <span>{order.totalPrice}</span>
+                        <span>{formatPrice(order.totalPrice)}</span>
                       </div>
                     </td>
                     <td>

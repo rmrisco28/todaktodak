@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 
 import "../../css/Checkbox.css";
 import { IoIosEye, IoMdEyeOff } from "react-icons/io";
+import { useLocation } from "react-router-dom";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
@@ -28,6 +29,8 @@ export function MemberLogin() {
   const { login } = useContext(AuthenticationContext);
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   useEffect(() => {
     const savedId = localStorage.getItem("savedMemberId");
@@ -58,7 +61,8 @@ export function MemberLogin() {
       })
       .then((res) => {
         const token = res.data.token;
-        login(token);
+        // TODO [@MINKI] 중복 호출 삭제
+        // login(token);
 
         if (saveId) {
           localStorage.setItem("savedMemberId", memberId);
@@ -66,8 +70,16 @@ export function MemberLogin() {
           localStorage.removeItem("savedMemberId");
         }
 
+        // [수정] login 함수의 Promise가 완료된 후에 navigate를 실행
+        login(token).then(() => {
+          // [수정] 쿼리 파라미터 대신 location.state에서 이전 경로를 가져옵니다.
+          const from = location.state?.from?.pathname || "/";
+          navigate(from, { replace: true });
+        });
+
         toast.success("로그인 되었습니다.", { position: "top-center" });
-        navigate("/");
+        // 중복 호출
+        // navigate("/");
       })
       .catch((err) => {
         console.log(err);

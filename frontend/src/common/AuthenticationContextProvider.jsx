@@ -31,6 +31,8 @@ export function AuthenticationContextProvider({ children }) {
   // hasAccess
   // isAdmin
   const [user, setUser] = useState(null);
+  // [추가] 최초 인증 상태 확인이 완료되었는지 추적하는 상태
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
 
   // 최초 로딩 시 토큰이 존재하면 사용자 정보 요청(get / jwt decode)
   useEffect(() => {
@@ -38,13 +40,22 @@ export function AuthenticationContextProvider({ children }) {
     if (token) {
       const payload = jwtDecode(token);
       // 토큰 정보의 memberId를 추출하여 회원정보 요청,
-      axios.get("/api/member?memberId=" + payload.sub).then((res) => {
-        setUser({
-          memberId: res.data.memberId,
-          name: res.data.name,
-          scope: payload.scp.split(","), // 토큰 scope (ex: ROLE_USER, ROLE_ADMIN)
+      axios
+        .get("/api/member?memberId=" + payload.sub)
+        .then((res) => {
+          setUser({
+            memberId: res.data.memberId,
+            name: res.data.name,
+            scope: payload.scp.split(","), // 토큰 scope (ex: ROLE_USER, ROLE_ADMIN)
+          });
+        })
+        .finally(() => {
+          // [추가] API 요청 성공/실패 여부와 관계없이 확인 작업이 끝났음을 표시
+          setIsAuthChecked(true);
         });
-      });
+    } else {
+      // [추가] 토큰이 없는 경우에도 확인 작업이 끝났음을 바로 표시
+      setIsAuthChecked(true);
     }
   }, []);
 
@@ -55,7 +66,8 @@ export function AuthenticationContextProvider({ children }) {
     localStorage.setItem("token", token);
 
     const payload = jwtDecode(token);
-    axios.get("/api/member?memberId=" + payload.sub).then((res) => {
+    // [수정] axios Promise를 반환하도록 return 추가
+    return axios.get("/api/member?memberId=" + payload.sub).then((res) => {
       setUser({
         memberId: res.data.memberId,
         name: res.data.name,
@@ -89,6 +101,7 @@ export function AuthenticationContextProvider({ children }) {
         logout: logout,
         hasAccess: hasAccess,
         isAdmin: isAdmin,
+        isAuthChecked: isAuthChecked, // [추가] isAuthChecked 값을 context를 통해 전달
       }}
     >
       {children}

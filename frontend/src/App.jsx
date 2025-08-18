@@ -56,6 +56,7 @@ import { RentalRenew } from "./feature/rental/RentalRenew.jsx";
 import { RentalReturn } from "./feature/rental/RentalReturn.jsx";
 import { RentalListAdmin } from "./feature/rental/RentalListAdmin.jsx";
 import { FullWidthLayout } from "./common/FullWidthLayout.jsx";
+import { ProtectedRoute } from "./common/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -69,27 +70,15 @@ function App() {
           </Route>
           {/* 상단 공통 메뉴 */}
           <Route path="/" element={<MainLayout />}>
+            {/*
+            --- 비로그인 사용자도 접근 가능한 페이지 ---
+          */}
             {/* 로그인 */}
             <Route path="login" element={<MemberLogin />} />
             {/* 로그아웃 */}
             <Route path="logout" element={<MemberLogout />} />
             {/* 회원가입 */}
             <Route path="signup" element={<MemberSignup />} />
-            {/* 회원목록(관리자) */}
-            <Route path="member/list" element={<MemberList />} />
-            {/* 회원상세(관리자) */}
-            <Route path="member" element={<MemberDetail />} />
-            {/* 회원수정(관리자) */}
-            <Route path="member/modify" element={<MemberModify />} />
-            {/* 회원등록(관리자) */}
-            <Route path="member/add" element={<MemberAdd />} />
-            {/* 회원상세(회원) */}
-            <Route path="member/myinfo" element={<MemberMyInfo />} />
-            {/* 회원수정(회원) */}
-            <Route
-              path="member/myinfo/modify"
-              element={<MemberMyInfoModify />}
-            />
             {/* 비밀번호 찾기-이메일인증 */}
             <Route
               path="member/password/email_auth"
@@ -97,91 +86,120 @@ function App() {
             />
             {/* 비밀번호 재설정*/}
             <Route path="member/resetPassword" element={<ResetPassword />} />
-            {/* 상품 등록 */}
-            <Route path="product/add" element={<ProductAdd />} />
-            {/* 상품조회 목록 */}
-            <Route path="product/list" element={<ProductList />} />
-            {/* 상품조회 상세 */}
-            <Route path="product/detail/:seq" element={<ProductDetail />} />
-            {/* 상품 수정 */}
-            <Route path="product/modify/:seq" element={<ProductModify />} />
-            {/* 판매상품 등록 */}
-            <Route path="sale/add" element={<SaleAdd />} />
             {/* 판매상품조회 목록 */}
             <Route path="sale/list" element={<SaleList />} />
             {/* 판매상품조회 상세 */}
             <Route path="sale/detail/:seq" element={<SaleDetail />} />
-            {/* 판매상품 수정 */}
-            <Route path="sale/modify/:seq" element={<SaleModify />} />
-            {/* 상품구매 상세 */}
-            <Route path="buy/:seq" element={<BuyForm />} />
-            {/* 상품구매 등록 */}
-            <Route path="buy/add" element={<BuyAdd />} />
-            {/* 반납신청 상세 */}
-            <Route path="return" element={<ReturnForm />} />
-            {/* 반납신청 등록 */}
-            <Route path="return/add" element={<ReturnAdd />} />
-            {/* 문의게시판 등록 */}
-            <Route path="contact/add" element={<ContactAdd />} />
             {/* 문의게시판 목록 */}
             <Route path="contact/list" element={<ContactList />} />
-            {/* 문의게시판 관리자 목록 */}
-            <Route path="contact/list/isAdmin" element={<ContactList />} />
-            {/* 문의게시판 상세 */}
-            <Route path="contact/detail/:seq" element={<ContactDetail />} />
-            {/* 문의게시판 수정 */}
-            <Route path="contact/modify/:seq" element={<ContactModify />} />
-            {/* 문의게시판 삭제목록 */}
-            <Route path="contact/deleted/list" element={<ContactDeleted />} />
-            {/* 문의게시판 삭제 상세 */}
-            <Route
-              path="contact/deleted/detail/:seq"
-              element={<ContactDeletedDetail />}
-            />
 
-            {/* 주문배송조회 목록 */}
-            <Route path="order/list" element={<OrderList />} />
-            {/* 주문배송조회 상세 */}
-            <Route path="order/:seq" element={<OrderDetail />} />
+            {/*
+            --- 로그인 사용자만 접근 가능한 페이지 ---
+          */}
+            <Route element={<ProtectedRoute />}>
+              {/* 회원목록(관리자) */}
+              <Route path="member/list" element={<MemberList />} />
+              {/* 회원상세(관리자) */}
+              <Route path="member" element={<MemberDetail />} />
+              {/* 회원수정(관리자) */}
+              <Route path="member/modify" element={<MemberModify />} />
+              {/* 회원등록(관리자) */}
+              <Route path="member/add" element={<MemberAdd />} />
+              {/* 회원상세(회원) */}
+              <Route path="member/myinfo" element={<MemberMyInfo />} />
+              {/* 회원수정(회원) */}
+              <Route
+                path="member/myinfo/modify"
+                element={<MemberMyInfoModify />}
+              />
 
-            {/* 주문배송조회 목록 (관리자) */}
-            <Route path="order/admin/list" element={<OrderAdminList />} />
+              {/* 상품 등록 */}
+              <Route path="product/add" element={<ProductAdd />} />
+              {/* 상품조회 목록 */}
+              <Route path="product/list" element={<ProductList />} />
+              {/* 상품조회 상세 */}
+              <Route path="product/detail/:seq" element={<ProductDetail />} />
+              {/* 상품 수정 */}
+              <Route path="product/modify/:seq" element={<ProductModify />} />
 
-            {/* 상품수령 상세 */}
-            <Route path="receive/:orderId" element={<ReceiveForm />} />
-            {/* 상품수령 업데이트 */}
-            <Route path="receive/exec" element={<ReceiveExec />} />
-            {/* 상품취소 상세 */}
-            <Route path="cancel/:orderId" element={<CancelForm />} />
-            {/* 상품취소 업데이트 */}
-            <Route path="cancel/exec" element={<CancelExec />} />
-            {/* 카테고리 등록 */}
-            <Route path="category/add" element={<CategoryAdd />} />
-            {/* 카테고리 목록 */}
-            <Route path="category/list" element={<CategoryList />} />
-            {/* 카테고리 수정 */}
-            <Route path="category/modify/:seq" element={<CategoryModify />} />
-            {/* 배송업체 등록 */}
-            <Route path="delivery/add" element={<DeliveryAdd />} />
-            {/* 배송업체 목록 */}
-            <Route path="delivery/list" element={<DeliveryList />} />
-            {/* 배송업체 수정 */}
-            <Route path="delivery/modify/:seq" element={<DeliveryModify />} />
-            {/* 대여 현황 */}
-            <Route path="rental/list" element={<RentalList />} />
-            {/* 대여 연장 */}
-            <Route path="rental/renew/:seq" element={<RentalRenew />} />
-            {/* 대여 반납 */}
-            <Route path="rental/return/:seq" element={<RentalReturn />} />
-            {/* 대여 관리자 */}
-            <Route path="rental/list/admin" element={<RentalListAdmin />} />
+              {/* 판매상품 등록 */}
+              <Route path="sale/add" element={<SaleAdd />} />
+              {/* 판매상품 수정 */}
+              <Route path="sale/modify/:seq" element={<SaleModify />} />
 
-            {/* 메인 배너 이미지 등록  */}
-            <Route path="banner/add" element={<BannerAdd />} />
-            {/* 메인 배너 이미지 목록 */}
-            <Route path="banner/list" element={<BannerList />} />
-            {/* 메인 배너 이미지 수정 */}
-            <Route path="banner/modify/:seq" element={<BannerModify />} />
+              {/* 판매상품구매 상세 */}
+              <Route path="buy/:seq" element={<BuyForm />} />
+              {/* 판매상품구매 등록 */}
+              <Route path="buy/add" element={<BuyAdd />} />
+
+              {/* 반납신청 상세 */}
+              <Route path="return" element={<ReturnForm />} />
+              {/* 반납신청 등록 */}
+              <Route path="return/add" element={<ReturnAdd />} />
+
+              {/* 문의게시판 등록 */}
+              <Route path="contact/add" element={<ContactAdd />} />
+              {/* 문의게시판 관리자 목록 */}
+              <Route path="contact/list/isAdmin" element={<ContactList />} />
+              {/* 문의게시판 상세 */}
+              <Route path="contact/detail/:seq" element={<ContactDetail />} />
+              {/* 문의게시판 수정 */}
+              <Route path="contact/modify/:seq" element={<ContactModify />} />
+              {/* 문의게시판 삭제목록 */}
+              <Route path="contact/deleted/list" element={<ContactDeleted />} />
+              {/* 문의게시판 삭제 상세 */}
+              <Route
+                path="contact/deleted/detail/:seq"
+                element={<ContactDeletedDetail />}
+              />
+
+              {/* 주문배송조회 목록 */}
+              <Route path="order/list" element={<OrderList />} />
+              {/* 주문배송조회 상세 */}
+              <Route path="order/:seq" element={<OrderDetail />} />
+              {/* 주문배송조회 목록 (관리자) */}
+              <Route path="order/admin/list" element={<OrderAdminList />} />
+
+              {/* 상품수령 상세 */}
+              <Route path="receive/:orderId" element={<ReceiveForm />} />
+              {/* 상품수령 업데이트 */}
+              <Route path="receive/exec" element={<ReceiveExec />} />
+
+              {/* 상품취소 상세 */}
+              <Route path="cancel/:orderId" element={<CancelForm />} />
+              {/* 상품취소 업데이트 */}
+              <Route path="cancel/exec" element={<CancelExec />} />
+
+              {/* 카테고리 등록 */}
+              <Route path="category/add" element={<CategoryAdd />} />
+              {/* 카테고리 목록 */}
+              <Route path="category/list" element={<CategoryList />} />
+              {/* 카테고리 수정 */}
+              <Route path="category/modify/:seq" element={<CategoryModify />} />
+
+              {/* 배송업체 등록 */}
+              <Route path="delivery/add" element={<DeliveryAdd />} />
+              {/* 배송업체 목록 */}
+              <Route path="delivery/list" element={<DeliveryList />} />
+              {/* 배송업체 수정 */}
+              <Route path="delivery/modify/:seq" element={<DeliveryModify />} />
+
+              {/* 대여 현황 */}
+              <Route path="rental/list" element={<RentalList />} />
+              {/* 대여 연장 */}
+              <Route path="rental/renew/:seq" element={<RentalRenew />} />
+              {/* 대여 반납 */}
+              <Route path="rental/return/:seq" element={<RentalReturn />} />
+              {/* 대여 관리자 */}
+              <Route path="rental/list/admin" element={<RentalListAdmin />} />
+
+              {/* 메인 배너 이미지 등록  */}
+              <Route path="banner/add" element={<BannerAdd />} />
+              {/* 메인 배너 이미지 목록 */}
+              <Route path="banner/list" element={<BannerList />} />
+              {/* 메인 배너 이미지 수정 */}
+              <Route path="banner/modify/:seq" element={<BannerModify />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
