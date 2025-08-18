@@ -1,0 +1,50 @@
+.coming-soon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px); /* 헤더/푸터 높이를 제외한 영역을 채우도록 조정 */
+    text-align: center;
+    padding: 2rem;
+    background-color: #fdfcfa; /* 따뜻한 느낌의 배경색 */
+}
+
+.coming-soon-svg {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 2rem;
+}
+
+.coming-soon-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #5C3D2E; /* 부드러운 갈색 톤 */
+    margin-bottom: 1rem;
+}
+
+.coming-soon-text {
+    font-size: 1.1rem;
+    color: #6c757d;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.coming-soon-button {
+    margin-top: 2rem;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px; /* 부드러운 버튼 모양 */
+    border: none;
+    background-color: #FFD700; /* SVG 모자 색과 통일 */
+    color: #5C3D2E;
+    transition: all 0.3s ease;
+}
+
+.coming-soon-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    background-color: #ffca28;
+}
