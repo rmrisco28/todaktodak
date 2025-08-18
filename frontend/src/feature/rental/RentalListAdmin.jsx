@@ -99,7 +99,7 @@ export function RentalListAdmin() {
   return (
     <>
       <Row className="justify-content-center">
-        <Col md={12} lg={10} className="mb-4">
+        <Col md={8} lg={12} className="mb-4">
           {/* 대여 상단 제목*/}
           <h2
             className="mb-4"

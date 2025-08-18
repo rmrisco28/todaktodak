@@ -186,7 +186,9 @@ export function ContactList() {
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="검색어를 입력하세요."
                 ></FormControl>
-                <Button type="submit">검색</Button>
+                <Button type="submit" className=" mb-0 px-3">
+                  검색
+                </Button>
               </InputGroup>
             </Form>
           </div>

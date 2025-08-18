@@ -71,7 +71,7 @@ export function RentalList() {
         <div className="row justify-content-center">
           <div className="col-12 col-lg-10">
             {/* 상단 제목 */}
-            <div className="mb-5">
+            <div className="mb-3">
               <h2
                 className="fw-bold mb-2"
                 style={{
@@ -81,200 +81,240 @@ export function RentalList() {
               >
                 내 렌탈 현황
               </h2>
-              <p className="text-muted mb-0">
-                현재 대여 중인 제품들을 확인하고 관리하세요.
-              </p>
             </div>
 
             {/* 렌탈 카드들 */}
-            <div className="row g-4 mb-5">
-              {rentalList.map((rental) => (
-                <div key={rental.seq} className="col-12">
-                  <div
-                    className="card border-0 shadow-sm h-100"
-                    style={{
-                      borderRadius: "16px",
-                      transition: "all 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-4px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)";
-                    }}
-                  >
-                    {/* 카드 헤더 */}
-                    <div
-                      className="card-header border-0 py-4"
-                      style={{
-                        backgroundColor: "#ffffff",
-                        borderRadius: "16px 16px 0 0",
-                      }}
-                    >
-                      <div className="row align-items-center">
-                        <div className="col-md-9">
-                          <h5
-                            className="fw-semibold mb-2"
-                            style={{ color: "#4a5568" }}
-                          >
-                            {rental.productNoName}
-                          </h5>
-                          <div className="d-flex align-items-center gap-3">
-                            <div className="me-5"></div>
-                            <span
-                              className="text-muted me-5"
-                              style={{ fontSize: "1rem" }}
-                            >
-                              수량: {rental.orderNoOrderCount}개
-                            </span>
-                            <div className="me-5"></div>
-                            <span style={{ fontSize: "0.875rem" }}>
-                              대여 상태:{" "}
-                            </span>
-                            <span
-                              className=" px-3 py-1 justify-content-center text-center"
-                              style={{
-                                backgroundColor:
-                                  rental.state === "대여중"
-                                    ? "#48bb78"
-                                    : rental.state === "연체"
-                                      ? "#f56565"
-                                      : rental.state === "반납 완료"
-                                        ? "#2d3748"
-                                        : "#ed8936",
-                                color: "white",
-                                borderRadius: "8px",
-                                fontSize: "0.8rem",
-                              }}
-                            >
-                              {rental.state}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="col-md-3 text-md-end">
-                          <h5
-                            className="fw-bold mb-1"
-                            style={{ color: "#2d3748" }}
-                          >
-                            {rental.productNoPrice.toLocaleString()}원
-                          </h5>
-                          <p
-                            className="text-muted mb-0"
-                            style={{ fontSize: "0.875rem" }}
-                          >
-                            반납일: {formatDate(rental.endDttm)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 카드 바디 */}
-                    <div className="card-body pt-0 pb-4">
-                      <div className="row g-3">
-                        {/* 대여 정보 테이블 */}
-                        <div className="col-12">
-                          <div
-                            className="p-4 rounded-3"
-                            style={{ backgroundColor: "#f7fafc" }}
-                          >
-                            <div className="row">
-                              <div className="col-md-6">
-                                <div className="mb-3">
-                                  <span
-                                    className="fw-medium text-muted d-block mb-1"
-                                    style={{ fontSize: "0.875rem" }}
-                                  >
-                                    대여 시작일
-                                  </span>
-                                  <span style={{ color: "#4a5568" }}>
-                                    {formatDate(rental.startDttm)}
-                                  </span>
-                                </div>
+            {rentalList.length > 0 ? (
+              <>
+                <p className="text-muted mb-5">
+                  현재 대여 중인 제품들을 확인하고 관리하세요.
+                </p>
+                <div className="row g-4 mb-5">
+                  {rentalList.map((rental) => (
+                    <div key={rental.seq} className="col-12">
+                      <div
+                        className="card border-0 shadow-sm h-100"
+                        style={{
+                          borderRadius: "16px",
+                          transition: "all 0.3s ease",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "translateY(-4px)";
+                          e.currentTarget.style.boxShadow =
+                            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.boxShadow =
+                            "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)";
+                        }}
+                      >
+                        {/* 카드 헤더 */}
+                        <div
+                          className="card-header border-0 py-4"
+                          style={{
+                            backgroundColor: "#ffffff",
+                            borderRadius: "16px 16px 0 0",
+                          }}
+                        >
+                          <div className="row align-items-center">
+                            <div className="col-md-9">
+                              <h5
+                                className="fw-semibold mb-2"
+                                style={{ color: "#4a5568" }}
+                              >
+                                {rental.productNoName}
+                              </h5>
+                              <div className="d-flex align-items-center gap-3">
+                                <div className="me-5"></div>
+                                <span
+                                  className="text-muted me-5"
+                                  style={{ fontSize: "1rem" }}
+                                >
+                                  수량: {rental.orderNoOrderCount}개
+                                </span>
+                                <div className="me-5"></div>
+                                <span style={{ fontSize: "0.875rem" }}>
+                                  대여 상태:{" "}
+                                </span>
+                                <span
+                                  className=" px-3 py-1 justify-content-center text-center"
+                                  style={{
+                                    backgroundColor:
+                                      rental.state === "대여중"
+                                        ? "#48bb78"
+                                        : rental.state === "연체"
+                                          ? "#f56565"
+                                          : rental.state === "반납 완료"
+                                            ? "#2d3748"
+                                            : "#ed8936",
+                                    color: "white",
+                                    borderRadius: "8px",
+                                    fontSize: "0.8rem",
+                                  }}
+                                >
+                                  {rental.state}
+                                </span>
                               </div>
-                              <div className="col-md-6">
-                                <div className="mb-3">
-                                  <span
-                                    className="fw-medium text-muted d-block mb-1"
-                                    style={{ fontSize: "0.875rem" }}
-                                  >
-                                    반납 예정일
-                                  </span>
-                                  <span style={{ color: "#4a5568" }}>
-                                    {formatDate(rental.endDttm)}
-                                  </span>
-                                </div>
-                              </div>
+                            </div>
+                            <div className="col-md-3 text-md-end">
+                              <h5
+                                className="fw-bold mb-1"
+                                style={{ color: "#2d3748" }}
+                              >
+                                {rental.productNoPrice.toLocaleString()}원
+                              </h5>
+                              <p
+                                className="text-muted mb-0"
+                                style={{ fontSize: "0.875rem" }}
+                              >
+                                반납일: {formatDate(rental.endDttm)}
+                              </p>
                             </div>
                           </div>
                         </div>
 
-                        {/* 액션 버튼들 */}
-                        <div className="col-12">
-                          <div className="d-flex gap-3 justify-content-end">
-                            <button
-                              className="btn px-4 py-2 fw-medium"
-                              style={{
-                                backgroundColor: "transparent",
-                                color: "#4299e1",
-                                border: "2px solid #4299e1",
-                                borderRadius: "10px",
-                                fontSize: "0.875rem",
-                                transition: "all 0.3s ease",
-                              }}
-                              onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = "#4299e1";
-                                e.target.style.color = "white";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "transparent";
-                                e.target.style.color = "#4299e1";
-                              }}
-                              onClick={() =>
-                                navigate(`/rental/renew/${rental.seq}`)
-                              }
-                            >
-                              <i className="fas fa-clock"></i>
-                              연장하기
-                            </button>
+                        {/* 카드 바디 */}
+                        <div className="card-body pt-0 pb-4">
+                          <div className="row g-3">
+                            {/* 대여 정보 테이블 */}
+                            <div className="col-12">
+                              <div
+                                className="p-4 rounded-3"
+                                style={{ backgroundColor: "#f7fafc" }}
+                              >
+                                <div className="row">
+                                  <div className="col-md-6">
+                                    <div className="mb-3">
+                                      <span
+                                        className="fw-medium text-muted d-block mb-1"
+                                        style={{ fontSize: "0.875rem" }}
+                                      >
+                                        대여 시작일
+                                      </span>
+                                      <span style={{ color: "#4a5568" }}>
+                                        {formatDate(rental.startDttm)}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div className="col-md-6">
+                                    <div className="mb-3">
+                                      <span
+                                        className="fw-medium text-muted d-block mb-1"
+                                        style={{ fontSize: "0.875rem" }}
+                                      >
+                                        반납 예정일
+                                      </span>
+                                      <span style={{ color: "#4a5568" }}>
+                                        {formatDate(rental.endDttm)}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 
-                            <button
-                              className="btn px-4 py-2 fw-medium"
-                              style={{
-                                backgroundColor: "transparent",
-                                color: "#1a202c",
-                                border: "2px solid #1a202c",
-                                borderRadius: "10px",
-                                fontSize: "0.875rem",
-                                transition: "all 0.3s ease",
-                              }}
-                              onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = "#1a202c";
-                                e.target.style.color = "white";
-                              }}
-                              onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = "transparent";
-                                e.target.style.color = "#1a202c";
-                              }}
-                              onClick={() =>
-                                navigate(`/rental/return/${rental.seq}`)
-                              }
-                            >
-                              <i className="fas fa-undo"></i>
-                              반납하기
-                            </button>
+                            {/* 액션 버튼들 */}
+                            <div className="col-12">
+                              <div className="d-flex gap-3 justify-content-end">
+                                <button
+                                  className="btn px-4 py-2 fw-medium"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    color: "#4299e1",
+                                    border: "2px solid #4299e1",
+                                    borderRadius: "10px",
+                                    fontSize: "0.875rem",
+                                    transition: "all 0.3s ease",
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.backgroundColor = "#4299e1";
+                                    e.target.style.color = "white";
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor =
+                                      "transparent";
+                                    e.target.style.color = "#4299e1";
+                                  }}
+                                  onClick={() =>
+                                    navigate(`/rental/renew/${rental.seq}`)
+                                  }
+                                >
+                                  <i className="fas fa-clock"></i>
+                                  연장하기
+                                </button>
+
+                                <button
+                                  className="btn px-4 py-2 fw-medium"
+                                  style={{
+                                    backgroundColor: "transparent",
+                                    color: "#1a202c",
+                                    border: "2px solid #1a202c",
+                                    borderRadius: "10px",
+                                    fontSize: "0.875rem",
+                                    transition: "all 0.3s ease",
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.target.style.backgroundColor = "#1a202c";
+                                    e.target.style.color = "white";
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor =
+                                      "transparent";
+                                    e.target.style.color = "#1a202c";
+                                  }}
+                                  onClick={() =>
+                                    navigate(`/rental/return/${rental.seq}`)
+                                  }
+                                >
+                                  <i className="fas fa-undo"></i>
+                                  반납하기
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            ) : (
+              <div className="row justify-content-center">
+                <h6 className="mb-5">대여한 상품이 없습니다.</h6>
 
+                <div className="col-8 col-lg-6 ">
+                  <button
+                    className="btn w-100 py-3 fw-medium d-flex align-items-center justify-content-center"
+                    style={{
+                      backgroundColor: "#2d3748",
+                      color: "white",
+                      borderRadius: "12px",
+                      border: "none",
+                      fontSize: "0.95rem",
+                      transition: "all 0.3s ease",
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                      textAlign: "center",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#1a202c";
+                      e.target.style.transform = "translateY(-2px)";
+                      e.target.style.boxShadow =
+                        "0 8px 15px rgba(0, 0, 0, 0.2)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "#2d3748";
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+                    }}
+                    onClick={() => navigate("/sale/list")}
+                  >
+                    <i className="fas fa-shopping-bag"></i>
+                    <span>추가 렌탈 제품 확인하기</span>
+                  </button>
+                </div>
+              </div>
+            )}
             {/* 페이지네이션 */}
             <div className="row">
               <div className="col-12">
