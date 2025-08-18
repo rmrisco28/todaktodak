@@ -16,6 +16,11 @@ import { Link } from "react-router-dom";
 import "../css/navbar.css";
 import { AuthenticationContext } from "./AuthenticationContextProvider.jsx";
 import { useNavigate, useSearchParams } from "react-router";
+import { RiAdminFill } from "react-icons/ri";
+import { LuUserRoundCheck, LuUserRoundCog } from "react-icons/lu";
+import { GoListUnordered } from "react-icons/go";
+import { MdOutlineFormatListBulleted } from "react-icons/md";
+import { FiLogIn, FiLogOut } from "react-icons/fi";
 
 export function AppNavbar() {
   // 로그인 상태 / 권한
@@ -125,15 +130,23 @@ export function AppNavbar() {
           <Nav className="align-items-lg-center">
             {user === null && (
               <Nav.Link as={Link} to="/login" className="py-2 px-3">
-                로그인
+                <FiLogIn />
+                <span className="ms-2">로그인</span>
               </Nav.Link>
             )}
             <Nav.Link as={Link} to="/order/list" className="py-2 px-3">
-              주문내역
+              <MdOutlineFormatListBulleted />
+              <span className="ms-2">주문내역</span>
             </Nav.Link>
 
             <NavDropdown
-              title={getDropdownTitle("마이페이지", "member-menu")}
+              title={getDropdownTitle(
+                <>
+                  <LuUserRoundCheck />
+                  <span className="ms-2">마이페이지</span>
+                </>,
+                "member-menu",
+              )}
               id="member-dropdown"
               align={{ lg: "end" }} // 데스크탑에서 오른쪽 정렬
               className="py-2 px-lg-2"
@@ -158,7 +171,13 @@ export function AppNavbar() {
 
             {isAdmin() && (
               <NavDropdown
-                title={getDropdownTitle("관리자", "admin-menu")}
+                title={getDropdownTitle(
+                  <>
+                    <RiAdminFill />
+                    <span className="ms-2">관리자</span>
+                  </>,
+                  "admin-menu",
+                )}
                 id="admin-dropdown"
                 align={{ lg: "end" }}
                 className="py-2 px-lg-2"
@@ -205,7 +224,8 @@ export function AppNavbar() {
 
             {user !== null && (
               <Nav.Link as={Link} to="/logout" className="py-2 px-3">
-                로그아웃
+                <FiLogOut />
+                <span className="ms-2">로그아웃</span>
               </Nav.Link>
             )}
 
