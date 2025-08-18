@@ -220,6 +220,11 @@ export function MemberMyInfoModify() {
             </FormLabel>
             <Col xs={12} sm={7}>
               <FormControl
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  backgroundColor: "transparent",
+                }}
                 value={member.memberId}
                 onChange={(e) =>
                   setMember({ ...member, memberId: e.target.value })
@@ -275,7 +280,16 @@ export function MemberMyInfoModify() {
               이메일
             </FormLabel>
             <Col xs={12} sm={7}>
-              <FormControl value={member.email} disabled type="email" />
+              <FormControl
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  backgroundColor: "transparent",
+                }}
+                value={member.email}
+                disabled
+                type="email"
+              />
             </Col>
           </FormGroup>
 
@@ -454,7 +468,7 @@ export function MemberMyInfoModify() {
         </section>
 
         {/* 취소, 변경 버튼 */}
-        <div className="d-flex gap-2 justify-content-end">
+        <div className="d-flex gap-2 justify-content-center">
           <Button variant="outline-primary" onClick={() => setModalShow(true)}>
             변경
           </Button>

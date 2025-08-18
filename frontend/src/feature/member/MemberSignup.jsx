@@ -228,7 +228,7 @@ export function MemberSignup() {
         <p className="text-end" style={{ fontSize: "12px" }}>
           <span style={{ color: "red" }}>*</span> 항목은 필수입력 항목입니다.
         </p>
-        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded mb-3">
+        <section className="bg-gray-100 px-3 px-sm-5 py-4 rounded-4 mb-3">
           {/* 아이디 / 중복확인 */}
           <div>
             <FormGroup className="mb-3" controlId="memberId">
@@ -299,6 +299,13 @@ export function MemberSignup() {
                   autoComplete="off"
                   type="password"
                   value={password}
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    borderRadius: 0,
+                    backgroundColor: "transparent",
+                    borderBottom: "2px solid black",
+                  }}
                   onChange={(e) => {
                     const value = e.target.value;
                     setPassword(value);
@@ -326,9 +333,17 @@ export function MemberSignup() {
               <FormGroup className="mb-3" controlId="password2">
                 <FormLabel>비밀번호 확인</FormLabel>
                 <FormControl
+                  placeholder="비밀번호 확인"
                   autoComplete="off"
                   type="password"
                   value={password2}
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    borderRadius: 0,
+                    backgroundColor: "transparent",
+                    borderBottom: "2px solid black",
+                  }}
                   onChange={(e) => {
                     setPassword2(e.target.value);
                     setErrors((prev) => ({
@@ -356,6 +371,13 @@ export function MemberSignup() {
               <FormControl
                 placeholder="이름"
                 value={name}
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  borderRadius: 0,
+                  backgroundColor: "transparent",
+                  borderBottom: "2px solid black",
+                }}
                 onChange={(e) => {
                   setName(e.target.value);
                   setErrors((prev) => ({ ...prev, name: null }));
@@ -374,6 +396,13 @@ export function MemberSignup() {
               <FormControl
                 placeholder="010-1234-5678"
                 value={phone}
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  borderRadius: 0,
+                  backgroundColor: "transparent",
+                  borderBottom: "2px solid black",
+                }}
                 onChange={(e) => {
                   let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
 
@@ -416,7 +445,9 @@ export function MemberSignup() {
               <div className="d-flex" style={{ gap: "10px" }}>
                 {/* 년도 */}
                 <Form.Select
-                  style={{ width: "140px" }}
+                  style={{
+                    width: "140px",
+                  }}
                   value={birthYear}
                   onChange={(e) => {
                     setBirthYear(e.target.value);
@@ -492,6 +523,13 @@ export function MemberSignup() {
                     autoComplete="off"
                     type="email"
                     value={email}
+                    style={{
+                      border: "none",
+                      boxShadow: "none",
+                      borderRadius: 0,
+                      backgroundColor: "transparent",
+                      borderBottom: "2px solid black",
+                    }}
                     onChange={(e) => {
                       const value = e.target.value;
                       setEmail(value);
@@ -547,6 +585,13 @@ export function MemberSignup() {
                       autoComplete="off"
                       placeholder="인증번호 입력"
                       value={emailCode}
+                      style={{
+                        border: "none",
+                        boxShadow: "none",
+                        borderRadius: 0,
+                        backgroundColor: "transparent",
+                        borderBottom: "2px solid black",
+                      }}
                       onChange={(e) => setEmailCode(e.target.value)}
                       style={{ height: "40px" }}
                     />
@@ -573,6 +618,13 @@ export function MemberSignup() {
                   <FormControl
                     placeholder="우편번호"
                     value={postCode}
+                    style={{
+                      border: "none",
+                      boxShadow: "none",
+                      borderRadius: 0,
+                      backgroundColor: "transparent",
+                      borderBottom: "2px solid black",
+                    }}
                     onChange={(e) => setPostCode(e.target.value)}
                     readOnly
                   />
@@ -594,6 +646,13 @@ export function MemberSignup() {
                 <FormControl
                   placeholder="도로명 주소 / 지번"
                   value={address}
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    borderRadius: 0,
+                    backgroundColor: "transparent",
+                    borderBottom: "2px solid black",
+                  }}
                   onChange={(e) => setAddress(e.target.value)}
                   readOnly
                 />
@@ -605,6 +664,13 @@ export function MemberSignup() {
                 <FormControl
                   placeholder="상세주소"
                   value={addressDetail}
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    borderRadius: 0,
+                    backgroundColor: "transparent",
+                    borderBottom: "2px solid black",
+                  }}
                   onChange={(e) => setAddressDetail(e.target.value)}
                 />
               </div>

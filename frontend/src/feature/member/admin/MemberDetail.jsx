@@ -256,28 +256,27 @@ export function MemberDetail() {
           </div>
         </section>
         {/* 삭제, 수정 버튼*/}
-        <div className="mb-3 mt-4 d-flex">
-          <div>
-            <Button
-              className="me-3"
-              variant="outline-danger"
-              onClick={() => setModalShow(true)}
-            >
-              삭제
-            </Button>
-            <Button
-              className="me-5"
-              variant="outline-primary"
-              onClick={() =>
-                navigate(
-                  `/member/modify?seq=${params.get("seq")}&page=${params.get("page")}`,
-                )
-              }
-            >
-              수정
-            </Button>
-          </div>
-          <Button variant="secondary" onClick={handleRedirectToList}>
+        <div className="mt-3 d-flex justify-content-end">
+          <Button
+            className="me-3"
+            variant="outline-danger"
+            onClick={() => setModalShow(true)}
+          >
+            삭제
+          </Button>
+          <Button
+            variant="outline-primary"
+            onClick={() =>
+              navigate(
+                `/member/modify?seq=${params.get("seq")}&page=${params.get("page")}`,
+              )
+            }
+          >
+            수정
+          </Button>
+        </div>
+        <div className="d-flex justify-content-end">
+          <Button variant="outline-dark" onClick={handleRedirectToList}>
             목록
           </Button>
         </div>

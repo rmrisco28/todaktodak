@@ -171,7 +171,15 @@ export function MemberModify() {
                 고객 번호
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.memberNo} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.memberNo}
+                  disabled
+                />
               </Col>
             </FormGroup>
           </div>
@@ -183,6 +191,12 @@ export function MemberModify() {
               </FormLabel>
               <Col sm={7}>
                 <FormControl
+                  disabled
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
                   value={member.memberId}
                   onChange={(e) =>
                     setMember({ ...member, memberId: e.target.value })
@@ -282,7 +296,12 @@ export function MemberModify() {
               </FormLabel>
               <Col sm={7}>
                 <FormControl
-                  readOnly
+                  disabled
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
                   value={member.email}
                   onChange={(e) =>
                     setMember({ ...member, email: e.target.value })

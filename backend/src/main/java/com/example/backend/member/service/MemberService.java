@@ -456,7 +456,7 @@ public class MemberService {
         // 이메일 유효성 검사
         String email = dto.getEmail();
         if (!Pattern.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", email)) {
-            throw new RuntimeException("이메일 형싣에 맞지 않습니다.");
+            throw new RuntimeException("이메일 형식에 맞지 않습니다.");
         }
         // 이메일 입력 유무
         if (dto.getEmail().trim().isBlank()) {
@@ -477,7 +477,7 @@ public class MemberService {
 
         // 새 비밀번호가 현재 비밀번호와 같은지 확인
         if (passwordEncoder.matches(dto.getNewPassword(), dbData.getPassword())) {
-            throw new RuntimeException("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+            throw new RuntimeException("새 비밀번호는 현재 비밀번호와 다르게 입력해주세요.");
         }
 
         // 새 비밀번호 유효성 검사

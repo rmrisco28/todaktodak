@@ -141,7 +141,15 @@ export function MemberMyInfo() {
                 이름
               </FormLabel>
               <Col sm={6}>
-                <FormControl value={member.name} readOnly />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.name}
+                  readOnly
+                />
               </Col>
             </FormGroup>
 
@@ -151,7 +159,15 @@ export function MemberMyInfo() {
                 이메일
               </FormLabel>
               <Col sm={6}>
-                <FormControl value={member.email} readOnly />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.email}
+                  readOnly
+                />
               </Col>
             </FormGroup>
 
@@ -161,7 +177,15 @@ export function MemberMyInfo() {
                 생년월일
               </FormLabel>
               <Col sm={6}>
-                <FormControl value={member.birthDate} readOnly />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.birthDate}
+                  readOnly
+                />
               </Col>
             </FormGroup>
 
@@ -171,7 +195,15 @@ export function MemberMyInfo() {
                 연락처
               </FormLabel>
               <Col sm={6}>
-                <FormControl value={member.phone} readOnly />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.phone}
+                  readOnly
+                />
               </Col>
             </FormGroup>
 
