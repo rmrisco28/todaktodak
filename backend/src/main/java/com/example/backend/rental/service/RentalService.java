@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,17 +39,32 @@ public class RentalService {
     private final MemberRepository memberRepository;
 
     // 렌탈 목록
-    public Map<String, Object> list(String keyword, Integer pageNumber) {
-        Page<RentalListDto> rentalListDtoPage = rentalRepository.searchRentalList(keyword, PageRequest.of(pageNumber - 1, 10));
+    public Map<String, Object> list(String keyword, Integer pageNumber, Authentication authentication) {
+        if (authentication == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
+
+        String userName = authentication.getName();
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("SCOPE_ROLE_ADMIN"));
+
+        Page<RentalListDto> rentalListDtoPage;
+        if (isAdmin) {
+            rentalListDtoPage = rentalRepository.searchRentalList(keyword, PageRequest.of(pageNumber - 1, 5));
+        } else {
+            rentalListDtoPage = rentalRepository.searchRentalListByUser(keyword, userName, PageRequest.of(pageNumber - 1, 5));
+
+        }
+
         int totalPages = rentalListDtoPage.getTotalPages();
 
-        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
-        int leftPageNumber = rightPageNumber - 9;
+        int rightPageNumber = ((pageNumber - 1) / 5 + 1) * 5;
+        int leftPageNumber = rightPageNumber - 4;
         rightPageNumber = Math.min(rightPageNumber, totalPages);
         leftPageNumber = Math.max(leftPageNumber, 1);
         var pageInfo = Map.of("totalPages", totalPages, "rightPageNumber", rightPageNumber, "leftPageNumber", leftPageNumber, "currentPageNumber", pageNumber);
 
-        //        rentalRepository.findAll();
         return Map.of("pageInfo", pageInfo, "rentalList", rentalListDtoPage.getContent());
     }
 
@@ -155,12 +171,13 @@ public class RentalService {
         rentalRepository.save(rental);
     }
 
+    // 관리자 렌탈 현황 조회
     public Map<String, Object> listAdmin(String keyword, Integer pageNumber) {
-        Page<RentalAdminDto> rentalAdminDtoPage = rentalRepository.searchRentalAdminList(keyword, PageRequest.of(pageNumber - 1, 5));
+        Page<RentalAdminDto> rentalAdminDtoPage = rentalRepository.searchRentalAdminList(keyword, PageRequest.of(pageNumber - 1, 10));
         int totalPages = rentalAdminDtoPage.getTotalPages();
 
-        int rightPageNumber = ((pageNumber - 1) / 5 + 1) * 5;
-        int leftPageNumber = rightPageNumber - 4;
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
         rightPageNumber = Math.min(rightPageNumber, totalPages);
         leftPageNumber = Math.max(leftPageNumber, 1);
         var pageInfo = Map.of("totalPages", totalPages, "rightPageNumber", rightPageNumber, "leftPageNumber", leftPageNumber, "currentPageNumber", pageNumber);

@@ -4,6 +4,8 @@ import com.example.backend.rental.dto.*;
 import com.example.backend.rental.service.RentalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -17,11 +19,12 @@ public class RentalController {
 
     // 렌탈 리스트
     @GetMapping("list")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> rentalList(
             @RequestParam(value = "q", defaultValue = "") String keyword,
-            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber
-    ) {
-        return rentalService.list(keyword, pageNumber);
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
+            Authentication authentication) {
+        return rentalService.list(keyword, pageNumber, authentication);
     }
 
     // 렌탈 반납 세부 현황
