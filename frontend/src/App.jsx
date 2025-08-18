@@ -57,6 +57,7 @@ import { RentalReturn } from "./feature/rental/RentalReturn.jsx";
 import { RentalListAdmin } from "./feature/rental/RentalListAdmin.jsx";
 import { FullWidthLayout } from "./common/FullWidthLayout.jsx";
 import { ProtectedRoute } from "./common/ProtectedRoute.jsx";
+import { ComingSoon } from "./ComingSoon.jsx";
 
 function App() {
   return (
@@ -73,6 +74,9 @@ function App() {
             {/*
             --- 비로그인 사용자도 접근 가능한 페이지 ---
           */}
+            {/* 준비중 */}
+            <Route path="comingsoon" element={<ComingSoon />} />
+
             {/* 로그인 */}
             <Route path="login" element={<MemberLogin />} />
             {/* 로그아웃 */}
@@ -199,6 +203,18 @@ function App() {
               <Route path="banner/list" element={<BannerList />} />
               {/* 메인 배너 이미지 수정 */}
               <Route path="banner/modify/:seq" element={<BannerModify />} />
+
+              {/* 관심상품 */}
+              <Route path="want/list" element={<ComingSoon />} />
+
+              {/* 장바구니 */}
+              <Route path="cart/list" element={<ComingSoon />} />
+
+              {/* 관리자 대시보드 */}
+              <Route path="admin" element={<ComingSoon />} />
+
+              {/* 관리자 통계현황 */}
+              <Route path="chart/list" element={<ComingSoon />} />
             </Route>
           </Route>
         </Routes>
