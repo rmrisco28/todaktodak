@@ -39,7 +39,8 @@ export function PaymentSuccess() {
       })
       .catch((err) => {
         console.error("결제 승인 또는 주문 저장 오류:", err);
-        toast.error("결제 처리 중 오류가 발생했습니다.");
+        // TODO 임시 주석
+        // toast.error("결제 처리 중 오류가 발생했습니다.");
         setPaymentResult("fail"); // 실패 상태 표시
       })
       .finally(() => {
