@@ -71,8 +71,8 @@ export function MemberDetail() {
   return (
     <Row className="justify-content-center">
       <Col xs={10} md={10} lg={6}>
-        <h3 className="mb-4 text-center">회원 정보 관리</h3>
-        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded-4">
+        <h3 className="mb-4 text-center">회원 정보</h3>
+        <section className="bg-gray-100 px-3 px-sm-5 py-4 rounded-4">
           {/* 고객 번호 */}
           <div>
             <FormGroup as={Row} controlId="memberNo" className="mb-4">
@@ -118,7 +118,15 @@ export function MemberDetail() {
                 이름
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.name} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.name}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
@@ -129,7 +137,15 @@ export function MemberDetail() {
                 이메일
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.email} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.email}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
@@ -140,7 +156,15 @@ export function MemberDetail() {
                 생년월일
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.birthDate} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.birthDate}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
@@ -151,7 +175,15 @@ export function MemberDetail() {
                 연락처
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.phone} readOnly={true} />
+                <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.phone}
+                  readOnly={true}
+                />
               </Col>
             </FormGroup>
           </div>
@@ -198,6 +230,11 @@ export function MemberDetail() {
               </FormLabel>
               <Col sm={7}>
                 <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
                   value={member.insertDttm?.replace("T", "  ")}
                   readOnly={true}
                 />
@@ -212,6 +249,11 @@ export function MemberDetail() {
               </FormLabel>
               <Col sm={7}>
                 <FormControl
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
                   value={member.updateDttm?.replace("T", "  ")}
                   readOnly={true}
                 />
@@ -289,11 +331,11 @@ export function MemberDetail() {
         </Modal.Header>
         <Modal.Body>{member.memberId} 회원을 삭제하시겠습니까?</Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
           <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
             삭제
+          </Button>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
           </Button>
         </Modal.Footer>
       </Modal>

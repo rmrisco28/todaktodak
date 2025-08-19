@@ -39,9 +39,6 @@ export function MemberMyInfoModify() {
   // 비밀번호
   const validatePassword = (value) =>
     /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*~]).{8,}$/.test(value);
-  // 이메일
-  const validateEmail = (value) =>
-    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
   // 연락처
   const validatePhone = (value) => /^01[016789]-?\d{3,4}-?\d{4}$/.test(value);
 
@@ -86,11 +83,6 @@ export function MemberMyInfoModify() {
     const newErrors = {};
 
     if (!member.name.trim()) newErrors.name = "이름을 입력해주세요.";
-    if (!validateEmail(member.email))
-      newErrors.email = "이메일 형식이 올바르지 않습니다.";
-    if (!validatePhone(member.phone))
-      newErrors.phone = "전화번호 형식이 올바르지 않습니다.";
-    // ... 생년월일도 필요하면 추가
 
     setErrors(newErrors);
 
@@ -206,9 +198,9 @@ export function MemberMyInfoModify() {
 
   return (
     <Row className="justify-content-center">
-      <Col xs={12} md={10} lg={5} className="p-3" style={{ width: "600px" }}>
+      <Col xs={12} md={10} lg={5} className="p-3" style={{ width: "700px" }}>
         <h3 className="mb-4 text-center">내 정보 변경</h3>
-        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded-4 mb-3">
+        <section className="bg-gray-100 px-3 px-sm-5 py-4 rounded-4 mb-3">
           {/* 아이디 */}
           <FormGroup
             as={Row}
@@ -264,9 +256,17 @@ export function MemberMyInfoModify() {
             </FormLabel>
             <Col xs={12} sm={7}>
               <FormControl
+                placeholder="이름"
                 value={member.name}
-                onChange={(e) => setMember({ ...member, name: e.target.value })}
+                onChange={(e) => {
+                  setMember({ ...member, name: e.target.value });
+                  setErrors((prev) => ({ ...prev, name: null }));
+                }}
+                className={errors.name ? "is-invalid" : ""}
               />
+              {errors.name && (
+                <div className="invalid-feedback">{errors.name}</div>
+              )}
             </Col>
           </FormGroup>
 
@@ -372,6 +372,7 @@ export function MemberMyInfoModify() {
             </FormLabel>
             <Col xs={12} sm={7}>
               <FormControl
+                placeholder="ex)010-1234-5678"
                 value={member.phone}
                 onChange={(e) => {
                   let value = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 추출
@@ -445,7 +446,11 @@ export function MemberMyInfoModify() {
               주소
             </FormLabel>
             <Col xs={12} sm={7}>
-              <FormControl value={member.addr} readOnly />
+              <FormControl
+                placeholder="도로명 주소 / 지번"
+                value={member.addr}
+                readOnly
+              />
             </Col>
           </FormGroup>
 
@@ -458,6 +463,7 @@ export function MemberMyInfoModify() {
             <FormLabel column xs={12} sm={3}></FormLabel>
             <Col xs={12} sm={7}>
               <FormControl
+                placeholder="상세 주소"
                 value={member.addrDetail}
                 onChange={(e) =>
                   setMember({ ...member, addrDetail: e.target.value })
@@ -500,7 +506,7 @@ export function MemberMyInfoModify() {
                 autoComplete="off"
                 type="password"
                 value={currentPassword}
-                style={{ width: "300px" }}
+                style={{ width: "100%" }}
                 onChange={(e) => {
                   const value = e.target.value;
                   setCurrentPassword(value);
@@ -521,7 +527,7 @@ export function MemberMyInfoModify() {
                 autoComplete="off"
                 type="password"
                 value={newPassword}
-                style={{ width: "300px" }}
+                style={{ width: "100%" }}
                 onChange={(e) => {
                   const value = e.target.value;
                   setNewPassword(value);
@@ -556,7 +562,7 @@ export function MemberMyInfoModify() {
                 autoComplete="off"
                 type="password"
                 value={newPassword2}
-                style={{ width: "300px" }}
+                style={{ width: "100%" }}
                 onChange={(e) => {
                   setNewPassword2(e.target.value);
                   setErrors((prev) => ({
@@ -576,21 +582,21 @@ export function MemberMyInfoModify() {
             </FormGroup>
           </Form>
           <div
-            className="d-flex justify-content-start mt-3"
-            style={{ width: "300px" }}
+            className="d-flex justify-content-end mt-3"
+            style={{ width: "100%" }}
           >
             <Button
               className="me-3"
-              variant="outline-danger"
-              onClick={() => setPasswordModalShow(false)}
-            >
-              취소
-            </Button>
-            <Button
               variant="outline-primary"
               onClick={handleChangePasswordButtonClick}
             >
               변경
+            </Button>
+            <Button
+              variant="outline-danger"
+              onClick={() => setPasswordModalShow(false)}
+            >
+              취소
             </Button>
           </div>
         </Modal.Body>
@@ -602,11 +608,11 @@ export function MemberMyInfoModify() {
         </Modal.Header>
         <Modal.Body>이대로 변경하시겠습니까?</Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
           <Button variant="outline-primary" onClick={handleModifyButtonClick}>
             변경
+          </Button>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
           </Button>
         </Modal.Footer>
       </Modal>

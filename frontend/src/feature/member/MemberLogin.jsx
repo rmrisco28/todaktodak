@@ -87,7 +87,10 @@ export function MemberLogin() {
 
         setPassword("");
 
-        setErrors({ password: "아이디 또는 비밀번호가 올바르지 않습니다." });
+        // setErrors({ password: "아이디 또는 비밀번호가 올바르지 않습니다." });
+        toast.error("아이디 또는 비밀번호가 올바르지 않습니다.", {
+          position: "top-center",
+        });
       })
       .finally(() => {
         console.log("always");
@@ -111,7 +114,7 @@ export function MemberLogin() {
           </span>
           Login
         </h2>
-        <section className="bg-gray-100 px-3 px-5 py-4 rounded mb-3">
+        <section className="bg-gray-100 px-5 py-5 rounded-3 mb-3">
           {/* 아이디 */}
           <Form onSubmit={handleFormSubmit}>
             <div>
@@ -240,7 +243,7 @@ export function MemberLogin() {
             </div>
             {/* 로그인 버튼 / 찾기, 가입 옵션 */}
             <div className="d-flex justify-content-between">
-              <Button type="submit" className="w-100 mb-4">
+              <Button type="submit" className="w-100 mb-0">
                 로그인
               </Button>
             </div>
