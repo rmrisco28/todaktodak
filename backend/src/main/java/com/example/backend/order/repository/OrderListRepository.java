@@ -20,6 +20,8 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 ol.name,
                 ol.totalPrice,
                 ol.state,
+                ol.deliveryCode,
+                ol.tracking,
                 ol.insertDttm,
                 ol.updateDttm
                 ) FROM OrderList ol
@@ -52,6 +54,7 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                         ol.addr,
                         ol.addrDetail,
                         ol.request,
+                        ol.deliveryCode,
                         ol.deliveryCompany,
                         ol.tracking,
                         ol.totalPrice,
@@ -79,6 +82,8 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 ol.name,
                 ol.totalPrice,
                 ol.state,
+                ol.deliveryCode,
+                ol.tracking,
                 ol.insertDttm,
                 ol.updateDttm
                 ) FROM OrderList ol
