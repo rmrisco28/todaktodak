@@ -198,7 +198,7 @@ export function AppNavbar() {
                 <NavDropdown.Item as={Link} to="/order/admin/list">
                   주문관리
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/rental/list">
+                <NavDropdown.Item as={Link} to="/rental/list/admin">
                   대여관리
                 </NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/receive/list">

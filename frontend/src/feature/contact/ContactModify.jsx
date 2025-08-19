@@ -9,6 +9,7 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
@@ -96,6 +97,7 @@ export function ContactModify() {
 
   return (
     <>
+      
       <div style={{ background: "#f8f9fa" }}>
         <div className="container py-3">
           <div className="row justify-content-center">
@@ -120,6 +122,10 @@ export function ContactModify() {
                           onChange={(e) => setUseYn(e.target.checked)}
                           style={{
                             transform: "scale(1.2)",
+                            appearance: "auto",
+                            WebkitAppearance: "auto",
+                            MozAppearance: "auto",
+
                           }}
                         />
                         <label

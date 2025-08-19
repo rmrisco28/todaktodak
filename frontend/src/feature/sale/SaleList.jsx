@@ -17,6 +17,7 @@ import { GrNext, GrPrevious } from "react-icons/gr";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 import "../../css/sale_list.css";
+import { IoSearch } from "react-icons/io5";
 
 export function SaleList() {
   const { isAdmin } = useContext(AuthenticationContext);
@@ -150,7 +151,7 @@ export function SaleList() {
           </div>
           <div className="mb-4"></div>
           {/* 검색창 */}
-          <div className="mb-5">
+          <div className="mb-3">
             <div className="row justify-content-center">
               <div className="col-12 col-md-8 col-lg-6">
                 <Form onSubmit={handleSearchFormSubmit}>
@@ -169,9 +170,10 @@ export function SaleList() {
                         background: "#f8f9fa",
                       }}
                     />
+
                     <button
                       type="submit"
-                      className="btn btn-dark px-4"
+                      className="btn btn-dark  mb-0 px-3"
                       style={{ borderRadius: "0 50px 50px 0" }}
                     >
                       <BiSearchAlt2 size={20} />
@@ -182,51 +184,28 @@ export function SaleList() {
             </div>
           </div>
           <div className="mb-5"></div>
+
           {/*상품 목록*/}
           {saleList.length > 0 ? (
             <div className="row g-3">
               {saleList.map((sale) => (
                 <div key={sale.seq} className="col-6 col-md-4 col-xl-3">
                   <div
-                    className="card border-0 h-100"
-                    style={{
-                      cursor: "pointer",
-                      borderRadius: "12px",
-                      overflow: "hidden",
-                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                    }}
+                    className="product-card"
                     onClick={() => handleTableRowClick(sale.seq)}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-4px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 8px 25px rgba(0,0,0,0.1)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 2px 10px rgba(0,0,0,0.05)";
-                    }}
                   >
-                    <img
-                      src={sale.thumbnailPath || "/placeholder.png"}
-                      className="card-img-top"
-                      alt={sale.title}
+                    {/* 이미지는 div의 배경으로 처리하여 확대/축소 효과를 깔끔하게 만듭니다. */}
+                    <div
+                      className="product-card-bg"
                       style={{
-                        height: "200px",
-                        objectFit: "cover",
+                        backgroundImage: `url('${sale.thumbnailPath || "/placeholder.png"}')`,
                       }}
-                    />
-                    <div className="card-body p-3">
-                      <h6
-                        className="fw-semibold mb-1 text-truncate"
-                        style={{ fontSize: "0.95rem" }}
-                      >
-                        {sale.title}
-                      </h6>
-                      <p
-                        className="text-dark fw-bold mb-0"
-                        style={{ fontSize: "1rem" }}
-                      >
+                    ></div>
+                    {/* 텍스트 가독성을 위한 반투명 오버레이 */}
+                    <div className="product-card-overlay"></div>
+                    <div className="product-card-body">
+                      <h6 className="product-card-title">{sale.title}</h6>
+                      <p className="product-card-price">
                         {sale.salePrice
                           ? sale.salePrice.toLocaleString() + "원"
                           : "가격 미정"}
