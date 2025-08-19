@@ -43,6 +43,7 @@ export function SaleList() {
     const category = searchParams.get("c");
 
     setKeyword(q);
+    document.getElementById("navbarSearchInput").value = q;
     setActiveCategory(category ? parseInt(category) : null);
 
     axios
@@ -137,6 +138,7 @@ export function SaleList() {
                       setActiveCategory(item.seq);
                       const params = new URLSearchParams(searchParams);
                       params.set("c", item.seq);
+                      params.delete("p");
                       setSearchParams(params);
                     }}
                     role="tab"
