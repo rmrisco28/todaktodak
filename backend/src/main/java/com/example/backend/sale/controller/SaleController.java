@@ -54,7 +54,7 @@ public class SaleController {
             @RequestParam(value = "c", required = false) Integer category,
             @RequestParam(value = "q", defaultValue = "") String keyword,
             @RequestParam(value = "p", defaultValue = "1") Integer pageNumber,
-            @RequestParam(value = "s", defaultValue = "10") Integer pageSize
+            @RequestParam(value = "s", defaultValue = "12") Integer pageSize
     ) {
         return saleService.list(category, keyword, pageNumber, pageSize);
     }
