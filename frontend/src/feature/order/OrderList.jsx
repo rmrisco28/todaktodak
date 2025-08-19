@@ -47,7 +47,7 @@ export function OrderList() {
     }
 
     axios
-      .get(`/api/order/list/${user.memberId}?${searchParams}`)
+      .get(`/api/order/list?${searchParams}`)
       .then((res) => {
         setOrderList(res.data.orderList);
         setPageInfo(res.data.pageInfo);
@@ -67,7 +67,7 @@ export function OrderList() {
 
   function handleSearchFormSubmit(e) {
     e.preventDefault();
-    navigate(`/order/list/${user.memberId}?q=` + keyword);
+    navigate(`/order/list?q=` + keyword);
   }
 
   if (!user || !orderList) {

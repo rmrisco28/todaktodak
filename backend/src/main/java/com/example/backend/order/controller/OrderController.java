@@ -63,16 +63,14 @@ public class OrderController {
     /**
      * 주문관리 목록 조회 (사용자)
      *
-     * @param memberId
      * @return
      */
-    @GetMapping("list/{memberId}")
+    @GetMapping("list")
     @PreAuthorize("isAuthenticated()")
-    public Map<String, Object> getOrders(@PathVariable String memberId,
-                                         Authentication authentication,
+    public Map<String, Object> getOrders(Authentication authentication,
                                          @RequestParam(value = "q", defaultValue = "") String keyword,
                                          @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
-        return orderService.list(memberId, authentication, keyword, pageNumber);
+        return orderService.list(authentication, keyword, pageNumber);
     }
 
     /**

@@ -303,10 +303,11 @@ public class OrderService {
         }
     }
 
-    public Map<String, Object> list(String memberId, Authentication authentication, String keyword, Integer pageNumber) {
+    public Map<String, Object> list(Authentication authentication, String keyword, Integer pageNumber) {
         if (authentication == null) {
             throw new RuntimeException("권한이 없습니다.");
         }
+        String memberId = authentication.getName();
 
         Page<OrderListAllDto> orderListDtoPage = orderListRepository.searchOrderListUser(memberId, keyword, PageRequest.of(pageNumber - 1, 10));
         int totalPages = orderListDtoPage.getTotalPages();
