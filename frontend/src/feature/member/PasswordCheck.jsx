@@ -50,6 +50,7 @@ export function PasswordCheck() {
         console.log(err);
         toast.error("비밀번호 확인에 실패하였습니다.", {
           position: "top-center",
+          autoClose: 1000,
         });
       })
       .finally(() => {});
