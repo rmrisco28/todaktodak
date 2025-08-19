@@ -302,7 +302,17 @@ public class MemberService {
     }
 
     // 회원 삭제 시 delYn 변경(삭제 데이터 보관)
-    public void updateDelYn(Integer seq) {
+    public void updateDelYn(Integer seq, String adminId, String password) {
+        // 1. 로그인한 계정 조회
+        Member admin = memberRepository.findByMemberId(adminId)
+                .orElseThrow(() -> new RuntimeException("관리자 정보를 찾을 수 없습니다."));
+
+        // 2. 비밀번호 검증
+        if (!passwordEncoder.matches(password, admin.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 회원 삭제 처리
         Member dbData = memberRepository.findById(seq).get();
         // del_yn = true
         dbData.setDelYn(true);
@@ -408,9 +418,13 @@ public class MemberService {
     }
 
     // 회원탈퇴(회원)
-    public void delete(String memberId) {
+    public void delete(String memberId, String password) {
         Member dbData = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(password, dbData.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
 
         // update_dttm = NOW()
         LocalDateTime now = LocalDateTime.now();
@@ -489,6 +503,16 @@ public class MemberService {
         // 변경 및 저장
         dbData.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         memberRepository.save(dbData);
+    }
+
+    public void checkPassword(String memberId, String password) {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
     }
 
     // 로그인(토큰생성)

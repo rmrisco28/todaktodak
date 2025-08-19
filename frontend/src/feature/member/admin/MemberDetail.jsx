@@ -18,6 +18,8 @@ export function MemberDetail() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
   const [modalShow, setModalShow] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -43,20 +45,30 @@ export function MemberDetail() {
 
   // 삭제 버튼 클릭
   function handleDeleteButtonClick() {
+    if (!adminPassword.trim()) {
+      setError("비밀번호를 입력해주세요.");
+      return;
+    }
+
     axios
-      .put(`/api/member/${params.get("seq")}/delete`)
+      .put(`/api/member/${params.get("seq")}/delete`, {
+        password: adminPassword,
+      })
       .then((res) => {
         console.log("실행완료");
         const message = res.data.message;
         if (message) {
           toast(message.text, { type: message.type, position: "top-center" });
         }
-        navigate("list");
+        setModalShow(false);
+        setAdminPassword("");
+        handleRedirectToList();
       })
       .catch((err) => {
         console.log(err);
         const message = err.response.data.message;
         toast(message.text, { type: message.type });
+        setAdminPassword("");
       })
       .finally(() => {
         console.log("always");
@@ -325,11 +337,31 @@ export function MemberDetail() {
       </Col>
 
       {/* 회원 삭제 확인 모달 */}
-      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+      <Modal
+        show={modalShow}
+        onHide={() => {
+          setModalShow(false);
+        }}
+      >
         <Modal.Header closeButton>
           <Modal.Title>회원 삭제 확인</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{member.memberId} 회원을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Body>
+          <FormGroup controlId="adminPassword">
+            <FormLabel>비밀번호 확인</FormLabel>
+            <FormControl
+              type="password"
+              placeholder="비밀번호"
+              value={adminPassword}
+              onChange={(e) => {
+                setAdminPassword(e.target.value);
+                setError(null);
+              }}
+              className={error ? "is-invalid" : ""}
+            />
+            {error && <div className="invalid-feedback">{error}</div>}
+          </FormGroup>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
             삭제

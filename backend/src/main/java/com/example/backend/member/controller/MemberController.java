@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -140,9 +142,14 @@ public class MemberController {
     // 회원 삭제(관리자)
     @PutMapping("{seq}/delete")
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
-    public ResponseEntity<?> MemberDelete(@PathVariable Integer seq) {
+    public ResponseEntity<?> MemberDelete(
+            @PathVariable Integer seq,
+            @RequestBody PasswordCheckDto dto,
+            Authentication authentication) {
+        String adminId = authentication.getName();
+
         try {
-            memberService.updateDelYn(seq);
+            memberService.updateDelYn(seq, adminId, dto.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
@@ -215,10 +222,10 @@ public class MemberController {
     // 회원 탈퇴(회원)
     @PutMapping("withdraw")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> delete(Authentication authentication) {
+    public ResponseEntity<?> delete(@RequestBody PasswordCheckDto check, Authentication authentication) {
         String memberId = authentication.getName();
         try {
-            memberService.delete(memberId);
+            memberService.delete(memberId, check.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
@@ -279,6 +286,27 @@ public class MemberController {
 
         return ResponseEntity.ok().body(Map.of("type", "success"));
     }
+
+    // 비밀번호 확인
+    @PostMapping("/passwordCheck")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> checkPassword(@RequestBody PasswordCheckDto check, Authentication authentication) {
+        String memberId = authentication.getName();
+        try {
+            // 비밀번호 검증
+            memberService.checkPassword(memberId, check.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", "비밀번호가 확인되었습니다.")));
+    }
+
 
     // 로그인
     @PostMapping("login")
