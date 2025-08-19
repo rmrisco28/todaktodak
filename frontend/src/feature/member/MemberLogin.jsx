@@ -11,12 +11,13 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
-import { FaRegTimesCircle, FaTimes } from "react-icons/fa";
+import { FaRegTimesCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import "../../css/Checkbox.css";
 import { IoIosEye, IoMdEyeOff } from "react-icons/io";
 import { useLocation } from "react-router-dom";
+import { PiLockKeyOpenDuotone } from "react-icons/pi";
 
 export function MemberLogin() {
   const [memberId, setMemberId] = useState("");
@@ -103,33 +104,113 @@ export function MemberLogin() {
       className="d-flex justify-content-center align-items-center"
       style={{ minHeight: "70vh" }}
     >
-      <Col xs={12} sm="auto" style={{ width: "500px" }}>
-        <h2 className="d-flex justify-content-center mb-4">Login</h2>
-        <section className="bg-gray-200 px-3 px-5 py-4 rounded mb-3">
+      <Col xs={12} sm="auto" style={{ width: "400px" }}>
+        <h2 className="d-flex justify-content-center mb-4">
+          <span>
+            <PiLockKeyOpenDuotone />
+          </span>
+          Login
+        </h2>
+        <section className="bg-gray-100 px-3 px-5 py-4 rounded mb-3">
           {/* 아이디 */}
           <Form onSubmit={handleFormSubmit}>
             <div>
-              <FormGroup className="mb-3" controlId="memberId">
-                <FormLabel>아이디</FormLabel>
+              <FormGroup as={Row} className="mb-3" controlId="memberId">
+                <FormLabel column sm={3}>
+                  아이디
+                </FormLabel>
+                <Col>
+                  <div style={{ position: "relative" }}>
+                    <FormControl
+                      placeholder="아이디"
+                      value={memberId}
+                      onChange={(e) => {
+                        setMemberId(e.target.value);
+                        setErrors((prev) => ({ ...prev, memberId: null }));
+                      }}
+                      style={{
+                        width: "100%",
+                        border: "none",
+                        boxShadow: "none",
+                        borderRadius: 0,
+                        backgroundColor: "transparent",
+                        borderBottom: "2px solid black",
+                      }}
+                      className={errors.memberId ? "is-invalid" : ""}
+                    />
+                    {errors.memberId && (
+                      <div className="invalid-feedback">{errors.memberId}</div>
+                    )}
+                    {/* 아이디 초기화 (입력값 있을 때만) */}
+                    {memberId && (
+                      <span
+                        onClick={() => setMemberId("")}
+                        style={{
+                          position: "absolute",
+                          top: "45%",
+                          right: "10px",
+                          transform: "translateY(-50%)",
+                          cursor: "pointer",
+                          fontSize: "15px",
+                        }}
+                      >
+                        <FaRegTimesCircle />
+                      </span>
+                    )}
+                  </div>
+                </Col>
+              </FormGroup>
+            </div>
+            {/* 패스워드 */}
+            <FormGroup as={Row} className="mb-3" controlId="password">
+              <FormLabel column sm={3}>
+                비밀번호
+              </FormLabel>
+              <Col>
                 <div style={{ position: "relative" }}>
                   <FormControl
-                    value={memberId}
+                    placeholder="비밀번호"
+                    autoComplete="off"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
                     onChange={(e) => {
-                      setMemberId(e.target.value);
-                      setErrors((prev) => ({ ...prev, memberId: null }));
+                      setPassword(e.target.value);
+                      setErrors((prev) => ({ ...prev, password: null }));
                     }}
                     style={{
-                      width: "100%",
+                      paddingRight: "60px",
+                      border: "none",
+                      boxShadow: "none",
+                      borderRadius: 0,
+                      backgroundColor: "transparent",
+                      borderBottom: "2px solid black",
                     }}
-                    className={errors.memberId ? "is-invalid" : ""}
+                    className={errors.password ? "is-invalid" : ""}
                   />
-                  {errors.memberId && (
-                    <div className="invalid-feedback">{errors.memberId}</div>
+                  {errors.password && (
+                    <div className="invalid-feedback">{errors.password}</div>
                   )}
-                  {/* 아이디 초기화 (입력값 있을 때만) */}
-                  {memberId && (
+
+                  {/* 👁 비밀번호 보기 토글 */}
+                  {password && (
                     <span
-                      onClick={() => setMemberId("")}
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      style={{
+                        position: "absolute",
+                        top: "45%",
+                        right: "30px",
+                        transform: "translateY(-50%)",
+                        cursor: "pointer",
+                        fontSize: "18px",
+                      }}
+                    >
+                      {showPassword ? <IoIosEye /> : <IoMdEyeOff />}
+                    </span>
+                  )}
+                  {/* 비밀번호 초기화 (입력값 있을 때만) */}
+                  {password && (
+                    <span
+                      onClick={() => setPassword("")}
                       style={{
                         position: "absolute",
                         top: "45%",
@@ -143,60 +224,7 @@ export function MemberLogin() {
                     </span>
                   )}
                 </div>
-              </FormGroup>
-            </div>
-            {/* 패스워드 */}
-            <FormGroup className="mb-3" controlId="password">
-              <FormLabel>비밀번호</FormLabel>
-              <div style={{ position: "relative" }}>
-                <FormControl
-                  autoComplete="off"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setErrors((prev) => ({ ...prev, password: null }));
-                  }}
-                  style={{ paddingRight: "60px" }}
-                  className={errors.password ? "is-invalid" : ""}
-                />
-                {errors.password && (
-                  <div className="invalid-feedback">{errors.password}</div>
-                )}
-
-                {/* 👁 비밀번호 보기 토글 */}
-                {password && (
-                  <span
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    style={{
-                      position: "absolute",
-                      top: "45%",
-                      right: "30px",
-                      transform: "translateY(-50%)",
-                      cursor: "pointer",
-                      fontSize: "18px",
-                    }}
-                  >
-                    {showPassword ? <IoIosEye /> : <IoMdEyeOff />}
-                  </span>
-                )}
-                {/* 비밀번호 초기화 (입력값 있을 때만) */}
-                {password && (
-                  <span
-                    onClick={() => setPassword("")}
-                    style={{
-                      position: "absolute",
-                      top: "45%",
-                      right: "10px",
-                      transform: "translateY(-50%)",
-                      cursor: "pointer",
-                      fontSize: "15px",
-                    }}
-                  >
-                    <FaRegTimesCircle />
-                  </span>
-                )}
-              </div>
+              </Col>
             </FormGroup>
             {/* 아이디 저장 체크박스 추가 (로그인 버튼 위) */}
             <div className="mb-2">
