@@ -59,6 +59,8 @@ import { FullWidthLayout } from "./common/FullWidthLayout.jsx";
 import { ProtectedRoute } from "./common/ProtectedRoute.jsx";
 import { ComingSoon } from "./ComingSoon.jsx";
 import { TrackingDetail } from "./feature/delivery/TrackingDetail.jsx";
+import { PaymentSuccess } from "./feature/order/PaymentSuccess.jsx";
+import { PaymentFail } from "./feature/order/PaymentFail.jsx";
 
 function App() {
   return (
@@ -104,6 +106,11 @@ function App() {
             <Route element={<ProtectedRoute />}>
               {/* 배송조회 TEST */}
               <Route path="testTracking" element={<TrackingDetail />} />
+              {/* 카카오페이 API */}
+              <Route path="payment/success" element={<PaymentSuccess />} />
+              <Route path="payment/fail" element={<PaymentFail />} />
+              <Route path="payment/cancel" element={<ComingSoon />} />
+
               {/* 회원목록(관리자) */}
               <Route path="member/list" element={<MemberList />} />
               {/* 회원상세(관리자) */}
