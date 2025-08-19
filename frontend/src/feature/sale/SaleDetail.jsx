@@ -279,7 +279,7 @@ export function SaleDetail() {
                     {/* 액션 버튼들 */}
                     <div className="d-flex flex-wrap gap-2 mb-2">
                       <button
-                        className="btn btn-outline-success fw-bold px-4"
+                        className="btn btn-outline-success fw-bold px-7"
                         style={{
                           borderRadius: "10px",
                           padding: "12px 24px",
