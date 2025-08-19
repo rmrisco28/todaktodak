@@ -78,7 +78,7 @@ export function OrderDetail() {
 
   function handleSaveButtonClick() {
     setIsProcessing(true);
-    // console.log(product);
+
     axios
       .putForm(`/api/order/modify/${seq}`, {
         state: order.state,
@@ -101,9 +101,9 @@ export function OrderDetail() {
         }
       })
       .finally(() => {
-        console.log("always");
         setModalShow(false);
         setIsProcessing(false);
+        navigate(`/order/admin/list`);
       });
   }
 
