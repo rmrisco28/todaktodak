@@ -105,7 +105,7 @@ export function OrderAdminList() {
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
               />
-              <Button type="submit">
+              <Button type="submit" className="mb-0">
                 <BiSearchAlt2 />
               </Button>
             </InputGroup>
