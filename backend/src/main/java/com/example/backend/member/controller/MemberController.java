@@ -145,10 +145,10 @@ public class MemberController {
     public ResponseEntity<?> MemberDelete(
             @PathVariable Integer seq,
             @RequestBody PasswordCheckDto dto,
-            @AuthenticationPrincipal Jwt jwt) {
+            Authentication authentication) {
+        String adminId = authentication.getName();
 
         try {
-            String adminId = jwt.getClaim("adminId");
             memberService.updateDelYn(seq, adminId, dto.getPassword());
         } catch (Exception e) {
             e.printStackTrace();

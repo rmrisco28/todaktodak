@@ -19,6 +19,7 @@ export function MemberDetail() {
   const [params] = useSearchParams();
   const [modalShow, setModalShow] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -44,6 +45,11 @@ export function MemberDetail() {
 
   // 삭제 버튼 클릭
   function handleDeleteButtonClick() {
+    if (!adminPassword) {
+      setError("비밀번호를 입력해주세요.");
+      return;
+    }
+
     axios
       .put(`/api/member/${params.get("seq")}/delete`, {
         password: adminPassword,
@@ -54,7 +60,10 @@ export function MemberDetail() {
         if (message) {
           toast(message.text, { type: message.type, position: "top-center" });
         }
-        navigate("list");
+        setModalShow(false);
+        setAdminPassword("");
+        setError("");
+        handleRedirectToList();
       })
       .catch((err) => {
         console.log(err);
@@ -328,7 +337,12 @@ export function MemberDetail() {
       </Col>
 
       {/* 회원 삭제 확인 모달 */}
-      <Modal show={modalShow} onHide={() => setModalShow(false)}>
+      <Modal
+        show={modalShow}
+        onHide={() => {
+          setModalShow(false);
+        }}
+      >
         <Modal.Header closeButton>
           <Modal.Title>회원 삭제 확인</Modal.Title>
         </Modal.Header>
@@ -339,8 +353,13 @@ export function MemberDetail() {
               type="password"
               placeholder="비밀번호"
               value={adminPassword}
-              onChange={(e) => setAdminPassword(e.target.value)}
+              onChange={(e) => {
+                setAdminPassword(e.target.value);
+                setError(null);
+              }}
+              className={error ? "is-invalid" : ""}
             />
+            {error && <div className="invalid-feedback">{error}</div>}
           </FormGroup>
         </Modal.Body>
         <Modal.Footer>
