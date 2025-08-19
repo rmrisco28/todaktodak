@@ -18,6 +18,9 @@ public class KakaoPayService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    @Value("${frontend.base.url}")
+    private String frontendBaseUrl;
+
     @Value("${kakaopay.api.key}")
     private String secretKey; // KakaoPay Secret key (dev)
 
@@ -30,16 +33,16 @@ public class KakaoPayService {
 
         Map<String, Object> params = new HashMap<>();
         params.put("cid", "TC0ONETIME"); // 테스트용 CID
-        params.put("partner_order_id", "1001");
+        params.put("partner_order_id", "order1234");
         params.put("partner_user_id", "user1234");
         params.put("item_name", request.getItemName());
         params.put("quantity", request.getQuantity());
         params.put("total_amount", request.getTotalAmount());
         params.put("vat_amount", 0);
         params.put("tax_free_amount", 0);
-        params.put("approval_url", "/payment/success");
-        params.put("cancel_url", "/payment/cancel");
-        params.put("fail_url", "/payment/fail");
+        params.put("approval_url", frontendBaseUrl + "/payment/success");
+        params.put("cancel_url", frontendBaseUrl + "/payment/cancel");
+        params.put("fail_url", frontendBaseUrl + "/payment/fail");
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(params, headers);
 
@@ -63,7 +66,7 @@ public class KakaoPayService {
         Map<String, Object> params = new HashMap<>();
         params.put("cid", "TC0ONETIME");
         params.put("tid", tid);
-        params.put("partner_order_id", "1001");
+        params.put("partner_order_id", "order1234");
         params.put("partner_user_id", "user1234");
         params.put("pg_token", pgToken);
 

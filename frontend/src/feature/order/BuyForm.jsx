@@ -170,7 +170,46 @@ export function BuyForm() {
 
   // 결제 버튼
   function handleSuccessButtonClick() {
-    window.open("https://payment-demo.kakaopay.com/online", "_blank");
+    // window.open("https://payment-demo.kakaopay.com/online", "_blank");
+    axios
+      .post("/api/kakaopay/ready", {
+        itemName: sale.title,
+        quantity: orderCount,
+        totalAmount: sale.salePrice * orderCount + sale.deliveryFee,
+      })
+      .then((res) => {
+        const { tid, next_redirect_pc_url } = res.data;
+
+        // ❗ 중요: tid를 다음 단계에서 사용하기 위해 localStorage에 저장합니다.
+        // 주문 정보도 함께 저장하여 결제 완료 후 DB에 저장할 때 사용합니다.
+        const orderData = {
+          tid: tid,
+          saleSaleNo: sale.saleNo,
+          recipient: recipient,
+          phone: phoneNumber,
+          post: postalCode,
+          addr: address,
+          addrDetail: addressDetail,
+          request: request,
+          totalPrice: sale.salePrice * orderCount + sale.deliveryFee,
+          deliveryFee: sale.deliveryFee,
+          totProdPrice: sale.salePrice * orderCount,
+          prodPrice: sale.salePrice,
+          orderCount: orderCount,
+          rentalPeriod: period,
+          productNo: sale.productNo,
+          memberMemberId: user.memberId,
+        };
+        localStorage.setItem("kakaoPayOrder", JSON.stringify(orderData));
+
+        // 3. 카카오페이 결제 페이지로 리다이렉트합니다.
+        window.location.href = next_redirect_pc_url;
+      })
+      .catch((err) => {
+        toast.error("결제 준비 중 오류가 발생했습니다. 다시 시도해주세요.");
+        setIsProcessing(false);
+      });
+    /*
     setIsProcessing(true);
     const totalPrice = sale.salePrice * orderCount + sale.deliveryFee;
     const totProdPrice = sale.salePrice * orderCount;
@@ -216,6 +255,8 @@ export function BuyForm() {
         console.log("finally");
         setIsProcessing(false);
       });
+
+     */
   }
 
   function handlePaymentChange() {}
