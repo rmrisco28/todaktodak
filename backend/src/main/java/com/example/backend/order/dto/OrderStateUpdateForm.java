@@ -7,6 +7,7 @@ public class OrderStateUpdateForm {
     private Integer seq;
     private String state;
     private String request;
+    private String deliveryCode;
     private String deliveryCompany;
     private String tracking;
 }

@@ -254,6 +254,7 @@ public class OrderService {
         }
         if (!(orderList.getDeliveryCompany()).equals(dto.getDeliveryCompany())) {
             // 배송업체 변경된 경우
+            orderList.setDeliveryCode(dto.getDeliveryCode());
             orderList.setDeliveryCompany(dto.getDeliveryCompany());
         }
         if (!(orderList.getTracking()).equals(dto.getTracking())) {
