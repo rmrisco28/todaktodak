@@ -51,7 +51,7 @@ export function MemberMyInfo() {
           <br />
           <hr />
         </div>
-        <ListGroup variant="flush">
+        <ListGroup variant="flush" className="text-center">
           <ListGroup.Item
             action
             onClick={() => navigate(`/member/passwordCheck`)}
