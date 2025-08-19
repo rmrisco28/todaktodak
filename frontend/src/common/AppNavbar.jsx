@@ -117,6 +117,7 @@ export function AppNavbar() {
                 </InputGroup.Text>
                 <Form.Control
                   type="text"
+                  id="navbarSearchInput"
                   placeholder="상품 검색"
                   className="max-width-200"
                   value={keyword}
