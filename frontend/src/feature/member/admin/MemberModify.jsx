@@ -108,7 +108,11 @@ export function MemberModify() {
         setMember(res.data);
         const message = res.data.message;
         if (message) {
-          toast(message.text, { type: message.type, position: "top-center" });
+          toast(message.text, {
+            type: message.type,
+            position: "top-center",
+            autoClose: 1000,
+          });
         }
         const page = params.get("page") || 1; // 추가
         navigate(`/member?seq=${params.get("seq")}&page=${page}`); // 상세 페이지 이동
@@ -117,7 +121,11 @@ export function MemberModify() {
         console.log(err);
         const message = err.response.data.message;
         if (message) {
-          toast(message.text, { type: message.type });
+          toast(message.text, {
+            type: message.type,
+            position: "top-center",
+            autoClose: 1000,
+          });
         }
       })
       .finally(() => {

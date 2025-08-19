@@ -55,11 +55,17 @@ export function ResetPassword() {
           navigate("/login");
         })
         .catch(() => {
-          toast.error("비밀번호 변경 실패", { position: "top-center" });
+          toast.error("비밀번호 변경 실패", {
+            position: "top-center",
+            autoClose: 1000,
+          });
         })
         .finally(() => {});
     } else {
-      toast.info("비밀번호 변경이 취소되었습니다.");
+      toast.info("비밀번호 변경이 취소되었습니다.", {
+        position: "top-center",
+        autoClose: 1000,
+      });
     }
   }
   return (

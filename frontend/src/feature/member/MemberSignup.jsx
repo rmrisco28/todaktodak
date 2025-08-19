@@ -129,12 +129,18 @@ export function MemberSignup() {
         purpose: "SIGNUP",
       })
       .then(() => {
-        toast.success("인증번호가 발송되었습니다.", { position: "top-center" });
+        toast.success("인증번호가 발송되었습니다.", {
+          position: "top-center",
+          autoClose: 1000,
+        });
 
         setEmailSent(true);
       })
       .catch(() => {
-        toast.error("이메일 발송에 실패했습니다.", { position: "top-center" });
+        toast.error("이메일 발송에 실패했습니다.", {
+          position: "top-center",
+          autoClose: 1000,
+        });
       })
       .finally(() => {
         setIsProcessing(false);
@@ -148,6 +154,7 @@ export function MemberSignup() {
       .then(() => {
         toast.success("이메일 인증이 완료되었습니다.", {
           position: "top-center",
+          autoClose: 1000,
         });
 
         setEmailVerified(true);
@@ -157,6 +164,7 @@ export function MemberSignup() {
       .catch(() => {
         toast.error("인증번호가 틀렸거나 만료되었습니다.", {
           position: "top-center",
+          autoClose: 1000,
         });
       });
   };

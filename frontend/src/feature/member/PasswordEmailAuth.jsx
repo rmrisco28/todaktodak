@@ -41,12 +41,18 @@ export function PasswordEmailAuth() {
     axios
       .post("/api/member/findPassword/authRequest", { memberId, email })
       .then(() => {
-        toast.success("인증번호가 발송되었습니다.", { position: "top-center" });
+        toast.success("인증번호가 발송되었습니다.", {
+          position: "top-center",
+          autoClose: 1000,
+        });
 
         setEmailSent(true);
       })
       .catch(() => {
-        toast.error("이메일 발송에 실패했습니다.", { position: "top-center" });
+        toast.error("이메일 발송에 실패했습니다.", {
+          position: "top-center",
+          autoClose: 1000,
+        });
       })
       .finally(() => {
         setIsProcessing(false);
@@ -60,6 +66,7 @@ export function PasswordEmailAuth() {
       .then(() => {
         toast.success("이메일 인증이 완료되었습니다.", {
           position: "top-center",
+          autoClose: 1000,
         });
 
         setEmailVerified(true);
@@ -67,7 +74,10 @@ export function PasswordEmailAuth() {
         setErrors((prev) => ({ ...prev, email: null }));
       })
       .catch(() => {
-        toast.error("이메일 인증 요청을 해주세요.", { position: "top-center" });
+        toast.error("이메일 인증 요청을 해주세요.", {
+          position: "top-center",
+          autoClose: 1000,
+        });
       })
       .finally(() => {});
   }

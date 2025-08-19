@@ -78,7 +78,10 @@ export function MemberLogin() {
           navigate(from, { replace: true });
         });
 
-        toast.success("로그인 되었습니다.", { position: "top-center" });
+        toast.success("로그인 되었습니다.", {
+          position: "top-center",
+          autoClose: 1000,
+        });
         // 중복 호출
         // navigate("/");
       })

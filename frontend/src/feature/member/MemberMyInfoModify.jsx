@@ -95,7 +95,10 @@ export function MemberMyInfoModify() {
       .then((res) => {
         console.log("성공");
         setMember(res.data);
-        toast.success("변경이 완료되었습니다.", { position: "top-center" });
+        toast.success("변경이 완료되었습니다.", {
+          position: "top-center",
+          autoClose: 1000,
+        });
 
         navigate(`/member/myinfo`);
       })
@@ -182,11 +185,19 @@ export function MemberMyInfoModify() {
       })
       .then((res) => {
         console.log(res);
-        toast("비밀번호가 변경되었습니다.", { type: "success" });
+        toast("비밀번호가 변경되었습니다.", {
+          type: "success",
+          position: "top-center",
+          autoClose: 1000,
+        });
       })
       .catch((err) => {
         console.log(err);
-        toast("현재 비밀번호가 일치하지않습니다.", { type: "error" });
+        toast("현재 비밀번호가 일치하지않습니다.", {
+          type: "error",
+          position: "top-center",
+          autoClose: 1000,
+        });
       })
       .finally(() => {
         setCurrentPassword("");

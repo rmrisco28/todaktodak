@@ -50,7 +50,11 @@ export function MemberWithdrawPage() {
       .then((res) => {
         console.log("ok");
         const message = res.data.message;
-        toast(message.text, { type: message.type, position: "top-center" });
+        toast(message.text, {
+          type: message.type,
+          position: "top-center",
+          autoClose: 1000,
+        });
         logout();
         navigate("/");
       })
@@ -58,7 +62,11 @@ export function MemberWithdrawPage() {
         console.log(err);
         const message = err.response.data.message;
         if (message) {
-          toast(message.text, { type: message.type, position: "top-center" });
+          toast(message.text, {
+            type: message.type,
+            position: "top-center",
+            autoClose: 1000,
+          });
         }
       })
       .finally(() => {

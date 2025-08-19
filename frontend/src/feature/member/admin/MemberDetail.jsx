@@ -58,7 +58,11 @@ export function MemberDetail() {
         console.log("실행완료");
         const message = res.data.message;
         if (message) {
-          toast(message.text, { type: message.type, position: "top-center" });
+          toast(message.text, {
+            type: message.type,
+            position: "top-center",
+            autoClose: 1000,
+          });
         }
         setModalShow(false);
         setAdminPassword("");
@@ -67,7 +71,11 @@ export function MemberDetail() {
       .catch((err) => {
         console.log(err);
         const message = err.response.data.message;
-        toast(message.text, { type: message.type });
+        toast(message.text, {
+          type: message.type,
+          position: "top-center",
+          autoClose: 1000,
+        });
         setAdminPassword("");
       })
       .finally(() => {
