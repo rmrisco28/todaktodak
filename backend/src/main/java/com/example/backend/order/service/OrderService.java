@@ -245,7 +245,7 @@ public class OrderService {
             String state = dto.getState();
             // 후처리
             processingByState(orderList, state);
-            String prevState = orderList.getPrevState();
+            String prevState = orderList.getPrevState() == null ? "" : orderList.getPrevState();
             if (prevState.isEmpty()) {
                 prevState = orderList.getState();
             } else {
