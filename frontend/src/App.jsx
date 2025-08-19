@@ -58,6 +58,7 @@ import { RentalListAdmin } from "./feature/rental/RentalListAdmin.jsx";
 import { FullWidthLayout } from "./common/FullWidthLayout.jsx";
 import { ProtectedRoute } from "./common/ProtectedRoute.jsx";
 import { ComingSoon } from "./ComingSoon.jsx";
+import { TrackingDetail } from "./feature/delivery/TrackingDetail.jsx";
 
 function App() {
   return (
@@ -101,6 +102,8 @@ function App() {
             --- 로그인 사용자만 접근 가능한 페이지 ---
           */}
             <Route element={<ProtectedRoute />}>
+              {/* 배송조회 TEST */}
+              <Route path="testTracking" element={<TrackingDetail />} />
               {/* 회원목록(관리자) */}
               <Route path="member/list" element={<MemberList />} />
               {/* 회원상세(관리자) */}
