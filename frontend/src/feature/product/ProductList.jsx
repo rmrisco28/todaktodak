@@ -101,7 +101,7 @@ export function ProductList() {
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
               />
-              <Button type="submit">
+              <Button type="submit " className="mb-0 px-3">
                 <BiSearchAlt2 />
               </Button>
             </InputGroup>

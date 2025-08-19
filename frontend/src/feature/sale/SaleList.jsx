@@ -158,13 +158,18 @@ export function SaleList() {
               <div className="col-12 col-md-8 col-lg-6">
                 <Form onSubmit={handleSearchFormSubmit}>
                   <div
-                    className="input-group shadow-sm"
-                    style={{ borderRadius: "50px", overflow: "hidden" }}
+                    className="btn-group shadow-sm"
+                    style={{
+                      borderRadius: "50px",
+                      overflow: "hidden",
+                      outline: "none",
+                      width: "100%",
+                    }}
                   >
                     <input
                       type="text"
-                      className="form-control border-0 px-4 py-3"
-                      placeholder="원하는 상품을 검색해보세요..."
+                      className="form-control border-0  px-4 py-3 pe-5 "
+                      placeholder="원하는 상품을 검색해보세요."
                       value={keyword}
                       onChange={(e) => setKeyword(e.target.value)}
                       style={{
@@ -172,7 +177,6 @@ export function SaleList() {
                         background: "#f8f9fa",
                       }}
                     />
-
                     <button
                       type="submit"
                       className="btn btn-dark  mb-0 px-3"

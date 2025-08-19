@@ -34,6 +34,7 @@ export function SaleDetail() {
       .get(`/api/sale/detail/${seq}`)
       .then((res) => {
         setSale(res.data);
+        setMainThumbnail(res.data.thumbnails[0].path);
       })
       .catch((err) => {
         toast("해당 상품이 존재하지 않습니다.", { type: "warning" });
@@ -66,7 +67,9 @@ export function SaleDetail() {
       });
   }
 
-  const handleThumbnailClick = (path) => setMainThumbnail(path);
+  const handleThumbnailClick = (path) => {
+    setMainThumbnail(path);
+  };
   const handleOrderCountChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setOrderCount(isNaN(value) || value < 1 ? 1 : value);
@@ -103,7 +106,7 @@ export function SaleDetail() {
                       }}
                     >
                       <Image
-                        src={sale.thumbnails[0]?.path}
+                        src={mainThumbnail}
                         className="w-100"
                         style={{
                           height: "400px",
@@ -326,7 +329,7 @@ export function SaleDetail() {
                         style={{
                           borderRadius: "10px",
                           padding: "10px 16px",
-                          fontSize: "0.9rem",
+                          fontSize: "0.95rem",
                           borderWidth: "2px",
                         }}
                         onClick={() => navigate(`/rental/list`)}
@@ -434,25 +437,6 @@ export function SaleDetail() {
           </Col>
         </Row>
       </div>
-
-      {/* 본문 이미지 */}
-      {sale.contentImages.length > 0 && (
-        <Row className="mt-4">
-          <Col>
-            <h5>상세 이미지</h5>
-            <div className="d-flex flex-column gap-3">
-              {sale.contentImages.map((image) => (
-                <Image
-                  key={image.name}
-                  src={image.path}
-                  fluid
-                  className="border"
-                />
-              ))}
-            </div>
-          </Col>
-        </Row>
-      )}
 
       {/* 삭제 모달 */}
       <Modal show={modalShow} onHide={() => setModalShow(false)}>

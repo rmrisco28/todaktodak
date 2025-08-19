@@ -14,6 +14,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+import "../../css/buy_form.css";
 
 axios.defaults.withCredentials = true; // ★ 세션 쿠키 전송
 
@@ -158,6 +159,7 @@ export function BuyForm() {
   let validate = true;
   if (
     phoneNumber.trim() === "" || // todo gg 토큰으로 번호받기3 토큰으로 전화 받으면 나중에 삭제
+    phoneNumber.trim().length < 12 ||
     postalCode.trim() === "" ||
     address.trim() === "" ||
     addressDetail.trim() === "" ||
@@ -519,68 +521,111 @@ export function BuyForm() {
 
                     {/* 결제 수단 섹션 */}
                     <div className="mb-4">
-                      <h5
-                        className="fw-semibold mb-3"
-                        style={{ color: "#495057" }}
-                      >
-                        결제 수단
-                      </h5>
-                      <div>
-                        <div
-                          className="d-flex gap-3 "
-                          style={{
-                            borderRadius: "10px",
-                            padding: "12px 16px",
-                            fontSize: "0.95rem",
-                            backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
-                            height: "80px",
-                          }}
-                        >
-                          <div>
-                            <label>
+                      <h5 className="payment-section-title">결제 수단</h5>
+                      <div className="payment-container">
+                        <div className="row g-3">
+                          {/* 카카오페이 */}
+                          <div className="col-6">
+                            <label
+                              className={`payment-method-label ${payment === "kakaoPay" ? "selected" : ""}`}
+                            >
                               <input
                                 type="radio"
                                 name="paymentMethod"
                                 value="kakaoPay"
+                                checked={payment === "kakaoPay"}
                                 onChange={(e) => setPayment(e.target.value)}
+                                className="payment-method-radio"
                               />
-                              카카오페이
+                              <span
+                                className={`payment-method-text ${payment === "kakaoPay" ? "selected" : ""}`}
+                              >
+                                카카오페이
+                              </span>
                             </label>
                           </div>
-                          <div>
-                            <label>
+
+                          {/* 네이버페이 */}
+                          <div className="col-6">
+                            <label
+                              className={`payment-method-label ${payment === "naverPay" ? "selected" : ""}`}
+                            >
                               <input
                                 type="radio"
                                 name="paymentMethod"
                                 value="naverPay"
+                                checked={payment === "naverPay"}
                                 onChange={(e) => setPayment(e.target.value)}
+                                className="payment-method-radio"
                               />
-                              네이버페이
+                              <span
+                                className={`payment-method-text ${payment === "naverPay" ? "selected" : ""}`}
+                              >
+                                네이버페이
+                              </span>
                             </label>
                           </div>
-                          <div>
-                            <label>
+
+                          {/* 일반결제 */}
+                          <div className="col-6">
+                            <label
+                              className={`payment-method-label ${payment === "generalPayment" ? "selected" : ""}`}
+                            >
                               <input
                                 type="radio"
                                 name="paymentMethod"
                                 value="generalPayment"
+                                checked={payment === "generalPayment"}
                                 onChange={(e) => setPayment(e.target.value)}
+                                className="payment-method-radio"
                               />
-                              일반결제
+                              <span
+                                className={`payment-method-text ${payment === "generalPayment" ? "selected" : ""}`}
+                              >
+                                일반결제
+                              </span>
                             </label>
                           </div>
-                          <div>
-                            <label>
+
+                          {/* 계좌이체 */}
+                          <div className="col-6">
+                            <label
+                              className={`payment-method-label ${payment === "accountTransfer" ? "selected" : ""}`}
+                            >
                               <input
                                 type="radio"
                                 name="paymentMethod"
                                 value="accountTransfer"
+                                checked={payment === "accountTransfer"}
                                 onChange={(e) => setPayment(e.target.value)}
+                                className="payment-method-radio"
                               />
-                              계좌이체
+                              <span
+                                className={`payment-method-text ${payment === "accountTransfer" ? "selected" : ""}`}
+                              >
+                                계좌이체
+                              </span>
                             </label>
                           </div>
                         </div>
+
+                        {/* 선택된 결제 수단 안내 */}
+                        {payment && (
+                          <div className="payment-confirmation">
+                            <div className="d-flex align-items-center">
+                              <i className="fas fa-check-circle payment-confirmation-icon"></i>
+                              <small className="payment-confirmation-text">
+                                선택된 결제 수단:{" "}
+                                <span className="payment-confirmation-method">
+                                  {payment === "kakaoPay" && "카카오페이"}
+                                  {payment === "naverPay" && "네이버페이"}
+                                  {payment === "generalPayment" && "일반결제"}
+                                  {payment === "accountTransfer" && "계좌이체"}
+                                </span>
+                              </small>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

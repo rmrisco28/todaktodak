@@ -1,0 +1,97 @@
+/* 결제 수단 섹션 스타일 */
+.payment-section-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #495057;
+}
+
+.payment-container {
+    padding: 1.5rem;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+}
+
+.payment-method-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    height: 100%;
+    cursor: pointer;
+    border-radius: 12px;
+    border: 2px solid #dee2e6;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+    min-height: 80px;
+    box-shadow: none;
+}
+
+.payment-method-label:hover {
+    border-color: #6c757d;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.payment-method-label.selected {
+    border: 3px solid #495057;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(73, 80, 87, 0.15);
+}
+
+.payment-method-label.selected:hover {
+    border-color: #495057;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(73, 80, 87, 0.15);
+}
+
+.payment-method-radio {
+    margin-right: 0.75rem;
+    accent-color: #495057;
+    transform: scale(1.2);
+}
+
+.payment-method-text {
+    font-weight: 600;
+    text-align: center;
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.payment-method-text.selected {
+    color: #495057;
+}
+
+.payment-confirmation {
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background-color: #e8f4f8;
+    border: 1px solid #bee5eb;
+}
+
+.payment-confirmation-icon {
+    color: #495057;
+    margin-right: 0.5rem;
+}
+
+.payment-confirmation-text {
+    font-weight: 500;
+    color: #495057;
+}
+
+.payment-confirmation-method {
+    font-weight: bold;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 576px) {
+    .payment-method-label {
+        min-height: 70px;
+        padding: 1rem;
+    }
+
+    .payment-method-text {
+        font-size: 0.9rem;
+    }
+}
