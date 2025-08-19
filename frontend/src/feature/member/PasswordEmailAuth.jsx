@@ -6,7 +6,6 @@ import {
   FormGroup,
   FormLabel,
   FormText,
-  InputGroup,
   Row,
 } from "react-bootstrap";
 import { useNavigate } from "react-router";
@@ -104,7 +103,7 @@ export function PasswordEmailAuth() {
         style={{ minHeight: "60vh" }}
       >
         <Col xs={12} sm="auto" style={{ width: "550px" }}>
-          <section className="bg-gray-200 px-3 px-5 py-4 rounded mb-3">
+          <section className="bg-gray-100 px-3 px-5 py-4 rounded mb-3">
             <h3 className="mb-4 mt-2 text-center">이메일 인증</h3>
             {/* 아이디 */}
             <FormGroup className="mt-3">

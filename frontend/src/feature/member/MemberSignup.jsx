@@ -585,15 +585,15 @@ export function MemberSignup() {
                       autoComplete="off"
                       placeholder="인증번호 입력"
                       value={emailCode}
+                      onChange={(e) => setEmailCode(e.target.value)}
                       style={{
+                        height: "40px",
                         border: "none",
                         boxShadow: "none",
                         borderRadius: 0,
                         backgroundColor: "transparent",
                         borderBottom: "2px solid black",
                       }}
-                      onChange={(e) => setEmailCode(e.target.value)}
-                      style={{ height: "40px" }}
                     />
                   </Col>
                   <Col xs={12} sm={4}>

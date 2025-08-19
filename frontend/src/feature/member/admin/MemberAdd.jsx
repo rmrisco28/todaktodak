@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import { toast } from "react-toastify";
 
 export function MemberAdd() {
   const [memberId, setMemberId] = useState("");
@@ -127,7 +126,7 @@ export function MemberAdd() {
     <Row className="d-flex justify-content-center">
       <Col md="auto">
         <h3 className="mb-4 text-center">회원 등록</h3>
-        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded mb-3">
+        <section className="bg-gray-100 px-3 px-sm-5 py-4 rounded mb-3">
           {/* 아이디 */}
           <div>
             <FormGroup className="mb-3" controlId="memberId">
@@ -401,9 +400,9 @@ export function MemberAdd() {
         {/* 회원등록 버튼 */}
         <div className="mb-4 d-flex justify-content-end gap-2">
           <Button variant="outline-primary" onClick={handleSaveButtonClick}>
-            회원 등록
+            등록
           </Button>
-          <Button onClick={() => navigate(-1)} variant="outline-secondary">
+          <Button onClick={() => navigate(-1)} variant="outline-dark">
             취소
           </Button>
         </div>

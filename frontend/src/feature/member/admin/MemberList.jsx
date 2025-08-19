@@ -14,6 +14,7 @@ import {
 } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router";
 import { IoSearch } from "react-icons/io5";
+import { FaUsers } from "react-icons/fa";
 
 export function MemberList() {
   const [memberList, setMemberList] = useState(null);
@@ -68,11 +69,12 @@ export function MemberList() {
       <Row className="align-items-center mb-4">
         <Col>
           <h2
-            style={{ cursor: "pointer", width: "130px" }}
+            style={{ cursor: "pointer", width: "180px" }}
             onMouseEnter={(e) => (e.target.style.color = "#007bff")}
             onMouseLeave={(e) => (e.target.style.color = "#000")}
             onClick={() => navigate("/member/list")}
           >
+            <FaUsers className="me-2" />
             회원목록
           </h2>
         </Col>
@@ -99,7 +101,7 @@ export function MemberList() {
       <Row>
         <Col>
           {memberList.length > 0 ? (
-            <Table hover={true} striped={true}>
+            <Table hover={true} striped={true} className="text-center">
               <thead>
                 <tr>
                   <th>시퀀스</th>
@@ -126,20 +128,24 @@ export function MemberList() {
                     <td>{member.name}</td>
                     <td>{member.insertDttm?.replace("T", " ")}</td>
                     <td>
-                      <FormCheck
-                        type="checkbox"
-                        checked={member.useYn}
-                        disabled
-                        label={"사용"}
-                      />
+                      <FormCheck inline>
+                        <FormCheck.Input
+                          type="checkbox"
+                          checked={member.useYn}
+                          disabled
+                        />
+                        <FormCheck.Label className="m-0">사용</FormCheck.Label>
+                      </FormCheck>
                     </td>
                     <td>
-                      <FormCheck
-                        type="checkbox"
-                        checked={member.delYn}
-                        disabled
-                        label={"삭제"}
-                      />
+                      <FormCheck inline>
+                        <FormCheck.Input
+                          type="checkbox"
+                          checked={member.delYn}
+                          disabled
+                        />
+                        <FormCheck.Label className="m-0">삭제</FormCheck.Label>
+                      </FormCheck>
                     </td>
                   </tr>
                 ))}

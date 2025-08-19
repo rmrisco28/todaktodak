@@ -3,15 +3,12 @@ import {
   Col,
   Form,
   FormControl,
-  FormGroup,
   FormLabel,
   FormText,
-  Modal,
   Row,
-  Spinner,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
@@ -20,12 +17,9 @@ export function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
 
   const location = useLocation();
   const { memberId, email } = location.state || {};
-
-  const [modalShow, setModalShow] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -49,7 +43,7 @@ export function ResetPassword() {
       return;
     }
 
-    if (window.confirm("비밀번호를 재설정하시겠습니까?")) {
+    if (window.confirm("비밀번호를 변경하시겠습니까?")) {
       axios
         .put(`/api/member/resetPassword`, {
           memberId,
@@ -81,7 +75,7 @@ export function ResetPassword() {
         style={{ minHeight: "60vh" }}
       >
         <Col xs={12} sm="auto" style={{ width: "500px" }}>
-          <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded mb-3">
+          <section className="bg-gray-100 px-3 px-sm-5 py-4 rounded mb-3">
             <h3 className="mb-4 mt-2 text-center">비밀번호 재설정</h3>
             <Form>
               {/* 비밀번호 입력 + 비밀번호 확인 입력을 가로로 정렬 */}
@@ -150,11 +144,14 @@ export function ResetPassword() {
               className="d-flex mt-4"
               style={{ gap: "10px", justifyContent: "center" }}
             >
-              <Button variant="secondary" onClick={() => navigate("/login")}>
-                취소
-              </Button>
-              <Button variant="primary" onClick={handleResetButtonClick}>
+              <Button
+                variant="outline-primary"
+                onClick={handleResetButtonClick}
+              >
                 변경
+              </Button>
+              <Button variant="outline-dark" onClick={() => navigate("/login")}>
+                취소
               </Button>
             </div>
           </section>

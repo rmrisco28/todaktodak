@@ -72,10 +72,6 @@ export function MemberModify() {
   function handleModifyButtonClick() {
     const newErrors = {};
 
-    if (!validatePhone(member.phone)) {
-      newErrors.phone = "전화번호 형식이 올바르지 않습니다.";
-    }
-
     // 비밀번호 유효성 검사
     if (newPassword.trim() && !validatePassword(newPassword)) {
       newErrors.newPassword =
@@ -163,7 +159,7 @@ export function MemberModify() {
     <Row className="justify-content-center">
       <Col xs={10} md={8} lg={6}>
         <h3 className="mb-4 text-center">회원 정보 수정</h3>
-        <section className="bg-gray-200 px-3 px-sm-5 py-4 rounded-4 mb-3">
+        <section className="bg-gray-100 px-3 px-sm-5 py-4 rounded-4 mb-3">
           {/* 고객 번호 */}
           <div>
             <FormGroup as={Row} controlId="memberNo" className="mb-4">
@@ -394,12 +390,10 @@ export function MemberModify() {
 
                     // 상태 업데이트
                     setMember({ ...member, phone: value });
-                    if (value.trim() === "") {
-                      setErrors((prev) => ({ ...prev, phone: null }));
-                    } else if (!validatePhone(value)) {
+                    if (!validatePhone(value)) {
                       setErrors((prev) => ({
                         ...prev,
-                        phone: "핸드폰 번호 형식이 올바르지 않습니다.",
+                        phone: "연락처 형식이 올바르지 않습니다.",
                       }));
                     } else {
                       setErrors((prev) => ({ ...prev, phone: null }));
@@ -521,11 +515,11 @@ export function MemberModify() {
         </Modal.Header>
         <Modal.Body>이대로 수정하시겠습니까?</Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
           <Button variant="outline-primary" onClick={handleModifyButtonClick}>
             수정
+          </Button>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
           </Button>
         </Modal.Footer>
       </Modal>

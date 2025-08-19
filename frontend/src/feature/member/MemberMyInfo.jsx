@@ -1,7 +1,6 @@
 import {
   Button,
   Col,
-  Container,
   Form,
   FormControl,
   FormGroup,
@@ -85,10 +84,6 @@ export function MemberMyInfo() {
           <hr />
         </div>
         <ListGroup variant="flush">
-          <ListGroup.Item action className="fs-5" style={{ border: "none" }}>
-            내 정보
-          </ListGroup.Item>
-
           <ListGroup.Item
             action
             onClick={() => navigate(`/member/myinfo/modify`)}
@@ -97,6 +92,7 @@ export function MemberMyInfo() {
           >
             정보 변경
           </ListGroup.Item>
+
           <ListGroup.Item
             action
             onClick={() => setModalShow(true)}
@@ -130,7 +126,6 @@ export function MemberMyInfo() {
                     backgroundColor: "transparent",
                   }}
                   value={member.memberId}
-                  readOnly
                 />
               </Col>
             </FormGroup>
@@ -148,7 +143,7 @@ export function MemberMyInfo() {
                     backgroundColor: "transparent",
                   }}
                   value={member.name}
-                  readOnly
+                  disabled
                 />
               </Col>
             </FormGroup>
@@ -166,7 +161,7 @@ export function MemberMyInfo() {
                     backgroundColor: "transparent",
                   }}
                   value={member.email}
-                  readOnly
+                  disabled
                 />
               </Col>
             </FormGroup>
@@ -184,7 +179,7 @@ export function MemberMyInfo() {
                     backgroundColor: "transparent",
                   }}
                   value={member.birthDate}
-                  readOnly
+                  disabled
                 />
               </Col>
             </FormGroup>
@@ -202,7 +197,7 @@ export function MemberMyInfo() {
                     backgroundColor: "transparent",
                   }}
                   value={member.phone}
-                  readOnly
+                  disabled
                 />
               </Col>
             </FormGroup>
@@ -213,7 +208,14 @@ export function MemberMyInfo() {
                 우편번호
               </FormLabel>
               <Col xs={3} sm={3} md={3} lg={2}>
-                <FormControl value={member.postCode} readOnly />
+                <FormControl
+                  style={{
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.postCode}
+                  disabled
+                />
               </Col>
             </FormGroup>
 
@@ -223,7 +225,14 @@ export function MemberMyInfo() {
                 주소
               </FormLabel>
               <Col sm={7}>
-                <FormControl value={member.addr} readOnly />
+                <FormControl
+                  style={{
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.addr}
+                  disabled
+                />
               </Col>
             </FormGroup>
 
@@ -231,7 +240,14 @@ export function MemberMyInfo() {
             <FormGroup as={Row}>
               <FormLabel column sm={2}></FormLabel>
               <Col sm={7}>
-                <FormControl value={member.addrDetail || ""} readOnly />
+                <FormControl
+                  style={{
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
+                  }}
+                  value={member.addrDetail || ""}
+                  disabled
+                />
               </Col>
             </FormGroup>
           </Form>
@@ -245,11 +261,11 @@ export function MemberMyInfo() {
         </Modal.Header>
         <Modal.Body>회원탈퇴를 하시겠습니까?</Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
           <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
             탈퇴
+          </Button>
+          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+            취소
           </Button>
         </Modal.Footer>
       </Modal>
