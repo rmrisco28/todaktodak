@@ -19,7 +19,7 @@ export function MemberDetail() {
   const [params] = useSearchParams();
   const [modalShow, setModalShow] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ export function MemberDetail() {
 
   // 삭제 버튼 클릭
   function handleDeleteButtonClick() {
-    if (!adminPassword) {
+    if (!adminPassword.trim()) {
       setError("비밀번호를 입력해주세요.");
       return;
     }
@@ -62,13 +62,13 @@ export function MemberDetail() {
         }
         setModalShow(false);
         setAdminPassword("");
-        setError("");
         handleRedirectToList();
       })
       .catch((err) => {
         console.log(err);
         const message = err.response.data.message;
         toast(message.text, { type: message.type });
+        setAdminPassword("");
       })
       .finally(() => {
         console.log("always");
