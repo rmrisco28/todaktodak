@@ -265,26 +265,51 @@ export function OrderList() {
                           }}
                         >
                           <div className="row align-items-center">
+                            {/* 첫줄*/}
                             <div className="col-md-8 mb-2">
+                              {/* 제목 */}
                               <h5
                                 className="fw-semibold mb-2"
                                 style={{ color: "#4a5568" }}
                               >
                                 {order.saleTitle}
                               </h5>
+                              {/* 둘째 줄*/}
                               <div className="d-flex align-items-center gap-3 flex-wrap">
                                 <span></span>
                                 <span
-                                  className="text-muted"
+                                  className="text-muted mb-3"
                                   style={{ fontSize: "0.9rem" }}
                                 >
                                   주문번호: {order.orderNo}
                                 </span>
                                 <span
-                                  className="text-muted"
+                                  className="text-muted mb-3"
                                   style={{ fontSize: "0.9rem" }}
                                 >
                                   주문자: {order.name}
+                                </span>
+                              </div>
+                              <div>
+                                <span
+                                  style={{ fontSize: "0.875rem" }}
+                                  className="px-3 "
+                                >
+                                  주문상태:
+                                </span>
+                                <span
+                                  className="px-3 py-1"
+                                  style={{
+                                    backgroundColor: "#48bb78",
+                                    color: "white",
+                                    borderRadius: "8px",
+                                    fontSize: "0.8rem",
+                                  }}
+                                >
+                                  {stateList.map(
+                                    (item) =>
+                                      item.code === order.state && item.kor,
+                                  )}
                                 </span>
                               </div>
                             </div>
@@ -296,45 +321,32 @@ export function OrderList() {
                                 {formatPrice(order.totalPrice)}
                               </h5>
                               <p
-                                className="text-muted mb-0"
+                                className="text-muted mb-3"
                                 style={{ fontSize: "0.875rem" }}
                               >
                                 주문일: {order.insertDttm}
                               </p>
-                            </div>
-                            <div>
-                              <span
-                                style={{ fontSize: "0.875rem" }}
-                                className="px-3 "
-                              >
-                                주문상태:
-                              </span>
-                              <span
-                                className="px-3 py-1"
-                                style={{
-                                  backgroundColor: "#48bb78",
-                                  color: "white",
-                                  borderRadius: "8px",
-                                  fontSize: "0.8rem",
-                                }}
-                              >
-                                {stateList.map(
-                                  (item) =>
-                                    item.code === order.state && item.kor,
-                                )}
-                              </span>
-                              <span>
+                              <span className="me-3">
                                 {(order.state.split(".")[0] === "D" ||
                                   order.state.split(".")[0] === "RV") && (
-                                  <Button
-                                    variant="outline-primary"
-                                    size="sm"
+                                  <button
+                                    className="btn btn-outline-dark px-4"
+                                    style={{
+                                      borderWidth: "2px",
+                                      fontSize: "0.8rem",
+                                      borderRadius: "10px",
+                                      height: "40px",
+                                    }}
                                     onClick={(e) =>
-                                      openTracking(e, order.deliveryCode, order.tracking)
+                                      openTracking(
+                                        e,
+                                        order.deliveryCode,
+                                        order.tracking,
+                                      )
                                     }
                                   >
                                     배송조회
-                                  </Button>
+                                  </button>
                                 )}
                               </span>
                             </div>
