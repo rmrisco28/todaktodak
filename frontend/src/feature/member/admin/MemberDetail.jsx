@@ -18,6 +18,7 @@ export function MemberDetail() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
   const [modalShow, setModalShow] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
 
   const navigate = useNavigate();
 
@@ -44,7 +45,9 @@ export function MemberDetail() {
   // 삭제 버튼 클릭
   function handleDeleteButtonClick() {
     axios
-      .put(`/api/member/${params.get("seq")}/delete`)
+      .put(`/api/member/${params.get("seq")}/delete`, {
+        password: adminPassword,
+      })
       .then((res) => {
         console.log("실행완료");
         const message = res.data.message;
@@ -329,7 +332,17 @@ export function MemberDetail() {
         <Modal.Header closeButton>
           <Modal.Title>회원 삭제 확인</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{member.memberId} 회원을 삭제하시겠습니까?</Modal.Body>
+        <Modal.Body>
+          <FormGroup controlId="adminPassword">
+            <FormLabel>비밀번호 확인</FormLabel>
+            <FormControl
+              type="password"
+              placeholder="비밀번호"
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+            />
+          </FormGroup>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
             삭제

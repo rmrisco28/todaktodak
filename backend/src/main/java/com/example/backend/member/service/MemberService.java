@@ -302,7 +302,17 @@ public class MemberService {
     }
 
     // 회원 삭제 시 delYn 변경(삭제 데이터 보관)
-    public void updateDelYn(Integer seq) {
+    public void updateDelYn(Integer seq, String adminId, String password) {
+        // 1. 로그인한 계정 조회
+        Member admin = memberRepository.findByMemberId(adminId)
+                .orElseThrow(() -> new RuntimeException("관리자 정보를 찾을 수 없습니다."));
+
+        // 2. 비밀번호 검증
+        if (!passwordEncoder.matches(password, admin.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3. 회원 삭제 처리
         Member dbData = memberRepository.findById(seq).get();
         // del_yn = true
         dbData.setDelYn(true);

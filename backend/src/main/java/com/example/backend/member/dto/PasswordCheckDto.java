@@ -3,6 +3,6 @@ package com.example.backend.member.dto;
 import lombok.Data;
 
 @Data
-public class PasswordCheck {
+public class PasswordCheckDto {
     private String password;
 }

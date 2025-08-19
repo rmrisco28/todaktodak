@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -140,9 +142,14 @@ public class MemberController {
     // 회원 삭제(관리자)
     @PutMapping("{seq}/delete")
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
-    public ResponseEntity<?> MemberDelete(@PathVariable Integer seq) {
+    public ResponseEntity<?> MemberDelete(
+            @PathVariable Integer seq,
+            @RequestBody PasswordCheckDto dto,
+            @AuthenticationPrincipal Jwt jwt) {
+
         try {
-            memberService.updateDelYn(seq);
+            String adminId = jwt.getClaim("adminId");
+            memberService.updateDelYn(seq, adminId, dto.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
@@ -215,7 +222,7 @@ public class MemberController {
     // 회원 탈퇴(회원)
     @PutMapping("withdraw")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> delete(@RequestBody PasswordCheck check, Authentication authentication) {
+    public ResponseEntity<?> delete(@RequestBody PasswordCheckDto check, Authentication authentication) {
         String memberId = authentication.getName();
         try {
             memberService.delete(memberId, check.getPassword());
@@ -283,7 +290,7 @@ public class MemberController {
     // 비밀번호 확인
     @PostMapping("/passwordCheck")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> checkPassword(@RequestBody PasswordCheck check, Authentication authentication) {
+    public ResponseEntity<?> checkPassword(@RequestBody PasswordCheckDto check, Authentication authentication) {
         String memberId = authentication.getName();
         try {
             // 비밀번호 검증
