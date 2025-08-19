@@ -5,6 +5,7 @@ import {
   FormGroup,
   FormLabel,
   Image,
+  Ratio,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -13,6 +14,8 @@ import { useNavigate, useParams, useSearchParams } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
+
+axios.defaults.withCredentials = true; // ★ 세션 쿠키 전송
 
 export function BuyForm() {
   const { seq } = useParams();
@@ -28,6 +31,7 @@ export function BuyForm() {
   const [isProcessing, setIsProcessing] = useState();
   const [orderCount, setOrderCount] = useState(1);
   const [recipient, setRecipient] = useState("");
+  const [payment, setPayment] = useState("");
 
   const [period, setPeriod] = useState(30);
 
@@ -190,8 +194,8 @@ export function BuyForm() {
         // rentalPeriod: 60, 기본값
         // state: "대여중", 기본값
         rentalPeriod: period,
-        deliveryCompany: "cj",
-        tracking: "trk123456789",
+        deliveryCompany: "",
+        tracking: "",
 
         productNo: sale.productNo,
         memberMemberId: user.memberId,
@@ -211,6 +215,8 @@ export function BuyForm() {
         setIsProcessing(false);
       });
   }
+
+  function handlePaymentChange() {}
 
   return (
     <>
@@ -343,7 +349,7 @@ export function BuyForm() {
                         배송 정보
                       </h5>
 
-                      <div className="mb-3">
+                      <div className="mb-1">
                         <label
                           className="form-label fw-medium"
                           style={{ color: "#343a40" }}
@@ -359,6 +365,7 @@ export function BuyForm() {
                               padding: "12px 16px",
                               fontSize: "0.95rem",
                               width: "150px",
+                              height: "40px",
                               backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
                             }}
                             value={postalCode}
@@ -461,8 +468,8 @@ export function BuyForm() {
                             }
                           }}
                         >
-                          <option value="집 앞에 놔주세요.">
-                            집 앞에 놔주세요.
+                          <option value="문 앞에 놔주세요.">
+                            문 앞에 놔주세요.
                           </option>
                           <option value="직접 받을게요.">직접 받을게요.</option>
                           <option value="경비실에 놔주세요.">
@@ -518,18 +525,63 @@ export function BuyForm() {
                       >
                         결제 수단
                       </h5>
-                      <input
-                        type="text"
-                        className="form-control border-0"
-                        style={{
-                          borderRadius: "10px",
-                          padding: "12px 16px",
-                          fontSize: "0.95rem",
-                          backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
-                        }}
-                        value="api?"
-                        disabled
-                      />
+                      <div>
+                        <div
+                          className="d-flex gap-3 "
+                          style={{
+                            borderRadius: "10px",
+                            padding: "12px 16px",
+                            fontSize: "0.95rem",
+                            backgroundColor: "#f1f1f1", // 더 연한 회색으로 변경
+                            height: "80px",
+                          }}
+                        >
+                          <div>
+                            <label>
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="kakaoPay"
+                                onChange={(e) => setPayment(e.target.value)}
+                              />
+                              카카오페이
+                            </label>
+                          </div>
+                          <div>
+                            <label>
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="naverPay"
+                                onChange={(e) => setPayment(e.target.value)}
+                              />
+                              네이버페이
+                            </label>
+                          </div>
+                          <div>
+                            <label>
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="generalPayment"
+                                onChange={(e) => setPayment(e.target.value)}
+                              />
+                              일반결제
+                            </label>
+                          </div>
+                          <div>
+                            <label>
+                              <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="accountTransfer"
+                                onChange={(e) => setPayment(e.target.value)}
+                              />
+                              계좌이체
+                            </label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

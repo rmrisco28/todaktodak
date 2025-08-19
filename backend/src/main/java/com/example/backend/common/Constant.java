@@ -17,5 +17,14 @@ public class Constant {
     public static final String ORDER_STATE_CANCEL_REQUEST = "C.REQ";     //* 취소 요청
     public static final String ORDER_STATE_CANCEL_COMPLETED = "C.CPLT";     //* 취소 완료
 
+    public static final String RENTAL_STATE_RENTAL_COMPLETED = "R.RSRC"; // *렌탈 완료
+    public static final String RENTAL_STATE_RENTAL_CANCELED = "R.RCAN"; // 렌탈 취소
+    public static final String RENTAL_STATE_RENTAL_REFUNDED = "R.RREF"; // 렌탈 환불
+    public static final String RENTAL_STATE_RENTAL_REJECTED = "R.RREJ"; // 렌탈 거부
+    public static final String RENTAL_STATE_RENTAL_PENDING = "R.RPND"; // 렌탈 보류
+
+    public static final String RETURN_STATE_RETURN_REQUEST = "RE.RSRR"; // 반납 요청
+    public static final String RETURN_STATE_RETURN_COMPLETED = "RE.RSCN"; // 반납 완료
+
 
 }

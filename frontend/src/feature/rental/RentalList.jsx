@@ -135,7 +135,7 @@ export function RentalList() {
                                 </span>
                                 <div className="me-5"></div>
                                 <span style={{ fontSize: "0.875rem" }}>
-                                  대여 상태:{" "}
+                                  대여 상태:
                                 </span>
                                 <span
                                   className=" px-3 py-1 justify-content-center text-center"

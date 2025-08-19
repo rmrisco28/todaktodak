@@ -331,7 +331,7 @@ public class OrderService {
     public void updateStateByUser(OrderStateUserUpdateForm dto) {
         OrderList dbData = orderListRepository.findBySeq(dto.getSeq());
 
-        String prevState = dbData.getPrevState();
+        String prevState = dbData.getPrevState() == null ? "" : dbData.getPrevState();
         if (prevState.isEmpty()) {
             prevState = dbData.getState();
         } else {
