@@ -20,6 +20,8 @@ public class OrderListAllDto {
     private String name;
     private Integer totalPrice;
     private String state;
+    private String deliveryCode;
+    private String tracking;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDttm;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

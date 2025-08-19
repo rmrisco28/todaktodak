@@ -7,6 +7,7 @@ import {
   Form,
   FormControl,
   InputGroup,
+  Modal,
   Pagination,
   Row,
   Spinner,
@@ -25,7 +26,7 @@ data.orderStateList.map((i) =>
   stateList.push({ id: i.id, code: i.code, kor: i.kor }),
 );
 
-export function OrderList() {
+export function TrackingDetail() {
   const { user } = useContext(AuthenticationContext);
   const [keyword, setKeyword] = useState("");
   const [orderList, setOrderList] = useState(null);
@@ -33,6 +34,36 @@ export function OrderList() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  // 모달 및 데이터 상태 추가
+  const [showModal, setShowModal] = useState(false);
+  const [trackingInfo, setTrackingInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 배송조회 버튼 클릭 핸들러
+  const handleTrackButtonClick = (courierCode, trackingNumber) => {
+    setShowModal(true);
+    setIsLoading(true);
+
+    axios
+      .get(`/api/tracking/${courierCode}/${trackingNumber}`)
+      .then((res) => {
+        setTrackingInfo(res.data);
+      })
+      .catch((err) => {
+        console.error("배송조회 오류:", err);
+        // 에러 처리 (예: 조회할 수 없다는 메시지 표시)
+        setTrackingInfo(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setTrackingInfo(null); // 모달 닫을 때 데이터 초기화
+  };
 
   useEffect(() => {
     if (!user || isProcessing === true) {
@@ -129,7 +160,6 @@ export function OrderList() {
             취소요청
           </Button>
         );
-      case "D.RDY":
       case "D.PRG":
       case "D.CPLT":
         return (
@@ -156,8 +186,8 @@ export function OrderList() {
   const openTracking = (e, t_code, t_invoice) => {
     e.stopPropagation();
     // GET 방식으로 값 전달
-    const url = `/api/order/tracking?t_code=${t_code}&t_invoice=${t_invoice}`;
-    window.open(url, "trackingPopup", "width=500,height=900");
+    const url = `/api/tracking/detail?t_code=${t_code}&t_invoice=${t_invoice}`;
+    window.open(url, "trackingPopup", "width=900,height=900");
   };
 
   return (
@@ -267,21 +297,35 @@ export function OrderList() {
                     <td className="d-none d-lg-table-cell">
                       {order.insertDttm}
                     </td>
-
-                    <td className="d-none d-lg-table-cell">
-                      {(order.state.split(".")[0] === "D" ||
-                        order.state.split(".")[0] === "RV") && (
-                        <Button
-                          variant="outline-primary"
-                          size="sm"
-                          onClick={(e) =>
-                            openTracking(e, order.deliveryCode, order.tracking)
-                          }
-                        >
-                          배송조회
-                        </Button>
+                    {/*
+                    <td>
+                      {order.trackingNumber && (
+                      <Button
+                        variant="outline-primary"
+                        size="sm"
+                        // onClick={() => handleTrackButtonClick(order.courierCode, order.trackingNumber)}
+                        onClick={(e) => {
+                          e.stopPropagation(); //  버블링/캡처링 중단
+                          handleTrackButtonClick("04", "692355936026");
+                        }}
+                      >
+                        배송조회
+                      </Button>
                       )}
                     </td>
+                     */}
+
+                    <td className="d-none d-lg-table-cell">
+                      {/*<button onClick={() => openTracking(order.t_code, order.t_invoice)}>*/}
+                      <Button
+                        variant="outline-primary"
+                        size="sm"
+                        onClick={(e) => openTracking(e, "04", "692355936026")}
+                      >
+                        배송조회
+                      </Button>
+                    </td>
+
                     <td className="d-none d-lg-table-cell">
                       {setButtonByState(order.state, order.seq)}
                     </td>
@@ -339,6 +383,40 @@ export function OrderList() {
           </Pagination>
         </Col>
       </Row>
+
+      {/* 배송조회 모달 */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>배송조회 결과</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {isLoading ? (
+            <div className="text-center">
+              <Spinner animation="border" />
+            </div>
+          ) : trackingInfo ? (
+            <div>
+              <p>
+                <strong>{trackingInfo.courierName}</strong>(
+                {trackingInfo.trackingNumber})
+              </p>
+              <ul className="list-unstyled">
+                {trackingInfo.trackingDetails.map((detail, index) => (
+                  <li key={index} className="mb-2">
+                    <strong>{detail.kind}</strong>({detail.timeString})
+                    <br />
+                    <small className="text-muted">
+                      {detail.where} ({detail.telno})
+                    </small>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p>배송 정보를 조회할 수 없습니다.</p>
+          )}
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

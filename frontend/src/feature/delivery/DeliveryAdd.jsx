@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
 export function DeliveryAdd() {
+  const [tcode, setTcode] = useState("00");
   const [name, setName] = useState("");
   const [callNo, setCallNo] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -20,7 +21,7 @@ export function DeliveryAdd() {
   const navigate = useNavigate();
 
   let validate = true;
-  if (name.trim() === "") {
+  if (name.trim() === "" || tcode.trim() === "") {
     validate = false;
   }
 
@@ -28,6 +29,7 @@ export function DeliveryAdd() {
     setIsProcessing(true);
     axios
       .postForm("/api/delivery/add", {
+        code: tcode,
         name: name,
         callNo: callNo,
       })
@@ -50,6 +52,15 @@ export function DeliveryAdd() {
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
         <h2 className="mb-4">배송업체 등록</h2>
+        <div>
+          <FormGroup className="mb-3" controlId="formName">
+            <FormLabel>택배사코드(스윗트래커연동)</FormLabel>
+            <FormControl
+              value={tcode}
+              onChange={(e) => setTcode(e.target.value)}
+            ></FormControl>
+          </FormGroup>
+        </div>
         <div>
           <FormGroup className="mb-3" controlId="formName">
             <FormLabel>배송업체명</FormLabel>

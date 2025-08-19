@@ -78,6 +78,9 @@ public class OrderList {
     @Column(name = "state", nullable = false, length = 10)
     private String state;
 
+    @Column(name = "delivery_code", length = 5)
+    private String deliveryCode;
+
     @Column(name = "delivery_company", length = 50)
     private String deliveryCompany;
 

@@ -83,6 +83,7 @@ export function OrderDetail() {
       .putForm(`/api/order/modify/${seq}`, {
         state: order.state,
         request: order.request,
+        deliveryCode: order.deliveryCode,
         deliveryCompany: order.deliveryCompany,
         tracking: order.tracking,
       })
@@ -186,50 +187,9 @@ export function OrderDetail() {
               )}
           </FormGroup>
         </div>
-        {isAdmin() && (
-          <div>
-            <Button
-              variant="outline-info"
-              onClick={() => setModalShow(true)}
-              disabled={isProcessing || !validate}
-            >
-              {isProcessing && <Spinner size="sm" />}
-              {isProcessing || "주문 상태 변경"}
-            </Button>
-          </div>
-        )}
+
         <hr />
 
-        <div>
-          <FormGroup className="mb-3" controlId="formRecipient">
-            <FormLabel>수령인 성함</FormLabel>
-            <FormControl value={order.recipient} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formPhone">
-            <FormLabel>연락처</FormLabel>
-            <FormControl value={order.phone} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formPost">
-            <FormLabel>post</FormLabel>
-            <FormControl value={order.post} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formAddr">
-            <FormLabel>주소</FormLabel>
-            <FormControl value={order.addr} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formAddrDetail">
-            <FormLabel>상세주소</FormLabel>
-            <FormControl value={order.addrDetail} readOnly={true} />
-          </FormGroup>
-        </div>
         <div>
           <FormGroup className="mb-3" controlId="formRequest">
             <FormLabel>배송요청사항</FormLabel>
@@ -254,13 +214,17 @@ export function OrderDetail() {
               <FormSelect
                 className="mb-3"
                 onChange={(e) =>
-                  setOrder({ ...order, deliveryCompany: e.target.value })
+                  setOrder({
+                    ...order,
+                    deliveryCode: e.target.value,
+                    deliveryCompany: e.target.selectedOptions.item(0).innerText,
+                  })
                 }
               >
                 <option>배송업체 선택</option>
                 {deliveryList.map((item) => (
                   <option
-                    value={item.name}
+                    value={item.code}
                     key={item.seq}
                     selected={item.name == order.deliveryCompany}
                   >
@@ -289,6 +253,50 @@ export function OrderDetail() {
             {!isAdmin() && (
               <FormControl value={order.tracking} readOnly={true} />
             )}
+          </FormGroup>
+        </div>
+        {isAdmin() && (
+          <div>
+            <Button
+              variant="outline-info"
+              onClick={() => setModalShow(true)}
+              disabled={isProcessing || !validate}
+            >
+              {isProcessing && <Spinner size="sm" />}
+              {isProcessing || "주문 상태 변경"}
+            </Button>
+          </div>
+        )}
+        <hr />
+
+        <div>
+          <FormGroup className="mb-3" controlId="formRecipient">
+            <FormLabel>수령인 성함</FormLabel>
+            <FormControl value={order.recipient} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formPhone">
+            <FormLabel>연락처</FormLabel>
+            <FormControl value={order.phone} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formPost">
+            <FormLabel>우편번호</FormLabel>
+            <FormControl value={order.post} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formAddr">
+            <FormLabel>주소</FormLabel>
+            <FormControl value={order.addr} readOnly={true} />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup className="mb-3" controlId="formAddrDetail">
+            <FormLabel>상세주소</FormLabel>
+            <FormControl value={order.addrDetail} readOnly={true} />
           </FormGroup>
         </div>
 

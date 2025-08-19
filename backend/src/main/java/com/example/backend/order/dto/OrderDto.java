@@ -33,6 +33,7 @@ public class OrderDto {
     private String addr;
     private String addrDetail;
     private String request;
+    private String deliveryCode;
     private String deliveryCompany;
     private String tracking;
 
@@ -41,7 +42,7 @@ public class OrderDto {
     private Integer deliveryFee;
     private Integer totProdPrice;
 
-    public OrderDto(Integer seq, String saleNo, String saleTitle, String orderNo, Integer prodPrice, Integer orderCount, Integer rentalPeriod, String state, LocalDateTime insertDttm, String recipient, String phone, String post, String addr, String addrDetail, String request, String deliveryCompany, String tracking, Integer totalPrice, Integer deliveryFee, Integer totProdPrice) {
+    public OrderDto(Integer seq, String saleNo, String saleTitle, String orderNo, Integer prodPrice, Integer orderCount, Integer rentalPeriod, String state, LocalDateTime insertDttm, String recipient, String phone, String post, String addr, String addrDetail, String request, String deliveryCode, String deliveryCompany, String tracking, Integer totalPrice, Integer deliveryFee, Integer totProdPrice) {
         this.seq = seq;
         this.saleTitle = saleTitle;
         this.saleNo = saleNo;
@@ -57,6 +58,7 @@ public class OrderDto {
         this.addr = addr;
         this.addrDetail = addrDetail;
         this.request = request;
+        this.deliveryCode = deliveryCode;
         this.deliveryCompany = deliveryCompany;
         this.tracking = tracking;
         this.totalPrice = totalPrice;

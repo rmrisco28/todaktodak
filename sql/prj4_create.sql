@@ -117,7 +117,8 @@ CREATE TABLE sale_image_content
 CREATE TABLE delivery
 (
     seq         INT AUTO_INCREMENT NOT NULL,
-    delivery_no VARCHAR(20)        NOT NULL UNIQUE,
+#     delivery_no VARCHAR(20)        NOT NULL UNIQUE,
+    code        VARCHAR(5)         NOT NULL,
     name        VARCHAR(50)        NOT NULL,
     tel         VARCHAR(15)        NOT NULL,
     insert_dttm DATETIME           NOT NULL DEFAULT NOW(),
@@ -351,6 +352,7 @@ CREATE TABLE order_list
     rental_period    INT          NOT NULL,
     prev_state       VARCHAR(2000),
     state            VARCHAR(10)  NOT NULL,
+    delivery_code    VARCHAR(5),
     delivery_company VARCHAR(50),
     tracking         VARCHAR(100),
     insert_dttm      DATETIME     NOT NULL DEFAULT NOW(),

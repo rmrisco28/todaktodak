@@ -15,6 +15,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
     @Query(value = """
             SELECT new com.example.backend.delivery.dto.DeliveryListDto(
             d.seq,
+            d.code,
             d.name,
             d.callNo,
             d.insertDttm,
@@ -33,6 +34,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
     @Query(value = """
                 SELECT new com.example.backend.delivery.dto.DeliveryDto(
                 d.seq,
+                d.code,
                 d.name,
                 d.callNo,
                 d.useYn
@@ -47,6 +49,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
     @Query(value = """
                     SELECT new com.example.backend.delivery.dto.DeliveryDto(
                     d.seq,
+                    d.code,
                     d.name,
                     d.callNo,
                     d.useYn
