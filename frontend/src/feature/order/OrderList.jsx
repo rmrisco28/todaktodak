@@ -185,7 +185,6 @@ export function OrderList() {
             <Table striped={true} hover={true}>
               <thead>
                 <tr>
-                  <th style={{ width: "70px" }}>번호</th>
                   <th
                     className="d-none d-md-table-cell"
                     style={{ width: "100px" }}
@@ -232,13 +231,12 @@ export function OrderList() {
                 </tr>
               </thead>
               <tbody>
-                {orderList.map((order, index) => (
+                {orderList.map((order) => (
                   <tr
                     key={order.seq}
                     style={{ cursor: "pointer" }}
                     onClick={() => handleTableRowClick(order.seq)}
                   >
-                    <td>{index + 1}</td>
                     <td className="d-none d-md-table-cell">{order.orderNo}</td>
                     <td>
                       <div className="d-flex gap-2">
