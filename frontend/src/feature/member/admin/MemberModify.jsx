@@ -468,7 +468,7 @@ export function MemberModify() {
                 <FormCheck
                   type="checkbox"
                   id="useYn"
-                  label={member.useYn ? "사용중" : "미사용"}
+                  label={"사용"}
                   checked={member.useYn}
                   onChange={(e) =>
                     setMember({ ...member, useYn: e.target.checked })
@@ -477,17 +477,17 @@ export function MemberModify() {
               </Col>
             </FormGroup>
           </div>
-          {/* 삭제여부 */}
+          {/* 탈퇴여부 */}
           <div>
             <FormGroup as={Row} controlId="delYn">
               <FormLabel column sm={3}>
-                삭제여부
+                탈퇴여부
               </FormLabel>
               <Col sm={7}>
                 <FormCheck
                   type="checkbox"
-                  id="useYn"
-                  label={"삭제"}
+                  id="delYn"
+                  label={"탈퇴"}
                   checked={member.delYn}
                   onChange={(e) =>
                     setMember({ ...member, delYn: e.target.checked })

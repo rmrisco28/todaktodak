@@ -55,7 +55,7 @@ export function ResetPassword() {
           navigate("/login");
         })
         .catch(() => {
-          toast.error("비밀번호 변경 실패");
+          toast.error("비밀번호 변경 실패", { position: "top-center" });
         })
         .finally(() => {});
     } else {

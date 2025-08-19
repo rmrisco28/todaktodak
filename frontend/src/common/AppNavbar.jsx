@@ -144,7 +144,9 @@ export function AppNavbar() {
               title={getDropdownTitle(
                 <>
                   <LuUserRoundCheck />
-                  <span className="ms-2">마이페이지</span>
+                  <span className="ms-2">
+                    {user ? user.memberId : "마이페이지"}
+                  </span>
                 </>,
                 "member-menu",
               )}

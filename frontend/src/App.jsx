@@ -102,6 +102,8 @@ function App() {
             {/* 문의게시판 목록 */}
             <Route path="contact/list" element={<ContactList />} />
 
+            {/* 회원탈퇴 */}
+            <Route path="member/withdraw" element={<MemberWithdrawPage />} />
             {/*
             --- 로그인 사용자만 접근 가능한 페이지 ---
           */}
@@ -128,11 +130,8 @@ function App() {
                 path="member/myinfo/modify"
                 element={<MemberMyInfoModify />}
               />
-
               {/* 변경 전 비밀번호 확인*/}
               <Route path="member/passwordCheck" element={<PasswordCheck />} />
-              {/* 회원탈퇴 */}
-              <Route path="member/withdraw" element={<MemberWithdrawPage />} />
 
               {/* 상품 등록 */}
               <Route path="product/add" element={<ProductAdd />} />

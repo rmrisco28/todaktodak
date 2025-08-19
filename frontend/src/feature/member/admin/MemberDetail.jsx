@@ -290,17 +290,17 @@ export function MemberDetail() {
               </Col>
             </FormGroup>
           </div>
-          {/* 삭제여부 */}
+          {/* 탈퇴여부 */}
           <div>
             <FormGroup as={Row} controlId="delYn">
               <FormLabel column sm={3}>
-                삭제
+                탈퇴
               </FormLabel>
               <Col sm={7}>
                 <FormCheck
                   type="checkbox"
                   id="delYn"
-                  label={"삭제"}
+                  label={"탈퇴"}
                   checked={member.delYn}
                   readOnly
                   disabled

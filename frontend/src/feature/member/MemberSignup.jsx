@@ -439,9 +439,7 @@ export function MemberSignup() {
           {/* 생년월일 */}
           <div>
             <FormGroup className="mb-3" controlId="birthDate">
-              <FormLabel>
-                생년월일 <span style={{ color: "red" }}>*</span>
-              </FormLabel>
+              <FormLabel>생년월일</FormLabel>
               <div className="d-flex" style={{ gap: "10px" }}>
                 {/* 년도 */}
                 <Form.Select
