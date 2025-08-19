@@ -3,6 +3,7 @@ package com.example.backend.order.controller;
 import com.example.backend.order.dto.OrderStateUpdateForm;
 import com.example.backend.order.dto.OrderStateUserUpdateForm;
 import com.example.backend.order.service.OrderService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController // ✅ REST API 컨트롤러로 동작하도록 지정 (View 반환 X, JSON 반환 O)
@@ -61,16 +63,14 @@ public class OrderController {
     /**
      * 주문관리 목록 조회 (사용자)
      *
-     * @param memberId
      * @return
      */
-    @GetMapping("list/{memberId}")
+    @GetMapping("list")
     @PreAuthorize("isAuthenticated()")
-    public Map<String, Object> getOrders(@PathVariable String memberId,
-                                         Authentication authentication,
+    public Map<String, Object> getOrders(Authentication authentication,
                                          @RequestParam(value = "q", defaultValue = "") String keyword,
                                          @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
-        return orderService.list(memberId, authentication, keyword, pageNumber);
+        return orderService.list(authentication, keyword, pageNumber);
     }
 
     /**
@@ -168,5 +168,12 @@ public class OrderController {
         }
     }
 
+    @GetMapping("/tracking")
+    public void tracking(HttpServletResponse response,
+                         @RequestParam String t_code,
+                         @RequestParam String t_invoice) throws IOException {
+
+        orderService.viewTracking(response, t_code, t_invoice);
+    }
 
 }

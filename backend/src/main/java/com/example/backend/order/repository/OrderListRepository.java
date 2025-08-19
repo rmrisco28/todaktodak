@@ -20,6 +20,8 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 ol.name,
                 ol.totalPrice,
                 ol.state,
+                ol.deliveryCode,
+                ol.tracking,
                 ol.insertDttm,
                 ol.updateDttm
                 ) FROM OrderList ol
@@ -31,6 +33,7 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 OR ol.saleNo.saleNo LIKE %:keyword%
                 OR ol.name LIKE %:keyword%
                 OR ol.state LIKE %:keyword%)
+            ORDER BY ol.seq DESC
             """)
     Page<OrderListAllDto> searchOrderListAll(@Param("keyword") String keyword, Pageable pageable);
 
@@ -52,6 +55,7 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                         ol.addr,
                         ol.addrDetail,
                         ol.request,
+                        ol.deliveryCode,
                         ol.deliveryCompany,
                         ol.tracking,
                         ol.totalPrice,
@@ -79,6 +83,8 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 ol.name,
                 ol.totalPrice,
                 ol.state,
+                ol.deliveryCode,
+                ol.tracking,
                 ol.insertDttm,
                 ol.updateDttm
                 ) FROM OrderList ol
@@ -91,6 +97,7 @@ public interface OrderListRepository extends JpaRepository<OrderList, Integer> {
                 OR ol.name LIKE %:keyword%
                 OR ol.state LIKE %:keyword%)
                 AND ol.name = :memberId
+            ORDER BY ol.seq DESC
             """)
     Page<OrderListAllDto> searchOrderListUser(String memberId, @Param("keyword") String keyword, Pageable pageable);
 

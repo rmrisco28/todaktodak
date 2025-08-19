@@ -24,6 +24,9 @@ public class DeliveryService {
     private final DeliveryRepository deliveryRepository;
 
     public boolean validateForAdd(DeliveryAddForm dto) {
+        if (dto.getCode() == null || dto.getCode().trim().isBlank()) {
+            return false;
+        }
         if (dto.getName() == null || dto.getName().trim().isBlank()) {
             return false;
         }
@@ -35,6 +38,7 @@ public class DeliveryService {
 
     public void add(DeliveryAddForm dto) {
         Delivery delivery = new Delivery();
+        delivery.setCode(dto.getCode());
         delivery.setName(dto.getName());
         delivery.setCallNo(dto.getCallNo());
         deliveryRepository.save(delivery);
@@ -68,6 +72,9 @@ public class DeliveryService {
     }
 
     public boolean validateForUpdate(DeliveryUpdateForm dto) {
+        if (dto.getCode() == null || dto.getCode().trim().isBlank()) {
+            return false;
+        }
         if (dto.getName() == null || dto.getName().trim().isBlank()) {
             return false;
         }
@@ -79,6 +86,7 @@ public class DeliveryService {
 
     public void update(DeliveryUpdateForm dto) {
         Delivery delivery = deliveryRepository.findById(dto.getSeq()).get();
+        delivery.setCode(dto.getCode());
         delivery.setName(dto.getName());
         delivery.setCallNo(dto.getCallNo());
         delivery.setUpdateDttm(LocalDateTime.now());

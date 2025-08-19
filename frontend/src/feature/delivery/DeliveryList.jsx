@@ -129,6 +129,7 @@ export function DeliveryList() {
                 <tr>
                   <th style={{ width: "70px" }}>번호</th>
                   <th>배송업체명</th>
+                  <th>택배사코드</th>
                   <th>업체연락처</th>
                   {/*<th style={{ width: "70px" }}>사용</th>*/}
                   <th
@@ -154,6 +155,11 @@ export function DeliveryList() {
                     <td>
                       <div className="d-flex gap-2">
                         <span>{delivery.name}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <span>{delivery.code}</span>
                       </div>
                     </td>
                     <td>

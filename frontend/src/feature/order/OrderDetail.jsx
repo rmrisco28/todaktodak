@@ -78,11 +78,12 @@ export function OrderDetail() {
 
   function handleSaveButtonClick() {
     setIsProcessing(true);
-    // console.log(product);
+
     axios
       .putForm(`/api/order/modify/${seq}`, {
         state: order.state,
         request: order.request,
+        deliveryCode: order.deliveryCode,
         deliveryCompany: order.deliveryCompany,
         tracking: order.tracking,
       })
@@ -100,239 +101,634 @@ export function OrderDetail() {
         }
       })
       .finally(() => {
-        console.log("always");
         setModalShow(false);
         setIsProcessing(false);
+        navigate(`/order/admin/list`);
       });
   }
 
   return (
-    <Row className="justify-content-center">
-      <Col xs={12} md={8} lg={6}>
-        <div className="d-flex justify-content-between">
-          <h2 className="mb-4">{order.seq} 번 주문 정보</h2>
-        </div>
-
-        <div className="mb-3">
-          상품 이미지
-          <ListGroup>
-            <ListGroupItem key={order.image.name}>
-              <Image fluid src={order.image.path} />
-            </ListGroupItem>
-          </ListGroup>
-        </div>
-
-        <div>
-          <FormGroup className="mb-3" controlId="formTitle">
-            <FormLabel>상품</FormLabel>
-            <FormControl value={order.saleTitle} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formOrderNo">
-            <FormLabel>주문번호</FormLabel>
-            <FormControl value={order.orderNo} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formProdPrice">
-            <FormLabel>상품가격</FormLabel>
-            <FormControl value={order.prodPrice} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formOrderCount">
-            <FormLabel>주문상품개수</FormLabel>
-            <FormControl value={order.orderCount} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formRetalPeriod">
-            <FormLabel>대여기간</FormLabel>
-            <FormControl value={order.rentalPeriod} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formInsertDttm">
-            <FormLabel>주문일시</FormLabel>
-            <FormControl value={order.insertDttm} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formState">
-            <FormLabel>주문상태</FormLabel>
-            {isAdmin() && (
-              <FormSelect
-                className="mb-3"
-                onChange={(e) => setOrder({ ...order, state: e.target.value })}
-              >
-                {stateList.map((item) => (
-                  <option
-                    value={item.code}
-                    key={item.id}
-                    selected={item.code === order.state}
+    <>
+      <>
+        <div className="container-fluid py-3" style={{ background: "#f8f9fa" }}>
+          <div className="row justify-content-center">
+            <div className="col-12 col-lg-10 col-xl-8">
+              <div className="row g-4">
+                {/* 왼쪽: 주문 상세 정보 */}
+                <div className="col-12 col-lg-7">
+                  <div
+                    className="card border-0 shadow-sm"
+                    style={{ borderRadius: "15px" }}
                   >
-                    {item.kor}
-                  </option>
-                ))}
-              </FormSelect>
-            )}
-            {!isAdmin() &&
-              stateList.map(
-                (item) =>
-                  item.code === order.state && (
-                    <FormControl value={item.kor} readOnly={true} />
-                  ),
-              )}
-          </FormGroup>
-        </div>
-        {isAdmin() && (
-          <div>
-            <Button
-              variant="outline-info"
-              onClick={() => setModalShow(true)}
-              disabled={isProcessing || !validate}
-            >
-              {isProcessing && <Spinner size="sm" />}
-              {isProcessing || "주문 상태 변경"}
-            </Button>
+                    <div className="card-body p-4">
+                      <h3 className="fw-bold mb-4" style={{ color: "#212529" }}>
+                        {order.seq}번 주문 상세 정보
+                      </h3>
+
+                      {/* 주문 기본 정보 섹션 */}
+                      <div className="mb-4">
+                        <h5
+                          className="fw-semibold mb-3"
+                          style={{ color: "#495057" }}
+                        >
+                          주문 기본 정보
+                        </h5>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            주문번호
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.orderNo}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            주문일시
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.insertDttm}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            대여기간
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.rentalPeriod}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            주문상태
+                          </label>
+                          {isAdmin() ? (
+                            <select
+                              className="form-select bg-white"
+                              style={{
+                                borderRadius: "10px",
+                                padding: "12px 16px",
+                                fontSize: "0.95rem",
+                                border: "2px solid #dee2e6",
+                                transition: "all 0.3s ease",
+                              }}
+                              onFocus={(e) => {
+                                e.target.style.borderColor = "#495057";
+                                e.target.style.boxShadow =
+                                  "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                              }}
+                              onBlur={(e) => {
+                                e.target.style.borderColor = "#dee2e6";
+                                e.target.style.boxShadow = "none";
+                              }}
+                              onChange={(e) =>
+                                setOrder({ ...order, state: e.target.value })
+                              }
+                            >
+                              {stateList.map((item) => (
+                                <option
+                                  value={item.code}
+                                  key={item.id}
+                                  selected={item.code === order.state}
+                                >
+                                  {item.kor}
+                                </option>
+                              ))}
+                            </select>
+                          ) : (
+                            <input
+                              type="text"
+                              className="form-control border-0"
+                              style={{
+                                borderRadius: "10px",
+                                padding: "12px 16px",
+                                fontSize: "0.95rem",
+                                backgroundColor: "#f1f1f1",
+                              }}
+                              value={
+                                stateList.find(
+                                  (item) => item.code === order.state,
+                                )?.kor || ""
+                              }
+                              readOnly
+                            />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 배송 정보 섹션 */}
+                      <div className="mb-4">
+                        <h5
+                          className="fw-semibold mb-3"
+                          style={{ color: "#495057" }}
+                        >
+                          배송 정보
+                        </h5>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            수령인
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.recipient}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            연락처
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.phone}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            우편번호
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.post}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            주소
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.addr}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            상세주소
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control border-0"
+                            style={{
+                              borderRadius: "10px",
+                              padding: "12px 16px",
+                              fontSize: "0.95rem",
+                              backgroundColor: "#f1f1f1",
+                            }}
+                            value={order.addrDetail}
+                            readOnly
+                          />
+                        </div>
+
+                        <div className="mb-3">
+                          <label
+                            className="form-label fw-medium"
+                            style={{ color: "#343a40" }}
+                          >
+                            배송 요청사항
+                          </label>
+                          {isAdmin() ? (
+                            <input
+                              type="text"
+                              className="form-control bg-white"
+                              style={{
+                                borderRadius: "10px",
+                                padding: "12px 16px",
+                                fontSize: "0.95rem",
+                                border: "2px solid #dee2e6",
+                                transition: "all 0.3s ease",
+                              }}
+                              onFocus={(e) => {
+                                e.target.style.borderColor = "#495057";
+                                e.target.style.boxShadow =
+                                  "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                              }}
+                              onBlur={(e) => {
+                                e.target.style.borderColor = "#dee2e6";
+                                e.target.style.boxShadow = "none";
+                              }}
+                              value={order.request}
+                              onChange={(e) =>
+                                setOrder({ ...order, request: e.target.value })
+                              }
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              className="form-control border-0"
+                              style={{
+                                borderRadius: "10px",
+                                padding: "12px 16px",
+                                fontSize: "0.95rem",
+                                backgroundColor: "#f1f1f1",
+                              }}
+                              value={order.request}
+                              readOnly
+                            />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 배송 관리 섹션 (관리자용) */}
+                      {isAdmin() && (
+                        <div className="mb-4">
+                          <h5
+                            className="fw-semibold mb-3"
+                            style={{ color: "#495057" }}
+                          >
+                            배송 관리
+                          </h5>
+
+                          <div className="mb-3">
+                            <label
+                              className="form-label fw-medium"
+                              style={{ color: "#343a40" }}
+                            >
+                              배송업체
+                            </label>
+                            <select
+                              className="form-select bg-white"
+                              style={{
+                                borderRadius: "10px",
+                                padding: "12px 16px",
+                                fontSize: "0.95rem",
+                                border: "2px solid #dee2e6",
+                                transition: "all 0.3s ease",
+                              }}
+                              onFocus={(e) => {
+                                e.target.style.borderColor = "#495057";
+                                e.target.style.boxShadow =
+                                  "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                              }}
+                              onBlur={(e) => {
+                                e.target.style.borderColor = "#dee2e6";
+                                e.target.style.boxShadow = "none";
+                              }}
+                              onChange={(e) =>
+                                setOrder({
+                                  ...order,
+                                  deliveryCode: e.target.value,
+                                  deliveryCompany: e.target.selectedOptions.item(0).innerText,
+                                })
+                              }
+                            >
+                              <option>배송업체 선택</option>
+                              {deliveryList.map((item) => (
+                                <option
+                                  value={item.code}
+                                  key={item.seq}
+                                  selected={item.name === order.deliveryCompany}
+                                >
+                                  {item.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="mb-3">
+                            <label
+                              className="form-label fw-medium"
+                              style={{ color: "#343a40" }}
+                            >
+                              운송장번호
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control bg-white"
+                              style={{
+                                borderRadius: "10px",
+                                padding: "12px 16px",
+                                fontSize: "0.95rem",
+                                border: "2px solid #dee2e6",
+                                transition: "all 0.3s ease",
+                              }}
+                              onFocus={(e) => {
+                                e.target.style.borderColor = "#495057";
+                                e.target.style.boxShadow =
+                                  "0 0 0 0.2rem rgba(73, 80, 87, 0.15)";
+                              }}
+                              onBlur={(e) => {
+                                e.target.style.borderColor = "#dee2e6";
+                                e.target.style.boxShadow = "none";
+                              }}
+                              value={order.tracking}
+                              onChange={(e) =>
+                                setOrder({ ...order, tracking: e.target.value })
+                              }
+                            />
+                          </div>
+
+                          <button
+                            className="btn btn-dark fw-bold px-4"
+                            style={{
+                              borderRadius: "12px",
+                              padding: "12px 24px",
+                              fontSize: "0.95rem",
+                            }}
+                            onClick={() => setModalShow(true)}
+                            disabled={isProcessing || !validate}
+                          >
+                            {isProcessing ? (
+                              <>
+                                <span
+                                  className="spinner-border spinner-border-sm me-2"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
+                                처리중...
+                              </>
+                            ) : (
+                              "주문 상태 변경"
+                            )}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 오른쪽: 주문 요약 */}
+                <div className="col-12 col-lg-5">
+                  <div
+                    className="card border-0 shadow-sm mb-4"
+                    style={{ borderRadius: "15px" }}
+                  >
+                    <div className="card-body p-4">
+                      <h4 className="fw-bold mb-4" style={{ color: "#212529" }}>
+                        주문 상품 정보
+                      </h4>
+
+                      {/* 상품 이미지 및 정보 */}
+                      <div
+                        className="d-flex gap-3 mb-4 p-3 bg-light"
+                        style={{ borderRadius: "12px" }}
+                      >
+                        <img
+                          src={order.image.path}
+                          alt={order.saleTitle}
+                          className="rounded"
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <div className="flex-grow-1">
+                          <h6
+                            className="fw-semibold mb-2"
+                            style={{ fontSize: "0.95rem" }}
+                          >
+                            {order.saleTitle}
+                          </h6>
+                          <p
+                            className="text-muted mb-1"
+                            style={{ fontSize: "0.85rem" }}
+                          >
+                            수량: {order.orderCount}개
+                          </p>
+                          <p
+                            className="fw-bold mb-0"
+                            style={{ color: "#212529" }}
+                          >
+                            {order.prodPrice.toLocaleString()}원
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* 금액 상세 */}
+                      <div className="border-top pt-3">
+                        <div className="d-flex justify-content-between mb-2">
+                          <span style={{ color: "#6c757d" }}>상품 금액</span>
+                          <span>{order.totProdPrice.toLocaleString()}원</span>
+                        </div>
+
+                        <div className="d-flex justify-content-between mb-3">
+                          <span style={{ color: "#6c757d" }}>배송비</span>
+                          <span>
+                            {order.deliveryFee > 0
+                              ? `${order.deliveryFee.toLocaleString()}원`
+                              : "무료배송"}
+                          </span>
+                        </div>
+
+                        <hr className="my-3" />
+
+                        <div className="d-flex justify-content-between mb-4">
+                          <span
+                            className="fw-bold"
+                            style={{ fontSize: "1.1rem", color: "#212529" }}
+                          >
+                            총 결제 완료된 금액
+                          </span>
+                          <span
+                            className="fw-bold"
+                            style={{ fontSize: "1.2rem", color: "#212529" }}
+                          >
+                            {order.totalPrice.toLocaleString()}원
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 배송업체 정보 (일반 사용자용) */}
+                  {!isAdmin() && (
+                    <div
+                      className="card border-0 shadow-sm"
+                      style={{ borderRadius: "15px" }}
+                    >
+                      <div className="card-body p-4">
+                        <h5
+                          className="fw-bold mb-3"
+                          style={{ color: "#212529" }}
+                        >
+                          배송 정보
+                        </h5>
+
+                        <div className="mb-3">
+                          <span
+                            className="fw-medium text-muted d-block mb-1"
+                            style={{ fontSize: "0.875rem" }}
+                          >
+                            배송업체
+                          </span>
+                          <span style={{ color: "#4a5568" }}>
+                            {order.deliveryCompany || "배송업체 미정"}
+                          </span>
+                        </div>
+
+                        <div className="mb-0">
+                          <span
+                            className="fw-medium text-muted d-block mb-1"
+                            style={{ fontSize: "0.875rem" }}
+                          >
+                            운송장번호
+                          </span>
+                          <span style={{ color: "#4a5568" }}>
+                            {order.tracking || "운송장번호 미등록"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-        <hr />
-
-        <div>
-          <FormGroup className="mb-3" controlId="formRecipient">
-            <FormLabel>수령인 성함</FormLabel>
-            <FormControl value={order.recipient} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formPhone">
-            <FormLabel>연락처</FormLabel>
-            <FormControl value={order.phone} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formPost">
-            <FormLabel>post</FormLabel>
-            <FormControl value={order.post} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formAddr">
-            <FormLabel>주소</FormLabel>
-            <FormControl value={order.addr} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formAddrDetail">
-            <FormLabel>상세주소</FormLabel>
-            <FormControl value={order.addrDetail} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formRequest">
-            <FormLabel>배송요청사항</FormLabel>
-            {isAdmin() && (
-              <FormControl
-                value={order.request}
-                placeholder={request}
-                onChange={(e) =>
-                  setOrder({ ...order, request: e.target.value })
-                }
-              />
-            )}
-            {!isAdmin() && (
-              <FormControl value={order.request} readOnly={true} />
-            )}
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formDeliveryCompany">
-            <FormLabel>배송업체명</FormLabel>
-            {isAdmin() && (
-              <FormSelect
-                className="mb-3"
-                onChange={(e) =>
-                  setOrder({ ...order, deliveryCompany: e.target.value })
-                }
-              >
-                <option>배송업체 선택</option>
-                {deliveryList.map((item) => (
-                  <option
-                    value={item.name}
-                    key={item.seq}
-                    selected={item.name == order.deliveryCompany}
-                  >
-                    {item.name}
-                  </option>
-                ))}
-              </FormSelect>
-            )}
-            {!isAdmin() && (
-              <FormControl value={order.deliveryCompany} readOnly={true} />
-            )}
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formTracking">
-            <FormLabel>운송장번호</FormLabel>
-            {isAdmin() && (
-              <FormControl
-                value={order.tracking}
-                placeholder={tracking}
-                onChange={(e) =>
-                  setOrder({ ...order, tracking: e.target.value })
-                }
-              />
-            )}
-            {!isAdmin() && (
-              <FormControl value={order.tracking} readOnly={true} />
-            )}
-          </FormGroup>
         </div>
 
-        <hr />
-
-        <div>
-          <FormGroup className="mb-3" controlId="formTotalPrice">
-            <FormLabel>총 결제금액</FormLabel>
-            <FormControl value={order.totalPrice} readOnly={true} />
-          </FormGroup>
+        {/* 모달 */}
+        <div
+          className={`modal fade ${modalShow ? "show d-block" : ""}`}
+          style={{
+            backgroundColor: modalShow ? "rgba(0,0,0,0.5)" : "transparent",
+          }}
+        >
+          <div className="modal-dialog">
+            <div
+              className="modal-content"
+              style={{ borderRadius: "15px", border: "none" }}
+            >
+              <div className="modal-header border-0">
+                <h5
+                  className="modal-title fw-bold"
+                  style={{ color: "#212529" }}
+                >
+                  상태값 변경 확인
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setModalShow(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                {order.seq}번 주문의 상태를 수정하시겠습니까?
+              </div>
+              <div className="modal-footer border-0">
+                <button
+                  className="btn btn-outline-secondary"
+                  style={{ borderRadius: "10px", fontWeight: "500" }}
+                  onClick={() => setModalShow(false)}
+                >
+                  취소
+                </button>
+                <button
+                  className="btn btn-dark"
+                  style={{ borderRadius: "10px", fontWeight: "500" }}
+                  disabled={isProcessing}
+                  onClick={handleSaveButtonClick}
+                >
+                  {isProcessing ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      처리중...
+                    </>
+                  ) : (
+                    "수정"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formTotProdPrice">
-            <FormLabel>전체 상품 가격</FormLabel>
-            <FormControl value={order.totProdPrice} readOnly={true} />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup className="mb-3" controlId="formDeliveryFee">
-            <FormLabel>배달비</FormLabel>
-            <FormControl value={order.deliveryFee} readOnly={true} />
-          </FormGroup>
-        </div>
-      </Col>
-
-      <Modal show={modalShow} onHide={() => setModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>상태값 변경 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{order.seq} 주문의 상태 수정하시겠습니까?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
-          <Button
-            disabled={isProcessing}
-            variant="primary"
-            onClick={handleSaveButtonClick}
-          >
-            {isProcessing && <Spinner size="sm" />}
-            {isProcessing || "수정"}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Row>
+      </>
+    </>
   );
 }

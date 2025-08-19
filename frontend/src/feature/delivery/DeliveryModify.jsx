@@ -40,7 +40,7 @@ export function DeliveryModify() {
   }
 
   let validate = true;
-  if (delivery.name.trim() === "") {
+  if (delivery.name.trim() === "" || delivery.code.trim() === "") {
     validate = false;
   }
 
@@ -48,6 +48,7 @@ export function DeliveryModify() {
     setIsProcessing(true);
     axios
       .putForm(`/api/delivery/modify/${seq}`, {
+        code: delivery.code,
         name: delivery.name,
         callNo: delivery.callNo,
       })
@@ -70,6 +71,17 @@ export function DeliveryModify() {
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
         <h2 className="mb-4">배송업체 수정</h2>
+        <div>
+          <FormGroup className="mb-3" controlId="formName">
+            <FormLabel>택배사코드(스윗트래커연동)</FormLabel>
+            <FormControl
+              value={delivery.code}
+              onChange={(e) =>
+                setDelivery({ ...delivery, code: e.target.value })
+              }
+            ></FormControl>
+          </FormGroup>
+        </div>
         <div>
           <FormGroup className="mb-3" controlId="formName">
             <FormLabel>배송업체명</FormLabel>

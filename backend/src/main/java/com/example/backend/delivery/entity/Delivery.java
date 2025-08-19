@@ -19,6 +19,9 @@ public class Delivery {
     @Column(name = "seq", nullable = false)
     private Integer seq;
 
+    @Column(name = "code", nullable = false)
+    private String code;
+
     @Column(name = "name", nullable = false)
     private String name;
 

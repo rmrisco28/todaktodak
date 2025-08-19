@@ -14,6 +14,7 @@ import java.time.ZoneId;
 @NoArgsConstructor
 public class DeliveryListDto {
     private Integer seq;
+    private String code;
     private String name;
     private String callNo;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

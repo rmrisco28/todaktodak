@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class DeliveryAddForm {
     private Integer seq;
+    private String code;
     private String name;
     private String callNo;
 }
