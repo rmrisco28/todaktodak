@@ -205,7 +205,6 @@ export function SaleAdd() {
           </FormGroup>
         </div>
         <div>
-          {/* TODO [@minki] 배달업체 데이터 조회  */}
           <FormGroup className="mb-3" controlId="formDeliveryFee">
             <FormLabel>배송비</FormLabel>
             <FormControl
