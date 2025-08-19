@@ -58,6 +58,8 @@ import { RentalListAdmin } from "./feature/rental/RentalListAdmin.jsx";
 import { FullWidthLayout } from "./common/FullWidthLayout.jsx";
 import { ProtectedRoute } from "./common/ProtectedRoute.jsx";
 import { ComingSoon } from "./ComingSoon.jsx";
+import { MemberWithdrawPage } from "./feature/member/MemberWithdrawPage.jsx";
+import { PasswordCheck } from "./feature/member/PasswordCheck.jsx";
 
 function App() {
   return (
@@ -111,11 +113,16 @@ function App() {
               <Route path="member/add" element={<MemberAdd />} />
               {/* 회원상세(회원) */}
               <Route path="member/myinfo" element={<MemberMyInfo />} />
-              {/* 회원수정(회원) */}
+              {/* 회원정보변경(회원) */}
               <Route
                 path="member/myinfo/modify"
                 element={<MemberMyInfoModify />}
               />
+
+              {/* 변경 전 비밀번호 확인*/}
+              <Route path="member/passwordCheck" element={<PasswordCheck />} />
+              {/* 회원탈퇴 */}
+              <Route path="member/withdraw" element={<MemberWithdrawPage />} />
 
               {/* 상품 등록 */}
               <Route path="product/add" element={<ProductAdd />} />

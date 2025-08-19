@@ -215,10 +215,10 @@ public class MemberController {
     // 회원 탈퇴(회원)
     @PutMapping("withdraw")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> delete(Authentication authentication) {
+    public ResponseEntity<?> delete(@RequestBody PasswordCheck check, Authentication authentication) {
         String memberId = authentication.getName();
         try {
-            memberService.delete(memberId);
+            memberService.delete(memberId, check.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
             String message = e.getMessage();
@@ -279,6 +279,27 @@ public class MemberController {
 
         return ResponseEntity.ok().body(Map.of("type", "success"));
     }
+
+    // 비밀번호 확인
+    @PostMapping("/passwordCheck")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> checkPassword(@RequestBody PasswordCheck check, Authentication authentication) {
+        String memberId = authentication.getName();
+        try {
+            // 비밀번호 검증
+            memberService.checkPassword(memberId, check.getPassword());
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", "비밀번호가 확인되었습니다.")));
+    }
+
 
     // 로그인
     @PostMapping("login")

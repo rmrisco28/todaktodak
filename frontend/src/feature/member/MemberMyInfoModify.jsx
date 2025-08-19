@@ -478,7 +478,10 @@ export function MemberMyInfoModify() {
           <Button variant="outline-primary" onClick={() => setModalShow(true)}>
             변경
           </Button>
-          <Button variant="outline-dark" onClick={() => navigate(-1)}>
+          <Button
+            variant="outline-dark"
+            onClick={() => navigate("/member/myinfo")}
+          >
             취소
           </Button>
         </div>

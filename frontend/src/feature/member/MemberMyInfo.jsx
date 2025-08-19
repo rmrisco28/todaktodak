@@ -1,29 +1,21 @@
 import {
-  Button,
   Col,
   Form,
   FormControl,
   FormGroup,
   FormLabel,
   ListGroup,
-  Modal,
   Row,
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
-import { AuthenticationContext } from "../../common/AuthenticationContextProvider.jsx";
 
 export function MemberMyInfo() {
   const [member, setMember] = useState(null);
 
-  const [modalShow, setModalShow] = useState(false);
-
   const navigate = useNavigate();
-
-  const { logout } = useContext(AuthenticationContext);
 
   const alertShow = useRef(false);
 
@@ -45,30 +37,6 @@ export function MemberMyInfo() {
         console.log("항상 실행");
       });
   }, []);
-
-  // 회원탈퇴 버튼
-  function handleDeleteButtonClick() {
-    axios
-      .put(`/api/member/withdraw`)
-      .then((res) => {
-        console.log("ok");
-        const message = res.data.message;
-        toast(message.text, { type: message.type });
-        navigate("/");
-        logout();
-      })
-      .catch((err) => {
-        console.log(err);
-        const message = err.response.data.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
-      })
-      .finally(() => {
-        console.log("항상 실행");
-      });
-  }
-
   if (!member) {
     return <Spinner />;
   }
@@ -86,7 +54,7 @@ export function MemberMyInfo() {
         <ListGroup variant="flush">
           <ListGroup.Item
             action
-            onClick={() => navigate(`/member/myinfo/modify`)}
+            onClick={() => navigate(`/member/passwordCheck`)}
             style={{ border: "none" }}
             className="fs-5"
           >
@@ -95,7 +63,7 @@ export function MemberMyInfo() {
 
           <ListGroup.Item
             action
-            onClick={() => setModalShow(true)}
+            onClick={() => navigate(`/member/withdraw`)}
             style={{ border: "none" }}
             className="fs-5"
           >
@@ -253,22 +221,6 @@ export function MemberMyInfo() {
           </Form>
         </section>
       </Col>
-
-      {/*  탈퇴 확인 모달*/}
-      <Modal show={modalShow} onHide={() => setModalShow(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>회원 탈퇴 확인</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>회원탈퇴를 하시겠습니까?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-danger" onClick={handleDeleteButtonClick}>
-            탈퇴
-          </Button>
-          <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-            취소
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </Row>
   );
 }

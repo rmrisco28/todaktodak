@@ -408,9 +408,13 @@ public class MemberService {
     }
 
     // 회원탈퇴(회원)
-    public void delete(String memberId) {
+    public void delete(String memberId, String password) {
         Member dbData = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(password, dbData.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
 
         // update_dttm = NOW()
         LocalDateTime now = LocalDateTime.now();
@@ -489,6 +493,16 @@ public class MemberService {
         // 변경 및 저장
         dbData.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         memberRepository.save(dbData);
+    }
+
+    public void checkPassword(String memberId, String password) {
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+
     }
 
     // 로그인(토큰생성)
