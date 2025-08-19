@@ -162,7 +162,7 @@ export function PasswordCheck() {
               </FormGroup>
             </Form>
           </section>
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-center">
             <Button
               variant="outline-primary"
               className="me-2"

@@ -9,15 +9,13 @@ import {
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 export function MemberMyInfo() {
   const [member, setMember] = useState(null);
 
   const navigate = useNavigate();
-
-  const alertShow = useRef(false);
 
   useEffect(() => {
     axios
@@ -27,11 +25,6 @@ export function MemberMyInfo() {
       })
       .catch((err) => {
         console.log(err);
-        if (err.response && err.response.status === 401 && !alertShow.current) {
-          alert("로그인 후 이용 가능합니다.");
-          alertShow.current = true;
-          navigate("/login");
-        }
       })
       .finally(() => {
         console.log("항상 실행");

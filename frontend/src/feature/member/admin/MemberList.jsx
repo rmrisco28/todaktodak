@@ -109,7 +109,7 @@ export function MemberList() {
                   <th>고객명</th>
                   <th>등록일시</th>
                   <th>사용</th>
-                  <th>삭제</th>
+                  <th>탈퇴</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,7 +144,7 @@ export function MemberList() {
                           checked={member.delYn}
                           disabled
                         />
-                        <FormCheck.Label className="m-0">삭제</FormCheck.Label>
+                        <FormCheck.Label className="m-0">탈퇴</FormCheck.Label>
                       </FormCheck>
                     </td>
                   </tr>

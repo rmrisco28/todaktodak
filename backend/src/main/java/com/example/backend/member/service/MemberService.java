@@ -431,6 +431,7 @@ public class MemberService {
         dbData.setUpdateDttm(now);
         // del_yn = true
         dbData.setDelYn(true);
+        dbData.setUseYn(false);
 
         dbData.setState("DELETE");
 

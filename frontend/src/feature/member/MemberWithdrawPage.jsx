@@ -51,9 +51,8 @@ export function MemberWithdrawPage() {
         console.log("ok");
         const message = res.data.message;
         toast(message.text, { type: message.type, position: "top-center" });
-
-        navigate("/");
         logout();
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -173,7 +172,7 @@ export function MemberWithdrawPage() {
               </FormGroup>
             </Form>
           </section>
-          <div className="d-flex justify-content-end">
+          <div className="d-flex justify-content-center">
             <Button
               variant="outline-danger"
               className="me-2"

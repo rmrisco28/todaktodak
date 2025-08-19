@@ -41,11 +41,12 @@ export function PasswordEmailAuth() {
     axios
       .post("/api/member/findPassword/authRequest", { memberId, email })
       .then(() => {
-        toast.success("인증번호가 발송되었습니다.");
+        toast.success("인증번호가 발송되었습니다.", { position: "top-center" });
+
         setEmailSent(true);
       })
       .catch(() => {
-        toast.error("이메일 발송에 실패했습니다.");
+        toast.error("이메일 발송에 실패했습니다.", { position: "top-center" });
       })
       .finally(() => {
         setIsProcessing(false);

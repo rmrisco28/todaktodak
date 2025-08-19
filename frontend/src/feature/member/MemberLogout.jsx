@@ -18,7 +18,7 @@ export function MemberLogout() {
     alert("로그아웃 되었습니다.");
     logout();
 
-    navigate("/login");
+    navigate("/");
   }, []);
 
   return <Spinner />;
