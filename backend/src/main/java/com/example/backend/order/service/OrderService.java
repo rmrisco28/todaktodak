@@ -13,6 +13,7 @@ import com.example.backend.sale.entity.Sale;
 import com.example.backend.sale.entity.SaleImageThumb;
 import com.example.backend.sale.repository.SaleImageThumbRepository;
 import com.example.backend.sale.repository.SaleRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,8 +36,12 @@ import java.util.Map;
 public class OrderService {
 
     private final SaleRepository saleRepository;
+
     @Value("${image.prefix}")
     private String imagePrefix;
+
+    @Value("${delivery.tracking.api.key}")
+    private String apiKey;
 
     private final OrderManageRepository orderManageRepository; // 주문 정보 저장소
     private final OrderItemRepository orderItemRepository;     // 주문상품 저장소
@@ -334,5 +340,17 @@ public class OrderService {
         dbData.setState(dto.getProcess());
         dbData.setUpdateDttm(LocalDateTime.now());
         orderListRepository.save(dbData);
+    }
+
+    public void viewTracking(HttpServletResponse response, String code, String invoice) throws IOException {
+        String form = "<form id='trackingForm' action='https://info.sweettracker.co.kr/tracking/4' method='post'>" +
+                "<input type='hidden' name='t_key' value='" + apiKey + "'/>" +
+                "<input type='hidden' name='t_code' value='" + code + "'/>" +
+                "<input type='hidden' name='t_invoice' value='" + invoice + "'/>" +
+                "</form>" +
+                "<script>document.getElementById('trackingForm').submit();</script>";
+
+        response.setContentType("text/html;charset=UTF-8");
+        response.getWriter().write(form);
     }
 }

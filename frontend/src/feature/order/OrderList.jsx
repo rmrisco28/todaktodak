@@ -129,6 +129,7 @@ export function OrderList() {
             취소요청
           </Button>
         );
+      case "D.RDY":
       case "D.PRG":
       case "D.CPLT":
         return (
@@ -151,6 +152,14 @@ export function OrderList() {
         );
     }
   };
+
+  const openTracking = (e, t_code, t_invoice) => {
+    e.stopPropagation();
+    // GET 방식으로 값 전달
+    const url = `/api/order/tracking?t_code=${t_code}&t_invoice=${t_invoice}`;
+    window.open(url, "trackingPopup", "width=500,height=900");
+  };
+
   return (
     <>
       <Row>
@@ -212,6 +221,12 @@ export function OrderList() {
                     className="d-none d-lg-table-cell"
                     style={{ width: "200px" }}
                   >
+                    배송조회
+                  </th>
+                  <th
+                    className="d-none d-lg-table-cell"
+                    style={{ width: "200px" }}
+                  >
                     주문처리
                   </th>
                 </tr>
@@ -251,6 +266,21 @@ export function OrderList() {
                     </td>
                     <td className="d-none d-lg-table-cell">
                       {order.insertDttm}
+                    </td>
+
+                    <td className="d-none d-lg-table-cell">
+                      {(order.state.split(".")[0] === "D" ||
+                        order.state.split(".")[0] === "RV") && (
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={(e) =>
+                            openTracking(e, order.deliveryCode, order.tracking)
+                          }
+                        >
+                          배송조회
+                        </Button>
+                      )}
                     </td>
                     <td className="d-none d-lg-table-cell">
                       {setButtonByState(order.state, order.seq)}
