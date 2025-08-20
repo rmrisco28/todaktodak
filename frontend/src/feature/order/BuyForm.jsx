@@ -199,6 +199,9 @@ export function BuyForm() {
           rentalPeriod: period,
           productNo: sale.productNo,
           memberMemberId: user.memberId,
+          deliveryCode: "",
+          deliveryCompany: "",
+          tracking: "",
         };
         localStorage.setItem("kakaoPayOrder", JSON.stringify(orderData));
 
