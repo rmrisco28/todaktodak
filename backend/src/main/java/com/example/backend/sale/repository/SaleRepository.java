@@ -29,7 +29,9 @@ public interface SaleRepository extends JpaRepository<Sale, Integer> {
             LEFT JOIN Category c
                    ON c.name = s.category
             WHERE (s.useYn = true 
-                AND s.delYn = false)
+                AND s.delYn = false
+                AND c.useYn = true
+                AND c.delYn = false)
                 AND (s.title LIKE %:keyword%
                 OR s.saleNo LIKE %:keyword%)
                 AND (:category IS NULL OR c.seq = :category)
