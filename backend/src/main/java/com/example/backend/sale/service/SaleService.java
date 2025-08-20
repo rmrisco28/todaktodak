@@ -154,6 +154,7 @@ public class SaleService {
     }
 
     public Map<String, Object> list(Integer category, String keyword, Integer pageNumber, Integer pageSize) {
+//       TODO [@MINKI] (1)카테고리 이름의 중복 방지처리, (2) Sale의 Category 참조 컬럼을 기존 카테고리명이 아니라 카테고리 seq로 변경
         Page<SaleListDto> saleListDtoPage = saleRepository.searchSaleList(category, keyword, PageRequest.of(pageNumber - 1, pageSize));
         int totalPages = saleListDtoPage.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
