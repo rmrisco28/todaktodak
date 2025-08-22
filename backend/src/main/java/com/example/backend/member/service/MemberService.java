@@ -8,6 +8,7 @@ import com.example.backend.member.repository.AuthRepository;
 import com.example.backend.member.repository.EmailAuthRepository;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.SimpleMailMessage;
@@ -41,6 +42,9 @@ public class MemberService {
 
     private final JavaMailSender mailSender;
     private final EmailAuthRepository emailAuthRepository;
+
+    @Value("${spring.mail.username}")
+    private String mailAddress;
 
 
     // 회원 가입
@@ -141,7 +145,7 @@ public class MemberService {
 
         // 이메일 발송
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("jihun8138@gmail.com");  // 실제 본인 이메일 설정
+        message.setFrom(mailAddress);  // 실제 본인 이메일 설정
         message.setTo(email);
         message.setSubject("[토닥토닥] 회원가입 인증번호");
         message.setText("인증번호는 " + code + " 입니다. 5분 이내로 입력하세요.");
@@ -195,7 +199,7 @@ public class MemberService {
 
         // 이메일 발송
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("jihun8138@gmail.com");  // 실제 본인 이메일 설정
+        message.setFrom(mailAddress);  // 실제 본인 이메일 설정
         message.setTo(email);
         message.setSubject("[토닥토닥] 비밀번호찾기 인증번호");
         message.setText("인증번호는 " + code + " 입니다. 5분 이내에 입력하세요.");
