@@ -64,6 +64,14 @@ import { TrackingDetail } from "./feature/delivery/TrackingDetail.jsx";
 import { PaymentSuccess } from "./feature/order/PaymentSuccess.jsx";
 import { PaymentFail } from "./feature/order/PaymentFail.jsx";
 
+function Buymerrong() {
+  return null;
+}
+
+function ComingSoonss() {
+  return null;
+}
+
 function App() {
   return (
     <AuthenticationContextProvider>
@@ -152,6 +160,8 @@ function App() {
               {/* 판매상품구매 등록 */}
               <Route path="buy/add" element={<BuyAdd />} />
 
+              <Route path="buy/add" element={<Buymerrong />} />
+
               {/* 반납신청 상세 */}
               <Route path="return" element={<ReturnForm />} />
               {/* 반납신청 등록 */}
@@ -231,6 +241,7 @@ function App() {
 
               {/* 관리자 통계현황 */}
               <Route path="chart/list" element={<ComingSoon />} />
+              <Route path="chart/list" element={<ComingSoonss />} />
             </Route>
           </Route>
         </Routes>
