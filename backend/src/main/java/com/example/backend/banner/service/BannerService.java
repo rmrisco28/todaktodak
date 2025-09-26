@@ -108,6 +108,7 @@ public class BannerService {
 
         dbData.setTitle(dto.getTitle());
         dbData.setLink(dto.getLink());
+        dbData.setUseYn(dto.getUseYn());
 
         // update_dttm = NOW()
         LocalDateTime now = LocalDateTime.now();
