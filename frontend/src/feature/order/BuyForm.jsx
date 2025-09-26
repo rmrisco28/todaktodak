@@ -163,7 +163,8 @@ export function BuyForm() {
     postalCode.trim() === "" ||
     address.trim() === "" ||
     addressDetail.trim() === "" ||
-    request.trim() === ""
+    request.trim() === "" ||
+    payment.trim() === ""
   ) {
     validate = false;
   }
